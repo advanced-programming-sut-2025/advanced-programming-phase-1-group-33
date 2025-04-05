@@ -5,13 +5,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class Map<PlaceableObject> {
+public class GameMap<PlaceableObject> {
     private Tile[][] tiles;
     private List<Building> buildings;
     private Map<Coordinate, Item> spawnedForageables;
     private Map<Coordinate, ResourceNode> spawnedResources;
 
-    public Map(Tile[][] tiles, List<Building> buildings) {
+    public GameMap(Tile[][] tiles, List<Building> buildings) {
         this.tiles = tiles;
         this.buildings = buildings;
         this.spawnedForageables = new HashMap<>();
@@ -21,6 +21,7 @@ public class Map<PlaceableObject> {
     public Tile getTileAt(Coordinate coordinate) {
         return tiles[coordinate.getX()][coordinate.getY()];
     }
+
 
     public boolean isOccupied(Coordinate coordinate) {
         // Check if the tile at the given coordinate is occupied by a building or another object
