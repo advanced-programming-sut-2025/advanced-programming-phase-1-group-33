@@ -1,9 +1,11 @@
 package com.yourgame.model;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class Map {
+public class Map<PlaceableObject> {
     private Tile[][] tiles;
     private List<Building> buildings;
     private Map<Coordinate, Item> spawnedForageables;
