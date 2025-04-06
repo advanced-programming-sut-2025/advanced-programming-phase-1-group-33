@@ -8,11 +8,11 @@
 
 ### `com.yourgame.model` (Model Package)
 
-*   **`GameState`**:
+*   **`GameState`**: [+]
     *   *Purpose:* Manages the overall state of an active game session. Coordinates saving and loading.
     *   *Attributes:* `players` (List<`Player`>), `currentTurnPlayerIndex` (int), `gameTime` (`TimeSystem`), `weather` (`WeatherSystem`), `map` (`Map`), `npcs` (List<`NPC`>), `shops` (List<`Shop`>).
     *   *Methods:* `getPlayer()`, `nextTurn()`, `saveState()`, `loadState()`.
-*   **`Player`**:
+*   **`Player`**: []
     *   *Attributes:* `username` (String), `hashedPassword` (String), `nickname` (String), `email` (String), `gender` (Enum `Gender`), `energy` (int), `maxEnergy` (int), `money` (int), `currentLocation` (`Coordinate`), `inventory` (`Inventory`), `equippedTool` (`Tool`), `skills` (Map<`SkillType`, `Skill`>), `relationships` (Map<String, `Relationship`> *NPC name or Player username -> Relationship*), `farmMapReference` (`FarmMap`), `knownCraftingRecipes` (Set<`Recipe`>), `knownCookingRecipes` (Set<`Recipe`>), `activeQuests` (List<`QuestStatus`>).
     *   *Methods:* `changeEnergy()`, `addXp()`, `canAfford()`, `addMoney()`, `deductMoney()`, `addItem()`, `removeItem()`, `hasItem()`, `learnRecipe()`, `updateQuest()`, `getCurrentSkillLevel()`.
 *   **`NPC`**:

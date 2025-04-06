@@ -40,7 +40,7 @@ public class Player {
         this.activeQuests = new ArrayList<>();
     }
 
-    // Getters and Setters for attributes
+    // Business logic methods
 
     public void changeEnergy(int amount) {
         this.energy = Math.max(0, Math.min(maxEnergy, this.energy + amount));
@@ -94,5 +94,143 @@ public class Player {
     public int getCurrentSkillLevel(SkillType skillType) {
         Skill skill = skills.get(skillType);
         return skill != null ? skill.getLevel() : 0;
+    }
+
+    // Getters and setters for all attributes
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getHashedPassword() {
+        return hashedPassword;
+    }
+
+    public void setHashedPassword(String hashedPassword) {
+        this.hashedPassword = hashedPassword;
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public Gender getGender() {
+        return gender;
+    }
+
+    public void setGender(Gender gender) {
+        this.gender = gender;
+    }
+
+    public int getEnergy() {
+        return energy;
+    }
+
+    public void setEnergy(int energy) {
+        this.energy = energy;
+    }
+
+    public int getMaxEnergy() {
+        return maxEnergy;
+    }
+
+    public void setMaxEnergy(int maxEnergy) {
+        this.maxEnergy = maxEnergy;
+    }
+
+    public int getMoney() {
+        return money;
+    }
+
+    public void setMoney(int money) {
+        this.money = money;
+    }
+
+    public Coordinate getCurrentLocation() {
+        return currentLocation;
+    }
+
+    public void setCurrentLocation(Coordinate currentLocation) {
+        this.currentLocation = currentLocation;
+    }
+
+    public Inventory getInventory() {
+        return inventory;
+    }
+
+    public void setInventory(Inventory inventory) {
+        this.inventory = inventory;
+    }
+
+    public Tool getEquippedTool() {
+        return equippedTool;
+    }
+
+    public void setEquippedTool(Tool equippedTool) {
+        this.equippedTool = equippedTool;
+    }
+
+    public Map<SkillType, Skill> getSkills() {
+        return skills;
+    }
+
+    public void setSkills(Map<SkillType, Skill> skills) {
+        this.skills = skills;
+    }
+
+    public Map<String, Relationship> getRelationships() {
+        return relationships;
+    }
+
+    public void setRelationships(Map<String, Relationship> relationships) {
+        this.relationships = relationships;
+    }
+
+    public FarmMap getFarmMapReference() {
+        return farmMapReference;
+    }
+
+    public void setFarmMapReference(FarmMap farmMapReference) {
+        this.farmMapReference = farmMapReference;
+    }
+
+    public Set<Recipe> getKnownCraftingRecipes() {
+        return knownCraftingRecipes;
+    }
+
+    public void setKnownCraftingRecipes(Set<Recipe> knownCraftingRecipes) {
+        this.knownCraftingRecipes = knownCraftingRecipes;
+    }
+
+    public Set<Recipe> getKnownCookingRecipes() {
+        return knownCookingRecipes;
+    }
+
+    public void setKnownCookingRecipes(Set<Recipe> knownCookingRecipes) {
+        this.knownCookingRecipes = knownCookingRecipes;
+    }
+
+    public List<QuestStatus> getActiveQuests() {
+        return activeQuests;
+    }
+
+    public void setActiveQuests(List<QuestStatus> activeQuests) {
+        this.activeQuests = activeQuests;
     }
 }
