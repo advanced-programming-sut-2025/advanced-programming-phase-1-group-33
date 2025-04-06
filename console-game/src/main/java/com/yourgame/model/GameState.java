@@ -99,4 +99,7 @@ public class GameState {
     public void setShops(List<Shop> shops) {
         this.shops = shops;
     }
+
+    public void startGame() {
+    }
 }

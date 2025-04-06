@@ -98,4 +98,12 @@ public class MenuView {
         System.out.println("3. Back to Game Menu");
         System.out.print("Choose an option: ");
     }
+
+    public void displayError(String s) {
+        System.out.println("Error: " + s);
+    }
+
+    public void displayMessage(String s) {
+        System.out.println("Message: " + s);
+    }
 }
