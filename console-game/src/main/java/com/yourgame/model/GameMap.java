@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class GameMap<PlaceableObject> {
+public class GameMap {
     private Tile[][] tiles;
     private List<Building> buildings;
     private Map<Coordinate, Item> spawnedForageables;
@@ -22,26 +22,73 @@ public class GameMap<PlaceableObject> {
         return tiles[coordinate.getX()][coordinate.getY()];
     }
 
-
     public boolean isOccupied(Coordinate coordinate) {
-        // Check if the tile at the given coordinate is occupied by a building or another object
-        return false; // Placeholder implementation
+        // Placeholder logic for checking occupancy
+        for (Building building : buildings) {
+            if (building.getCoordinate().equals(coordinate)) {
+                return true;
+            }
+        }
+        return spawnedForageables.containsKey(coordinate) || spawnedResources.containsKey(coordinate);
     }
 
     public List<Coordinate> findPath(Coordinate start, Coordinate end) {
-        // Implement pathfinding logic here
-        return new ArrayList<>(); // Placeholder implementation
+        // Placeholder pathfinding logic
+        return new ArrayList<>();
     }
 
-    public void placeObject(Coordinate coordinate, PlaceableObject object) {
-        // Logic to place an object on the map
+    public void placeObject(Coordinate coordinate, Object object) {
+        // This method needs specific logic based on object type
+        if (object instanceof Item) {
+            spawnedForageables.put(coordinate, (Item) object);
+        } else if (object instanceof ResourceNode) {
+            spawnedResources.put(coordinate, (ResourceNode) object);
+        } else if (object instanceof Building) {
+            buildings.add((Building) object);
+        }
     }
 
     public void removeObject(Coordinate coordinate) {
-        // Logic to remove an object from the map
+        spawnedForageables.remove(coordinate);
+        spawnedResources.remove(coordinate);
+        buildings.removeIf(b -> b.getCoordinate().equals(coordinate));
     }
 
     public void spawnForageables() {
-        // Logic to spawn forageable items on the map
+        // Sample placeholder logic to spawn items
+    }
+
+    // Getters and Setters
+
+    public Tile[][] getTiles() {
+        return tiles;
+    }
+
+    public void setTiles(Tile[][] tiles) {
+        this.tiles = tiles;
+    }
+
+    public List<Building> getBuildings() {
+        return buildings;
+    }
+
+    public void setBuildings(List<Building> buildings) {
+        this.buildings = buildings;
+    }
+
+    public Map<Coordinate, Item> getSpawnedForageables() {
+        return spawnedForageables;
+    }
+
+    public void setSpawnedForageables(Map<Coordinate, Item> spawnedForageables) {
+        this.spawnedForageables = spawnedForageables;
+    }
+
+    public Map<Coordinate, ResourceNode> getSpawnedResources() {
+        return spawnedResources;
+    }
+
+    public void setSpawnedResources(Map<Coordinate, ResourceNode> spawnedResources) {
+        this.spawnedResources = spawnedResources;
     }
 }
