@@ -57,4 +57,12 @@ public class Item {
     public void setValue(int value) {
         this.value = value;
     }
+
+    public String getSellPrice() {
+        return "";
+    }
+
+    public boolean isStackable() {
+        return false;
+    }
 }

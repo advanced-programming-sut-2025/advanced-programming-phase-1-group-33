@@ -16,7 +16,7 @@ public class InventoryView {
         }
     }
 
-    public void displayItemTooltip(Item item) {
+    public void displayItemTooltip(Item     item) {
         System.out.println("Item: " + item.getName());
         System.out.println("Description: " + item.getDescription());
         System.out.println("Sell Price: " + item.getSellPrice());
