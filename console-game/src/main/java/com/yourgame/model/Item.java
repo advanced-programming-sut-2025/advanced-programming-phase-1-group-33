@@ -1,12 +1,13 @@
 package com.yourgame.model;
 import com.yourgame.model.enums.ItemType;
 
-public class Item {
+public abstract class Item {
     private String id;
     private String name;
     private String description;
     private ItemType type;
     private int value; // Could represent in-game currency or utility
+
 
     public Item(String id, String name, String description, ItemType type, int value) {
         this.id = id;
@@ -16,7 +17,12 @@ public class Item {
         this.value = value;
     }
 
+    public void use(){}
     // Getters and Setters
+
+    public Item(String name2, String description2, int sellPrice, boolean isStackable) {
+        //TODO Auto-generated constructor stub
+    }
 
     public String getId() {
         return id;

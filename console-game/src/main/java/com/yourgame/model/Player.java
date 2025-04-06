@@ -233,4 +233,24 @@ public class Player {
     public void setActiveQuests(List<QuestStatus> activeQuests) {
         this.activeQuests = activeQuests;
     }
+
+    public double getSpeed() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getSpeed'");
+    }
+
+    public void setSpeed(double d) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'setSpeed'");
+    }
+
+    public double getHealth() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getHealth'");
+    }
+
+    public void setHealth(double d) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'setHealth'");
+    }
 }
