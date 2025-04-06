@@ -1,4 +1,5 @@
 package com.yourgame.model;
+import com.yourgame.model.enums.TileType;
 
 public class Tile {
     private TileType type;
