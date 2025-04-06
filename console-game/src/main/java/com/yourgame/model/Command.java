@@ -16,4 +16,8 @@ public class Command {
     public String[] getArguments() {
         return arguments;
     }
+
+    public boolean isExitCommand() {
+        return true;
+    }
 }

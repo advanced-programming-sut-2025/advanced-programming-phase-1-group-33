@@ -12,7 +12,7 @@ public class GameController {
 
     public GameController() {
         this.gameState = new GameState();
-        this.consoleView = new ConsoleView();
+        this.consoleView = new ConsoleView(System.out);
         this.isRunning = true;
     }
 

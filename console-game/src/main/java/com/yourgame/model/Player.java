@@ -3,7 +3,7 @@ package com.yourgame.model;
 import javax.tools.Tool;
 import java.util.*;
 import java.util.Map;
-
+import com.yourgame.model.enums.Gender;
 public class Player {
     private String username;
     private String hashedPassword;

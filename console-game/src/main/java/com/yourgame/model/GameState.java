@@ -8,11 +8,11 @@ public class GameState {
     private int currentTurnPlayerIndex;
     private TimeSystem gameTime;
     private WeatherSystem weather;
-    private Map map;
+    private GameMap map;
     private List<NPC> npcs;
     private List<Shop> shops;
 
-    public GameState(List<Player> players, TimeSystem gameTime, WeatherSystem weather, Map map, List<NPC> npcs, List<Shop> shops) {
+    public GameState(List<Player> players, TimeSystem gameTime, WeatherSystem weather, GameMap map, List<NPC> npcs, List<Shop> shops) {
         this.players = players;
         this.currentTurnPlayerIndex = 0; // Start with the first player
         this.gameTime = gameTime;
@@ -20,6 +20,10 @@ public class GameState {
         this.map = map;
         this.npcs = npcs;
         this.shops = shops;
+    }
+
+    public GameState() {
+
     }
 
     public Player getPlayer(int index) {
@@ -72,11 +76,11 @@ public class GameState {
         this.weather = weather;
     }
 
-    public Map getMap() {
+    public GameMap getMap() {
         return map;
     }
 
-    public void setMap(Map map) {
+    public void setMap(GameMap map) {
         this.map = map;
     }
 

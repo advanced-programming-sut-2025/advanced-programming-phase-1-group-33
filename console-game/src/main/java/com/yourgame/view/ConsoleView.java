@@ -40,4 +40,7 @@ public class ConsoleView {
     public void displayMap(String map) {
         displayMessage("Map: " + map);
     }
+
+    public void promptForInput() {displayMessage("input: ");
+    }
 }
