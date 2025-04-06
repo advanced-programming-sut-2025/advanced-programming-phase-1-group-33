@@ -1,6 +1,7 @@
 package com.yourgame.model;
 
 import java.util.List;
+import java.util.Map;
 
 public class GameState {
     private List<Player> players;
@@ -39,4 +40,59 @@ public class GameState {
     }
 
     // Getters and setters for the attributes can be added here
+    public List<Player> getPlayers() {
+        return players;
+    }
+
+    public void setPlayers(List<Player> players) {
+        this.players = players;
+    }
+
+    public int getCurrentTurnPlayerIndex() {
+        return currentTurnPlayerIndex;
+    }
+
+    public void setCurrentTurnPlayerIndex(int currentTurnPlayerIndex) {
+        this.currentTurnPlayerIndex = currentTurnPlayerIndex;
+    }
+
+    public TimeSystem getGameTime() {
+        return gameTime;
+    }
+
+    public void setGameTime(TimeSystem gameTime) {
+        this.gameTime = gameTime;
+    }
+
+    public WeatherSystem getWeather() {
+        return weather;
+    }
+
+    public void setWeather(WeatherSystem weather) {
+        this.weather = weather;
+    }
+
+    public Map getMap() {
+        return map;
+    }
+
+    public void setMap(Map map) {
+        this.map = map;
+    }
+
+    public List<NPC> getNpcs() {
+        return npcs;
+    }
+
+    public void setNpcs(List<NPC> npcs) {
+        this.npcs = npcs;
+    }
+
+    public List<Shop> getShops() {
+        return shops;
+    }
+
+    public void setShops(List<Shop> shops) {
+        this.shops = shops;
+    }
 }
