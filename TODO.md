@@ -18,7 +18,7 @@
 *   **`NPC`**:
     *   *Attributes:* `name` (String), `currentLocation` (`Coordinate`), `schedule` (Map<`TimeCondition`, `Coordinate`>), `dialogue` (Map<`DialogueTrigger`, String>), `likedGifts` (Set<`Item`>), `dislikedGifts` (Set<`Item`>), `questsAvailable` (List<`Quest`>).
     *   *Methods:* `getDialogue()`, `checkGiftPreference()`, `getCurrentLocation()`.
-*   **`Map`**:
+*   **`GameMap`**:
     *   *Attributes:* `tiles` (2D Array or Map<`Coordinate`, `Tile`>), `buildings` (List<`Building`>), `spawnedForageables` (Map<`Coordinate`, `Item`>), `spawnedResources` (Map<`Coordinate`, `ResourceNode`>).
     *   *Methods:* `getTileAt()`, `isOccupied()`, `findPath()`, `placeObject()`, `removeObject()`, `spawnForageables()`.
 *   **`FarmMap`** (extends `Map`?):
