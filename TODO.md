@@ -21,7 +21,7 @@
 *   **`GameMap`**:
     *   *Attributes:* `tiles` (2D Array or Map<`Coordinate`, `Tile`>), `buildings` (List<`Building`>), `spawnedForageables` (Map<`Coordinate`, `Item`>), `spawnedResources` (Map<`Coordinate`, `ResourceNode`>).
     *   *Methods:* `getTileAt()`, `isOccupied()`, `findPath()`, `placeObject()`, `removeObject()`, `spawnForageables()`.
-*   **`FarmMap`** (extends `Map`?):
+*   **`FarmMap`** (extends `GameMap`?):
     *   *Attributes:* Reference to specific player's farm layout, maybe `Greenhouse` reference.
 *   **`Tile`**:
     *   *Attributes:* `coordinate` (`Coordinate`), `terrainType` (Enum `Terrain`), `currentCrop` (`Crop`), `placedObject` (`PlaceableObject`), `isTilled` (boolean), `isWatered` (boolean).
