@@ -2,7 +2,7 @@ package com.yourgame.controller;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
+import com.yourgame.model.Command;
 public class CommandParser {
 
     private static final String COMMAND_PATTERN = "^(\\w+)\\s*(.*)$";

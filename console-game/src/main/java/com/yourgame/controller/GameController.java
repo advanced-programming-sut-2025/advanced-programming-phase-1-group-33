@@ -4,7 +4,7 @@ import com.yourgame.model.GameState;
 import com.yourgame.view.ConsoleView;
 
 import java.util.Scanner;
-
+import com.yourgame.model.Command;
 public class GameController {
     private GameState gameState;
     private ConsoleView consoleView;

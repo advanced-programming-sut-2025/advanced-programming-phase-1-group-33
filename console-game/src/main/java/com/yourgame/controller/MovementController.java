@@ -2,9 +2,9 @@ package com.yourgame.controller;
 
 import com.yourgame.model.GameState;
 import com.yourgame.model.Player;
-import com.yourgame.model.Map;
+import com.yourgame.model.GameMap;
 import com.yourgame.model.Coordinate;
-
+import com.yourgame.model.Command;
 public class MovementController {
     private GameState gameState;
 
@@ -13,7 +13,7 @@ public class MovementController {
     }
 
     public void handleWalk(Command cmd) {
-        Player player = gameState.getPlayer();
+        Player player = gameState.getPlayer(1);
         Coordinate newLocation = calculateNewLocation(player.getCurrentLocation(), cmd.getArguments());
 
         if (isValidMove(newLocation)) {
@@ -31,7 +31,7 @@ public class MovementController {
     }
 
     private boolean isValidMove(Coordinate newLocation) {
-        Map map = gameState.getMap();
-        return map.isOccupied(newLocation) == false; // Example check
-    }
+        return true;
+
+        }
 }

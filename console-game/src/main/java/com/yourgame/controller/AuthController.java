@@ -1,6 +1,6 @@
 package com.yourgame.controller;
 
-import com.yourgame.model.Player;
+import com.yourgame.model.Command;
 
 public class AuthController {
     
