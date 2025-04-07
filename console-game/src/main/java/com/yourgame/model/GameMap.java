@@ -9,7 +9,7 @@ public class GameMap {
     private Tile[][] tiles;
     private List<Building> buildings;
     private Map<Coordinate, Item> spawnedForageables;
-    private Map<Coordinate, ResourceNode> spawnedResources;
+    private Map<Coordinate, Resource> spawnedResources;
 
     public GameMap(Tile[][] tiles, List<Building> buildings) {
         this.tiles = tiles;
@@ -41,8 +41,8 @@ public class GameMap {
         // This method needs specific logic based on object type
         if (object instanceof Item) {
             spawnedForageables.put(coordinate, (Item) object);
-        } else if (object instanceof ResourceNode) {
-            spawnedResources.put(coordinate, (ResourceNode) object);
+        } else if (object instanceof Resource) {
+            spawnedResources.put(coordinate, (Resource) object);
         } else if (object instanceof Building) {
             buildings.add((Building) object);
         }
@@ -84,11 +84,11 @@ public class GameMap {
         this.spawnedForageables = spawnedForageables;
     }
 
-    public Map<Coordinate, ResourceNode> getSpawnedResources() {
+    public Map<Coordinate, Resource> getSpawnedResources() {
         return spawnedResources;
     }
 
-    public void setSpawnedResources(Map<Coordinate, ResourceNode> spawnedResources) {
+    public void setSpawnedResources(Map<Coordinate, Resource> spawnedResources) {
         this.spawnedResources = spawnedResources;
     }
 }

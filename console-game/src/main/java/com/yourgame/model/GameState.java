@@ -1,7 +1,6 @@
 package com.yourgame.model;
 
 import java.util.List;
-import java.util.Map;
 
 public class GameState {
     private List<Player> players;
