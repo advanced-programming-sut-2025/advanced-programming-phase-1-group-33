@@ -4,7 +4,7 @@ import javax.management.relation.Relation;
 
 import com.yourgame.model.Animal;
 import com.yourgame.model.Recipe;
-import com.yourgame.model.Relation;
+import com.yourgame.model.Relationship;
 import com.yourgame.model.enums.ItemType;
 import com.yourgame.model.enums.TileType;
 
@@ -25,7 +25,7 @@ public class InfoView {
         System.out.println();
     }
 
-    public void displayRelationhipInfo(Relation relation){
+    public void displayRelationhipInfo(Relationship relation){
         System.out.println();
     }
        
