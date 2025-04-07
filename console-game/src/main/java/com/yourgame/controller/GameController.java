@@ -16,6 +16,11 @@ public class GameController {
         this.isRunning = true;
     }
 
+    public GameController(GameState gameState, ConsoleView consoleView) {
+        this.gameState = gameState;
+        this.consoleView = consoleView;
+        this.isRunning = true;
+    }
     public void startGame() {
         consoleView.displayWelcomeMessage();
         while (isRunning) {
