@@ -5,10 +5,11 @@ public abstract class Item {
     private String id;
     private String name;
     private String description;
-    private ItemType type;
+    private ItemType type;   
     private int value; // Could represent in-game currency or utility
+    private boolean isStackable;
 
-
+    // this needs to be cleaned! 
     public Item(String id, String name, String description, ItemType type, int value) {
         this.id = id;
         this.name = name;
@@ -69,6 +70,6 @@ public abstract class Item {
     }
 
     public boolean isStackable() {
-        return false;
+        return isStackable;
     }
 }
