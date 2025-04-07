@@ -1,5 +1,5 @@
 package com.yourgame.model;
-
+import com.yourgame.model.enums.Season;
 public class TimeSystem {
     private int hour;
     private int dayOfMonth;

@@ -2,8 +2,10 @@ package com.yourgame.model.enums;
 
 public enum ItemType {
     FOOD,
-    TOOL,
+    Tool,
+    CROP, 
     MATERIAL,
+    RESOURCE, 
     TREASURE,
     QUEST_ITEM
 }
