@@ -1,6 +1,5 @@
 package com.yourgame.view;
 
-import javax.management.relation.Relation;
 
 import com.yourgame.model.Animal;
 import com.yourgame.model.Recipe;
