@@ -1,10 +1,13 @@
 package com.yourgame.controller.AppController;
 
+import java.io.Console;
 import java.util.Scanner;
 
+import com.yourgame.model.GameState;
 import com.yourgame.model.AppModel.Result;
 import com.yourgame.model.AppModel.enums.PreGameMenuCommands;
-
+import com.yourgame.view.ConsoleView;
+import com.yourgame.controller.GameController;
 public class PreGameController {
 
     public Result handleCommand(String command, Scanner scanner) {
@@ -45,10 +48,15 @@ public class PreGameController {
 
     private Result LOAD_GAME(String command) {
         // TODO Auto-generated method stub
+        GameState gameState = new GameState(); 
+        ConsoleView consoleView = new ConsoleView(System.out);
+        GameController gameController = new GameController(gameState, consoleView); 
+
         return Result.success("Unimplemented method 'LOAD_GAME'");
     }
 
     private Result createNewGame(String command, Scanner scanner) {
+        GameController gameController = new GameController(); 
         // TODO Auto-generated method stub
         return Result.success("Unimplemented method 'createNewGame'");
     }
