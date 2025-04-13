@@ -3,8 +3,6 @@ package com.yourgame.controller.AppController;
 
 public class LoginController {
     
-
-
     public static boolean handleLogin(String username, String password) {
         System.out.println("your logged in");
         return true; 

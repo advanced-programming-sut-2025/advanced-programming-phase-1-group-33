@@ -3,15 +3,19 @@ package com.yourgame.model.AppModel.enums;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public enum MainMenuCommands {
-    ENTER_MENU("enter"),
-    EXIT_MENU("exit"),
-    SHOW_CURRENT_MENU("shoW current menu");
+public enum ProfileMenuCommands {
+    CHANGE_USERNAME("enter"),
+    CHANGE_PASSWORD("exit"),
+    CHANGE_EMAIL("enter"),
+    CHANGE_NICKNAME("enter"),
+    USER_INFO("shoW current menu"),
+    SHOW_CURRENT_MENU("shoW current menu"),
+    GO_BACK("shoW current menu");
 
     private final String regex;
     private final Pattern pattern;
 
-    MainMenuCommands(String regex) {
+    ProfileMenuCommands(String regex) {
         this.regex = regex;
         // using CASE_INSENSITIVE to permit flexibility in input case
         this.pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
@@ -45,8 +49,8 @@ public enum MainMenuCommands {
         return regex;
     }
 
-    public static MainMenuCommands parse(String input) {
-        for (MainMenuCommands command : values()) {
+    public static ProfileMenuCommands parse(String input) {
+        for (ProfileMenuCommands command : values()) {
             if (command.matches(input)) {
                 return command;
             }

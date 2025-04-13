@@ -9,15 +9,16 @@ import com.yourgame.model.GameState;
 import com.yourgame.model.AppModel.enums.MainMenuCommands;
 import com.yourgame.model.AppModel.enums.Menu;
 import com.yourgame.model.AppModel.Result;
+
 public class MainMenuController {
-    
-    public Result handleCommand(String command,Scanner scanner ) {
+
+    public Result handleCommand(String command, Scanner scanner) {
         MainMenuCommands mainCommand = MainMenuCommands.parse(command);
         if (mainCommand == null) {
             return Result.failure("Invalid command!");
         }
-        
-        switch(mainCommand) {
+
+        switch (mainCommand) {
             case ENTER_MENU:
                 return handleMenuEnter(command);
             case EXIT_MENU:
@@ -36,12 +37,11 @@ public class MainMenuController {
     public MainMenuController() {
 
     }
-    
 
     // // Constructor
     // public MainMenuController(GameState gameState, MenuView menuView) {
-    //     this.gameState = gameState;
-    //     this.menuView = menuView;
+    // this.gameState = gameState;
+    // this.menuView = menuView;
     // }
 
     // Handles the "enter menu" command.
@@ -49,7 +49,7 @@ public class MainMenuController {
         switch (menuName.toLowerCase()) {
             case "login":
                 App.setCurrentMenu(Menu.LoginMenuView);
-                return Result.success(""); 
+                return Result.success("");
             case "signin":
                 App.setCurrentMenu(Menu.RegisterationView);
                 return Result.success("");
@@ -58,8 +58,7 @@ public class MainMenuController {
                 return Result.success("");
             // Add more cases for other menus as necessary
         }
-        return Result.success(""); 
+        return Result.success("");
     }
-
 
 }
