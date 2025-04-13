@@ -4,7 +4,7 @@ import com.yourgame.model.AppModel.enums.Menu;
 import java.util.List;
 
 public class App {
-    private static Menu currentMenu = Menu.RegisterationView;
+    private static Menu currentMenu = Menu.MainMenuView;
     private static User currentUser;
     private static List<User> users;
 
