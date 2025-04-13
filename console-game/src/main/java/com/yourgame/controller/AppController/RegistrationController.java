@@ -1,8 +1,4 @@
-package com.yourgame.controller;
-
-import com.yourgame.model.GameState;
-import com.yourgame.model.Player;
-import com.yourgame.model.GameState;
+package com.yourgame.controller.AppController;
 
 public class RegistrationController {
     public static boolean registerUser(String username, String password, String email) {

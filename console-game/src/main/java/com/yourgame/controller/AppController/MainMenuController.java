@@ -1,15 +1,15 @@
-package com.yourgame.controller;
+package com.yourgame.controller.AppController;
 
-import com.yourgame.view.MenuView;
+import com.yourgame.view.AppViews.MenuView;
 import com.yourgame.model.GameState;
 
-public class MenuController {
+public class MainMenuController {
 
     private final GameState gameState;  // Keeps track of the current game state.
     private final MenuView menuView;    // Responsible for displaying menus to the user.
 
     // Constructor
-    public MenuController(GameState gameState, MenuView menuView) {
+    public MainMenuController(GameState gameState, MenuView menuView) {
         this.gameState = gameState;
         this.menuView = menuView;
     }

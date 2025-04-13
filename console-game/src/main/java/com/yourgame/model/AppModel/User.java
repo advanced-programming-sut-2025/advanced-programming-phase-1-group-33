@@ -1,4 +1,4 @@
-package com.yourgame.model.App;
+package com.yourgame.model.AppModel;
 
 import com.yourgame.model.enums.Gender;
 

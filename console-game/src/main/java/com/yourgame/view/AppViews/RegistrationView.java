@@ -1,10 +1,10 @@
-package com.yourgame.view;
+package com.yourgame.view.AppViews;
 
-import com.yourgame.controller.RegistrationController;
+import com.yourgame.controller.AppController.RegistrationController;
 
 import java.util.Scanner;
-
-public class RegistrationView extends AppMenu{
+// this is the login and signup menu and is going to be controlled by login and signup
+public class RegistrationView implements AppMenu {
     private static final Scanner scanner = new Scanner(System.in);
 
     public static void show() {
@@ -29,7 +29,7 @@ public class RegistrationView extends AppMenu{
 
 
     }
-
+    @Override
     public void check(Scanner scanner) {
         show();
     }

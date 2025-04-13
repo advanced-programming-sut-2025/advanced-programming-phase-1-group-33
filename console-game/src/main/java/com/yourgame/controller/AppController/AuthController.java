@@ -1,4 +1,4 @@
-package com.yourgame.controller;
+package com.yourgame.controller.AppController;
 
 import com.yourgame.model.Command;
 

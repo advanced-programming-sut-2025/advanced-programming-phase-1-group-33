@@ -1,7 +1,7 @@
-package com.yourgame.model.App.enums;
+package com.yourgame.model.AppModel.enums;
 
-import com.yourgame.view.RegistrationView;
-import com.yourgame.view.AppMenu;
+import com.yourgame.view.AppViews.RegistrationView;
+import com.yourgame.view.AppViews.AppMenu;
 import java.util.Scanner;
 
 public enum Menu {

@@ -1,5 +1,5 @@
-package com.yourgame.model.App;
-import com.yourgame.model.App.enums.Menu;
+package com.yourgame.model.AppModel;
+import com.yourgame.model.AppModel.enums.Menu;
 
 import java.util.List;
 
@@ -8,7 +8,7 @@ public class App {
     private static User currentUser;
     private static List<User> users;
 
-    public Menu getCurrentMenu() {
+    public static Menu getCurrentMenu() {
         return currentMenu;
     }
 
