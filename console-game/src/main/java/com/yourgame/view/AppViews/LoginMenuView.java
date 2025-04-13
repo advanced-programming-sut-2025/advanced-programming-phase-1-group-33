@@ -1,14 +1,12 @@
 package com.yourgame.view.AppViews;
 
-import com.yourgame.controller.AppController.RegistrationController;
-
 import java.util.Scanner;
 
-// this is the login and signup menu and is going to be controlled by login and signup
-public class RegistrationView implements AppMenu {
+import com.yourgame.controller.AppController.LoginController;
 
-    public static void show(Scanner scanner) {
-        System.out.println("\n--- REGISTER ---");
+public class LoginMenuView implements AppMenu{
+        public static void show(Scanner scanner) {
+        System.out.println("\n--- LOGIN ---");
 
         System.out.print("Enter username: ");
         String username = scanner.nextLine();
@@ -16,10 +14,8 @@ public class RegistrationView implements AppMenu {
         System.out.print("Enter password: ");
         String password = scanner.nextLine();
 
-        System.out.print("Enter email: ");
-        String email = scanner.nextLine();
 
-        boolean result = RegistrationController.registerUser(username, password, email);
+        boolean result = LoginController.handleLogin(username, password);
 
         if (result) {
             System.out.println("User registered successfully!");
@@ -29,8 +25,10 @@ public class RegistrationView implements AppMenu {
 
     }
 
+    
     @Override
     public void check(Scanner scanner) {
         show(scanner);
+        
     }
 }

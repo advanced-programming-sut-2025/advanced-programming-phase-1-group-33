@@ -1,11 +1,14 @@
 package com.yourgame.model.AppModel.enums;
 
-import com.yourgame.view.AppViews.RegistrationView;
-import com.yourgame.view.AppViews.AppMenu;
+import com.yourgame.view.AppViews.*;
+
 import java.util.Scanner;
 
 public enum Menu {
-    RegisterationView(new RegistrationView());
+    MainMenuView(new MainMenuView()),
+    RegisterationView(new RegistrationView()),
+    LoginMenuView(new LoginMenuView()), 
+    ExitMenu(new ExitMenu());
 
     private final AppMenu menu;
 

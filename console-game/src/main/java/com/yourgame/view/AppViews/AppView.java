@@ -2,13 +2,17 @@ package com.yourgame.view.AppViews;
 
 
 import com.yourgame.model.AppModel.App;
+import com.yourgame.model.AppModel.enums.Menu;
 
 import java.util.Scanner;
 public class AppView {
-    private static App app;
-    public static void run(){
+    public  void run(){
         Scanner scanner = new Scanner(System.in);
-        app.getCurrentMenu().checkCommand(scanner);
+        while (App.getCurrentMenu() != Menu.ExitMenu) {
+            App.getCurrentMenu().checkCommand(scanner);
+        }
+        scanner.close();
     }
+
 
 }
