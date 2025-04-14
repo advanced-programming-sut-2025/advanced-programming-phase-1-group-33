@@ -1,4 +1,4 @@
-package com.yourgame.model;
+package com.yourgame.model.Weather;
 import com.yourgame.model.enums.Season;
 public class TimeSystem {
     private int hour;

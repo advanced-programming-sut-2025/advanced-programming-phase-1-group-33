@@ -1,6 +1,6 @@
 package com.yourgame.model.enums;
 
-import com.yourgame.model.Tile;
+import com.yourgame.model.Map.Tile;
 
 public enum ToolType {
     HOE("Hoe", 1, 10, "Tilling the soil."),

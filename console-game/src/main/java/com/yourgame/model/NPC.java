@@ -4,6 +4,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.yourgame.model.Map.Coordinate;
+import com.yourgame.model.Weather.TimeCondition;
+
 public class NPC {
     private String name;
     private Coordinate currentLocation;

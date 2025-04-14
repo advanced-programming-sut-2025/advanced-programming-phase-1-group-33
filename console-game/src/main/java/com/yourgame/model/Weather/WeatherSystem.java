@@ -1,4 +1,4 @@
-package com.yourgame.model;
+package com.yourgame.model.Weather;
 
 import com.yourgame.model.enums.Weather;
 import java.util.Random;
@@ -42,4 +42,9 @@ public class WeatherSystem {
         Weather[] weathers = Weather.values();
         return weathers[random.nextInt(weathers.length)];
     }
+    private void isThorPossible(Weather weatertype){
+        if(weatertype == weatertype.STORMY){
+        }
+    }
+    
 }

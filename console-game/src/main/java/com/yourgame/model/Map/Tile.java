@@ -1,4 +1,4 @@
-package com.yourgame.model;
+package com.yourgame.model.Map;
 import com.yourgame.model.enums.TileType;
 
 public class Tile {

@@ -1,6 +1,8 @@
 
 package com.yourgame.model;
 
+import com.yourgame.model.Map.Tile;
+
 public class Tool extends Item {
     private int level;          // The level of the tool, e.g., wooden, steel, iridium, etc.
     private int energyCost;     // The energy consumed by using this tool

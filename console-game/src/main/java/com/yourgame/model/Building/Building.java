@@ -1,7 +1,10 @@
-package com.yourgame.model;
+package com.yourgame.model.Building;
 
 import java.awt.Dimension;
 import java.util.Map;
+
+import com.yourgame.model.Item;
+import com.yourgame.model.Map.Coordinate;
 
 public class Building {
     private String name;

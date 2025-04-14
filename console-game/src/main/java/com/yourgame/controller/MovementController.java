@@ -2,8 +2,8 @@ package com.yourgame.controller;
 
 import com.yourgame.model.GameState;
 import com.yourgame.model.Player;
-import com.yourgame.model.GameMap;
-import com.yourgame.model.Coordinate;
+import com.yourgame.model.Map.Coordinate;
+import com.yourgame.model.Map.GameMap;
 import com.yourgame.model.Command;
 public class MovementController {
     private GameState gameState;

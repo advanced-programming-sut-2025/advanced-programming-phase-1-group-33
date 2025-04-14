@@ -2,7 +2,11 @@ package com.yourgame.model;
 
 import javax.tools.Tool;
 import java.util.*;
-import java.util.Map;
+
+import com.yourgame.model.Building.FarmMap;
+import com.yourgame.model.Map.Coordinate;
+import com.yourgame.model.Skill.Skill;
+// import com.yourgame.model.Skill.SkillType;
 import com.yourgame.model.enums.Gender;
 public class Player {
     private String username;
@@ -16,7 +20,8 @@ public class Player {
     private Coordinate currentLocation;
     private Inventory inventory;
     private Tool equippedTool;
-    private Map<SkillType, Skill> skills;
+    private ArrayList<Skill> skills ; 
+    // private Map<SkillType, Skill> skills;
     private Map<String, Relationship> relationships; // NPC name or Player username -> Relationship
     private FarmMap farmMapReference;
     private Set<Recipe> knownCraftingRecipes;
@@ -33,7 +38,7 @@ public class Player {
         this.energy = maxEnergy; // Start with full energy
         this.money = 0; // Start with no money
         this.inventory = new Inventory();
-        this.skills = new HashMap<>();
+        this.skills = new ArrayList<>();
         this.relationships = new HashMap<>();
         this.knownCraftingRecipes = new HashSet<>();
         this.knownCookingRecipes = new HashSet<>();
@@ -46,13 +51,9 @@ public class Player {
         this.energy = Math.max(0, Math.min(maxEnergy, this.energy + amount));
     }
 
-    public void addXp(SkillType skillType, int xp) {
-        Skill skill = skills.get(skillType);
-        if (skill != null) {
-            skill.addXp(xp);
-        }
+    public void addXp(Skill skill, int xp) {
+        skill.addExperience(xp);
     }
-
     public boolean canAfford(int cost) {
         return this.money >= cost;
     }
@@ -91,10 +92,10 @@ public class Player {
         // Update quest logic here
     }
 
-    public int getCurrentSkillLevel(SkillType skillType) {
-        Skill skill = skills.get(skillType);
-        return skill != null ? skill.getLevel() : 0;
-    }
+    // public int getCurrentSkillLevel(SkillType skillType) {
+    //     Skill skill = skills.get(skillType);
+    //     return skill != null ? skill.getLevel() : 0;
+    // }
 
     // Getters and setters for all attributes
 
@@ -186,11 +187,11 @@ public class Player {
         this.equippedTool = equippedTool;
     }
 
-    public Map<SkillType, Skill> getSkills() {
+    public ArrayList<Skill> getSkills() {
         return skills;
     }
 
-    public void setSkills(Map<SkillType, Skill> skills) {
+    public void setSkills(ArrayList<Skill> skills) {
         this.skills = skills;
     }
 

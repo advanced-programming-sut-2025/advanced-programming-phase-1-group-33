@@ -3,8 +3,8 @@ package com.yourgame.view;
 import java.util.List;
 
 import com.yourgame.model.Buff;
-import com.yourgame.model.TimeSystem;
-import com.yourgame.model.WeatherSystem;
+import com.yourgame.model.Weather.TimeSystem;
+import com.yourgame.model.Weather.WeatherSystem;
 import com.yourgame.model.enums.ToolType;
 
 public class PlayerStatusView {

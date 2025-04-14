@@ -1,6 +1,6 @@
 package com.yourgame.view;
-import com.yourgame.model.Coordinate;
-import com.yourgame.model.GameMap;
+import com.yourgame.model.Map.Coordinate;
+import com.yourgame.model.Map.GameMap;
 
 public class MapView {
     public void displayGameMapSegment(GameMap map, Coordinate center, int radius ){

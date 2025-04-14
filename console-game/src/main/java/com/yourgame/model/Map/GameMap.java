@@ -1,9 +1,13 @@
-package com.yourgame.model;
+package com.yourgame.model.Map;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import com.yourgame.model.Item;
+import com.yourgame.model.Resource;
+import com.yourgame.model.Building.Building;
 
 public class GameMap {
     private Tile[][] tiles;
