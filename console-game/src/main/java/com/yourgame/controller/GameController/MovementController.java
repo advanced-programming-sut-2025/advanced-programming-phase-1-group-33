@@ -1,11 +1,11 @@
-package com.yourgame.controller;
+package com.yourgame.controller.GameController;
 
 import com.yourgame.model.GameState;
 import com.yourgame.model.Player;
 import com.yourgame.model.Map.Coordinate;
 import com.yourgame.model.Map.GameMap;
 import com.yourgame.model.Command;
-public class MovementController {
+public class MovementController extends GameMenuCtrl{
     private GameState gameState;
 
     public MovementController(GameState gameState) {

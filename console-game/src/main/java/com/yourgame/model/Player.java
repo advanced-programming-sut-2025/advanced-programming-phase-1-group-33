@@ -4,8 +4,13 @@ import javax.tools.Tool;
 import java.util.*;
 
 import com.yourgame.model.Building.FarmMap;
+import com.yourgame.model.Inventory.Inventory;
+import com.yourgame.model.Item.Item;
 import com.yourgame.model.Map.Coordinate;
 import com.yourgame.model.Skill.Skill;
+import com.yourgame.model.Inventory.BackPack;
+import com.yourgame.model.enums.BackPackType;
+import com.yourgame.model.enums.AnimalType;
 // import com.yourgame.model.Skill.SkillType;
 import com.yourgame.model.enums.Gender;
 public class Player {
@@ -17,6 +22,8 @@ public class Player {
     private int energy;
     private int maxEnergy;
     private int money;
+    private final BackPack backPack = new BackPack(BackPackType.DEFAULT);
+    private ArrayList<AnimalType> animals= new ArrayList<>(); 
     private Coordinate currentLocation;
     private Inventory inventory;
     private Tool equippedTool;

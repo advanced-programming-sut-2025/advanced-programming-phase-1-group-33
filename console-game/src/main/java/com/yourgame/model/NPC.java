@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.yourgame.model.Item.Item;
 import com.yourgame.model.Map.Coordinate;
 import com.yourgame.model.Weather.TimeCondition;
 

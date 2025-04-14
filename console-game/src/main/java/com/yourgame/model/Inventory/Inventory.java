@@ -1,6 +1,8 @@
-package com.yourgame.model;
+package com.yourgame.model.Inventory;
 
 import java.util.Map;
+
+import com.yourgame.model.Item.Item;
 
 public class Inventory {
     public void addItem(Item item) {

@@ -1,7 +1,9 @@
-package com.yourgame.model;
+package com.yourgame.model.Shop;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import com.yourgame.model.Item.Item;
 
 public class Shop {
     private String name;

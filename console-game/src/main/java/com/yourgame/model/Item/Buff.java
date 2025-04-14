@@ -1,4 +1,6 @@
-package com.yourgame.model;
+package com.yourgame.model.Item;
+
+import com.yourgame.model.Player;
 
 public class Buff {
     private String name;            // Name of the buff (e.g., "Speed Boost")

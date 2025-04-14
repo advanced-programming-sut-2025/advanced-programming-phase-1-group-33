@@ -2,7 +2,7 @@ package com.yourgame.model.Building;
 import java.awt.Dimension;
 import java.util.Map;
 
-import com.yourgame.model.Item;
+import com.yourgame.model.Item.Item;
 import com.yourgame.model.Map.Coordinate;
 public class FarmMap extends Building{
 

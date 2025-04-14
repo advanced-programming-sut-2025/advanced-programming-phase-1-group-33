@@ -1,7 +1,7 @@
 package com.yourgame.view;
 
-import com.yourgame.model.Inventory;
-import com.yourgame.model.Item;
+import com.yourgame.model.Inventory.Inventory;
+import com.yourgame.model.Item.Item;
 
 import java.util.Map;
 

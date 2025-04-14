@@ -1,6 +1,7 @@
 package com.yourgame.model;
 
 import com.yourgame.model.Building.Building;
+import com.yourgame.model.Item.Item;
 import com.yourgame.model.enums.AnimalType;
 
 public class Animal {

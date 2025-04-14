@@ -5,9 +5,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.yourgame.model.Item;
-import com.yourgame.model.Resource;
 import com.yourgame.model.Building.Building;
+import com.yourgame.model.Item.Item;
+import com.yourgame.model.Item.Resource;
 
 public class GameMap {
     private Tile[][] tiles;

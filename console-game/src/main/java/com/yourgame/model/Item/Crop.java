@@ -1,4 +1,4 @@
-package com.yourgame.model;
+package com.yourgame.model.Item;
 
 import com.yourgame.model.data.CropData;
 import com.yourgame.model.enums.Quality;

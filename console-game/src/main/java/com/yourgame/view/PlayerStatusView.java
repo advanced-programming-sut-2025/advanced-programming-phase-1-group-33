@@ -2,7 +2,7 @@ package com.yourgame.view;
 
 import java.util.List;
 
-import com.yourgame.model.Buff;
+import com.yourgame.model.Item.Buff;
 import com.yourgame.model.Weather.TimeSystem;
 import com.yourgame.model.Weather.WeatherSystem;
 import com.yourgame.model.enums.ToolType;

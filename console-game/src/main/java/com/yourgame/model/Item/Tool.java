@@ -1,5 +1,5 @@
 
-package com.yourgame.model;
+package com.yourgame.model.Item;
 
 import com.yourgame.model.Map.Tile;
 

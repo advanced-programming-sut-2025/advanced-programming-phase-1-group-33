@@ -3,6 +3,7 @@ package com.yourgame.model;
 import java.util.List;
 
 import com.yourgame.model.Map.GameMap;
+import com.yourgame.model.Shop.Shop;
 import com.yourgame.model.Weather.TimeSystem;
 import com.yourgame.model.Weather.WeatherSystem;
 

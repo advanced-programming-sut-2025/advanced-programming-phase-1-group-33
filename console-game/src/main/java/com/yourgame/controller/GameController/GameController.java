@@ -1,9 +1,11 @@
-package com.yourgame.controller;
+package com.yourgame.controller.GameController;
 
 import com.yourgame.model.GameState;
 import com.yourgame.view.ConsoleView;
 
 import java.util.Scanner;
+
+import com.yourgame.controller.CommandParser;
 import com.yourgame.model.Command;
 public class GameController {
     private GameState gameState;
