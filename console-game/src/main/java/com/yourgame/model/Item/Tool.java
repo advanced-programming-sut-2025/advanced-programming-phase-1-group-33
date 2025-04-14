@@ -2,16 +2,18 @@
 package com.yourgame.model.Item;
 
 import com.yourgame.model.Map.Tile;
+import com.yourgame.model.enums.ToolType;
 
 public class Tool extends Item {
     private int level;          // The level of the tool, e.g., wooden, steel, iridium, etc.
     private int energyCost;     // The energy consumed by using this tool
-
+    private ToolType toolType;
     // Constructor
     public Tool(String name, String description, int sellPrice, boolean isStackable, int level, int energyCost) {
         super(name, description, sellPrice, isStackable);
         this.level = level;
         this.energyCost = energyCost;
+        this.toolType = ToolType.AXE;
     }
 
     // Getters and setters
