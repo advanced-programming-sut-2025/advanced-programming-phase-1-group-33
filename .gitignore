@@ -1,5 +1,9 @@
-# ignore the target file 
-*/target/*
+# Ignore all target folders (any depth)
+**/target/
+
+# Ignore IntelliJ IDEA config folder
 .idea/
-Phase1.pdf/
-TODO.md/
+
+# Ignore specific files
+Phase1.pdf
+TODO.md
