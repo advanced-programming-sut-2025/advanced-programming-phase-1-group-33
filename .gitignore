@@ -1,2 +1,5 @@
 # ignore the target file 
 */target/*
+.idea/
+Phase1.pdf/
+TODO.md/
