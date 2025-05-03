@@ -1,6 +1,6 @@
 package com.yourgame.persistence;
 
-import com.yourgame.model.AppModel.User;
+import com.yourgame.model.User;
 import com.yourgame.model.enums.Gender;
 import java.sql.*;
 
@@ -34,7 +34,7 @@ public class UserDAO {
                         rs.getString("password"),
                         rs.getString("email"),
                         rs.getString("nickname"),
-                        Gender.valueOf(rs.getString("gender"))
+                        rs.getString("gender")
                 );
             }
         }

@@ -1,27 +1,23 @@
-package com.yourgame.model.AppModel;
+package com.yourgame.model;
 
 import com.yourgame.model.enums.Gender;
+import com.yourgame.model.enums.SecurityQuestion;
 
 public class User {
     private String Username;
     private String Password;
     private String Email;
     private String Nickname;
-    private Gender Gender;
+    private String Gender;
+    private SecurityQuestion question;
+    private String answer;
 
-    public User(String Username, String Password, String Email, String Nickname, Gender Gender) {
+    public User(String Username, String Password, String Email, String Nickname, String Gender) {
         this.Username = Username;
         this.Password = Password;
         this.Email = Email;
         this.Nickname = Nickname;
         this.Gender = Gender;
-    }
-    public User(String Username, String Password, String Email, String Nickname) {
-        this.Username = Username;
-        this.Password = Password;
-        this.Email = Email;
-        this.Nickname = Nickname;
-        this.Gender = Gender.Female;
     }
 
     public String getUsername() {
@@ -36,7 +32,7 @@ public class User {
     public String getNickname() {
         return Nickname;
     }
-    public Gender getGender() {
+    public String getGender() {
         return Gender;
     }
 
@@ -52,8 +48,23 @@ public class User {
     public void setNickname(String nickname) {
         this.Nickname = nickname;
     }
-    public void setGender(Gender gender) {
+    public void setGender(String gender) {
         this.Gender = gender;
+    }
+    public SecurityQuestion getQuestion() {
+        return question;
+    }
+
+    public void setQuestion(SecurityQuestion question) {
+        this.question = question;
+    }
+
+    public String getAnswer() {
+        return answer;
+    }
+
+    public void setAnswer(String answer) {
+        this.answer = answer;
     }
 
 }
