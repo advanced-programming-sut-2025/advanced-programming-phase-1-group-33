@@ -7,9 +7,10 @@ import com.yourgame.model.enums.SecurityQuestion;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.sql.SQLException;
+import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 public class LoginMenuController extends Controller {
 
     private static User userOfForgetPassword = null;
@@ -48,7 +49,7 @@ public class LoginMenuController extends Controller {
         return new Response(true, "Successfully logged in! Password updated to: " + newPass);
     }
 
-    public static Response handleRegister(Request request) {
+    public static Response handleRegister(Request request, Scanner scanner) {
         String username = request.body.get("username");
         String password = request.body.get("password");
         String email = request.body.get("email");
@@ -70,8 +71,8 @@ public class LoginMenuController extends Controller {
                 return new Response(false, "Password isn't secure! " +
                         validatePasswordSecurity(password));
             }
-            if (!password.equals(passwordConfirm)) {
-                return new Response(false, "Passwords do not match!");
+            if (!password.trim().equals(passwordConfirm.trim())) {
+                return  new Response(false, "Passwords do not match! Password : " + password + " And pass to conf : " + passwordConfirm);
             }
         }
         if (!validateEmail(email)) {
@@ -80,6 +81,18 @@ public class LoginMenuController extends Controller {
         User user = new User(username, hashPassword(password),email, nickname, gender);
         userWaitingForQuestion = user;
         isWaitingForQuestion = true;
+        // Persist the new user using USERDao
+        try {
+            App.getUserDAO().saveUser(user);
+            System.out.println("user saved");
+        } catch (SQLException e) {
+            if (e.getMessage().contains("UNIQUE constraint failed: users.username")) {
+                return new Response(false, "Username already exists!");
+            }
+            e.printStackTrace();
+            return new Response(false, "An error occurred during registration.");
+        }
+
         if (System.getenv("APP_MODE") != null && System.getenv("APP_MODE").equals("TEST")) {
             userPassword = password;
         }

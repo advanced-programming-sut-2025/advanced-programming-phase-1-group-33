@@ -3,69 +3,38 @@ package com.yourgame.view.AppViews;
 import java.util.Scanner;
 
 import com.yourgame.controller.AppController.LoginMenuController;
-import com.yourgame.model.App;
 import com.yourgame.model.IO.Request;
 import com.yourgame.model.IO.Response;
 import com.yourgame.model.enums.Commands.LoginMenuCommands;
-import com.yourgame.model.enums.Commands.MenuTypes;
 
-public class LoginMenu implements AppMenu {
+public class RegisterMenu implements AppMenu {
 
-    @Override
-    public String getPreview() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("----------------------------\n");
-        sb.append("Login Menu Commands:\n");
-        sb.append(
-                "1. Register: register -u <username> -p <password> -pc <passwordConfirm> -n <nickname> -e <email> -g <gender>\n");
-        sb.append("2. List Questions: list_questions\n");
-        sb.append("3. Pick Question: pick_question -q <questionNumber> -a <answer> -ac <answerConfirm>\n");
-        sb.append("4. Answer: answer -a <answer>\n");
-        sb.append("5. Enter Menu: enter <menuname>\n");
-        sb.append("6. Show Menu: show_menu\n");
-        sb.append("8. Go Back: go back\n");
-        sb.append("8. Exit: exit_menu\n");
-        sb.append("----------------------------");
-        return sb.toString();
-    }
-
-    @Override
     public Response handleMenu(String input, Scanner scanner) {
-        LoginMenuCommands command = LoginMenuCommands.parse(input);
-        if (command == null) {
-            return getInvalidCommand();
+        Response response = null;
+        if (LoginMenuCommands.LIST_QUESTIONS.matches(input)) {
+            response = getListQuestions(input);
+        } else if (LoginMenuController.isWaitingForQuestion) {
+            if (LoginMenuCommands.PICK_QUESTION.matches(input)) {
+                response = getPickQuestion(input);
+            } else {
+                response = getInvalidCommand();
+            }
+        } else if (LoginMenuController.getUserOfForgetPassword() != null && !LoginMenuController.isProgramWaitingForAnswer) {
+            response = getChangePassword(input);
+        } else if (LoginMenuCommands.EXIT_MENU.matches(input)) {
+            response = getExitMenu(input);
+        } else if (LoginMenuCommands.ENTER_MENU.matches(input)) {
+            response = getEnterMenu(input);
+        } else if (LoginMenuCommands.SHOW_MENU.matches(input)) {
+            response = getShowMenu(input);
+        } else if (LoginMenuCommands.ANSWER.matches(input)) {
+            response = getAnswer(input);
+        } else if (LoginMenuCommands.REGISTER.matches(input)) {
+            response = getRegister(input, scanner);
+        } else {
+            response = getInvalidCommand();
         }
-
-        switch (command) {
-            case LIST_QUESTIONS:
-                return getListQuestions(input);
-            case PICK_QUESTION:
-                if (LoginMenuController.isWaitingForQuestion) {
-                    return getPickQuestion(input);
-                } else {
-                    return getInvalidCommand();
-                }
-            case EXIT_MENU:
-                return getExitMenu(input);
-            case ENTER_MENU:
-                return getEnterMenu(input);
-            case SHOW_MENU:
-                return getShowMenu(input);
-            case ANSWER:
-                return getAnswer(input);
-            case REGISTER:
-                return getRegister(input, scanner);
-            case GO_Back:
-                App.setCurrentMenu(MenuTypes.MainMenu);
-                return new Response(true, "Going Back to MainMenu"); 
-            default:
-                // Special case for change password logic
-                if (LoginMenuController.getUserOfForgetPassword() != null
-                        && !LoginMenuController.isProgramWaitingForAnswer) {
-                    return getChangePassword(input);
-                }
-                return getInvalidCommand();
-        }
+        return (response);
     }
 
     private static Response getChangePassword(String input) {
@@ -120,10 +89,11 @@ public class LoginMenu implements AppMenu {
         return response;
     }
 
+
     private static Response getAnswer(String input) {
         Request request = new Request(input);
         request.body.put("answer", LoginMenuCommands.ANSWER.getGroup(input, "answer"));
         Response response = LoginMenuController.handleAnswer(request);
         return response;
-    }
+    }   
 }

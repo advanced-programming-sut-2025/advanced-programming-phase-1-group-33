@@ -4,6 +4,8 @@
 # Ignore IntelliJ IDEA config folder
 /.idea/
 
+/.vscode/
+
 # Ignore specific files
 Phase1.pdf
 TODO.md

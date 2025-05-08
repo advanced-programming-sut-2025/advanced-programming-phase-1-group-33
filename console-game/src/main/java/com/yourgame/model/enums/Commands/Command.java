@@ -5,7 +5,7 @@ import java.util.regex.Pattern;
 
 public interface Command {
     String ENTER_MENU = "menu\\s+enter\\s+(?<menuName>.*)";
-    String EXIT_MENU = "menu\\s+exit";
+    String EXIT_MENU = "exit";
     String SHOW_MENU = "show\\s+current\\s+menu";
 
     boolean matches(String input);

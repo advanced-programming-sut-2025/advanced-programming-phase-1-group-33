@@ -26,19 +26,21 @@ dependencies {
 
     implementation("com.google.code.gson:gson:2.10.1")
 
+
+    implementation("org.xerial:sqlite-jdbc:3.45.3.0")
 }
 
 // Apply a specific Java toolchain to ease working on different environments.
 java {
     toolchain {
-        languageVersion = JavaLanguageVersion.of(21)
+        languageVersion = JavaLanguageVersion.of(23)
     }
 }
 
 application {
-    // Define the main class for the application.
-    mainClass = "com.yourgame.Main"
+    mainClass.set("com.yourgame.Main")
 }
+
 
 tasks.named<Test>("test") {
     // Use JUnit Platform for unit tests.

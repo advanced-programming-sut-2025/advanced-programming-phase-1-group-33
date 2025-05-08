@@ -5,8 +5,13 @@ import com.yourgame.model.IO.Response;
 import java.util.Scanner;
 
 public interface AppMenu {
-    void handleMenu(String input);
+    Response handleMenu(String command, Scanner scanner);
 
+    // Add this method
+    default String getPreview() {
+        return null; // Default: no preview
+    }
+    
     default void printResponse(Response response) {
         System.out.println(response.getMessage());
     }
@@ -14,5 +19,4 @@ public interface AppMenu {
     default Response getInvalidCommand() {
         return new Response(false, "Invalid command");
     }
-
 }

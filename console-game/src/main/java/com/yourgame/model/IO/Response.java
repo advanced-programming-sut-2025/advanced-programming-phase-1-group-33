@@ -16,6 +16,11 @@ public class Response {
         this.success = success;
     }
 
+    @Override
+    public String toString() {
+        return this.message;
+    }
+
     public String getMessage() {
         return message;
     }

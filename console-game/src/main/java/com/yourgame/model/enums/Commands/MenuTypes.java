@@ -10,6 +10,7 @@ public enum MenuTypes {
     AvatarMenu(new AvatarMenu()),
     PreGameMenu(new PreGameMenu()),
     LoginMenu(new LoginMenu()),
+    RegisterMenu(new RegisterMenu()),
     ExitMenu(new ExitMenu());
 
     private final AppMenu menu;
