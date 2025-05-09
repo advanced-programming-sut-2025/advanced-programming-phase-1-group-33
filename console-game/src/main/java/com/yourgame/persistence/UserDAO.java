@@ -6,6 +6,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+
 public class UserDAO {
     private Connection connection;
     
@@ -29,6 +30,14 @@ public class UserDAO {
         }
     }
 
+    public void updateUsername(String oldUsername, String newUsername) throws SQLException {
+        String sql = "UPDATE users SET username = ? WHERE username = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, newUsername);
+            stmt.setString(2, oldUsername);
+            stmt.executeUpdate();
+        }
+    }
 
 
     public void saveUser(User user) throws SQLException {

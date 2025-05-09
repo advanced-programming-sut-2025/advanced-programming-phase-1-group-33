@@ -17,10 +17,10 @@ public class MainMenuController {
                 App.setCurrentMenu(MenuTypes.RegisterMenu);
                 return new Response(true, "You are now in " + menuName[0]);
             case "profile":
-                App.setCurrentMenu(MenuTypes.RegisterMenu);
+                App.setCurrentMenu(MenuTypes.ProfileMenu);
                 return new Response(true, "You are now in " + menuName[0]);
             case "pregame":
-                App.setCurrentMenu(MenuTypes.RegisterMenu);
+                App.setCurrentMenu(MenuTypes.PreGameMenu);
                 return new Response(true, "You are now in " + menuName[0]);
 
             case "exit":

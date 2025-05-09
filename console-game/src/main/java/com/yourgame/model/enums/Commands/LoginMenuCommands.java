@@ -10,7 +10,7 @@ public enum LoginMenuCommands implements Command{
     FORGET("^forget\\s+password\\s+-u\\s+(?<username>.+)$"),
     ANSWER("^answer\\s+-a\\s+(?<answer>.+)$"),
     LIST_QUESTIONS("^list\\s+questions$"),
-    GO_Back("go\\s+back"),
+    GO_Back(Command.Go_back),
     SHOW_MENU(Command.SHOW_MENU),
     EXIT_MENU(Command.EXIT_MENU),
     ENTER_MENU(Command.ENTER_MENU);
