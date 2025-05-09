@@ -37,6 +37,8 @@ public class LoginMenu implements AppMenu {
         }
 
         switch (command) {
+            case LOGIN:
+                return getLogin(input); 
             case LIST_QUESTIONS:
                 return getListQuestions(input);
             case PICK_QUESTION:
@@ -66,6 +68,16 @@ public class LoginMenu implements AppMenu {
                 }
                 return getInvalidCommand();
         }
+    }
+
+    private Response getLogin(String input) {
+        Request request = new Request(input);
+        request.body.put("username", LoginMenuCommands.LOGIN.getGroup(input, "username"));
+        request.body.put("password", LoginMenuCommands.LOGIN.getGroup(input, "password"));
+
+        Response response = LoginMenuController.handleLogin(request);
+        return response;
+        
     }
 
     private static Response getChangePassword(String input) {

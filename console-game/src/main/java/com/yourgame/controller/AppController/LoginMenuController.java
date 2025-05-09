@@ -11,6 +11,7 @@ import java.sql.SQLException;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
 public class LoginMenuController extends Controller {
 
     private static User userOfForgetPassword = null;
@@ -42,7 +43,7 @@ public class LoginMenuController extends Controller {
             }
         }
         user.setPassword(hashPassword(newPass));
-        //Save User
+        // Save User
         userOfForgetPassword = null;
         App.setCurrentUser(user);
         App.setCurrentMenu(MenuTypes.MainMenu);
@@ -72,13 +73,14 @@ public class LoginMenuController extends Controller {
                         validatePasswordSecurity(password));
             }
             if (!password.trim().equals(passwordConfirm.trim())) {
-                return  new Response(false, "Passwords do not match! Password : " + password + " And pass to conf : " + passwordConfirm);
+                return new Response(false,
+                        "Passwords do not match! Password : " + password + " And pass to conf : " + passwordConfirm);
             }
         }
         if (!validateEmail(email)) {
             return new Response(false, "Email is invalid!");
         }
-        User user = new User(username, hashPassword(password),email, nickname, gender);
+        User user = new User(username, hashPassword(password), email, nickname, gender);
         userWaitingForQuestion = user;
         isWaitingForQuestion = true;
         // Persist the new user using USERDao
@@ -97,7 +99,8 @@ public class LoginMenuController extends Controller {
             userPassword = password;
         }
         String message = "User created! Password is: " + password + "\n" +
-                "Enter 'pick question -q <question number> -a <answer> -c <confirm answer>' to choose security question\n" +
+                "Enter 'pick question -q <question number> -a <answer> -c <confirm answer>' to choose security question\n"
+                +
                 "You can enter 'list questions' command to see possible security questions\n";
         return new Response(true, message);
     }
@@ -115,7 +118,7 @@ public class LoginMenuController extends Controller {
         User user = getUserWaitingForQuestion();
         user.setAnswer(answer);
         user.setQuestion(SecurityQuestion.values()[questionNumber - 1]);
-//save user
+        // save user
         isWaitingForQuestion = false;
         userWaitingForQuestion = null;
         App.setCurrentMenu(MenuTypes.MainMenu);
@@ -123,9 +126,28 @@ public class LoginMenuController extends Controller {
         return new Response(true, "Question Picked! Logging in...");
     }
 
-//    public static Response handleLogin(Request request)
+    public static Response handleLogin(Request request) {
+        String username = request.body.get("username");
+        String password = request.body.get("password");
 
-//    public static Response handleForgetPassword(Request request)
+        try {
+            User user = App.getUserDAO().loadUser(username);
+            if (user == null) {
+                return new Response(false, "Username not found!");
+            }
+            if (!user.getPassword().equals(hashPassword(password))) {
+                return new Response(false, "Incorrect password!");
+            }
+            App.setCurrentUser(user);
+            App.setCurrentMenu(MenuTypes.MainMenu);
+            return new Response(true, "Login successful! You logged in as "+ user.getUsername());
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return new Response(false, "An error occurred during login.");
+        }
+    }
+
+    // public static Response handleForgetPassword(Request request)
 
     public static Response handleAnswer(Request request) {
         if (userOfForgetPassword == null) {
@@ -163,6 +185,7 @@ public class LoginMenuController extends Controller {
     public static String getUserPassword() {
         return userPassword;
     }
+
     private static int thisCharCount(char ch, String str) {
         int count = 0;
         for (int i = 0; i < str.length(); i++) {
@@ -238,7 +261,8 @@ public class LoginMenuController extends Controller {
         if (email.contains("..")) {
             return false;
         }
-        if (invalidFrontAndEndChars(username)) return false;
+        if (invalidFrontAndEndChars(username))
+            return false;
 
         if (!tail.matches("[a-zA-Z]{2,}")) {
             return false;
@@ -246,8 +270,10 @@ public class LoginMenuController extends Controller {
         if (!domain.matches("[a-zA-Z\\d-]+")) {
             return false;
         }
-        if (invalidFrontAndEndChars(domain)) return false;
-        if (invalidFrontAndEndChars(tail)) return false;
+        if (invalidFrontAndEndChars(domain))
+            return false;
+        if (invalidFrontAndEndChars(tail))
+            return false;
         return true;
     }
 
