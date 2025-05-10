@@ -22,6 +22,10 @@ public class GameMap {
         this.spawnedResources = new HashMap<>();
     }
 
+    public GameMap() {
+        //TODO Auto-generated constructor stub
+    }
+
     public Tile getTileAt(Coordinate coordinate) {
         return tiles[coordinate.getX()][coordinate.getY()];
     }

@@ -1,11 +1,15 @@
 package com.yourgame.controller.GameController;
 
 import com.yourgame.model.GameState;
+import com.yourgame.model.User;
+import com.yourgame.model.IO.Request;
+import com.yourgame.model.IO.Response;
 import com.yourgame.view.ConsoleView;
 
 import java.util.Scanner;
 
 import com.yourgame.controller.CommandParser;
+import com.yourgame.model.App;
 import com.yourgame.model.Command;
 public class GameController {
     private GameState gameState;
@@ -13,7 +17,11 @@ public class GameController {
     private boolean isRunning;
 
     public GameController() {
-        this.gameState = new GameState();
+        User currentUser = App.getCurrentUser();
+        if (currentUser == null || currentUser.getGameState() == null) {
+            throw new IllegalStateException("Cannot initialize GameController: No user logged in or game state available.");
+        }
+        this.gameState = App.getCurrentUser().getGameState();
         this.consoleView = new ConsoleView(System.out);
         this.isRunning = true;
     }
@@ -48,5 +56,21 @@ public class GameController {
             // Delegate to the appropriate controller based on command
             // This part will be implemented as the game expands
         }
+    }
+
+    public Response getEnergy() {
+        return new Response(true, "Your energy is " + gameState.getCurrentPlayer().getEnergy() + "/" + gameState.getCurrentPlayer().getMaxEnergy()); 
+    }
+
+    public Response setCurrentPlayerEnergy(Request request) {
+        int energy = Integer.parseInt(request.body.get("value")); 
+        gameState.getCurrentPlayer().setEnergy(energy); 
+        return new Response(true, "Your energy is Setted" + gameState.getCurrentPlayer().getEnergy() + "/" + gameState.getCurrentPlayer().getMaxEnergy()); 
+    }
+
+    public Response setCurrentPlayerEnergyUnlimited() {
+        // TODO Auto-generated method stub
+        gameState.getCurrentPlayer().setUnlimitedEnergy(true);
+        return new Response(true, "Your energy is Your energy is set to be unlimited"); 
     }
 }

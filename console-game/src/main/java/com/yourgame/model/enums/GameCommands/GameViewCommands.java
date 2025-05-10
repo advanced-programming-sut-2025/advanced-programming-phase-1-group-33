@@ -1,105 +1,130 @@
 package com.yourgame.model.enums.GameCommands;
 
-import com.yourgame.model.Command;
+import com.yourgame.model.enums.Commands.Command;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 
-public enum GameViewCommands {
-    GAME_NEW(""),
-    GAME_MAP(""),
-    LOAD_GAME(""),
-    EXIT_GAME(""),
-    NEXT_TURN(""),
-    TIME(""),
-    DATE(""),
-    DATETIME(""),
-    DAY_OF_WEEK(""),
-    CHEAT_ADVANCE_TIME(""),
-    CHEAT_ADVANCE_DATE(""),
-    SEASON(""),
-    CHEAT_THOR(""),
-    WEATHER(""),
-    WEATHER_FORECAST(""),
-    CHEAT_WEATHER_SET(""),
-    GREEN_HOUSE_BUILD(""),
-    WALK(""),
-    PRINT_MAP(""),
-    HELP_READING_MAP(""),
-    ENERGY_SHOW(""),
-    ENERGY_SET_VALUE(""),
-    ENERGY_UNLIMITED(""),
-    INVENTORY_SHOW(""),
-    INVENTORY_TRASH(""),
-    TOOLS_EQUIP(""),
-    TOOLS_SHOW_CURRENT(""),
-    TOOLS_SHOW_AVAILABLE(""),
-    TOOLS_UPGRADE(""),
-    TOOLS_USE_DIRECTION(""),
-    CRAFT_INFO(""),
-    PLANT(""),
-    SHOW_PLANT(""),
-    FERTILIZE(""),
-    HOW_MUCH_WATER(""),
-    CRAFTING_SHOW_RECIPES(""),
-    CRAFTING_CRAFT(""),
-    PLACE_ITEM(""),
-    CHEAT_ADD_ITEM(""),
-    COOKING_REFRIGERATOR_PICK(""),
-    COOKING_REFRIGERATOR_PUT(""),
-    COOKING_SHOW_RECIPES(""),
-    EAT(""),
-    BUILD(""),
-    BUY_ANIMAL(""),
-    PET(""),
-    CHEAT_SET_FRIENDSHIP(""),
-    ANIMALS(""),
-    SHEPHERD(""),
-    FEED_HAY(""),
-    PRODUCES(""),
-    COLLECT_PRODUCE(""),
-    SELL_ANIMAL(""),
-    FISHING(""),
-    ARTISAN_USE(""),
-    ARTISAN_GET(""),
-    SHOW_ALL_PRODUCTS(""),
-    SHOW_ALL_AVAILABLE_PRODUCTS(""),
-    PURCHASE(""),
-    CHEAT_ADD_DOLLARS(""),
-    SELL_PRODUCT(""),
-    FRIENDSHIPS(""),
-    TALK(""),
-    TALK_HISTORY(""),
-    GIFT(""),
-    GIFT_LIST(""),
-    GIFT_HISTORY(""),
-    GIFT_RATE(""),
-    HUG(""),
-    FLOWER(""),
-    ASK_MARRIAGE(""),
-    RESPOND_MARRIAGE_ACCEPT(""),
-    RESPOND_MARRIAGE_REJECT(""),
-    START_TRADE(""),
-    TRADE(""),
-    TRADE_LIST(""),
-    TRADE_RESPOND_ACCEPT(""),
-    TRADE_RESPOND_REJECT(""),
-    TRADE_HISTORY(""),
-    MEET_NPC(""),
-    GIFT_NPC(""),
-    FRIENDSHIP_NPC_LIST(""),
-    QUESTS_LIST(""),
-    QUESTS_FINISH(""),
-    SHOW_MENU(""),
-    EXIT_MENU(""),
-    ENTER_MENU("");
+public enum GameViewCommands implements Command{
+    // NEXT_TURN(""),
+    ENERGY_SHOW("^energy\\s+show$"),
+    ENERGY_SET_VALUE("^energy\\s+set\\s+(?<value>\\d+)$"),
+    ENERGY_UNLIMITED("^energy\\s+unlimited$"),
+    // TIME(""),
+    // DATE(""),
+    // DATETIME(""),
+    // DAY_OF_WEEK(""),
+    // CHEAT_ADVANCE_TIME(""),
+    // CHEAT_ADVANCE_DATE(""),
+    // SEASON(""),
+    // CHEAT_THOR(""),
+    // WEATHER(""),
+    // WEATHER_FORECAST(""),
+    // CHEAT_WEATHER_SET(""),
+    // GREEN_HOUSE_BUILD(""),
+    // WALK(""),
+    // PRINT_MAP(""),
+    // HELP_READING_MAP(""),
+    // ENERGY_SHOW(""),
+    // INVENTORY_SHOW(""),
+    // INVENTORY_TRASH(""),
+    // TOOLS_EQUIP(""),
+    // TOOLS_SHOW_CURRENT(""),
+    // TOOLS_SHOW_AVAILABLE(""),
+    // TOOLS_UPGRADE(""),
+    // TOOLS_USE_DIRECTION(""),
+    // CRAFT_INFO(""),
+    // PLANT(""),
+    // SHOW_PLANT(""),
+    // FERTILIZE(""),
+    // HOW_MUCH_WATER(""),
+    // CRAFTING_SHOW_RECIPES(""),
+    // CRAFTING_CRAFT(""),
+    // PLACE_ITEM(""),
+    // CHEAT_ADD_ITEM(""),
+    // COOKING_REFRIGERATOR_PICK(""),
+    // COOKING_REFRIGERATOR_PUT(""),
+    // COOKING_SHOW_RECIPES(""),
+    // EAT(""),
+    // BUILD(""),
+    // BUY_ANIMAL(""),
+    // PET(""),
+    // CHEAT_SET_FRIENDSHIP(""),
+    // ANIMALS(""),
+    // SHEPHERD(""),
+    // FEED_HAY(""),
+    // PRODUCES(""),
+    // COLLECT_PRODUCE(""),
+    // SELL_ANIMAL(""),
+    // FISHING(""),
+    // ARTISAN_USE(""),
+    // ARTISAN_GET(""),
+    // SHOW_ALL_PRODUCTS(""),
+    // SHOW_ALL_AVAILABLE_PRODUCTS(""),
+    // PURCHASE(""),
+    // CHEAT_ADD_DOLLARS(""),
+    // SELL_PRODUCT(""),
+    // FRIENDSHIPS(""),
+    // TALK(""),
+    // TALK_HISTORY(""),
+    // GIFT(""),
+    // GIFT_LIST(""),
+    // GIFT_HISTORY(""),
+    // GIFT_RATE(""),
+    // HUG(""),
+    // FLOWER(""),
+    // ASK_MARRIAGE(""),
+    // RESPOND_MARRIAGE_ACCEPT(""),
+    // RESPOND_MARRIAGE_REJECT(""),
+    // START_TRADE(""),
+    // TRADE(""),
+    // TRADE_LIST(""),
+    // TRADE_RESPOND_ACCEPT(""),
+    // TRADE_RESPOND_REJECT(""),
+    // TRADE_HISTORY(""),
+    // MEET_NPC(""),
+    // GIFT_NPC(""),
+    // FRIENDSHIP_NPC_LIST(""),
+    // QUESTS_LIST(""),
+    // QUESTS_FINISH(""),
+    // SHOW_MENU(""),
+    // ENTER_MENU(""),
+    Go_Back(Command.Go_back), 
+    EXIT_GAME("exit\\s+game");
 
-    private final String regex;
+    private final String pattern;
 
-    GameViewCommands(String regex){
-        this.regex = regex;
+    GameViewCommands(String pattern) {
+        this.pattern = pattern;
+    }
+        @Override
+    public boolean matches(String input) {
+        return getMatcher(input).matches();
     }
 
-    
+    public Matcher getMatcher(String input) {
+        return Pattern.compile(pattern).matcher(input);
+    }
+
+    @Override
+    public String getGroup(String input, String group) {
+        Matcher matcher = getMatcher(input);
+        matcher.find();
+        String value = matcher.group(group);
+        if (value != null && group.equals("loginFlag")) {
+            if (!value.equals("-stay-logged-in")) value = null;
+        }
+        return value != null ? value.trim() : null;
+    }
+
+
+    public static GameViewCommands parse(String input) {
+        for (GameViewCommands command : values()) {
+            if (command.matches(input)) {
+                return command;
+            }
+        }
+        return null;
+    }
 }

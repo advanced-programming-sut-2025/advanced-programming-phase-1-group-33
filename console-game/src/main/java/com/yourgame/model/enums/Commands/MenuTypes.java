@@ -1,6 +1,7 @@
 package com.yourgame.model.enums.Commands;
 
 import com.yourgame.view.AppViews.*;
+import com.yourgame.view.GameMenu;
 
 import java.util.Scanner;
 
@@ -11,6 +12,7 @@ public enum MenuTypes {
     PreGameMenu(new PreGameMenu()),
     LoginMenu(new LoginMenu()),
     RegisterMenu(new RegisterMenu()),
+    GameMenu(new GameMenu()), 
     ExitMenu(new ExitMenu());
 
     private final AppMenu menu;

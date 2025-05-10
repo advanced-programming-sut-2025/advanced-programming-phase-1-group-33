@@ -8,6 +8,8 @@ import com.yourgame.model.Weather.TimeSystem;
 import com.yourgame.model.Weather.WeatherSystem;
 
 public class GameState {
+    private Player currentPlayer; 
+
     private List<Player> players;
     private int currentTurnPlayerIndex;
     private TimeSystem gameTime;
@@ -16,7 +18,8 @@ public class GameState {
     private List<NPC> npcs;
     private List<Shop> shops;
 
-    public GameState(List<Player> players, TimeSystem gameTime, WeatherSystem weather, GameMap map, List<NPC> npcs, List<Shop> shops) {
+    public GameState(Player player,  List<Player> players, TimeSystem gameTime, WeatherSystem weather, GameMap map, List<NPC> npcs, List<Shop> shops) {
+        this.currentPlayer = player; 
         this.players = players;
         this.currentTurnPlayerIndex = 0; // Start with the first player
         this.gameTime = gameTime;
@@ -29,6 +32,15 @@ public class GameState {
     public GameState() {
 
     }
+
+    public Player getCurrentPlayer() {
+        return currentPlayer;
+    }
+
+    public void setCurrentPlayer(Player currentPlayer) {
+        this.currentPlayer = currentPlayer;
+    }
+
 
     public Player getPlayer(int index) {
         return players.get(index);

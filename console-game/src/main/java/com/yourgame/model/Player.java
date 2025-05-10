@@ -20,7 +20,8 @@ public class Player {
     private String email;
     private Gender gender;
     private int energy;
-    private int maxEnergy;
+    private int maxEnergy= 1000; // made this uppp :))) :))) 
+    private boolean unlimitedEnergy= false; 
     private int money;
     private final BackPack backPack = new BackPack(BackPackType.DEFAULT);
     private ArrayList<AnimalType> animals= new ArrayList<>(); 
@@ -37,7 +38,6 @@ public class Player {
 
     public Player(String username, String hashedPassword, String nickname, String email, Gender gender, int maxEnergy) {
         this.username = username;
-        this.hashedPassword = hashedPassword;
         this.nickname = nickname;
         this.email = email;
         this.gender = gender;
@@ -53,6 +53,19 @@ public class Player {
     }
 
     // Business logic methods
+
+    public Player(User currentUser) {
+        this.username = currentUser.getUsername(); 
+        this.nickname = currentUser.getNickname(); 
+        this.energy = maxEnergy; // Start with full energy
+        this.money = 0; // Start with no money
+        this.inventory = new Inventory();
+        this.skills = new ArrayList<>();
+        this.relationships = new HashMap<>();
+        this.knownCraftingRecipes = new HashSet<>();
+        this.knownCookingRecipes = new HashSet<>();
+        this.activeQuests = new ArrayList<>();
+    }
 
     public void changeEnergy(int amount) {
         this.energy = Math.max(0, Math.min(maxEnergy, this.energy + amount));
@@ -93,6 +106,13 @@ public class Player {
         } else {
             knownCraftingRecipes.add(recipe);
         }
+    }
+    public boolean isUnlimitedEnergy() {
+        return unlimitedEnergy;
+    }
+
+    public void setUnlimitedEnergy(boolean unlimitedEnergy) {
+        this.unlimitedEnergy = unlimitedEnergy;
     }
 
     public void updateQuest(QuestStatus questStatus) {

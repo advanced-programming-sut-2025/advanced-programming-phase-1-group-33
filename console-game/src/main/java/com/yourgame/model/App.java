@@ -53,5 +53,4 @@ public class App {
     public static void setUsers(List<User> users) {
         App.users = users;
     }
-
 }
