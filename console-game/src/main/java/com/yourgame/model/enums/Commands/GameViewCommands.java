@@ -5,13 +5,13 @@ import java.util.regex.Pattern;
 
 
 public enum GameViewCommands implements Command{
+    TIME("^time$"),
+    DATE("^date$"),
+    DATETIME("^datetime$"),
     NEXT_TURN("^next\\s+turn$"),
     ENERGY_SHOW("^energy\\s+show$"),
     ENERGY_SET_VALUE("^energy\\s+set\\s+(?<value>\\d+)$"),
     ENERGY_UNLIMITED("^energy\\s+unlimited$"),
-    // TIME(""),
-    // DATE(""),
-    // DATETIME(""),
     // DAY_OF_WEEK(""),
     // CHEAT_ADVANCE_TIME(""),
     // CHEAT_ADVANCE_DATE(""),

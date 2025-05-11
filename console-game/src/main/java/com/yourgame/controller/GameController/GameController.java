@@ -79,4 +79,17 @@ public class GameController {
         return new Response(true, "You are  playing as " + gameState.getCurrentPlayer().getUsername());
 
     }
+
+    public Response getTime() {
+        return new Response(true, "Current time is " + gameState.getGameTime().getTime());
+        
+    }
+
+    public Response getDate() {
+        return new Response(true, "Current Date is " + gameState.getGameTime().getDate());
+    }
+
+    public Response getDateTime() {
+        return new Response(true, "Current DateTime is " + gameState.getGameTime().getDateTime());
+    }
 }

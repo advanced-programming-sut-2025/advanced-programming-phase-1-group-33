@@ -30,8 +30,14 @@ public class GameMenu implements AppMenu{
             return getInvalidCommand();
         }
         switch (command) {
-            case  NEXT_TURN:
+            case NEXT_TURN:
                 return getNextTurn();
+            case TIME:
+                return getTime(); 
+            case DATE:
+                return getDate(); 
+            case DATETIME:
+                return getDateTime(); 
             case ENERGY_SHOW:
                 return getEnergyShow();
             case ENERGY_SET_VALUE:
@@ -50,6 +56,19 @@ public class GameMenu implements AppMenu{
             default:
                 return getInvalidCommand();
         }
+    }
+
+    private Response getDateTime() {
+        // TODO Auto-generated method stub
+        return controller.getDateTime(); 
+    }
+
+    private Response getDate() {
+        return controller.getDate(); 
+    }
+
+    private Response getTime() {
+        return controller.getTime();        
     }
 
     private Response getNextTurn() {

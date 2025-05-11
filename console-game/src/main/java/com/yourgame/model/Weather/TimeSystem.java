@@ -1,5 +1,7 @@
 package com.yourgame.model.Weather;
+
 import com.yourgame.model.enums.Season;
+
 public class TimeSystem {
     private int hour;
     private int dayOfMonth;
@@ -46,6 +48,29 @@ public class TimeSystem {
 
     public String formatDate() {
         return String.format("%d/%d/%d", dayOfMonth, season.ordinal() + 1, year);
+    }
+
+    // Returns the current time (hour)
+    public String getTime() {
+        return formatTime();
+    }
+
+    // Returns the current date
+    public String getDate() {
+        return formatDate();
+    }
+
+    // Returns the date and time together
+    public String getDateTime() {
+        return String.format("%s %s", formatDate(), formatTime());
+    }
+
+    // Returns the day of the week computed from dayOfMonth.
+    public String getDayOfWeek() {
+        String[] days = { "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" };
+        // This calculation is a placeholder. Adjust the offset as needed.
+        int index = (dayOfMonth - 1) % 7;
+        return days[index];
     }
 
     public boolean isNight() {
