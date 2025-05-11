@@ -50,11 +50,11 @@ private Response getNewGame(String input) {
     String stringUsers= PreGameMenuCommands.New_GAME.getGroup(input, "usernames");
     String[] tokens = stringUsers.trim().split("\\s+");
     // tokens[0] is the command; subsequent tokens are usernames.
-    if (tokens.length < 2 || tokens.length > 4) {
+    if (tokens.length < 1 || tokens.length > 3) {
         return new Response(false, "Please enter between 1 to 3 usernames for new game.");
     }
     // Extract usernames (tokens[1] to tokens[tokens.length-1])
-    java.util.List<String> usernames = Arrays.asList(Arrays.copyOfRange(tokens, 1, tokens.length));
+    List<String> usernames = Arrays.asList(tokens);
     UserDAO userDAO = App.getUserDAO(); 
     try {
         for (String username : usernames) {

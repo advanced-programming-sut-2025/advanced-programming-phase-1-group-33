@@ -76,7 +76,7 @@ public class GameController {
 
     public Response NextTurn() {
         gameState.nextTurn();
-        return new Response(true, "You are  playing as" + gameState.getCurrentPlayer());
+        return new Response(true, "You are  playing as " + gameState.getCurrentPlayer().getUsername());
 
     }
 }
