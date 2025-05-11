@@ -1,4 +1,5 @@
 package com.yourgame.view;
+
 import java.util.Scanner;
 
 import com.yourgame.controller.AppController.LoginMenuController;
@@ -12,8 +13,9 @@ import com.yourgame.model.enums.Commands.GameViewCommands;
 
 import com.yourgame.view.AppViews.AppMenu;
 
-public class GameMenu implements AppMenu{
+public class GameMenu implements AppMenu {
     private GameController controller;
+
     public Response handleMenu(String input, Scanner scanner) {
 
         if (controller == null) {
@@ -26,49 +28,80 @@ public class GameMenu implements AppMenu{
         }
 
         GameViewCommands command = GameViewCommands.parse(input);
-        if(command == null){
+        if (command == null) {
             return getInvalidCommand();
         }
         switch (command) {
-            case NEXT_TURN:
-                return getNextTurn();
-            case TIME:
-                return getTime(); 
-            case DATE:
-                return getDate(); 
-            case DATETIME:
-                return getDateTime(); 
-            case ENERGY_SHOW:
-                return getEnergyShow();
-            case ENERGY_SET_VALUE:
-                return getEnergySet(input);
-            case ENERGY_UNLIMITED:
-                return getEnergyUnlimited();
-            case Go_Back:
-                App.setCurrentMenu(MenuTypes.MainMenu);
-                return new Response(true, "Going Back to MainMenu");
-            case EXIT_MENU:
-                return getExitMenu(input);
-            case ENTER_MENU:
-                return getEnterMenu(input);
-            case SHOW_MENU:
-                return getShowMenu(input);
-            default:
-                return getInvalidCommand();
+        case NEXT_TURN:
+            return getNextTurn();
+        case TIME:
+            return getTime();
+        case DATE:
+            return getDate();
+        case DATETIME:
+            return getDateTime();
+        case DAY_OF_WEEK:
+            return getDayOfWeek();
+        case SEASON:
+            return getSeason();
+        case CHEAT_ADVANCE_DATE:
+            return getAdvancedDate(input);
+        case CHEAT_ADVANCE_TIME:
+            return getAdvancedTime(input);
+        case ENERGY_SHOW:
+            return getEnergyShow();
+        case ENERGY_SET_VALUE:
+            return getEnergySet(input);
+        case ENERGY_UNLIMITED:
+            return getEnergyUnlimited();
+        case Go_Back:
+            App.setCurrentMenu(MenuTypes.MainMenu);
+            return new Response(true, "Going Back to MainMenu");
+        case EXIT_MENU:
+            return getExitMenu(input);
+        case ENTER_MENU:
+            return getEnterMenu(input);
+        case SHOW_MENU:
+            return getShowMenu(input);
+        default:
+            return getInvalidCommand();
         }
+    }
+
+    private Response getAdvancedTime(String input) {
+        // TODO Auto-generated methd stub
+        Request request = new Request(input);
+        request.body.put("amount", GameViewCommands.CHEAT_ADVANCE_TIME.getGroup(input, "amount"));
+        return controller.getAdvancedTime(request);
+    }
+
+    private Response getAdvancedDate(String input) {
+        Request request = new Request(input);
+        request.body.put("amount", GameViewCommands.CHEAT_ADVANCE_DATE.getGroup(input, "amount"));
+        return controller.getAdvancedDate(request);
+    }
+
+    private Response getSeason() {
+        // TODO Auto-generated method stub
+        return controller.getSeason();
+    }
+
+    private Response getDayOfWeek() {
+        // TODO Auto-generated method stub
+        return controller.getDayOfWeek();
     }
 
     private Response getDateTime() {
         // TODO Auto-generated method stub
-        return controller.getDateTime(); 
+        return controller.getDateTime();
     }
 
     private Response getDate() {
-        return controller.getDate(); 
+        return controller.getDate();
     }
 
     private Response getTime() {
-        return controller.getTime();        
+        return controller.getTime();
     }
 
     private Response getNextTurn() {
@@ -79,19 +112,24 @@ public class GameMenu implements AppMenu{
         App.setCurrentMenu(MenuTypes.ExitMenu);
         return new Response(true, "Exit from the Game Until We make some menu for it");
         // TODO Auto-generated method stub
-        // throw new UnsupportedOperationException("Unimplemented method 'getExitFromGame'");
+        // throw new UnsupportedOperationException("Unimplemented method
+        // 'getExitFromGame'");
     }
+
     private Response getEnergyUnlimited() {
         return controller.setCurrentPlayerEnergyUnlimited();
     }
+
     private Response getEnergySet(String input) {
         Request request = new Request(input);
         request.body.put("value", GameViewCommands.ENERGY_SET_VALUE.getGroup(input, "value"));
         return controller.setCurrentPlayerEnergy(request);
     }
+
     private Response getEnergyShow() {
         return controller.getEnergy();
     }
+
     private static Response getExitMenu(String input) {
         Request request = new Request(input);
         Response response = LoginMenuController.handleExitMenu(request);

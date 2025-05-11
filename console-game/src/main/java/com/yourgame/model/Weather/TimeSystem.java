@@ -32,14 +32,17 @@ public class TimeSystem {
     }
 
     private void advanceSeason() {
-        // Logic to advance the season based on the current month
-        // This is a placeholder for the actual implementation
+        // Assuming Season enum values are in order. This will wrap around
+        // automatically.
+        Season[] seasons = Season.values();
+        int nextOrdinal = (season.ordinal() + 1) % seasons.length;
+        season = seasons[nextOrdinal];
     }
 
     private int getDaysInMonth() {
         // Logic to return the number of days in the current month
         // This is a placeholder for the actual implementation
-        return 30; // Example value
+        return 28; // Example value
     }
 
     public String formatTime() {
@@ -63,6 +66,11 @@ public class TimeSystem {
     // Returns the date and time together
     public String getDateTime() {
         return String.format("%s %s", formatDate(), formatTime());
+    }
+
+    // Returns the season as a String
+    public String getSeason() {
+        return season.toString();
     }
 
     // Returns the day of the week computed from dayOfMonth.

@@ -46,6 +46,9 @@ public class GameState {
     }
 
     public void nextTurn() {
+        if(currentTurnPlayerIndex == players.size() - 1){
+            gameTime.advanceHour();
+        }
         currentTurnPlayerIndex = (currentTurnPlayerIndex + 1) % players.size();
         setCurrentPlayer(players.get(currentTurnPlayerIndex));
         // Additional logic for advancing game time and updating state can be added here

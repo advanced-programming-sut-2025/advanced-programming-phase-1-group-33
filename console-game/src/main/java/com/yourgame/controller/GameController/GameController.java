@@ -11,6 +11,7 @@ import java.util.Scanner;
 import com.yourgame.controller.CommandParser;
 import com.yourgame.model.App;
 import com.yourgame.model.Command;
+
 public class GameController {
     private GameState gameState;
     private ConsoleView consoleView;
@@ -19,7 +20,8 @@ public class GameController {
     public GameController() {
         User currentUser = App.getCurrentUser();
         if (currentUser == null || App.getGameState() == null) {
-            throw new IllegalStateException("Cannot initialize GameController: No user logged in or game state available.");
+            throw new IllegalStateException(
+                    "Cannot initialize GameController: No user logged in or game state available.");
         }
         this.gameState = App.getGameState();
         this.consoleView = new ConsoleView(System.out);
@@ -31,6 +33,7 @@ public class GameController {
         this.consoleView = consoleView;
         this.isRunning = true;
     }
+
     public void startGame() {
         consoleView.displayWelcomeMessage();
         while (isRunning) {
@@ -48,7 +51,7 @@ public class GameController {
     private void processInput(String input) {
         CommandParser commandParser = new CommandParser();
         Command command = commandParser.parse(input);
-        
+
         if (command.isExitCommand()) {
             isRunning = false;
             consoleView.displayGoodbyeMessage();
@@ -59,19 +62,21 @@ public class GameController {
     }
 
     public Response getEnergy() {
-        return new Response(true, "Your energy is " + gameState.getCurrentPlayer().getEnergy() + "/" + gameState.getCurrentPlayer().getMaxEnergy()); 
+        return new Response(true, "Your energy is " + gameState.getCurrentPlayer().getEnergy() + "/"
+                + gameState.getCurrentPlayer().getMaxEnergy());
     }
 
     public Response setCurrentPlayerEnergy(Request request) {
-        int energy = Integer.parseInt(request.body.get("value")); 
-        gameState.getCurrentPlayer().setEnergy(energy); 
-        return new Response(true, "Your energy is Setted" + gameState.getCurrentPlayer().getEnergy() + "/" + gameState.getCurrentPlayer().getMaxEnergy()); 
+        int energy = Integer.parseInt(request.body.get("value"));
+        gameState.getCurrentPlayer().setEnergy(energy);
+        return new Response(true, "Your energy is Setted" + gameState.getCurrentPlayer().getEnergy() + "/"
+                + gameState.getCurrentPlayer().getMaxEnergy());
     }
 
     public Response setCurrentPlayerEnergyUnlimited() {
         // TODO Auto-generated method stub
         gameState.getCurrentPlayer().setUnlimitedEnergy(true);
-        return new Response(true, "Your energy is Your energy is set to be unlimited"); 
+        return new Response(true, "Your energy is unlimited");
     }
 
     public Response NextTurn() {
@@ -82,7 +87,7 @@ public class GameController {
 
     public Response getTime() {
         return new Response(true, "Current time is " + gameState.getGameTime().getTime());
-        
+
     }
 
     public Response getDate() {
@@ -91,5 +96,36 @@ public class GameController {
 
     public Response getDateTime() {
         return new Response(true, "Current DateTime is " + gameState.getGameTime().getDateTime());
+    }
+
+    public Response getDayOfWeek() {
+        // TODO Auto-generated method stub
+        return new Response(true, "Current Day of the week is " + gameState.getGameTime().getDayOfWeek());
+
+    }
+
+    public Response getSeason() {
+        // TODO Auto-generated method stub
+        return new Response(true, "Current Season is " + gameState.getGameTime().getSeason());
+    }
+
+    public Response getAdvancedDate(Request request) {
+        // TODO Auto-generated method stub
+
+        int amountOfDays = Integer.parseInt(request.body.get("amount"));
+
+        for(int i = 0; i < amountOfDays; i ++){
+            gameState.getGameTime().advanceDay();
+        }
+        return new Response(true, "How tf you cheated at the timeee dudeee!!" + amountOfDays + "Days");
+    }
+
+    public Response getAdvancedTime(Request request) {
+        int amountOfHours = Integer.parseInt(request.body.get("amount"));
+
+        for(int i = 0; i < amountOfHours; i ++){
+            gameState.getGameTime().advanceHour();
+        }
+        return new Response(true, "How tf you cheated at the timeee dudeee!!" + amountOfHours + " hours" );        
     }
 }
