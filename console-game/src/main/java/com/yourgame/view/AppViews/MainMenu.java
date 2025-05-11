@@ -4,6 +4,7 @@ import java.util.Scanner;
 
 import com.yourgame.controller.AppController.MainMenuController;
 import com.yourgame.model.App;
+import com.yourgame.model.IO.Request;
 import com.yourgame.model.IO.Response;
 import com.yourgame.model.enums.Commands.MainMenuCommands;
 
@@ -37,9 +38,11 @@ public class MainMenu implements AppMenu {
             case ENTER_MENU:
                 return controller.handleMenuEnter(command);
             case SHOW_CURRENT_MENU:
-                return  new Response(true, "Current menu: "+ App.getCurrentMenu());
+                return  new Response(true, ""+ App.getCurrentMenu());
             case EXIT_MENU:
                 return controller.handleExit();
+            case USER_LOGOUT:
+                return MainMenuController.handleLogout();
             default:
                 return getInvalidCommand(); 
                 // return new Response(false, "Command not implemented yet.");

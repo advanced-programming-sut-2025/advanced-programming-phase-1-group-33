@@ -6,7 +6,9 @@ import java.util.regex.Pattern;
 public enum MainMenuCommands {
     ENTER_MENU("enter\\s+(.+)"),
     EXIT_MENU("exit"),
-    SHOW_CURRENT_MENU("shoW current menu");
+    SHOW_CURRENT_MENU("shoW current menu"),
+    USER_LOGOUT("^user\\s+logout$");
+
 
     private final String regex;
     private final Pattern pattern;

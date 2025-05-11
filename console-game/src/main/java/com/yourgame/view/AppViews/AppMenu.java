@@ -15,7 +15,6 @@ public interface AppMenu {
     default void printResponse(Response response) {
         System.out.println(response.getMessage());
     }
-
     default Response getInvalidCommand() {
         return new Response(false, "Invalid command");
     }
