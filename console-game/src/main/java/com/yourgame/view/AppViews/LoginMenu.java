@@ -76,6 +76,7 @@ public class LoginMenu implements AppMenu {
         request.body.put("password", LoginMenuCommands.LOGIN.getGroup(input, "password"));
 
         Response response = LoginMenuController.handleLogin(request);
+        App.setCurrentMenu(MenuTypes.MainMenu);
         return response;
         
     }

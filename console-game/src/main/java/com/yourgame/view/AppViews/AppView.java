@@ -13,7 +13,6 @@ public class AppView {
 
         System.out.println("Trying to run DAO ");
         App.getUserDAO();
-        System.out.println("Current menu: " + App.getCurrentMenu());
 
         while (App.getCurrentMenu() != MenuTypes.ExitMenu) {
             if(App.getCurrentMenu().getMenu().getPreview() != null){

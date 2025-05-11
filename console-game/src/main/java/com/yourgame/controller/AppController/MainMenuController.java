@@ -12,16 +12,16 @@ public class MainMenuController {
         switch (menuName[0].toLowerCase()) {
             case "login":
                 App.setCurrentMenu(MenuTypes.LoginMenu);
-                return new Response(true, "You are now in " + menuName[0]);
+                return new Response(true, "You are now in " + App.getCurrentMenu());
             case "register":
                 App.setCurrentMenu(MenuTypes.RegisterMenu);
-                return new Response(true, "You are now in " + menuName[0]);
+                return new Response(true, "You are now in " + App.getCurrentMenu());
             case "profile":
                 App.setCurrentMenu(MenuTypes.ProfileMenu);
-                return new Response(true, "You are now in " + menuName[0]);
+                return new Response(true, "You are now in " + App.getCurrentMenu());
             case "pregame":
                 App.setCurrentMenu(MenuTypes.PreGameMenu);
-                return new Response(true, "You are now in " + menuName[0]);
+                return new Response(true, "You are now in " +App.getCurrentMenu());
 
             case "exit":
                 App.setCurrentMenu(MenuTypes.ExitMenu);

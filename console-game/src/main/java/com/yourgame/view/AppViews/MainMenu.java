@@ -36,6 +36,8 @@ public class MainMenu implements AppMenu {
         switch (mainCommand) {
             case ENTER_MENU:
                 return controller.handleMenuEnter(command);
+            case SHOW_CURRENT_MENU:
+                return  new Response(true, "Current menu: "+ App.getCurrentMenu());
             case EXIT_MENU:
                 return controller.handleExit();
             default:

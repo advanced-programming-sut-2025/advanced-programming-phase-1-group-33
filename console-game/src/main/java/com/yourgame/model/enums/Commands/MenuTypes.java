@@ -36,7 +36,7 @@ public enum MenuTypes {
         } else if (this == MenuTypes.ProfileMenu) {
             return "Profile Menu";
         } else if (this == MenuTypes.LoginMenu) {
-            return "Sign In Menu";
+            return "Login Menu";
         } else {
             return "";
         }
