@@ -25,7 +25,7 @@ public class App {
         return gameState;
     }
 
-    public void setGameState(GameState gameState) {
+    public static void setGameState(GameState gameState) {
         App.gameState = gameState;
     }
 

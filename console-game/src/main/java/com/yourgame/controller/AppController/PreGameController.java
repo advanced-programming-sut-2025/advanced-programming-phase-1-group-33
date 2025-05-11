@@ -63,13 +63,10 @@ public class PreGameController {
     // return Result.success("Unimplemented method 'LOAD_GAME'");
     // }
     //
-    public Response createNewGame(Request request) {
+    public Response createNewGame(List<Player> players) {
         // Assume you have a Player constructor that can create a player from the
         // current user
         
-        Player player = new Player(App.getCurrentUser());
-        List<Player> players = new ArrayList<>();
-        players.add(player);
 
         // Create components for your game state
         TimeSystem gameTime = new TimeSystem(8, 1, Season.SPRING, 1); // initialize game time

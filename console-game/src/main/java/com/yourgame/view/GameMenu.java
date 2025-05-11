@@ -16,7 +16,7 @@ public class GameMenu implements AppMenu{
         
         if (controller == null) {
             // Initialize only when game state exists
-            if (App.getCurrentUser() == null || App.getCurrentUser().getGameState() == null) {
+            if (App.getCurrentUser() == null || App.getGameState() == null) {
                 App.setCurrentMenu(MenuTypes.LoginMenu);
                 return new Response(false, "Game not initialized. Please start a new game.");
             }
