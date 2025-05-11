@@ -1,13 +1,11 @@
-package com.yourgame.model.enums.GameCommands;
-
-import com.yourgame.model.enums.Commands.Command;
+package com.yourgame.model.enums.Commands;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 
 public enum GameViewCommands implements Command{
-    // NEXT_TURN(""),
+    NEXT_TURN("^next\\s+turn$"),
     ENERGY_SHOW("^energy\\s+show$"),
     ENERGY_SET_VALUE("^energy\\s+set\\s+(?<value>\\d+)$"),
     ENERGY_UNLIMITED("^energy\\s+unlimited$"),
@@ -88,10 +86,10 @@ public enum GameViewCommands implements Command{
     // FRIENDSHIP_NPC_LIST(""),
     // QUESTS_LIST(""),
     // QUESTS_FINISH(""),
-    // SHOW_MENU(""),
-    // ENTER_MENU(""),
-    Go_Back(Command.Go_back), 
-    EXIT_GAME("exit\\s+game");
+    SHOW_MENU(Command.SHOW_MENU),
+    EXIT_MENU(Command.EXIT_MENU),
+    ENTER_MENU(Command.ENTER_MENU),
+    Go_Back(Command.Go_back);
 
     private final String pattern;
 

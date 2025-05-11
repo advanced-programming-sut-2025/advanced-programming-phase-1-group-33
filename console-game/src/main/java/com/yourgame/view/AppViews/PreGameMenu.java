@@ -8,14 +8,8 @@ import java.util.Scanner;
 
 import com.yourgame.controller.AppController.PreGameController;
 import com.yourgame.model.App;
-import com.yourgame.model.GameState;
-import com.yourgame.model.NPC;
 import com.yourgame.model.Player;
 import com.yourgame.model.IO.Response;
-import com.yourgame.model.Map.GameMap;
-import com.yourgame.model.Shop.Shop;
-import com.yourgame.model.Weather.TimeSystem;
-import com.yourgame.model.Weather.WeatherSystem;
 import com.yourgame.model.enums.Commands.MenuTypes;
 import com.yourgame.model.enums.Commands.PreGameMenuCommands;
 import com.yourgame.persistence.UserDAO;
@@ -26,7 +20,7 @@ public class PreGameMenu implements AppMenu {
     public Response handleMenu(String input, Scanner scanner) {
         PreGameMenuCommands command = PreGameMenuCommands.parse(input);
         switch (command) {
-            case New_GAM:
+            case New_GAME:
                 return getNewGame(input);
             case LOAD_GAME:
                 return getLoadGame(input);
@@ -53,7 +47,8 @@ public class PreGameMenu implements AppMenu {
 
 private Response getNewGame(String input) {
     // Split input assuming format: "New_GAM user1 user2 user3"
-    String[] tokens = input.trim().split("\\s+");
+    String stringUsers= PreGameMenuCommands.New_GAME.getGroup(input, "usernames");
+    String[] tokens = stringUsers.trim().split("\\s+");
     // tokens[0] is the command; subsequent tokens are usernames.
     if (tokens.length < 2 || tokens.length > 4) {
         return new Response(false, "Please enter between 1 to 3 usernames for new game.");

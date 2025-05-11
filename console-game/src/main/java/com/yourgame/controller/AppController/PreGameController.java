@@ -78,7 +78,7 @@ public class PreGameController {
         // Create a new game state instance
         GameState gameState = new GameState(players,  gameTime, weather, map, npcs, shops);
         gameState.startGame(); // Any initialization logic inside startGame()
-
+        gameState.setCurrentPlayer(players.get(0));
         // Optionally, store the gameState somewhere accessible (e.g., in App or a
         // GameController)
         App.setGameState(gameState);

@@ -47,6 +47,7 @@ public class GameState {
 
     public void nextTurn() {
         currentTurnPlayerIndex = (currentTurnPlayerIndex + 1) % players.size();
+        setCurrentPlayer(players.get(currentTurnPlayerIndex));
         // Additional logic for advancing game time and updating state can be added here
     }
 

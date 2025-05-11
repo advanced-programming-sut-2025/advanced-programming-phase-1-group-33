@@ -73,4 +73,10 @@ public class GameController {
         gameState.getCurrentPlayer().setUnlimitedEnergy(true);
         return new Response(true, "Your energy is Your energy is set to be unlimited"); 
     }
+
+    public Response NextTurn() {
+        gameState.nextTurn();
+        return new Response(true, "You are  playing as" + gameState.getCurrentPlayer());
+
+    }
 }
