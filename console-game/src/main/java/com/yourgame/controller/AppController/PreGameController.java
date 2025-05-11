@@ -15,7 +15,7 @@ import com.yourgame.model.Weather.TimeSystem;
 import com.yourgame.model.Weather.WeatherSystem;
 import com.yourgame.model.enums.Season;
 import com.yourgame.model.enums.Commands.MenuTypes;
-
+import com.yourgame.model.IO.Request;
 public class PreGameController {
 
     // public Result handleCommand(String command, Scanner scanner) {
@@ -63,9 +63,10 @@ public class PreGameController {
     // return Result.success("Unimplemented method 'LOAD_GAME'");
     // }
     //
-    public Response createNewGame(String command) {
+    public Response createNewGame(Request request) {
         // Assume you have a Player constructor that can create a player from the
         // current user
+        
         Player player = new Player(App.getCurrentUser());
         List<Player> players = new ArrayList<>();
         players.add(player);
@@ -78,12 +79,12 @@ public class PreGameController {
         List<Shop> shops = new ArrayList<>(); // and shop list if needed
 
         // Create a new game state instance
-        GameState gameState = new GameState(player, players,  gameTime, weather, map, npcs, shops);
+        GameState gameState = new GameState(players,  gameTime, weather, map, npcs, shops);
         gameState.startGame(); // Any initialization logic inside startGame()
 
         // Optionally, store the gameState somewhere accessible (e.g., in App or a
         // GameController)
-        App.getCurrentUser().setGameState(gameState);
+        App.setGameState(gameState);
         // Change the current menu to your game menu
         App.setCurrentMenu(MenuTypes.GameMenu);
         return new Response(true, "New game started! Entering game menu...");

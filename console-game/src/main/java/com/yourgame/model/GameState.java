@@ -18,8 +18,7 @@ public class GameState {
     private List<NPC> npcs;
     private List<Shop> shops;
 
-    public GameState(Player player,  List<Player> players, TimeSystem gameTime, WeatherSystem weather, GameMap map, List<NPC> npcs, List<Shop> shops) {
-        this.currentPlayer = player; 
+    public GameState( List<Player> players, TimeSystem gameTime, WeatherSystem weather, GameMap map, List<NPC> npcs, List<Shop> shops) {
         this.players = players;
         this.currentTurnPlayerIndex = 0; // Start with the first player
         this.gameTime = gameTime;

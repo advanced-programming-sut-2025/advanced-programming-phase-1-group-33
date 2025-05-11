@@ -1,6 +1,8 @@
 package com.yourgame.view.AppViews;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
@@ -16,7 +18,7 @@ import com.yourgame.model.Weather.TimeSystem;
 import com.yourgame.model.Weather.WeatherSystem;
 import com.yourgame.model.enums.Commands.MenuTypes;
 import com.yourgame.model.enums.Commands.PreGameMenuCommands;
-
+import com.yourgame.persistence.UserDAO;
 public class PreGameMenu implements AppMenu {
     PreGameController controller = new PreGameController();
 
@@ -49,10 +51,38 @@ public class PreGameMenu implements AppMenu {
         throw new UnsupportedOperationException("Unimplemented method 'getLoadGame'");
     }
 
-    private Response getNewGame(String input) {
-        controller.createNewGame(input);
-        // Change the current menu to your game menu
-        App.setCurrentMenu(MenuTypes.GameMenu);
-        return new Response(true, "New game started! Entering Game...");
+private Response getNewGame(String input) {
+    // Split input assuming format: "New_GAM user1 user2 user3"
+    String[] tokens = input.trim().split("\\s+");
+    // tokens[0] is the command; subsequent tokens are usernames.
+    if (tokens.length < 2 || tokens.length > 4) {
+        return new Response(false, "Please enter between 1 to 3 usernames for new game.");
     }
-}
+    // Extract usernames (tokens[1] to tokens[tokens.length-1])
+    java.util.List<String> usernames = Arrays.asList(Arrays.copyOfRange(tokens, 1, tokens.length));
+    UserDAO userDAO = App.getUserDAO(); 
+    try {
+        for (String username : usernames) {
+            if (userDAO.loadUser(username) == null) {
+                return new Response(false, "User '" + username + "' does not exist. Cannot start game.");
+            }
+        }
+    } catch (SQLException e) {
+        return new Response(false, "Database error: " + e.getMessage());
+    }
+
+        // Load each user and create a Player object for each
+    List<Player> players = new ArrayList<>();
+    try {
+        for (String username : usernames) {
+            players.add(new Player(userDAO.loadUser(username)));
+        }
+    } catch (SQLException e) {
+        return new Response(false, "Error loading users: " + e.getMessage());
+    }
+    
+    controller.createNewGame(players);
+    // Change the current menu to the game menu.
+    App.setCurrentMenu(MenuTypes.GameMenu);
+    return new Response(true, "New game started! Entering Game...");
+}}

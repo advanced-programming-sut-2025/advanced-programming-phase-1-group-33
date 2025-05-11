@@ -10,6 +10,7 @@ public class App {
     private static User currentUser;
     private static List<User> users;
     private static UserDAO userDAO;
+    private static GameState gameState;
 
     static {
         try {
@@ -20,8 +21,14 @@ public class App {
         }
     }
 
+    public static GameState getGameState() {
+        return gameState;
+    }
 
-    
+    public void setGameState(GameState gameState) {
+        App.gameState = gameState;
+    }
+
     public static UserDAO getUserDAO() {
         return userDAO;
     }

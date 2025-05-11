@@ -18,10 +18,10 @@ public class GameController {
 
     public GameController() {
         User currentUser = App.getCurrentUser();
-        if (currentUser == null || currentUser.getGameState() == null) {
+        if (currentUser == null || App.getGameState() == null) {
             throw new IllegalStateException("Cannot initialize GameController: No user logged in or game state available.");
         }
-        this.gameState = App.getCurrentUser().getGameState();
+        this.gameState = App.getGameState();
         this.consoleView = new ConsoleView(System.out);
         this.isRunning = true;
     }

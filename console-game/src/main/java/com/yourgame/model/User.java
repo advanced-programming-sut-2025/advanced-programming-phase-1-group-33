@@ -11,7 +11,6 @@ public class User {
     private String Gender;
     private SecurityQuestion question;
     private String answer;
-    private GameState gameState;
 
     public User(String Username, String Password, String Email, String Nickname, String Gender) {
         this.Username = Username;
@@ -35,14 +34,6 @@ public class User {
 
     public String getUsername() {
         return Username;
-    }
-
-    public GameState getGameState() {
-        return gameState;
-    }
-
-    public void setGameState(GameState gameState) {
-        this.gameState = gameState;
     }
 
     public String getPassword() {
