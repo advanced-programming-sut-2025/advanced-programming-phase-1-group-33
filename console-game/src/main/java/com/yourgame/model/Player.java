@@ -35,6 +35,8 @@ public class Player {
     private Set<Recipe> knownCraftingRecipes;
     private Set<Recipe> knownCookingRecipes;
     private List<QuestStatus> activeQuests;
+    private String currentMapId;
+    private Coordinate currentCoordinate;
 
     public Player(String username, String hashedPassword, String nickname, String email, Gender gender, int maxEnergy) {
         this.username = username;
@@ -277,8 +279,24 @@ public class Player {
         throw new UnsupportedOperationException("Unimplemented method 'getHealth'");
     }
 
+    
     public void setHealth(double d) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'setHealth'");
+    }
+    public String getCurrentMapId() {
+        return currentMapId;
+    }
+
+    public void setCurrentMapId(String currentMapId) {
+        this.currentMapId = currentMapId;
+    }
+
+    public Coordinate getCurrentCoordinate() {
+        return currentCoordinate;
+    }
+
+    public void setCurrentCoordinate(Coordinate currentCoordinate) {
+        this.currentCoordinate = currentCoordinate;
     }
 }

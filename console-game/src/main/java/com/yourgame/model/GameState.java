@@ -3,6 +3,7 @@ package com.yourgame.model;
 import java.util.List;
 
 import com.yourgame.model.Map.GameMap;
+import com.yourgame.model.Map.MapManager;
 import com.yourgame.model.Shop.Shop;
 import com.yourgame.model.Weather.TimeSystem;
 import com.yourgame.model.Weather.WeatherSystem;
@@ -14,22 +15,32 @@ public class GameState {
     private int currentTurnPlayerIndex;
     private TimeSystem gameTime;
     private WeatherSystem weather;
-    private GameMap map;
+    private GameMap currentMap;
+    private MapManager mapManager; 
     private List<NPC> npcs;
     private List<Shop> shops;
 
-    public GameState( List<Player> players, TimeSystem gameTime, WeatherSystem weather, GameMap map, List<NPC> npcs, List<Shop> shops) {
+    public GameState( List<Player> players, TimeSystem gameTime, WeatherSystem weather, MapManager mapManager, List<NPC> npcs, List<Shop> shops) {
         this.players = players;
         this.currentTurnPlayerIndex = 0; // Start with the first player
         this.gameTime = gameTime;
         this.weather = weather;
-        this.map = map;
+        this.mapManager = mapManager;
+        this.currentMap = mapManager.getMap("farmMap");
         this.npcs = npcs;
         this.shops = shops;
     }
 
     public GameState() {
 
+    }
+
+    public MapManager getMapManager() {
+        return mapManager;
+    }
+
+    public void setMapManager(MapManager mapManager) {
+        this.mapManager = mapManager;
     }
 
     public Player getCurrentPlayer() {
@@ -95,12 +106,12 @@ public class GameState {
         this.weather = weather;
     }
 
-    public GameMap getMap() {
-        return map;
+    public GameMap getCurrentMap() {
+        return currentMap;
     }
 
-    public void setMap(GameMap map) {
-        this.map = map;
+    public void setCurrentMap(GameMap currentMap) {
+        this.currentMap = currentMap;
     }
 
     public List<NPC> getNpcs() {

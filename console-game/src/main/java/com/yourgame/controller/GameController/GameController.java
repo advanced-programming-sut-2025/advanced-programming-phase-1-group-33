@@ -1,9 +1,11 @@
 package com.yourgame.controller.GameController;
 
 import com.yourgame.model.GameState;
+import com.yourgame.model.Player;
 import com.yourgame.model.User;
 import com.yourgame.model.IO.Request;
 import com.yourgame.model.IO.Response;
+import com.yourgame.model.Map.GameMap;
 import com.yourgame.model.enums.Weather;
 import com.yourgame.view.ConsoleView;
 
@@ -159,5 +161,21 @@ public class GameController {
     public Response getBuildGreenHouse() {
         // TODO Auto-generated method stub
         return new Response(false, "To Do We need to create Map after that we can have green house");
+    }
+
+    public Response PrintMap() {
+            // Get the current player from the game state
+            Player currentPlayer = gameState.getCurrentPlayer();
+            // Retrieve the map using the player's current map id
+            String mapId = currentPlayer.getCurrentMapId();
+            System.out.println(mapId);
+            GameMap map = gameState.getMapManager().getMap(mapId);
+            System.out.println(gameState.getMapManager().getMaps());
+            if (map == null) {
+                return new Response(false, "Map not found for the current player. Current map Id: " + mapId);
+            }
+            // Render the map based on its current state
+            String renderedMap = map.renderMap();
+            return new Response(true, renderedMap);    
     }
 }

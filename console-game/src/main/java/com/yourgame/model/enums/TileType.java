@@ -2,9 +2,10 @@ package com.yourgame.model.enums;
 
 public enum TileType {
     GRASS,
+    BUILDING,
     WATER,
     ROCK,
     DIRT,
     SAND,
-    // Add more as needed
+    PORTAL // new portal tile type
 }
