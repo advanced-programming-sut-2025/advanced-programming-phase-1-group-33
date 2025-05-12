@@ -108,43 +108,21 @@ public class GameMap {
         this.spawnedResources = spawnedResources;
     }
 
-        /**
-     * Returns a string representation of the map.
-     * Each tile is represented by a character based on its type.
-     */
     public String renderMap() {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < tiles.length; i++) {
             for (int j = 0; j < tiles[i].length; j++) {
-                Tile tile = tiles[i][j];
-                sb.append(getTileChar(tile));
+                Tile t = tiles[i][j];
+                if (t.isOccupied()) {
+                    sb.append('I');             // or pull from content.render()
+                } else {
+                    sb.append(t.getType().getColoredSymbol());
+                }
             }
-            sb.append("\n");
+            sb.append('\n');
         }
         return sb.toString();
-    }
-    
-    private char getTileChar(Tile tile) {
-        if (tile.getContent() != null) {
-            // For example, if there is an item, show a special character
-            return 'I';
-        }
-        TileType type = tile.getType();
-        switch (type) {
-            case GRASS:
-                return 'G'; // or use a . for grass
-            case WATER:
-                return '~';
-            case PORTAL:
-                return 'P';
-            case BUILDING:
-                return 'B';
-            // add other cases as needed
-            default:
-                return '.';
-        }
-    }
-
+    }    
     // ...existing code...
 
 }

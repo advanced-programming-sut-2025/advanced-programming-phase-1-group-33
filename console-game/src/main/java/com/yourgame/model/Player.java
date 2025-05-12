@@ -7,6 +7,7 @@ import com.yourgame.model.Building.FarmMap;
 import com.yourgame.model.Inventory.Inventory;
 import com.yourgame.model.Item.Item;
 import com.yourgame.model.Map.Coordinate;
+import com.yourgame.model.Map.MapManager;
 import com.yourgame.model.Skill.Skill;
 import com.yourgame.model.Inventory.BackPack;
 import com.yourgame.model.enums.BackPackType;
@@ -298,5 +299,10 @@ public class Player {
 
     public void setCurrentCoordinate(Coordinate currentCoordinate) {
         this.currentCoordinate = currentCoordinate;
+    }
+
+    public void initializeFarm(FarmMap farmMap) {
+        setFarmMapReference(farmMap);
+        setCurrentMapId(farmMap.getMapId());
     }
 }

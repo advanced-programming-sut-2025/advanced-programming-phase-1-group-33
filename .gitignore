@@ -9,3 +9,8 @@
 # Ignore specific files
 Phase1.pdf
 TODO.md
+
+
+# Ignore Every Class Files 
+
+*.class
