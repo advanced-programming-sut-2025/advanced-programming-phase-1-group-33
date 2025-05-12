@@ -39,20 +39,21 @@ public class MapManager {
         return null;
     }
 
+    public Tile[][] getTileFiller(Tile[][] tiles, TileType tileType, int x1, int x2 , int y1, int y2) {
+        for (int i = x1 ; i < x2; i++) {
+            for (int j = y1; j < y2; j++) {
+                tiles[i][j] = new Tile(tileType);
+            }
+        }
+        return tiles; 
+    }
+    
     public Tile[][] getDefaultFarmTiles(int x, int y) {
         Tile[][] defaultTiles = new Tile[x][y];
+        defaultTiles = getTileFiller(defaultTiles, TileType.GRASS, 0, x, 0, y);
 
-        for (int i = 0; i < x; i++) {
-            for (int j = 0; j < y; j++) {
-                defaultTiles[i][j] = new Tile(TileType.GRASS);
-            }
-        }
-        for (int i = x / 2 - 2; i < x / 2 + 3; i++) {
-            for (int j = y / 2 - 2; j < y / 2 + 3; j++) {
-                defaultTiles[i][j] = new Tile(TileType.WATER);
-            }
-        }
-
+        defaultTiles = getTileFiller(defaultTiles, TileType.BUILDING, 13, 17, 12 , 17); 
+        defaultTiles = getTileFiller(defaultTiles, TileType.WATER, 13, 17, 12 , 17); 
         // Place the portal at a valid coordinate, for example at the bottom-right
         // corner.
         int portalRow = x - 1;

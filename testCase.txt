@@ -1,0 +1,36 @@
+enter login
+login -u aeen123 -p HImynameisCHIKI23@ 
+enter pregame
+game new aeen123 matin 
+energy show
+energy set -v 100
+energy unlimited
+next turn 
+time
+date
+datetime
+season
+day of the week
+cheat advance time 8h
+cheat advance time -2h
+cheat advance date 28d
+time
+date
+datetime
+season
+next turn 
+next turn 
+datetime
+weather
+cheat weather set rain
+weather forecast
+cheat advance date 1d
+weather forecast
+cheat advance date 1d
+weather forecast
+cheat advance date 1d
+weather
+greenhouse build
+print map -l 10, 10 -s 10
+go back
+exit
