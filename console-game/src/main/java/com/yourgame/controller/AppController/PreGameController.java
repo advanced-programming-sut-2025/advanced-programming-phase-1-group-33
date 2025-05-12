@@ -70,7 +70,7 @@ public class PreGameController {
 
         // Create components for your game state
         TimeSystem gameTime = new TimeSystem(8, 1, Season.SPRING, 1); // initialize game time
-        WeatherSystem weather = new WeatherSystem(); // initialize weather system
+        WeatherSystem weather = new WeatherSystem(Season.SPRING); // initialize weather system
         GameMap map = new GameMap(); // default game map
         List<NPC> npcs = new ArrayList<>(); // any NPCs for the game
         List<Shop> shops = new ArrayList<>(); // and shop list if needed

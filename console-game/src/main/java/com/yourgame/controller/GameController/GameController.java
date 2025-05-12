@@ -4,6 +4,7 @@ import com.yourgame.model.GameState;
 import com.yourgame.model.User;
 import com.yourgame.model.IO.Request;
 import com.yourgame.model.IO.Response;
+import com.yourgame.model.enums.Weather;
 import com.yourgame.view.ConsoleView;
 
 import java.util.Scanner;
@@ -114,7 +115,7 @@ public class GameController {
 
         int amountOfDays = Integer.parseInt(request.body.get("amount"));
 
-        for(int i = 0; i < amountOfDays; i ++){
+        for (int i = 0; i < amountOfDays; i++) {
             gameState.getGameTime().advanceDay();
         }
         return new Response(true, "How tf you cheated at the timeee dudeee!!" + amountOfDays + "Days");
@@ -123,9 +124,40 @@ public class GameController {
     public Response getAdvancedTime(Request request) {
         int amountOfHours = Integer.parseInt(request.body.get("amount"));
 
-        for(int i = 0; i < amountOfHours; i ++){
+        for (int i = 0; i < amountOfHours; i++) {
             gameState.getGameTime().advanceHour();
         }
-        return new Response(true, "How tf you cheated at the timeee dudeee!!" + amountOfHours + " hours" );        
+        return new Response(true, "How tf you cheated at the timeee dudeee!!" + amountOfHours + " hours");
+    }
+
+    public Response getWeather() {
+        return new Response(true, "Current Weather is " + gameState.getWeather().getCurrentWeather());
+    }
+
+    public Response cheatWeather(Request request) {
+        String weatherInput = request.body.get("Type");
+        Weather weather;
+        try {
+            weather = Weather.fromString(weatherInput);
+        } catch (IllegalArgumentException e) {
+            return new Response(true, e.getMessage());
+        }
+        gameState.getWeather().setCurrentWeather(weather);
+        return new Response(true, "Weather set to " + weather.toString());
+    }
+
+    public Response cheatThor(Request request) {
+        // TODO Auto-generated method stub
+        return new Response(false, "To Do We need to create the Thor After Map ");
+    }
+
+    public Response getWeatherForcast() {
+        // TODO Auto-generated method stub
+        return new Response(true, "Tomorrow Weather is " + gameState.getWeather().getTomorrowWeather());
+    }
+
+    public Response getBuildGreenHouse() {
+        // TODO Auto-generated method stub
+        return new Response(false, "To Do We need to create Map after that we can have green house");
     }
 }

@@ -1,5 +1,6 @@
 package com.yourgame.model.Weather;
 
+import com.yourgame.model.App;
 import com.yourgame.model.enums.Season;
 
 public class TimeSystem {
@@ -29,6 +30,7 @@ public class TimeSystem {
             dayOfMonth = 1;
             advanceSeason();
         }
+        App.getGameState().getWeather().advanceToNextDay(season);
     }
 
     private void advanceSeason() {
@@ -70,6 +72,11 @@ public class TimeSystem {
 
     // Returns the season as a String
     public String getSeason() {
+        return season.toString();
+    }
+
+    // Returns the season as a String
+    public String getSeasonType() {
         return season.toString();
     }
 

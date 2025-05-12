@@ -1,50 +1,69 @@
 package com.yourgame.model.Weather;
 
 import com.yourgame.model.enums.Weather;
+import com.yourgame.model.enums.Season;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class WeatherSystem {
     private Weather currentWeather;
     private Weather tomorrowWeather;
-    private Random random;
 
-    public WeatherSystem() {
+    private Random random;
+    // private Season currentSeason;
+
+    // Pass initial season (from your TimeSystem, for example) to the constructor.
+    public WeatherSystem(Season currentSeason) {
         this.random = new Random();
-        // Initialize the weather for today and tomorrow
-        this.currentWeather = generateRandomWeather();
-        this.tomorrowWeather = generateRandomWeather();
+        this.currentWeather = generateRandomWeather(currentSeason);
+        this.tomorrowWeather = generateRandomWeather(currentSeason);
     }
 
-    // Getter for currentWeather
+    // Utility method to generate weather valid for a specific season.
+    private Weather generateRandomWeather(Season season) {
+        Weather[] weathers = Weather.values();
+        List<Weather> validWeathers = new ArrayList<>();
+        for (Weather weather : weathers) {
+            if (Weather.isValidForSeason(weather, season)) {
+                validWeathers.add(weather);
+            }
+        }
+        // Safety check if no weather is valid.
+        if (validWeathers.isEmpty()) {
+            return Weather.SUNNY; // fallback option
+        }
+        return validWeathers.get(random.nextInt(validWeathers.size()));
+    }
+
+    // Getter for currentWeather.
     public Weather getCurrentWeather() {
         return currentWeather;
     }
 
-    // Getter for tomorrowWeather
+    // Getter for tomorrowWeather.
     public Weather getTomorrowWeather() {
         return tomorrowWeather;
     }
 
-    // Predict tomorrow's weather (could be extended with more logic)
+    // Predict tomorrow's weather.
     public Weather predictTomorrowWeather() {
         return tomorrowWeather;
     }
 
-    // Advance the weather system to the next day
-    public void advanceToNextDay() {
-        // Tomorrow's weather becomes today's weather, and generate new weather for tomorrow
+    // Advance the weather system to the next day.
+    public void advanceToNextDay(Season currentSeason) {
         this.currentWeather = this.tomorrowWeather;
-        this.tomorrowWeather = generateRandomWeather();
+        // In a real game you might update currentSeason as well if needed.
+        this.tomorrowWeather = generateRandomWeather(currentSeason);
     }
 
-    // Utility method to randomly choose a weather type
-    private Weather generateRandomWeather() {
-        Weather[] weathers = Weather.values();
-        return weathers[random.nextInt(weathers.length)];
+    public void setCurrentWeather(Weather currentWeather) {
+        this.currentWeather = currentWeather;
     }
-    private void isThorPossible(Weather weatertype){
-        if(weatertype == weatertype.STORMY){
-        }
+
+    public void setTomorrowWeather(Weather tomorrowWeather) {
+        this.tomorrowWeather = tomorrowWeather;
     }
-    
+
 }

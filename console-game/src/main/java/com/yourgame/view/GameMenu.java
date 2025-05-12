@@ -48,6 +48,16 @@ public class GameMenu implements AppMenu {
             return getAdvancedDate(input);
         case CHEAT_ADVANCE_TIME:
             return getAdvancedTime(input);
+        case CHEAT_THOR:
+            return getCheatThor(input);
+        case WEATHER:
+            return getWeather();
+        case CHEAT_WEATHER_SET:
+            return getCheatWeather(input);
+        case WEATHER_FORECAST: 
+            return getWeatherForcast();
+        case GREEN_HOUSE_BUILD:
+            return getBuildGreenHouse(); 
         case ENERGY_SHOW:
             return getEnergyShow();
         case ENERGY_SET_VALUE:
@@ -68,8 +78,36 @@ public class GameMenu implements AppMenu {
         }
     }
 
-    private Response getAdvancedTime(String input) {
+    private Response getBuildGreenHouse() {
+        return controller.getBuildGreenHouse();
+    }
+
+    private Response getWeatherForcast() {
+        return controller.getWeatherForcast();
+    }
+
+    private Response getCheatWeather(String input) {
+        Request request = new Request(input);
+        request.body.put("Type", GameViewCommands.CHEAT_WEATHER_SET.getGroup(input, "Type"));
+        // return controller.getAdvancedTime(request);
+        return controller.cheatWeather(request);
+    }
+
+    private Response getWeather() {
+        // TODO Auto-generated method stub
+        return controller.getWeather();
+    }
+
+    private Response getCheatThor(String input) {
+        Request request = new Request(input);
+        request.body.put("X", GameViewCommands.CHEAT_THOR.getGroup(input, "X"));
+        request.body.put("Y", GameViewCommands.CHEAT_THOR.getGroup(input, "Y"));
         // TODO Auto-generated methd stub
+        // return controller.getAdvancedTime(request);
+        return controller.cheatThor(request);
+    }
+
+    private Response getAdvancedTime(String input) {
         Request request = new Request(input);
         request.body.put("amount", GameViewCommands.CHEAT_ADVANCE_TIME.getGroup(input, "amount"));
         return controller.getAdvancedTime(request);
