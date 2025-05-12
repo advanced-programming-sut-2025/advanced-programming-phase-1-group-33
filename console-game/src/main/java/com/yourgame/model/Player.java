@@ -1,11 +1,10 @@
 package com.yourgame.model;
 
-import javax.tools.Tool;
 import java.util.*;
 
 import com.yourgame.model.Building.FarmMap;
-import com.yourgame.model.Inventory.Inventory;
 import com.yourgame.model.Item.Item;
+import com.yourgame.model.Item.Tool;
 import com.yourgame.model.Map.Coordinate;
 import com.yourgame.model.Skill.Skill;
 import com.yourgame.model.Inventory.BackPack;
@@ -26,7 +25,7 @@ public class Player {
     private final BackPack backPack = new BackPack(BackPackType.DEFAULT);
     private ArrayList<AnimalType> animals= new ArrayList<>(); 
     private Coordinate currentLocation;
-    private Inventory inventory;
+    private BackPack inventory;
     private Tool equippedTool;
     private ArrayList<Skill> skills ; 
     // private Map<SkillType, Skill> skills;
@@ -44,7 +43,7 @@ public class Player {
         this.maxEnergy = maxEnergy;
         this.energy = maxEnergy; // Start with full energy
         this.money = 0; // Start with no money
-        this.inventory = new Inventory();
+        this.inventory = new BackPack(BackPackType.DEFAULT);
         this.skills = new ArrayList<>();
         this.relationships = new HashMap<>();
         this.knownCraftingRecipes = new HashSet<>();
@@ -59,7 +58,7 @@ public class Player {
         this.nickname = currentUser.getNickname(); 
         this.energy = maxEnergy; // Start with full energy
         this.money = 0; // Start with no money
-        this.inventory = new Inventory();
+        this.inventory = new BackPack(BackPackType.DEFAULT);
         this.skills = new ArrayList<>();
         this.relationships = new HashMap<>();
         this.knownCraftingRecipes = new HashSet<>();
@@ -88,17 +87,17 @@ public class Player {
         }
     }
 
-    public void addItem(Item item) {
-        inventory.addItem(item);
-    }
-
-    public void removeItem(Item item) {
-        inventory.removeItem(item);
-    }
-
-    public boolean hasItem(Item item) {
-        return inventory.hasItem(item);
-    }
+//    public void addItem(Item item) {
+//        inventory.addItem(item);
+//    }
+//
+//    public void removeItem(Item item) {
+//        inventory.removeItem(item);
+//    }
+//
+//    public boolean hasItem(Item item) {
+//        return inventory.hasItem(item);
+//    }
 
     public void learnRecipe(Recipe recipe) {
         if (recipe.isCookingRecipe()) {
@@ -198,11 +197,11 @@ public class Player {
         this.currentLocation = currentLocation;
     }
 
-    public Inventory getInventory() {
+    public BackPack getInventory() {
         return inventory;
     }
 
-    public void setInventory(Inventory inventory) {
+    public void setInventory(BackPack inventory) {
         this.inventory = inventory;
     }
 

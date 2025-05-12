@@ -160,4 +160,36 @@ public class GameController {
         // TODO Auto-generated method stub
         return new Response(false, "To Do We need to create Map after that we can have green house");
     }
+
+        public Response handleShowInventory(Request request) {
+            String output = gameState.getCurrentPlayer().getInventory().showInventory();
+            if (output.isEmpty())
+                return new Response(true, "Your Backpack is empty!");
+            return new Response(true, output);
+        }
+
+    public Response handleInventoryTrashing(Request request) {
+        // TODO
+        return handleShowInventory(request);
+    }
+
+    public Response handleToolsEquip(Request request) {
+        // TODO
+        return handleShowInventory(request);
+    }
+
+    public Response handleToolsShow(Request request) {
+        // TODO
+        return handleShowInventory(request);
+    }
+
+    public Response handleToolsShowAvailable(Request request) {
+        // TODO
+        return handleShowInventory(request);
+    }
+
+    public Response handleToolsUseDirectionResponse(Request request) {
+        // TODO
+        return handleShowInventory(request);
+    }
 }

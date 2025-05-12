@@ -73,9 +73,67 @@ public class GameMenu implements AppMenu {
             return getEnterMenu(input);
         case SHOW_MENU:
             return getShowMenu(input);
+        case INVENTORY_SHOW:
+            return getShowInventoryResponse(input);
+        case INVENTORY_TRASH:
+            return getInventoryTrashResponse(input);
+        case TOOLS_EQUIP:
+            return getToolsEquipResponse(input);
+        case TOOLS_SHOW_CURRENT:
+            return getToolsShowResponse(input);
+        case TOOLS_SHOW_AVAILABLE:
+            return getToolsShowAvailable(input);
+        case TOOLS_USE_DIRECTION:
+            return getToolsUseDirectionResponse(input);
         default:
             return getInvalidCommand();
         }
+    }
+
+    private Response getToolsUseDirectionResponse(String input) {
+        Response response;
+        Request request = new Request(input);
+        response = controller.handleToolsUseDirectionResponse(request);
+        return response;
+    }
+
+    private Response getToolsShowAvailable(String input) {
+        Response response;
+        Request request = new Request(input);
+        response = controller.handleToolsShowAvailable(request);
+        return response;
+    }
+
+    private Response getToolsShowResponse(String input) {
+        Response response;
+        Request request = new Request(input);
+        response = controller.handleToolsShow(request);
+        return response;
+    }
+
+    private Response getToolsEquipResponse(String input) {
+        Response response;
+        Request request = new Request(input);
+        request.body.put("toolName", GameViewCommands.TOOLS_EQUIP.getGroup(input, "toolName"));
+        response = controller.handleToolsEquip(request);
+        return response;
+    }
+
+
+    private Response getInventoryTrashResponse(String input) {
+        Response response;
+        Request request = new Request(input);
+        request.body.put("itemName", GameViewCommands.INVENTORY_TRASH.getGroup(input, "itemName"));
+        request.body.put("number", GameViewCommands.INVENTORY_TRASH.getGroup(input, "number"));
+        response = controller.handleInventoryTrashing(request);
+        return response;
+    }
+
+    private Response getShowInventoryResponse(String input) {
+        Response response;
+        Request request = new Request(input);
+        response = controller.handleShowInventory(request);
+        return response;
     }
 
     private Response getBuildGreenHouse() {
