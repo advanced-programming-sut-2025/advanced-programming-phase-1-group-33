@@ -98,7 +98,11 @@ public class GameMenu implements AppMenu {
 
     private Response getWalk(String input) {
         // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getWalk'");
+        Request request = new Request(input);
+        request.body.put("x", GameViewCommands.WALK.getGroup(input, "x"));
+        request.body.put("y", GameViewCommands.WALK.getGroup(input, "y"));
+
+        return controller.getWalk(request); 
     }
 
 

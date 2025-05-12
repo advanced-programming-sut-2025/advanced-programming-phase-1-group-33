@@ -304,5 +304,6 @@ public class Player {
     public void initializeFarm(FarmMap farmMap) {
         setFarmMapReference(farmMap);
         setCurrentMapId(farmMap.getMapId());
+        setCurrentCoordinate(new Coordinate(0, 0)); 
     }
 }

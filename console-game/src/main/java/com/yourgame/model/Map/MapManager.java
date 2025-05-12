@@ -9,7 +9,6 @@ import com.yourgame.model.Map.Portal;
 public class MapManager {
     private Map<String, GameMap> maps;
 
-
     public MapManager() {
         maps = new HashMap<>();
     }
@@ -41,35 +40,78 @@ public class MapManager {
     }
 
     public Tile[][] getDefaultFarmTiles(int x, int y) {
-        Tile[][] defaultTiles = new Tile[x][y]; 
+        Tile[][] defaultTiles = new Tile[x][y];
 
-        for(int i = 0 ; i< x; i++){
-            for(int j = 0; j < y ; j++){
-                defaultTiles[i][j] = new Tile(TileType.GRASS); 
+        for (int i = 0; i < x; i++) {
+            for (int j = 0; j < y; j++) {
+                defaultTiles[i][j] = new Tile(TileType.GRASS);
             }
         }
-        for(int i = x/2 - 2 ; i < x/2 + 3; i++){
-            for(int j = y/2 - 2 ; j < y/2 + 3 ; j++){
-                defaultTiles[i][j] = new Tile(TileType.WATER); 
+        for (int i = x / 2 - 2; i < x / 2 + 3; i++) {
+            for (int j = y / 2 - 2; j < y / 2 + 3; j++) {
+                defaultTiles[i][j] = new Tile(TileType.WATER);
             }
         }
-        
-        return defaultTiles; 
+
+        // Place the portal at a valid coordinate, for example at the bottom-right
+        // corner.
+        int portalRow = x - 1;
+        int portalCol = y - 1;
+        defaultTiles[portalRow][portalCol] = new Tile(TileType.PORTAL);
+        // Set portal content with desired destination info (e.g., destination map ID
+        // and a coordinate)
+        defaultTiles[portalRow][portalCol].setContent(new Portal("villageMap", 0, 0));
+
+        return defaultTiles;
     }
 
+    public Tile[][] getDefaultVillageTiles(int x, int y) {
+        Tile[][] defaultTiles = new Tile[x][y];
 
-    public Tile[][] getDefaultBeachTiles(int x, int y) {
-        Tile[][] defaultTiles = new Tile[x][y]; 
-
-        for(int i = 0 ; i< x; i++){
-            for(int j = 0; j < y/2 ; j++){
-                defaultTiles[i][j] = new Tile(TileType.SAND); 
-            }
-            for(int j = y/2; j < y ; j++){
-                defaultTiles[i][j] = new Tile(TileType.WATER); 
+        for (int i = 0; i < x; i++) {
+            for (int j = 0; j < y; j++) {
+                defaultTiles[i][j] = new Tile(TileType.GRASS);
             }
         }
-        return defaultTiles; 
+        for (int i = x / 2 - 2; i < x / 2 + 3; i++) {
+            for (int j = y / 2 - 2; j < y / 2 + 3; j++) {
+                defaultTiles[i][j] = new Tile(TileType.WATER);
+            }
+        }
+
+        defaultTiles[x][y] = new Tile(TileType.PORTAL);
+        // Place the portal at a valid coordinate, for example at the bottom-right
+        // corner.
+        int portalRow = x - 1;
+        int portalCol = y - 1;
+        defaultTiles[portalRow][portalCol] = new Tile(TileType.PORTAL);
+        // Set portal content with desired destination info (e.g., destination map ID
+        // and a coordinate)
+        defaultTiles[portalRow][portalCol].setContent(new Portal("villageMap", 0, 0));
+
+        return defaultTiles;
+    }
+
+    public Tile[][] getDefaultBeachTiles(int x, int y) {
+        Tile[][] defaultTiles = new Tile[x][y];
+
+        for (int i = 0; i < x; i++) {
+            for (int j = 0; j < y / 2; j++) {
+                defaultTiles[i][j] = new Tile(TileType.SAND);
+            }
+            for (int j = y / 2; j < y; j++) {
+                defaultTiles[i][j] = new Tile(TileType.WATER);
+            }
+        }
+
+        int portalRow = x - 1;
+        int portalCol = y - 1;
+        defaultTiles[portalRow][portalCol] = new Tile(TileType.PORTAL);
+        // Set portal content with desired destination info (e.g., destination map ID
+        // and a coordinate)
+        defaultTiles[portalRow][portalCol].setContent(new Portal("villageMap", 0, 0));
+
+        return defaultTiles;
 
     }
 }

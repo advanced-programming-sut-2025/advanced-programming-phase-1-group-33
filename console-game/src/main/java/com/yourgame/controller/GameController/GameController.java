@@ -5,7 +5,11 @@ import com.yourgame.model.Player;
 import com.yourgame.model.User;
 import com.yourgame.model.IO.Request;
 import com.yourgame.model.IO.Response;
+import com.yourgame.model.Map.Coordinate;
 import com.yourgame.model.Map.GameMap;
+import com.yourgame.model.Map.Portal;
+import com.yourgame.model.Map.Tile;
+import com.yourgame.model.enums.TileType;
 import com.yourgame.model.enums.Weather;
 import com.yourgame.view.ConsoleView;
 
@@ -154,7 +158,6 @@ public class GameController {
     }
 
     public Response getWeatherForcast() {
-        // TODO Auto-generated method stub
         return new Response(true, "Tomorrow Weather is " + gameState.getWeather().getTomorrowWeather());
     }
 
@@ -168,14 +171,44 @@ public class GameController {
             Player currentPlayer = gameState.getCurrentPlayer();
             // Retrieve the map using the player's current map id
             String mapId = currentPlayer.getCurrentMapId();
-            System.out.println(mapId);
             GameMap map = gameState.getMapManager().getMap(mapId);
             System.out.println(gameState.getMapManager().getMaps());
             if (map == null) {
                 return new Response(false, "Map not found for the current player. Current map Id: " + mapId);
             }
             // Render the map based on its current state
-            String renderedMap = map.renderMap();
+            String renderedMap = map.renderMap(gameState.getPlayers());
             return new Response(true, renderedMap);    
+    }
+
+    public Response getWalk(Request request) {
+    // Get player's current coordinate and the intended destination coordinate
+    Player currentPlayer = gameState.getCurrentPlayer(); 
+    Coordinate current = gameState.getCurrentPlayer().getCurrentCoordinate();
+    int x = Integer.parseInt(request.body.get("x"));
+    int y = Integer.parseInt(request.body.get("y"));
+
+    Coordinate destination = new Coordinate(x, y);  // compute based on the command
+
+    // Check if destination is valid and not blocked by another player/building
+    GameMap currentMap = App.getGameState().getMapManager().getMap(currentPlayer.getCurrentMapId());
+    if (currentMap.isOccupied(destination)) {
+        return new Response(false, "That tile is occupied.");
+    }
+    // TO-DO 
+    // Move player
+    currentPlayer.setCurrentCoordinate(destination);
+    
+    // Check if the tile is a portal
+    Tile destTile = currentMap.getTileAt(destination);
+    if (destTile.getType() == TileType.PORTAL && destTile.getContent() instanceof Portal) {
+        Portal portal = (Portal) destTile.getContent();
+        // Teleport the player to new location in the destination map:
+        currentPlayer.setCurrentMapId(portal.getDestinationMapId());
+        currentPlayer.setCurrentCoordinate(new Coordinate(portal.getDestRow(), portal.getDestCol()));
+        return new Response(true, "Teleported to " + portal.getDestinationMapId());
+    }
+    
+    return new Response(true, "Moved successfully.");
     }
 }

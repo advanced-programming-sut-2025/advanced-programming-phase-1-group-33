@@ -7,7 +7,7 @@ public enum TileType {
     ROCK('^', ANSI.WHITE, true),
     DIRT('.', ANSI.RED, true),
     SAND('.', ANSI.YELLOW, true),
-    PORTAL('P', ANSI.PURPLE, false);
+    PORTAL('P', ANSI.PURPLE, true);
 
     private final char symbol;
     private final String colorCode;
