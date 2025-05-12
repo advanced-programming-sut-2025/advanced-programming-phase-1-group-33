@@ -31,6 +31,10 @@ weather forecast
 cheat advance date 1d
 weather
 greenhouse build
-print map -l 10, 10 -s 10
+print map -l 1, 2 -s 10
+next turn 
+print map -l 1, 2 -s 10
+walk -l 31 , 31 
+print map -l 1, 2 -s 10
 go back
 exit
