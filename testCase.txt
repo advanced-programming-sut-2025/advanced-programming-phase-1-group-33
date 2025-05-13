@@ -35,6 +35,7 @@ print map -l 1, 2 -s 10
 next turn 
 print map -l 1, 2 -s 10
 walk -l 31 , 31 
+walk -l 1, 0
 print map -l 1, 2 -s 10
 go back
 exit

@@ -127,7 +127,7 @@ public class GameMap {
                     Tile t = tiles[i][j];
                     if (t.isOccupied()) {
                         // For example, if tile contains an item, building or portal.
-                        sb.append('I');
+                        sb.append(t.getContent().toString());
                     } else {
                         sb.append(t.getType().getColoredSymbol());
                     }

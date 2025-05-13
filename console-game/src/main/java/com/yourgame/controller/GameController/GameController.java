@@ -13,6 +13,12 @@ import com.yourgame.model.enums.TileType;
 import com.yourgame.model.enums.Weather;
 import com.yourgame.view.ConsoleView;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Queue;
 import java.util.Scanner;
 
 import com.yourgame.controller.CommandParser;
@@ -167,48 +173,177 @@ public class GameController {
     }
 
     public Response PrintMap() {
-            // Get the current player from the game state
-            Player currentPlayer = gameState.getCurrentPlayer();
-            // Retrieve the map using the player's current map id
-            String mapId = currentPlayer.getCurrentMapId();
-            GameMap map = gameState.getMapManager().getMap(mapId);
-            System.out.println(gameState.getMapManager().getMaps());
-            if (map == null) {
-                return new Response(false, "Map not found for the current player. Current map Id: " + mapId);
-            }
-            // Render the map based on its current state
-            String renderedMap = map.renderMap(gameState.getPlayers());
-            return new Response(true, renderedMap);    
+        // Get the current player from the game state
+        Player currentPlayer = gameState.getCurrentPlayer();
+        // Retrieve the map using the player's current map id
+        String mapId = currentPlayer.getCurrentMapId();
+        GameMap map = gameState.getMapManager().getMap(mapId);
+        if (map == null) {
+            return new Response(false, "Map not found for the current player. Current map Id: " + mapId);
+        }
+        // Render the map based on its current state
+        String renderedMap = map.renderMap(gameState.getPlayers());
+        return new Response(true, renderedMap);
     }
 
     public Response getWalk(Request request) {
-    // Get player's current coordinate and the intended destination coordinate
-    Player currentPlayer = gameState.getCurrentPlayer(); 
-    Coordinate current = gameState.getCurrentPlayer().getCurrentCoordinate();
-    int x = Integer.parseInt(request.body.get("x"));
-    int y = Integer.parseInt(request.body.get("y"));
+        // Obtain current player and destination.
+        Player currentPlayer = gameState.getCurrentPlayer();
+        int destX = Integer.parseInt(request.body.get("x"));
+        int destY = Integer.parseInt(request.body.get("y"));
+        Coordinate destination = new Coordinate(destX, destY);
 
-    Coordinate destination = new Coordinate(x, y);  // compute based on the command
+        // Retrieve the current map.
+        GameMap currentMap = gameState.getMapManager().getMap(currentPlayer.getCurrentMapId());
+        if (currentMap == null) {
+            return new Response(false, "Current map not found.");
+        }
 
-    // Check if destination is valid and not blocked by another player/building
-    GameMap currentMap = App.getGameState().getMapManager().getMap(currentPlayer.getCurrentMapId());
-    if (currentMap.isOccupied(destination)) {
-        return new Response(false, "That tile is occupied.");
+        // Find a path using BFS with 8–neighbor moves.
+        List<Coordinate> path = findPath(currentPlayer.getCurrentCoordinate(), destination, currentMap);
+        if (path == null || path.isEmpty()) {
+            return new Response(false, "No valid path found to the destination.");
+        }
+
+        // Check that path does not cross another player's farm.
+        // (For illustration, we assume that if any tile in the path is marked as
+        // non–walkable or
+        // belongs to a farm whose map id is not equal to currentPlayer's own farm id,
+        // then reject.)
+        for (Coordinate coord : path) {
+            // Example: if the tile is on a farm map and it is not the current player’s
+            // farm:
+            if (!currentPlayer.getCurrentMapId().equals("farmMap") // adjust condition as needed
+                    && isOtherPlayersFarm(coord, currentMap)) {
+                return new Response(false, "You cannot enter another player's farm.");
+            }
+        }
+
+        // Simulate walking along the path using energy.
+        // Energy cost per step is 1/20 unit.
+        // At the start of each new turn (except the first), there is an extra penalty
+        // of 10 energy (equivalent to 10/20 units).
+        // Each turn, the player has 50 energy, unless unlimited.
+        double perStepCost = 1.0 / 20; // energy cost for one tile move.
+        double turnPenalty = 10.0 / 20; // additional cost when changing turn.
+        double turnEnergy = 50;
+        int turnCount = 1;
+
+        // If player has unlimited energy, then simply move and update coordinate.
+        if (currentPlayer.isUnlimitedEnergy()) {
+            currentPlayer.setCurrentCoordinate(destination);
+            // Also check if destination is a portal.
+            Tile destTile = currentMap.getTileAt(destination);
+            if (destTile.getType() == TileType.PORTAL && destTile.getContent() instanceof Portal) {
+                Portal portal = (Portal) destTile.getContent();
+                currentPlayer.setCurrentMapId(portal.getDestinationMapId());
+                currentPlayer.setCurrentCoordinate(new Coordinate(portal.getDestRow(), portal.getDestCol()));
+                return new Response(true, "Teleported to " + portal.getDestinationMapId());
+            }
+            return new Response(true, "Moved successfully (unlimited energy).");
+        }
+
+        // Otherwise, simulate movement along the path.
+        for (int i = 1; i < path.size(); i++) { // start from 1 as 0 is the starting coordinate.
+            // Check if current turn energy is enough for the next step.
+            if (turnEnergy < perStepCost) {
+                // Not enough energy to move to next tile: auto-change turn.
+                turnCount++;
+                turnEnergy = 50 - turnPenalty; // new turn cost penalty.
+            }
+            turnEnergy -= perStepCost;
+        }
+
+        // Calculate total energy cost using the formula: (distance + 10 *
+        // numberOfTurns) / 20.
+        int distance = path.size() - 1; // number of steps
+        double totalCost = (distance + 10 * turnCount) / 20.0;
+
+        // Optionally, if totalCost exceeds the available energy across turns, you could
+        // stop early.
+        // For this demo, we assume the simulation always completes the path.
+
+        // Update the player's coordinate.
+        currentPlayer.setCurrentCoordinate(destination);
+
+        // Check for a portal at destination.
+        Tile destTile = currentMap.getTileAt(destination);
+        if (destTile.getType() == TileType.PORTAL && destTile.getContent() instanceof Portal) {
+            Portal portal = (Portal) destTile.getContent();
+            currentPlayer.setCurrentMapId(portal.getDestinationMapId());
+            currentPlayer.setCurrentCoordinate(new Coordinate(portal.getDestRow(), portal.getDestCol()));
+            return new Response(true,
+                    "Teleported to " + portal.getDestinationMapId() + " after " + turnCount + " turn(s).");
+        }
+
+        // If the move consumed all energy in the current turn, automatically advance
+        // the turn.
+        if (turnEnergy <= 0) {
+            gameState.nextTurn();
+            return new Response(true, "Moved successfully, but your turn ended after " + turnCount
+                    + " turn(s). Now playing as " + gameState.getCurrentPlayer().getUsername());
+        }
+
+        return new Response(true, "Moved successfully in " + turnCount + " turn(s).");
     }
-    // TO-DO 
-    // Move player
-    currentPlayer.setCurrentCoordinate(destination);
-    
-    // Check if the tile is a portal
-    Tile destTile = currentMap.getTileAt(destination);
-    if (destTile.getType() == TileType.PORTAL && destTile.getContent() instanceof Portal) {
-        Portal portal = (Portal) destTile.getContent();
-        // Teleport the player to new location in the destination map:
-        currentPlayer.setCurrentMapId(portal.getDestinationMapId());
-        currentPlayer.setCurrentCoordinate(new Coordinate(portal.getDestRow(), portal.getDestCol()));
-        return new Response(true, "Teleported to " + portal.getDestinationMapId());
+
+    // Helper method: findPath using BFS with 8–directions.
+    private List<Coordinate> findPath(Coordinate start, Coordinate goal, GameMap map) {
+        Queue<Coordinate> queue = new LinkedList<>();
+        Map<Coordinate, Coordinate> cameFrom = new HashMap<>();
+        queue.add(start);
+        cameFrom.put(start, null);
+
+        // Define 8 neighboring moves.
+        int[] dx = { -1, -1, -1, 0, 0, 1, 1, 1 };
+        int[] dy = { -1, 0, 1, -1, 1, -1, 0, 1 };
+
+        while (!queue.isEmpty()) {
+            Coordinate current = queue.poll();
+            if (current.equals(goal)) {
+                // Found destination; reconstruct path.
+                List<Coordinate> path = new ArrayList<>();
+                for (Coordinate node = current; node != null; node = cameFrom.get(node)) {
+                    path.add(0, node);
+                }
+                return path;
+            }
+            // Explore neighbors.
+            for (int i = 0; i < 8; i++) {
+                int newX = current.getX() + dx[i];
+                int newY = current.getY() + dy[i];
+                Coordinate neighbor = new Coordinate(newX, newY);
+                if (!isWithinMap(neighbor, map))
+                    continue;
+                // Check if the tile is walkable.
+                Tile tile = map.getTileAt(neighbor);
+                if (!tile.getType().isWalkable())
+                    continue;
+                if (cameFrom.containsKey(neighbor))
+                    continue;
+                cameFrom.put(neighbor, current);
+                queue.add(neighbor);
+            }
+        }
+        return null; // no path found.
     }
-    
-    return new Response(true, "Moved successfully.");
+
+    // Check if a coordinate is within the bounds of the map.
+    private boolean isWithinMap(Coordinate coord, GameMap map) {
+        Tile[][] tiles = map.getTiles();
+        int rows = tiles.length;
+        int cols = tiles[0].length;
+        return coord.getX() >= 0 && coord.getX() < rows && coord.getY() >= 0 && coord.getY() < cols;
+    }
+
+    // Example helper to check if the tile belongs to another player's farm.
+    // (You will need to implement logic based on your game's rules, for example:
+    private boolean isOtherPlayersFarm(Coordinate coord, GameMap map) {
+        // For instance, if tile type is BUILDING and the coordinate is within a defined
+        // farm boundary,
+        // then return true.
+        // This is a stub and should be replaced with your actual logic.
+        Tile tile = map.getTileAt(coord);
+        return tile.getType() == TileType.BUILDING;
     }
 }

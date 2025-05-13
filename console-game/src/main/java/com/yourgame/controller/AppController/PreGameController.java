@@ -72,20 +72,7 @@ public class PreGameController {
         WeatherSystem weather = new WeatherSystem(Season.SPRING); // initialize weather system
 
         // Create map manager and maps
-        MapManager mapManager = new MapManager();
-        // Initialize tiles array as needed
-        Tile[][] beachTiles = mapManager.getDefaultBeachTiles(10 , 10); // create 10x10 tiles for beach map
-        // (Fill the tile arrays with proper Tile objects)
-        
-        GameMap beachMap = new GameMap("Beach",beachTiles, new ArrayList<>());
-        mapManager.addMap(beachMap);
-        for(Player player: players ){
-            Tile[][] farmTiles = mapManager.getDefaultFarmTiles(32 , 32); 
-            String playerFarmId = player.getUsername() + "Farm";             
-            FarmMap farmMap = new FarmMap(playerFarmId,farmTiles, new ArrayList<>());
-            mapManager.addMap(farmMap);
-            player.initializeFarm(farmMap); 
-        }
+        MapManager mapManager = new MapManager(players);
 
         // Create a new game state instance with the mapManager (change constructor if needed)
         GameState gameState = new GameState(players, gameTime, weather, mapManager, new ArrayList<>(), new ArrayList<>());

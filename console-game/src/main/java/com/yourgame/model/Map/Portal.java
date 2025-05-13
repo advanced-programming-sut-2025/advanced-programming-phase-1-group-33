@@ -1,5 +1,7 @@
 package com.yourgame.model.Map;
 
+import com.yourgame.model.enums.TileType;
+
 public class Portal {
     private String destinationMapId;
     private int destRow;
@@ -21,5 +23,10 @@ public class Portal {
     
     public int getDestCol() {
         return destCol;
+    }
+    @Override
+    public String toString() {
+        // TODO Auto-generated method stub
+        return TileType.PORTAL.getColoredSymbol();
     }
 }
