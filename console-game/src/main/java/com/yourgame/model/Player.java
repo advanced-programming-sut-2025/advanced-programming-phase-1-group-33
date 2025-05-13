@@ -6,6 +6,7 @@ import com.yourgame.model.Building.FarmMap;
 import com.yourgame.model.Item.Item;
 import com.yourgame.model.Item.Tool;
 import com.yourgame.model.Map.Coordinate;
+import com.yourgame.model.Map.MapManager;
 import com.yourgame.model.Skill.Skill;
 import com.yourgame.model.Inventory.BackPack;
 import com.yourgame.model.enums.BackPackType;
@@ -34,6 +35,8 @@ public class Player {
     private Set<Recipe> knownCraftingRecipes;
     private Set<Recipe> knownCookingRecipes;
     private List<QuestStatus> activeQuests;
+    private String currentMapId;
+    private Coordinate currentCoordinate;
 
     public Player(String username, String hashedPassword, String nickname, String email, Gender gender, int maxEnergy) {
         this.username = username;
@@ -276,8 +279,30 @@ public class Player {
         throw new UnsupportedOperationException("Unimplemented method 'getHealth'");
     }
 
+    
     public void setHealth(double d) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'setHealth'");
+    }
+    public String getCurrentMapId() {
+        return currentMapId;
+    }
+
+    public void setCurrentMapId(String currentMapId) {
+        this.currentMapId = currentMapId;
+    }
+
+    public Coordinate getCurrentCoordinate() {
+        return currentCoordinate;
+    }
+
+    public void setCurrentCoordinate(Coordinate currentCoordinate) {
+        this.currentCoordinate = currentCoordinate;
+    }
+
+    public void initializeFarm(FarmMap farmMap) {
+        setFarmMapReference(farmMap);
+        setCurrentMapId(farmMap.getMapId());
+        setCurrentCoordinate(new Coordinate(0, 0)); 
     }
 }

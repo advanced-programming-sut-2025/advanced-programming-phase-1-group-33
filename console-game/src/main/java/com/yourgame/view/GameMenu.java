@@ -58,6 +58,12 @@ public class GameMenu implements AppMenu {
             return getWeatherForcast();
         case GREEN_HOUSE_BUILD:
             return getBuildGreenHouse(); 
+        case WALK:
+            return getWalk(input); 
+        case PRINT_MAP:
+            return getPrintMap(input); 
+        case HELP_READING_MAP:
+            return getHelpRedning(); 
         case ENERGY_SHOW:
             return getEnergyShow();
         case ENERGY_SET_VALUE:
@@ -89,6 +95,28 @@ public class GameMenu implements AppMenu {
             return getInvalidCommand();
         }
     }
+
+    private Response getHelpRedning() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getHelpRedning'");
+    }
+
+
+    private Response getPrintMap(String input) {
+        // TODO Auto-generated method stub
+        return controller.PrintMap(); 
+    }
+
+
+    private Response getWalk(String input) {
+        // TODO Auto-generated method stub
+        Request request = new Request(input);
+        request.body.put("x", GameViewCommands.WALK.getGroup(input, "x"));
+        request.body.put("y", GameViewCommands.WALK.getGroup(input, "y"));
+
+        return controller.getWalk(request); 
+    }
+
 
     private Response getToolsUseDirectionResponse(String input) {
         Response response;

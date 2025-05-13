@@ -5,17 +5,21 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.yourgame.model.Player;
 import com.yourgame.model.Building.Building;
 import com.yourgame.model.Item.Item;
 import com.yourgame.model.Item.Resource;
+import com.yourgame.model.enums.TileType;
 
 public class GameMap {
+    private String mapId;
     private Tile[][] tiles;
     private List<Building> buildings;
     private Map<Coordinate, Item> spawnedForageables;
     private Map<Coordinate, Resource> spawnedResources;
 
-    public GameMap(Tile[][] tiles, List<Building> buildings) {
+    public GameMap(String mapId, Tile[][] tiles, List<Building> buildings) {
+        this.mapId = mapId;
         this.tiles = tiles;
         this.buildings = buildings;
         this.spawnedForageables = new HashMap<>();
@@ -23,7 +27,11 @@ public class GameMap {
     }
 
     public GameMap() {
-        //TODO Auto-generated constructor stub
+        // TODO Auto-generated constructor stub
+    }
+
+    public String getMapId() {
+        return mapId;
     }
 
     public Tile getTileAt(Coordinate coordinate) {
@@ -31,7 +39,7 @@ public class GameMap {
     }
 
     public boolean isOccupied(Coordinate coordinate) {
-        // Placeholder logic for checking occupancy
+        // Check if any building or spawned object occupies the tile.
         for (Building building : buildings) {
             if (building.getCoordinate().equals(coordinate)) {
                 return true;
@@ -98,5 +106,35 @@ public class GameMap {
 
     public void setSpawnedResources(Map<Coordinate, Resource> spawnedResources) {
         this.spawnedResources = spawnedResources;
+    }
+
+    public String renderMap(List<Player> players) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < tiles.length; i++) {
+            for (int j = 0; j < tiles[i].length; j++) {
+                boolean playerHere = false;
+                for (Player p : players) {
+                    // Only check players that are in this map
+                    if (p.getCurrentMapId().equals(this.mapId) && 
+                        p.getCurrentCoordinate().getX() == i &&
+                        p.getCurrentCoordinate().getY() == j) {
+                        sb.append('@');
+                        playerHere = true;
+                        break;
+                    }
+                }
+                if (!playerHere) {
+                    Tile t = tiles[i][j];
+                    if (t.isOccupied()) {
+                        // For example, if tile contains an item, building or portal.
+                        sb.append(t.getContent().toString());
+                    } else {
+                        sb.append(t.getType().getColoredSymbol());
+                    }
+                }
+            }
+            sb.append('\n');
+        }
+        return sb.toString();
     }
 }

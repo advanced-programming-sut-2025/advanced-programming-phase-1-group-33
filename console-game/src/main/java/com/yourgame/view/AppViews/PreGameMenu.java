@@ -66,7 +66,7 @@ private Response getNewGame(String input) {
         return new Response(false, "Database error: " + e.getMessage());
     }
 
-        // Load each user and create a Player object for each
+    // Load each user and create a Player object for each
     List<Player> players = new ArrayList<>();
     try {
         for (String username : usernames) {
