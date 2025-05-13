@@ -14,9 +14,6 @@ public class MainMenuController {
             case "login":
                 App.setCurrentMenu(MenuTypes.LoginMenu);
                 return new Response(true, "" + App.getCurrentMenu());
-            case "register":
-                App.setCurrentMenu(MenuTypes.RegisterMenu);
-                return new Response(true, "" + App.getCurrentMenu());
             case "profile":
                 App.setCurrentMenu(MenuTypes.ProfileMenu);
                 return new Response(true, "" + App.getCurrentMenu());

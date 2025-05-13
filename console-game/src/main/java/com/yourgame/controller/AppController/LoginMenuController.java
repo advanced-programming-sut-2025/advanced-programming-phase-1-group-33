@@ -98,33 +98,46 @@ public class LoginMenuController extends Controller {
         if (System.getenv("APP_MODE") != null && System.getenv("APP_MODE").equals("TEST")) {
             userPassword = password;
         }
-        String message = "User created! Password is: " + password + "\n" +
-                "Enter 'pick question -q <question number> -a <answer> -c <confirm answer>' to choose security question\n"
-                +
-                "You can enter 'list questions' command to see possible security questions\n";
-        return new Response(true, message);
+       System.out.println("Enter 'pick question -q <question number> -a <answer> -c <confirm answer>' to choose security question\n");
+
+        int counter = 0;
+        for (SecurityQuestion sq : App.securityQuestions) {
+            System.out.println(counter + ". " + sq.getQuestion());
+            counter++;
+        }
+        //Bug for printing input command into output (it is fixed but it's not clean);
+
+        String moz = scanner.nextLine();
+
+        String numberOfSecurityQuestions = scanner.nextLine();
+        String[] parts = numberOfSecurityQuestions.split("\\s+");
+        if (parts.length < 2) {
+            System.out.println("Invalid security question input.");
+        }
+
+        String questionIndex = parts[0].trim();
+        String answer = parts[1].trim();
+
+        return selectSecurityQuestion(username, password, passwordConfirm, nickname, email, gender, questionIndex, answer);
+
     }
 
-    public static Response handlePickQuestion(Request request) {
-        int questionNumber = Integer.parseInt(request.body.get("questionNumber"));
-        String answer = request.body.get("answer");
-        String answerConfirm = request.body.get("answerConfirm");
-        if (questionNumber < 1 || questionNumber > 4) {
-            return new Response(false, "Invalid question number!");
+    public static Response selectSecurityQuestion(String username, String password, String passwordConfirm, String nickname,
+                                                  String email,
+                                                  String gender, String number, String answer) {
+        int counter = 0;
+        try {
+            counter = Integer.parseInt(number);
+        }catch(NumberFormatException e) {
+            System.out.println("Invalid number.");
         }
-        if (!answer.equals(answerConfirm)) {
-            return new Response(false, "Answer doesn't match!");
-        }
-        User user = getUserWaitingForQuestion();
-        user.setAnswer(answer);
-        user.setQuestion(SecurityQuestion.values()[questionNumber - 1]);
-        // save user
-        isWaitingForQuestion = false;
-        userWaitingForQuestion = null;
-        App.setCurrentMenu(MenuTypes.MainMenu);
-        App.setCurrentUser(user);
-        return new Response(true, "Question Picked! Logging in...");
+
+        if(counter > App.securityQuestions.size()) System.out.println("Please enter a valid security question.");
+        SecurityQuestion question = App.securityQuestions.get(counter);
+        SecurityQuestion s= new SecurityQuestion(question.getQuestion() , answer);
+        return new Response(true,"");
     }
+
 
     public static Response handleLogin(Request request) {
         String username = request.body.get("username");
@@ -149,34 +162,8 @@ public class LoginMenuController extends Controller {
 
     // public static Response handleForgetPassword(Request request)
 
-    public static Response handleAnswer(Request request) {
-        if (userOfForgetPassword == null) {
-            return new Response(false, "You haven't entered your username.");
-        }
-        String answer = request.body.get("answer");
-        User user = userOfForgetPassword;
-        if (!answer.equals(user.getAnswer())) {
-            userOfForgetPassword = null;
-            isProgramWaitingForAnswer = false;
-            return new Response(false, "Answer doesn't match!");
-        }
-        isProgramWaitingForAnswer = false;
-        return new Response(true, "Your answer is correct; select your new password.");
-    }
 
-    public static Response handleListQuestions(Request request) {
-        Response response = new Response();
-        response.setSuccess(true);
 
-        StringBuilder stringBuilder = new StringBuilder("List of questions:\n");
-        int index = 1;
-        for (SecurityQuestion question : SecurityQuestion.values()) {
-            stringBuilder.append(index).append("- ").append(question).append("\n");
-            index++;
-        }
-        response.setMessage(stringBuilder.toString());
-        return response;
-    }
 
     public static User getUserWaitingForQuestion() {
         return userWaitingForQuestion;
@@ -301,5 +288,43 @@ public class LoginMenuController extends Controller {
             return true;
         }
         return false;
+    }
+
+    public static Response askSecurityQuestion(String username) throws SQLException {
+        User user = App.getUserDAO().loadUser(username);
+        if (user == null) {
+            return new Response(false, "Username not found!");
+        }
+        SecurityQuestion sq = user.getSecurityQuestion();
+        return new Response(true , sq.getQuestion());
+    }
+
+    public static Response checkAnswerQuestion(String username, String answer) throws SQLException {
+        User user = App.getUserDAO().loadUser(username);
+        if (user == null) {
+            return new Response(false, "Username not found!");
+        }
+        SecurityQuestion sq = user.getSecurityQuestion();
+        if(!sq.getAnswer().equals(answer)){
+            return new Response(false, "wrong answer");
+        }
+        return new Response(true , "user answered successfully " + "your password : " + user.getPassword());
+    }
+
+    public static Response setNewPasswordAfterForgetPassword(String username , String newPassword) throws SQLException {
+        User user = App.getUserDAO().loadUser(username);
+        if (user == null) {
+            return new Response(false, "Username not found!");
+        }
+        String passwordRegex = "^[a-zA-Z0-9?><,\"';:\\/|\\]\\[}{+=)(*&^%$#!]+";
+        Matcher matcher = Pattern.compile(passwordRegex).matcher(newPassword);
+        if (!matcher.matches()) {
+            return new Response(false, "invalid password format");
+        }
+        if (!validatePasswordSecurity(newPassword).equals("Success")) {
+            return new Response(false, "Password isn't secure! " +
+                    validatePasswordSecurity(newPassword));
+        }
+        return new Response(true, "user password changed successfully");
     }
 }

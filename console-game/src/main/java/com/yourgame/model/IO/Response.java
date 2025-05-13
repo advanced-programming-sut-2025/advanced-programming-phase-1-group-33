@@ -28,4 +28,8 @@ public class Response {
     public void setMessage(String message) {
         this.message = message;
     }
+
+    public boolean getSuccessful() {
+        return success;
+    }
 }
