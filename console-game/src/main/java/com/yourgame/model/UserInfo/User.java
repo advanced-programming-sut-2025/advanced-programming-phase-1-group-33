@@ -1,7 +1,6 @@
-package com.yourgame.model;
+package com.yourgame.model.UserInfo;
 
-import com.yourgame.model.enums.Gender;
-import com.yourgame.model.enums.SecurityQuestion;
+import com.yourgame.model.SecurityQuestion;
 
 public class User {
     private String Username;

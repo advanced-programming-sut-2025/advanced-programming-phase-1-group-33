@@ -5,11 +5,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.yourgame.model.Player;
+import com.yourgame.model.UserInfo.Player;
 import com.yourgame.model.Building.Building;
 import com.yourgame.model.Item.Item;
 import com.yourgame.model.Item.Resource;
-import com.yourgame.model.enums.TileType;
 
 public class GameMap {
     private String mapId;

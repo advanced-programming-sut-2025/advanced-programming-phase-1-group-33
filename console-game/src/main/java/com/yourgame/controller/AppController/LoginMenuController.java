@@ -2,8 +2,9 @@ package com.yourgame.controller.AppController;
 
 import com.yourgame.model.*;
 import com.yourgame.model.IO.*;
+import com.yourgame.model.UserInfo.User;
 import com.yourgame.model.enums.Commands.MenuTypes;
-import com.yourgame.model.enums.SecurityQuestion;
+import com.yourgame.model.SecurityQuestion;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;

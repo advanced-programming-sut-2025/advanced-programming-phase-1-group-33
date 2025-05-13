@@ -1,6 +1,6 @@
 package com.yourgame.model;
+import com.yourgame.model.UserInfo.User;
 import com.yourgame.model.enums.Commands.MenuTypes;
-import com.yourgame.model.enums.SecurityQuestion;
 import com.yourgame.persistence.UserDAO;
 
 import java.sql.SQLException;

@@ -1,96 +1,128 @@
 package com.yourgame.model.Weather;
 
 import com.yourgame.model.App;
-import com.yourgame.model.enums.Season;
+
+import java.util.ArrayList;
+import java.util.Random;
 
 public class TimeSystem {
-    private int hour;
-    private int dayOfMonth;
+    public TimeSystem clone;
     private Season season;
-    private int year;
+    private DaysOfTheWeek dayOfWeek;
+    private int date;
+    private int hour;
+    private Weather weather;
+    private Weather nextDayWeather;
 
-    public TimeSystem(int hour, int dayOfMonth, Season season, int year) {
-        this.hour = hour;
-        this.dayOfMonth = dayOfMonth;
-        this.season = season;
-        this.year = year;
+    public TimeSystem() {
+        this.hour = 9;
+        this.dayOfWeek = DaysOfTheWeek.Saturday;
+        this.season = Season.Spring;
+        this.date = 1;
+        this.weather = Weather.Sunny;
+        this.nextDayWeather = Weather.Sunny;
+
     }
 
-    public void advanceHour() {
-        hour++;
-        if (hour >= 24) {
-            hour = 0;
-            advanceDay();
+    public void advancedHour(int h) {
+        this.hour += h;
+        while (this.hour >= 24) {
+            this.hour -= 24;
+            advancedDay(1);
+
+        }
+
+    }
+
+    public void advancedDay(int d) {
+        for (int i = 0; i < d; i++) {
+            this.date++;
+            if (this.date > 28) {
+                this.date = 1;
+                advancedSeason();
+            }
+            DaysOfTheWeek[] days = DaysOfTheWeek.values();
+            int currentIndex = this.dayOfWeek.ordinal();
+            this.dayOfWeek = days[(currentIndex + 1) % days.length];
+        }
+        if (d == 1) {
+            this.weather = this.nextDayWeather;
+            this.nextDayWeather = createNextDayWeather();
+        } else {
+            this.weather = createNextDayWeather();
+            this.nextDayWeather = createNextDayWeather();
+
         }
     }
 
-    public void advanceDay() {
-        dayOfMonth++;
-        if (dayOfMonth > getDaysInMonth()) {
-            dayOfMonth = 1;
-            advanceSeason();
-        }
-        App.getGameState().getWeather().advanceToNextDay(season);
-    }
-
-    private void advanceSeason() {
-        // Assuming Season enum values are in order. This will wrap around
-        // automatically.
+    public void advancedSeason() {
         Season[] seasons = Season.values();
-        int nextOrdinal = (season.ordinal() + 1) % seasons.length;
-        season = seasons[nextOrdinal];
+        int currentIndex = this.season.ordinal();
+        if (currentIndex < 3) {
+            this.season = seasons[currentIndex + 1];
+        } else {
+            this.season = Season.Spring;
+        }
     }
 
-    private int getDaysInMonth() {
-        // Logic to return the number of days in the current month
-        // This is a placeholder for the actual implementation
-        return 28; // Example value
+    public Season getSeason() {
+        return season;
     }
 
-    public String formatTime() {
-        return String.format("%02d:00", hour);
+    public DaysOfTheWeek getDayOfWeek() {
+        return dayOfWeek;
     }
 
-    public String formatDate() {
-        return String.format("%d/%d/%d", dayOfMonth, season.ordinal() + 1, year);
+
+    public int getDate() {
+        return date;
     }
 
-    // Returns the current time (hour)
-    public String getTime() {
-        return formatTime();
+    public int getHour() {
+        return hour;
     }
 
-    // Returns the current date
-    public String getDate() {
-        return formatDate();
+    public void setHour(int hour) {
+        this.hour = hour;
     }
 
-    // Returns the date and time together
-    public String getDateTime() {
-        return String.format("%s %s", formatDate(), formatTime());
+    public Weather getWeather() {
+        return weather;
     }
 
-    // Returns the season as a String
-    public String getSeason() {
-        return season.toString();
+    public void setWeather(Weather weather) {
+        this.weather = weather;
     }
 
-    // Returns the season as a String
-    public String getSeasonType() {
-        return season.toString();
+    public Weather getNextDayWeather() {
+        return nextDayWeather;
     }
 
-    // Returns the day of the week computed from dayOfMonth.
-    public String getDayOfWeek() {
-        String[] days = { "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" };
-        // This calculation is a placeholder. Adjust the offset as needed.
-        int index = (dayOfMonth - 1) % 7;
-        return days[index];
+    public void setNextDayWeather(Weather nextDayWeather) {
+        this.nextDayWeather = nextDayWeather;
     }
 
-    public boolean isNight() {
-        return hour < 6 || hour >= 18; // Example logic for night time
+    public Weather createNextDayWeather() {
+        Weather[] weather = Weather.values();
+        ArrayList<Weather> weatherList = new ArrayList<>();
+        for (Weather w : weather) {
+            if (w.getSeasons().contains(this.season)) {
+                weatherList.add(w);
+            }
+        }
+        Random random = new Random();
+        int index = random.nextInt(weatherList.size());
+        return weatherList.get(index);
     }
 
-    // Getters and setters for hour, dayOfMonth, season, and year can be added here
+    public TimeSystem clone() {
+        TimeSystem cloned = new TimeSystem();
+        cloned.season = season;
+        cloned.dayOfWeek = dayOfWeek;
+        cloned.date = date;
+        cloned.hour = hour;
+        cloned.weather = weather;
+        cloned.nextDayWeather = nextDayWeather;
+        return cloned;
+    }
 }

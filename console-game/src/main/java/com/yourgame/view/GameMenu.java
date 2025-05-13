@@ -169,7 +169,7 @@ public class GameMenu implements AppMenu {
     }
 
     private Response getWeatherForcast() {
-        return controller.getWeatherForcast();
+        return controller.getWeatherForecast();
     }
 
     private Response getCheatWeather(String input) {

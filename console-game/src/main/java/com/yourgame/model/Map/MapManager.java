@@ -7,10 +7,9 @@ import java.util.Map;
 import java.util.Random;
 
 import com.yourgame.model.enums.TileType;
-import com.yourgame.model.Player;
+import com.yourgame.model.UserInfo.Player;
 import com.yourgame.model.Building.FarmMap;
 import com.yourgame.model.Item.Item;
-import com.yourgame.model.Map.Portal;
 
 public class MapManager {
     private Map<String, GameMap> maps;

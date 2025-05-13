@@ -1,18 +1,17 @@
-package com.yourgame.model;
+package com.yourgame.model.UserInfo;
 
 import java.util.*;
 
+import com.yourgame.model.Animals.AnimalType;
 import com.yourgame.model.Building.FarmMap;
-import com.yourgame.model.Item.Item;
 import com.yourgame.model.Item.Tool;
 import com.yourgame.model.Map.Coordinate;
-import com.yourgame.model.Map.MapManager;
-import com.yourgame.model.Skill.Skill;
+import com.yourgame.model.Recipes.Recipe;
 import com.yourgame.model.Inventory.BackPack;
 import com.yourgame.model.enums.BackPackType;
-import com.yourgame.model.enums.AnimalType;
-// import com.yourgame.model.Skill.SkillType;
+import com.yourgame.model.Skill.Skill;
 import com.yourgame.model.enums.Gender;
+
 public class Player {
     private String username;
     private String hashedPassword;
@@ -24,7 +23,7 @@ public class Player {
     private boolean unlimitedEnergy= false; 
     private int money;
     private final BackPack backPack = new BackPack(BackPackType.DEFAULT);
-    private ArrayList<AnimalType> animals= new ArrayList<>(); 
+    private ArrayList<AnimalType> animals= new ArrayList<>();
     private Coordinate currentLocation;
     private BackPack inventory;
     private Tool equippedTool;
@@ -34,7 +33,6 @@ public class Player {
     private FarmMap farmMapReference;
     private Set<Recipe> knownCraftingRecipes;
     private Set<Recipe> knownCookingRecipes;
-    private List<QuestStatus> activeQuests;
     private String currentMapId;
     private Coordinate currentCoordinate;
 
@@ -51,7 +49,6 @@ public class Player {
         this.relationships = new HashMap<>();
         this.knownCraftingRecipes = new HashSet<>();
         this.knownCookingRecipes = new HashSet<>();
-        this.activeQuests = new ArrayList<>();
     }
 
     // Business logic methods
@@ -66,16 +63,12 @@ public class Player {
         this.relationships = new HashMap<>();
         this.knownCraftingRecipes = new HashSet<>();
         this.knownCookingRecipes = new HashSet<>();
-        this.activeQuests = new ArrayList<>();
     }
 
     public void changeEnergy(int amount) {
         this.energy = Math.max(0, Math.min(maxEnergy, this.energy + amount));
     }
 
-    public void addXp(Skill skill, int xp) {
-        skill.addExperience(xp);
-    }
     public boolean canAfford(int cost) {
         return this.money >= cost;
     }
@@ -117,9 +110,9 @@ public class Player {
         this.unlimitedEnergy = unlimitedEnergy;
     }
 
-    public void updateQuest(QuestStatus questStatus) {
-        // Update quest logic here
-    }
+//    public void updateQuest(QuestStatus questStatus) {
+//        // Update quest logic here
+//    }
 
     // public int getCurrentSkillLevel(SkillType skillType) {
     //     Skill skill = skills.get(skillType);
@@ -256,13 +249,7 @@ public class Player {
         this.knownCookingRecipes = knownCookingRecipes;
     }
 
-    public List<QuestStatus> getActiveQuests() {
-        return activeQuests;
-    }
 
-    public void setActiveQuests(List<QuestStatus> activeQuests) {
-        this.activeQuests = activeQuests;
-    }
 
     public double getSpeed() {
         // TODO Auto-generated method stub

@@ -2,23 +2,16 @@ package com.yourgame.controller.AppController;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
 import com.yourgame.model.App;
 import com.yourgame.model.GameState;
-import com.yourgame.model.NPC;
-import com.yourgame.model.Player;
-import com.yourgame.model.Building.FarmMap;
+import com.yourgame.model.UserInfo.Player;
 import com.yourgame.model.IO.Response;
-import com.yourgame.model.Map.GameMap;
 import com.yourgame.model.Map.MapManager;
-import com.yourgame.model.Map.Tile;
-import com.yourgame.model.Shop.Shop;
 import com.yourgame.model.Weather.TimeSystem;
-import com.yourgame.model.Weather.WeatherSystem;
-import com.yourgame.model.enums.Season;
+import com.yourgame.model.Weather.Weather;
 import com.yourgame.model.enums.Commands.MenuTypes;
-import com.yourgame.model.IO.Request;
+
 public class PreGameController {
 
     // public Result handleCommand(String command, Scanner scanner) {
@@ -68,8 +61,8 @@ public class PreGameController {
     //
     public Response createNewGame(List<Player> players) {
         // Create components for your game state
-        TimeSystem gameTime = new TimeSystem(8, 1, Season.SPRING, 1); // initialize game time
-        WeatherSystem weather = new WeatherSystem(Season.SPRING); // initialize weather system
+        TimeSystem gameTime = new TimeSystem(); // initialize game time
+        Weather weather = Weather.Sunny; // initialize weather system
 
         // Create map manager and maps
         MapManager mapManager = new MapManager(players);

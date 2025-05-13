@@ -1,4 +1,4 @@
-package com.yourgame.model;
+package com.yourgame.model.Npc;
 
 public class DialogueTrigger {
 

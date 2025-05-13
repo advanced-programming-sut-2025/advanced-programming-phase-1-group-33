@@ -1,11 +1,11 @@
 package com.yourgame.controller.AppController;
 
 import java.sql.SQLException;
-import java.util.Scanner;
+
 import com.yourgame.model.IO.*;
 import com.yourgame.model.App;
-import com.yourgame.model.User;
-import com.yourgame.controller.AppController.LoginMenuController;
+import com.yourgame.model.UserInfo.User;
+
 public class ProfileMenuController {
     public static Response showUserInfo() {
         User currentUser = App.getCurrentUser();

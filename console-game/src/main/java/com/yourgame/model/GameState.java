@@ -4,23 +4,25 @@ import java.util.List;
 
 import com.yourgame.model.Map.GameMap;
 import com.yourgame.model.Map.MapManager;
+import com.yourgame.model.Npc.NPC;
 import com.yourgame.model.Shop.Shop;
+import com.yourgame.model.UserInfo.Player;
 import com.yourgame.model.Weather.TimeSystem;
-import com.yourgame.model.Weather.WeatherSystem;
+import com.yourgame.model.Weather.Weather;
 
 public class GameState {
-    private Player currentPlayer; 
+    private Player currentPlayer;
 
     private List<Player> players;
     private int currentTurnPlayerIndex;
     private TimeSystem gameTime;
-    private WeatherSystem weather;
+    private Weather weather;
     private GameMap currentMap;
     private MapManager mapManager; 
     private List<NPC> npcs;
     private List<Shop> shops;
 
-    public GameState( List<Player> players, TimeSystem gameTime, WeatherSystem weather, MapManager mapManager, List<NPC> npcs, List<Shop> shops) {
+    public GameState( List<Player> players, TimeSystem gameTime, Weather weather, MapManager mapManager, List<NPC> npcs, List<Shop> shops) {
         this.players = players;
         this.currentTurnPlayerIndex = 0; // Start with the first player
         this.gameTime = gameTime;
@@ -58,7 +60,7 @@ public class GameState {
 
     public void nextTurn() {
         if(currentTurnPlayerIndex == players.size() - 1){
-            gameTime.advanceHour();
+            gameTime.advancedHour(1);
         }
         currentTurnPlayerIndex = (currentTurnPlayerIndex + 1) % players.size();
         setCurrentPlayer(players.get(currentTurnPlayerIndex));
@@ -98,13 +100,6 @@ public class GameState {
         this.gameTime = gameTime;
     }
 
-    public WeatherSystem getWeather() {
-        return weather;
-    }
-
-    public void setWeather(WeatherSystem weather) {
-        this.weather = weather;
-    }
 
     public GameMap getCurrentMap() {
         return currentMap;

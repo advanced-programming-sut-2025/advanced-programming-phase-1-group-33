@@ -1,7 +1,5 @@
 package com.yourgame.model.Item;
 
-import com.yourgame.model.Player;
-
 public class FoodBuff {
     private int increment;
     private int duration;

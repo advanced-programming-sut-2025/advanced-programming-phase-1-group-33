@@ -1,7 +1,7 @@
 package com.yourgame.persistence;
 
-import com.yourgame.model.User;
-import com.yourgame.model.enums.Gender;
+import com.yourgame.model.UserInfo.User;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;

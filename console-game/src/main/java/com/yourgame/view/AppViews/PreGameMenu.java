@@ -8,7 +8,7 @@ import java.util.Scanner;
 
 import com.yourgame.controller.AppController.PreGameController;
 import com.yourgame.model.App;
-import com.yourgame.model.Player;
+import com.yourgame.model.UserInfo.Player;
 import com.yourgame.model.IO.Response;
 import com.yourgame.model.enums.Commands.MenuTypes;
 import com.yourgame.model.enums.Commands.PreGameMenuCommands;

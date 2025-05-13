@@ -1,6 +1,7 @@
 package com.yourgame.model.data;
 
-import com.yourgame.model.enums.Season;
+import com.yourgame.model.Weather.Season;
+
 import java.util.List;
 
 public class CropData {

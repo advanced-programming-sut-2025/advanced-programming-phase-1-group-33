@@ -1,4 +1,4 @@
-package com.yourgame.model;
+package com.yourgame.model.Npc;
 
 import java.util.List;
 import java.util.Map;
@@ -15,18 +15,16 @@ public class NPC {
     private Map<DialogueTrigger, String> dialogue;
     private Set<Item> likedGifts;
     private Set<Item> dislikedGifts;
-    private List<Quest> questsAvailable;
 
     public NPC(String name, Coordinate currentLocation, Map<TimeCondition, Coordinate> schedule,
                Map<DialogueTrigger, String> dialogue, Set<Item> likedGifts,
-               Set<Item> dislikedGifts, List<Quest> questsAvailable) {
+               Set<Item> dislikedGifts) {
         this.name = name;
         this.currentLocation = currentLocation;
         this.schedule = schedule;
         this.dialogue = dialogue;
         this.likedGifts = likedGifts;
         this.dislikedGifts = dislikedGifts;
-        this.questsAvailable = questsAvailable;
     }
 
     // Getter and Setter for name
@@ -89,13 +87,6 @@ public class NPC {
     }
 
     // Getter and Setter for questsAvailable
-    public List<Quest> getQuestsAvailable() {
-        return questsAvailable;
-    }
-
-    public void setQuestsAvailable(List<Quest> questsAvailable) {
-        this.questsAvailable = questsAvailable;
-    }
 
     // Schema method: checkGiftPreference()
     // Returns Boolean: true if liked, false if disliked, or null for a neutral gift.

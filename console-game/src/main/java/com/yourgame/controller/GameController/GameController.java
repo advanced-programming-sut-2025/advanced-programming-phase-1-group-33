@@ -1,16 +1,16 @@
 package com.yourgame.controller.GameController;
 
 import com.yourgame.model.GameState;
-import com.yourgame.model.Player;
-import com.yourgame.model.User;
+import com.yourgame.model.UserInfo.Player;
+import com.yourgame.model.UserInfo.User;
 import com.yourgame.model.IO.Request;
 import com.yourgame.model.IO.Response;
 import com.yourgame.model.Map.Coordinate;
 import com.yourgame.model.Map.GameMap;
 import com.yourgame.model.Map.Portal;
 import com.yourgame.model.Map.Tile;
+import com.yourgame.model.Weather.Weather;
 import com.yourgame.model.enums.TileType;
-import com.yourgame.model.enums.Weather;
 import com.yourgame.view.ConsoleView;
 
 import java.util.ArrayList;
@@ -24,6 +24,7 @@ import java.util.Scanner;
 import com.yourgame.controller.CommandParser;
 import com.yourgame.model.App;
 import com.yourgame.model.Command;
+import jdk.javadoc.doclet.Reporter;
 
 public class GameController {
     private GameState gameState;
@@ -98,22 +99,20 @@ public class GameController {
 
     }
 
-    public Response getTime() {
-        return new Response(true, "Current time is " + gameState.getGameTime().getTime());
-
+    public Response getTime(){
+        return new Response(true , String.format("it's %d" , App.getGameState().getGameTime().getHour()));
     }
-
-    public Response getDate() {
-        return new Response(true, "Current Date is " + gameState.getGameTime().getDate());
+    public Response getDate(){
+        return new Response(true , String.format("we are in %s season , in %d " , App.getGameState().getGameTime().getSeason().name() , App.getGameState().getGameTime().getDate()));
     }
-
-    public Response getDateTime() {
-        return new Response(true, "Current DateTime is " + gameState.getGameTime().getDateTime());
+    public Response getDateTime(){
+        return new Response(true , String.format("Season : %s , Day : %d , Hour : %d" , App.getGameState().getGameTime()
+                .getSeason().name() , App.getGameState().getGameTime().getDate() , App.getGameState().getGameTime().getHour()));
     }
 
     public Response getDayOfWeek() {
         // TODO Auto-generated method stub
-        return new Response(true, "Current Day of the week is " + gameState.getGameTime().getDayOfWeek());
+        return new Response(true , String.format("Day : %s ", App.getGameState().getGameTime().getDayOfWeek().name()));
 
     }
 
@@ -128,7 +127,7 @@ public class GameController {
         int amountOfDays = Integer.parseInt(request.body.get("amount"));
 
         for (int i = 0; i < amountOfDays; i++) {
-            gameState.getGameTime().advanceDay();
+            gameState.getGameTime().advancedDay(amountOfDays);
         }
         return new Response(true, "How tf you cheated at the timeee dudeee!!" + amountOfDays + "Days");
     }
@@ -137,25 +136,27 @@ public class GameController {
         int amountOfHours = Integer.parseInt(request.body.get("amount"));
 
         for (int i = 0; i < amountOfHours; i++) {
-            gameState.getGameTime().advanceHour();
+            gameState.getGameTime().advancedHour(amountOfHours);
         }
         return new Response(true, "How tf you cheated at the timeee dudeee!!" + amountOfHours + " hours");
     }
 
     public Response getWeather() {
-        return new Response(true, "Current Weather is " + gameState.getWeather().getCurrentWeather());
+        return new Response(true, "Current Weather is " + gameState.getGameTime().getWeather().getName());
     }
 
     public Response cheatWeather(Request request) {
-        String weatherInput = request.body.get("Type");
-        Weather weather;
-        try {
-            weather = Weather.fromString(weatherInput);
-        } catch (IllegalArgumentException e) {
-            return new Response(true, e.getMessage());
+        String weather = request.body.get("Type");
+        Weather w;
+        try{
+            w = Weather.valueOf(weather.trim());
+
         }
-        gameState.getWeather().setCurrentWeather(weather);
-        return new Response(true, "Weather set to " + weather.toString());
+        catch(Exception exception){
+            return new Response(false, "Invalid weather");
+        }
+        gameState.getGameTime().setNextDayWeather(w);
+        return new Response(true, "Tomorrow weather : " + w.getName());
     }
 
     public Response cheatThor(Request request) {
@@ -163,8 +164,8 @@ public class GameController {
         return new Response(false, "To Do We need to create the Thor After Map ");
     }
 
-    public Response getWeatherForcast() {
-        return new Response(true, "Tomorrow Weather is " + gameState.getWeather().getTomorrowWeather());
+    public Response getWeatherForecast() {
+        return new Response(true, "Tomorrow Weather is " + gameState.getGameTime().getWeather().getName());
     }
 
     public Response getBuildGreenHouse() {

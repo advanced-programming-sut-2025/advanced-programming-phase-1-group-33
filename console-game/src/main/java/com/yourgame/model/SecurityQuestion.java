@@ -1,4 +1,4 @@
-package com.yourgame.model.enums;
+package com.yourgame.model;
 
 public class SecurityQuestion {
     private final String question;

@@ -8,7 +8,7 @@ import com.yourgame.controller.AppController.LoginMenuController;
 import com.yourgame.model.App;
 import com.yourgame.model.IO.Request;
 import com.yourgame.model.IO.Response;
-import com.yourgame.model.User;
+import com.yourgame.model.UserInfo.User;
 import com.yourgame.model.enums.Commands.LoginMenuCommands;
 import com.yourgame.model.enums.Commands.MenuTypes;
 
