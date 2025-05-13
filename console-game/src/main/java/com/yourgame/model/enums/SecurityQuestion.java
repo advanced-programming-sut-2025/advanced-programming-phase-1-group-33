@@ -1,19 +1,18 @@
 package com.yourgame.model.enums;
 
-public enum SecurityQuestion {
-    PET_QUESTION("What is your favorite pet?"),
-    GAME_QUESTION("What is your favorite game?"),
-    CAR_QUESTION("What is your favorite car?"),
-    COLOR_QUESTION("What is your favorite color?");
-
-    final private String question;
-
-    SecurityQuestion(String question) {
+public class SecurityQuestion {
+    private final String question;
+    private final String answer;
+    public SecurityQuestion(String question, String answer) {
         this.question = question;
+        this.answer = answer;
     }
 
-    @Override
-    public String toString() {
+    public String getQuestion() {
         return question;
+    }
+
+    public String getAnswer() {
+        return answer;
     }
 }

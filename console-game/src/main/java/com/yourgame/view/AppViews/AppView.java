@@ -4,12 +4,13 @@ package com.yourgame.view.AppViews;
 import com.yourgame.model.App;
 import com.yourgame.model.enums.Commands.MenuTypes;
 
+import java.sql.SQLException;
 import java.util.Scanner;
 
 public class AppView {
     public final static Scanner scanner = new Scanner(System.in);
 
-    public void run() {
+    public void run() throws SQLException {
 
         System.out.println("Trying to run DAO ");
         App.getUserDAO();

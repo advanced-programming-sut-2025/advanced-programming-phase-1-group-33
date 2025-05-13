@@ -2,10 +2,11 @@ package com.yourgame.view.AppViews;
 
 import com.yourgame.model.IO.Response;
 
+import java.sql.SQLException;
 import java.util.Scanner;
 
 public interface AppMenu {
-    Response handleMenu(String command, Scanner scanner);
+    Response handleMenu(String command, Scanner scanner) throws SQLException;
 
     // Add this method
     default String getPreview() {

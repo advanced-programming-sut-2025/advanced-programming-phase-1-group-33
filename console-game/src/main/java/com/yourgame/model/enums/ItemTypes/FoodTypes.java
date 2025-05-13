@@ -1,6 +1,7 @@
 package com.yourgame.model.enums.ItemTypes;
 
 import com.yourgame.model.Inventory.Slot;
+import com.yourgame.model.Item.Food;
 import com.yourgame.model.Item.FoodBuff;
 import com.yourgame.model.*;
 import com.yourgame.model.enums.Quality;

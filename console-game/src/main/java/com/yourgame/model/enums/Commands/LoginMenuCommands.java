@@ -8,8 +8,6 @@ public enum LoginMenuCommands implements Command{
     PICK_QUESTION("^pick\\s+question\\s+-q\\s+(?<questionNumber>\\d+)\\s+-a\\s+(?<answer>.+?)\\s+-c\\s+(?<answerConfirm>.+)$"),
     LOGIN("^login\\s+-u\\s+(?<username>.+?)\\s+-p\\s+(?<password>\\S+)\\s*(?<loginFlag>\\S+)?$"),
     FORGET("^forget\\s+password\\s+-u\\s+(?<username>.+)$"),
-    ANSWER("^answer\\s+-a\\s+(?<answer>.+)$"),
-    LIST_QUESTIONS("^list\\s+questions$"),
     GO_Back(Command.Go_back),
     SHOW_MENU(Command.SHOW_MENU),
     EXIT_MENU(Command.EXIT_MENU),

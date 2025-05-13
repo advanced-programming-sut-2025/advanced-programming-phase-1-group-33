@@ -32,6 +32,10 @@ public class User {
                 '}';
     }
 
+    public SecurityQuestion getSecurityQuestion() {
+        return question;
+    }
+
     public String getUsername() {
         return Username;
     }
