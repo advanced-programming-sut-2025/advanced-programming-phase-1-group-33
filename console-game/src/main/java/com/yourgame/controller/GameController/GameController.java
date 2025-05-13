@@ -339,11 +339,8 @@ public class GameController {
     // Example helper to check if the tile belongs to another player's farm.
     // (You will need to implement logic based on your game's rules, for example:
     private boolean isOtherPlayersFarm(Coordinate coord, GameMap map) {
-        // For instance, if tile type is BUILDING and the coordinate is within a defined
-        // farm boundary,
-        // then return true.
-        // This is a stub and should be replaced with your actual logic.
+        // To do 
         Tile tile = map.getTileAt(coord);
-        return tile.getType() == TileType.BUILDING;
+        return false;
     }
 }
