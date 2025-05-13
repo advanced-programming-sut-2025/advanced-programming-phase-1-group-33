@@ -68,7 +68,7 @@ public class PreGameController {
         MapManager mapManager = new MapManager(players);
 
         // Create a new game state instance with the mapManager (change constructor if needed)
-        GameState gameState = new GameState(players, gameTime, weather, mapManager, new ArrayList<>(), new ArrayList<>());
+        GameState gameState = new GameState(players, weather, mapManager, new ArrayList<>(), new ArrayList<>());
         gameState.startGame();
         gameState.setCurrentPlayer(players.get(0));
 

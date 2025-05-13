@@ -15,7 +15,7 @@ public enum GameViewCommands implements Command{
     CHEAT_THOR("^cheat\\s+Thor\\s+-l\\s+(?<x>\\d+)\\s*,\\s*(?<y>\\d+)$"),
     WEATHER("^weather$"),
     WEATHER_FORECAST("^weather\\s+forecast$"),
-    CHEAT_WEATHER_SET("^cheat\\s+weather\\s+set\\s+(?<Type>sunny|rain|storm|snow)$"),
+    CHEAT_WEATHER_SET("^cheat\\s+weather\\s+set\\s+(?<Type>Sunny|Rainy|Stormy|Snowy)$"),
     GREEN_HOUSE_BUILD("^greenhouse\\s+build$"),
     NEXT_TURN("^next\\s+turn$"),
     ENERGY_SHOW("^energy\\s+show$"),

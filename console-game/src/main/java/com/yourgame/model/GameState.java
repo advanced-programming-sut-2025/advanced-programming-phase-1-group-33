@@ -22,10 +22,10 @@ public class GameState {
     private List<NPC> npcs;
     private List<Shop> shops;
 
-    public GameState( List<Player> players, TimeSystem gameTime, Weather weather, MapManager mapManager, List<NPC> npcs, List<Shop> shops) {
+    public GameState( List<Player> players, Weather weather, MapManager mapManager, List<NPC> npcs, List<Shop> shops) {
         this.players = players;
         this.currentTurnPlayerIndex = 0; // Start with the first player
-        this.gameTime = gameTime;
+        this.gameTime = new TimeSystem();
         this.weather = weather;
         this.mapManager = mapManager;
         this.currentMap = mapManager.getMap("farmMap");

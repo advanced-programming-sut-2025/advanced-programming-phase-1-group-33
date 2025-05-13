@@ -100,19 +100,19 @@ public class GameController {
     }
 
     public Response getTime(){
-        return new Response(true , String.format("it's %d" , App.getGameState().getGameTime().getHour()));
+        return new Response(true , String.format("current time is: %d" , gameState.getGameTime().getHour()));
     }
     public Response getDate(){
-        return new Response(true , String.format("we are in %s season , in %d " , App.getGameState().getGameTime().getSeason().name() , App.getGameState().getGameTime().getDate()));
+        return new Response(true , String.format("current season is %s, in %d " , gameState.getGameTime().getSeason().name() , gameState.getGameTime().getDate()));
     }
     public Response getDateTime(){
-        return new Response(true , String.format("Season : %s , Day : %d , Hour : %d" , App.getGameState().getGameTime()
-                .getSeason().name() , App.getGameState().getGameTime().getDate() , App.getGameState().getGameTime().getHour()));
+        return new Response(true , String.format("Season : %s , Day : %d , Hour : %d" , gameState.getGameTime()
+                .getSeason().name() , gameState.getGameTime().getDate() , gameState.getGameTime().getHour()));
     }
 
     public Response getDayOfWeek() {
         // TODO Auto-generated method stub
-        return new Response(true , String.format("Day : %s ", App.getGameState().getGameTime().getDayOfWeek().name()));
+        return new Response(true , String.format("Day : %s ", gameState.getGameTime().getDayOfWeek().name()));
 
     }
 
@@ -126,18 +126,16 @@ public class GameController {
 
         int amountOfDays = Integer.parseInt(request.body.get("amount"));
 
-        for (int i = 0; i < amountOfDays; i++) {
             gameState.getGameTime().advancedDay(amountOfDays);
-        }
+
         return new Response(true, "How tf you cheated at the timeee dudeee!!" + amountOfDays + "Days");
     }
 
     public Response getAdvancedTime(Request request) {
         int amountOfHours = Integer.parseInt(request.body.get("amount"));
 
-        for (int i = 0; i < amountOfHours; i++) {
             gameState.getGameTime().advancedHour(amountOfHours);
-        }
+
         return new Response(true, "How tf you cheated at the timeee dudeee!!" + amountOfHours + " hours");
     }
 
