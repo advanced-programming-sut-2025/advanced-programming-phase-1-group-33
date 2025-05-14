@@ -33,6 +33,10 @@ cheat advance date 1d
 weather
 greenhouse build
 inventory show
+tools equip Hoe
+tools show current
+tools show available
+craftinfo -n Carrot
 print map -l 1, 2 -s 10
 next turn 
 print map -l 1, 2 -s 10

@@ -5,7 +5,6 @@ import java.util.List;
 import com.yourgame.model.Map.GameMap;
 import com.yourgame.model.Map.MapManager;
 import com.yourgame.model.Npc.NPC;
-import com.yourgame.model.Shop.Shop;
 import com.yourgame.model.UserInfo.Player;
 import com.yourgame.model.WeatherAndTime.TimeSystem;
 import com.yourgame.model.WeatherAndTime.Weather;
@@ -20,9 +19,8 @@ public class GameState {
     private GameMap currentMap;
     private MapManager mapManager; 
     private List<NPC> npcs;
-    private List<Shop> shops;
 
-    public GameState( List<Player> players, Weather weather, MapManager mapManager, List<NPC> npcs, List<Shop> shops) {
+    public GameState( List<Player> players, Weather weather, MapManager mapManager, List<NPC> npcs) {
         this.players = players;
         this.currentTurnPlayerIndex = 0; // Start with the first player
         this.gameTime = new TimeSystem();
@@ -30,7 +28,6 @@ public class GameState {
         this.mapManager = mapManager;
         this.currentMap = mapManager.getMap("farmMap");
         this.npcs = npcs;
-        this.shops = shops;
     }
 
     public GameState() {
@@ -143,13 +140,6 @@ public class GameState {
         this.npcs = npcs;
     }
 
-    public List<Shop> getShops() {
-        return shops;
-    }
-
-    public void setShops(List<Shop> shops) {
-        this.shops = shops;
-    }
 
     public void startGame() {
     }

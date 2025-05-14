@@ -3,7 +3,7 @@ package com.yourgame.view;
 import java.util.Scanner;
 
 import com.yourgame.controller.AppController.LoginMenuController;
-import com.yourgame.controller.GameController.GameController;
+import com.yourgame.controller.GameController.*;
 import com.yourgame.model.App;
 import com.yourgame.model.IO.Request;
 import com.yourgame.model.IO.Response;
@@ -14,17 +14,22 @@ import com.yourgame.model.enums.Commands.GameViewCommands;
 import com.yourgame.view.AppViews.AppMenu;
 
 public class GameMenu implements AppMenu {
-    private GameController controller;
+    private GameController gameController;
+    private CookingController cookingController;
+    private CraftingController craftingController;
+    private ForagingController foragingController;
+    private ToolController toolController;
+    private WeatherAndTimeController weatherAndTimeController;
 
     public Response handleMenu(String input, Scanner scanner) {
 
-        if (controller == null) {
+        if (gameController == null) {
             // Initialize only when game state exists
             if (App.getCurrentUser() == null || App.getGameState() == null) {
                 App.setCurrentMenu(MenuTypes.LoginMenu);
                 return new Response(false, "Game not initialized. Please start a new game.");
             }
-            controller = new GameController();
+            gameController = new GameController();
         }
 
         GameViewCommands command = GameViewCommands.parse(input);
@@ -32,69 +37,157 @@ public class GameMenu implements AppMenu {
             return getInvalidCommand();
         }
         switch (command) {
-        case NEXT_TURN:
-            return getNextTurn();
-        case TIME:
-            return getTime();
-        case DATE:
-            return getDate();
-        case DATETIME:
-            return getDateTime();
-        case DAY_OF_WEEK:
-            return getDayOfWeek();
-        case SEASON:
-            return getSeason();
-        case CHEAT_ADVANCE_DATE:
-            return getAdvancedDate(input);
-        case CHEAT_ADVANCE_TIME:
-            return getAdvancedTime(input);
-        case CHEAT_THOR:
-            return getCheatThor(input);
-        case WEATHER:
-            return getWeather();
-        case CHEAT_WEATHER_SET:
-            return getCheatWeather(input);
-        case WEATHER_FORECAST: 
-            return getWeatherForcast();
-        case GREEN_HOUSE_BUILD:
-            return getBuildGreenHouse(); 
-        case WALK:
-            return getWalk(input); 
-        case PRINT_MAP:
-            return getPrintMap(input); 
-        case HELP_READING_MAP:
-            return getHelpRedning(); 
-        case ENERGY_SHOW:
-            return getEnergyShow();
-        case ENERGY_SET_VALUE:
-            return getEnergySet(input);
-        case ENERGY_UNLIMITED:
-            return getEnergyUnlimited();
-        case Go_Back:
-            App.setCurrentMenu(MenuTypes.MainMenu);
-            return new Response(true, "Going Back to MainMenu");
-        case EXIT_MENU:
-            return getExitMenu(input);
-        case ENTER_MENU:
-            return getEnterMenu(input);
-        case SHOW_MENU:
-            return getShowMenu(input);
-        case INVENTORY_SHOW:
-            return getShowInventoryResponse(input);
-//        case INVENTORY_TRASH:
-//            return getInventoryTrashResponse(input);
-//        case TOOLS_EQUIP:
-//            return getToolsEquipResponse(input);
-//        case TOOLS_SHOW_CURRENT:
-//            return getToolsShowResponse(input);
-//        case TOOLS_SHOW_AVAILABLE:
-//            return getToolsShowAvailable(input);
-//        case TOOLS_USE_DIRECTION:
+            case NEXT_TURN:
+                return getNextTurn();
+            case TIME:
+                return getTime();
+            case DATE:
+                return getDate();
+            case DATETIME:
+                return getDateTime();
+            case DAY_OF_WEEK:
+                return getDayOfWeek();
+            case SEASON:
+                return getSeason();
+            case CHEAT_ADVANCE_DATE:
+                return getAdvancedDate(input);
+            case CHEAT_ADVANCE_TIME:
+                return getAdvancedTime(input);
+            case CHEAT_THOR:
+                return getCheatThor(input);
+            case WEATHER:
+                return getWeather();
+            case CHEAT_WEATHER_SET:
+                return getCheatWeather(input);
+            case WEATHER_FORECAST:
+                return getWeatherForcast();
+            case GREEN_HOUSE_BUILD:
+                return getBuildGreenHouse();
+            case WALK:
+                return getWalk(input);
+            case PRINT_MAP:
+                return getPrintMap(input);
+            case HELP_READING_MAP:
+                return getHelpRedning();
+            case ENERGY_SHOW:
+                return getEnergyShow();
+            case ENERGY_SET_VALUE:
+                return getEnergySet(input);
+            case ENERGY_UNLIMITED:
+                return getEnergyUnlimited();
+            case Go_Back:
+                App.setCurrentMenu(MenuTypes.MainMenu);
+                return new Response(true, "Going Back to MainMenu");
+            case EXIT_MENU:
+                return getExitMenu(input);
+            case ENTER_MENU:
+                return getEnterMenu(input);
+            case SHOW_MENU:
+                return getShowMenu(input);
+            case INVENTORY_SHOW:
+                return getShowInventoryResponse(input);
+            case INVENTORY_TRASH:
+                return getInventoryTrashResponse(input);
+            case TOOLS_EQUIP:
+                return getToolsEquipResponse(input);
+            case TOOLS_SHOW_CURRENT:
+                return getToolsShowResponse(input);
+            case TOOLS_SHOW_AVAILABLE:
+                return getToolsShowAvailable(input);
+//          case TOOLS_USE_DIRECTION:
 //            return getToolsUseDirectionResponse(input);
-        default:
-            return getInvalidCommand();
+//          case TOOLS_UPGRADE:
+//                return getToolUpgradeResponse(input);
+            case CRAFT_INFO:
+                return showCraftInfo(input);
+            case CRAFTING_SHOW_RECIPES:
+                return craftShowRecipes(input);
+            case CRAFTING_CRAFT:
+                return getCraftingResponse(input);
+            case CHEAT_ADD_ITEM:
+                return getAddItemCheatResponse(input);
+            case COOKING_REFRIGERATOR_PICK_PUT:
+                return getCookingRefrigeratorResponse(input);
+            case COOKING_SHOW_RECIPES:
+                return getShowCookingRecipesResponse(input);
+            case COOKING_PREPARE:
+                return getCookingPrepareResponse(input);
+            case EAT:
+                return getEatResponse(input);
+            default:
+                return getInvalidCommand();
         }
     }
+
+    private Response getEatResponse(String input) {
+        Response response;
+        Request request = new Request(input);
+        request.body.put("foodName", GameViewCommands.EAT.getGroup(input, "foodName"));
+        response = cookingController.handleEating(request);
+        return response;
+    }
+
+    private Response getCookingPrepareResponse(String input) {
+        Request request = new Request(input);
+        request.body.put("itemName", GameViewCommands.COOKING_PREPARE.getGroup(input, "itemName"));
+        return cookingController.handleCookingFood(request);
+    }
+
+    private Response getShowCookingRecipesResponse(String input) {
+        Response response;
+        Request request = new Request(input);
+        response = cookingController.handleShowCookingRecipes(request);
+        return response;
+    }
+
+    private Response getCookingRefrigeratorResponse(String input) {
+        Response response;
+        Request request = new Request(input);
+        request.body.put("item", GameViewCommands.COOKING_REFRIGERATOR_PICK_PUT.getGroup(input, "item"));
+        request.body.put("action", GameViewCommands.COOKING_REFRIGERATOR_PICK_PUT.getGroup(input, "action"));
+        response = cookingController.cookingRefrigerator(request);
+        return response;
+    }
+
+    private Response getAddItemCheatResponse(String input) {
+        Response response;
+        Request request = new Request(input);
+        request.body.put("itemName", GameViewCommands.CHEAT_ADD_ITEM.getGroup(input, "itemName"));
+        request.body.put("count", GameViewCommands.CHEAT_ADD_ITEM.getGroup(input, "count"));
+        response = craftingController.handleAddItemCheat(request);
+        return response;
+    }
+
+    private Response getCraftingResponse(String input) {
+        Response response;
+        Request request = new Request(input);
+        request.body.put("itemName", GameViewCommands.CRAFTING_CRAFT.getGroup(input, "itemName"));
+        response = craftingController.handleItemCrafting(request);
+        return response;
+    }
+
+    private Response craftShowRecipes(String input) {
+        Response response;
+        Request request = new Request(input);
+        response = craftingController.craftingShowRecipes(request);
+        return response;
+    }
+
+    private Response showCraftInfo(String input) {
+        Response response;
+        Request request = new Request(input);
+        request.body.put("craftName", GameViewCommands.CRAFT_INFO.getGroup(input, "craftName"));
+        response = foragingController.craftInfo(request);
+        return response;
+    }
+
+//    private Response getToolUpgradeResponse(String input) {
+//        Response response;
+//        Request request = new Request(input);
+//        request.body.put("name", GameViewCommands.TOOLS_EQUIP.getGroup(input, "name"));
+//        response = controller.handleToolsUpgrade(request);
+//        return response;
+//    }
 
     private Response getHelpRedning() {
         // TODO Auto-generated method stub
@@ -104,7 +197,7 @@ public class GameMenu implements AppMenu {
 
     private Response getPrintMap(String input) {
         // TODO Auto-generated method stub
-        return controller.PrintMap(); 
+        return gameController.PrintMap();
     }
 
 
@@ -114,7 +207,7 @@ public class GameMenu implements AppMenu {
         request.body.put("x", GameViewCommands.WALK.getGroup(input, "x"));
         request.body.put("y", GameViewCommands.WALK.getGroup(input, "y"));
 
-        return controller.getWalk(request); 
+        return gameController.getWalk(request);
     }
 
 
@@ -124,64 +217,66 @@ public class GameMenu implements AppMenu {
 //        response = controller.handleToolsUseDirectionResponse(request);
 //        return response;
 //    }
+
+    private Response getToolsShowAvailable(String input) {
+        Response response;
+        Request request = new Request(input);
+        response = toolController.handleToolsShowAvailable(request);
+        return response;
+    }
+
+    //
+    private Response getToolsShowResponse(String input) {
+        Response response;
+        Request request = new Request(input);
+        response = toolController.handleToolsShow(request);
+        return response;
+    }
+
+    private Response getToolsEquipResponse(String input) {
+        Response response;
+        Request request = new Request(input);
+        request.body.put("toolName", GameViewCommands.TOOLS_EQUIP.getGroup(input, "toolName"));
+        response = toolController.handleToolsEquip(request);
+        return response;
+    }
+
+    //
 //
-//    private Response getToolsShowAvailable(String input) {
-//        Response response;
-//        Request request = new Request(input);
-//        response = controller.handleToolsShowAvailable(request);
-//        return response;
-//    }
-//
-//    private Response getToolsShowResponse(String input) {
-//        Response response;
-//        Request request = new Request(input);
-//        response = controller.handleToolsShow(request);
-//        return response;
-//    }
-//
-//    private Response getToolsEquipResponse(String input) {
-//        Response response;
-//        Request request = new Request(input);
-//        request.body.put("toolName", GameViewCommands.TOOLS_EQUIP.getGroup(input, "toolName"));
-//        response = controller.handleToolsEquip(request);
-//        return response;
-//    }
-//
-//
-//    private Response getInventoryTrashResponse(String input) {
-//        Response response;
-//        Request request = new Request(input);
-//        request.body.put("itemName", GameViewCommands.INVENTORY_TRASH.getGroup(input, "itemName"));
-//        request.body.put("number", GameViewCommands.INVENTORY_TRASH.getGroup(input, "number"));
-//        response = controller.handleInventoryTrashing(request);
-//        return response;
-//    }
-//
+    private Response getInventoryTrashResponse(String input) {
+        Response response;
+        Request request = new Request(input);
+        request.body.put("itemName", GameViewCommands.INVENTORY_TRASH.getGroup(input, "itemName"));
+        request.body.put("number", GameViewCommands.INVENTORY_TRASH.getGroup(input, "number"));
+        response = gameController.handleInventoryTrashing(request);
+        return response;
+    }
+
     private Response getShowInventoryResponse(String input) {
         Response response;
         Request request = new Request(input);
-        response = controller.handleShowInventory(request);
+        response = gameController.handleShowInventory(request);
         return response;
     }
 
     private Response getBuildGreenHouse() {
-        return controller.getBuildGreenHouse();
+        return gameController.getBuildGreenHouse();
     }
 
     private Response getWeatherForcast() {
-        return controller.getWeatherForecast();
+        return weatherAndTimeController.getWeatherForecast();
     }
 
     private Response getCheatWeather(String input) {
         Request request = new Request(input);
         request.body.put("Type", GameViewCommands.CHEAT_WEATHER_SET.getGroup(input, "Type"));
         // return controller.getAdvancedTime(request);
-        return controller.cheatWeather(request);
+        return weatherAndTimeController.cheatWeather(request);
     }
 
     private Response getWeather() {
         // TODO Auto-generated method stub
-        return controller.getWeather();
+        return weatherAndTimeController.getWeather();
     }
 
     private Response getCheatThor(String input) {
@@ -190,46 +285,46 @@ public class GameMenu implements AppMenu {
         request.body.put("Y", GameViewCommands.CHEAT_THOR.getGroup(input, "Y"));
         // TODO Auto-generated methd stub
         // return controller.getAdvancedTime(request);
-        return controller.cheatThor(request);
+        return weatherAndTimeController.cheatThor(request);
     }
 
     private Response getAdvancedTime(String input) {
         Request request = new Request(input);
         request.body.put("amount", GameViewCommands.CHEAT_ADVANCE_TIME.getGroup(input, "amount"));
-        return controller.getAdvancedTime(request);
+        return weatherAndTimeController.getAdvancedTime(request);
     }
 
     private Response getAdvancedDate(String input) {
         Request request = new Request(input);
         request.body.put("amount", GameViewCommands.CHEAT_ADVANCE_DATE.getGroup(input, "amount"));
-        return controller.getAdvancedDate(request);
+        return weatherAndTimeController.getAdvancedDate(request);
     }
 
     private Response getSeason() {
         // TODO Auto-generated method stub
-        return controller.getSeason();
+        return weatherAndTimeController.getSeason();
     }
 
     private Response getDayOfWeek() {
         // TODO Auto-generated method stub
-        return controller.getDayOfWeek();
+        return weatherAndTimeController.getDayOfWeek();
     }
 
     private Response getDateTime() {
         // TODO Auto-generated method stub
-        return controller.getDateTime();
+        return weatherAndTimeController.getDateTime();
     }
 
     private Response getDate() {
-        return controller.getDate();
+        return weatherAndTimeController.getDate();
     }
 
     private Response getTime() {
-        return controller.getTime();
+        return weatherAndTimeController.getTime();
     }
 
     private Response getNextTurn() {
-        return controller.NextTurn();
+        return gameController.NextTurn();
     }
 
     private Response getExitFromGame(String input, Scanner scanner) {
@@ -241,17 +336,17 @@ public class GameMenu implements AppMenu {
     }
 
     private Response getEnergyUnlimited() {
-        return controller.setCurrentPlayerEnergyUnlimited();
+        return gameController.setCurrentPlayerEnergyUnlimited();
     }
 
     private Response getEnergySet(String input) {
         Request request = new Request(input);
         request.body.put("value", GameViewCommands.ENERGY_SET_VALUE.getGroup(input, "value"));
-        return controller.setCurrentPlayerEnergy(request);
+        return gameController.setCurrentPlayerEnergy(request);
     }
 
     private Response getEnergyShow() {
-        return controller.getEnergy();
+        return gameController.getEnergy();
     }
 
     private static Response getExitMenu(String input) {

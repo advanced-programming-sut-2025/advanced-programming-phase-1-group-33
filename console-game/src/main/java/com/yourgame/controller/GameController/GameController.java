@@ -1,7 +1,14 @@
 package com.yourgame.controller.GameController;
 
+import com.yourgame.model.Animals.AnimalGood;
+import com.yourgame.model.Animals.Fish;
 import com.yourgame.model.GameState;
+import com.yourgame.model.Inventory.Tools.Tool;
+import com.yourgame.model.Item.*;
+import com.yourgame.model.ManuFactor.ArtisanMachine;
 import com.yourgame.model.ManuFactor.Ingredient;
+import com.yourgame.model.Recipes.CookingRecipe;
+import com.yourgame.model.Recipes.CraftingRecipes;
 import com.yourgame.model.UserInfo.Player;
 import com.yourgame.model.UserInfo.User;
 import com.yourgame.model.IO.Request;
@@ -14,13 +21,7 @@ import com.yourgame.model.WeatherAndTime.Weather;
 import com.yourgame.model.enums.TileType;
 import com.yourgame.view.ConsoleView;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Queue;
-import java.util.Scanner;
+import java.util.*;
 
 import com.yourgame.controller.CommandParser;
 import com.yourgame.model.App;
@@ -97,73 +98,6 @@ public class GameController {
         gameState.nextTurn();
         return new Response(true, "You are  playing as " + gameState.getCurrentPlayer().getUsername());
 
-    }
-
-    public Response getTime(){
-        return new Response(true , String.format("current time is: %d" , gameState.getGameTime().getHour()));
-    }
-    public Response getDate(){
-        return new Response(true , String.format("current season is %s, in %d " , gameState.getGameTime().getSeason().name() , gameState.getGameTime().getDate()));
-    }
-    public Response getDateTime(){
-        return new Response(true , String.format("Season : %s , Day : %d , Hour : %d" , gameState.getGameTime()
-                .getSeason().name() , gameState.getGameTime().getDate() , gameState.getGameTime().getHour()));
-    }
-
-    public Response getDayOfWeek() {
-        // TODO Auto-generated method stub
-        return new Response(true , String.format("Day : %s ", gameState.getGameTime().getDayOfWeek().name()));
-
-    }
-
-    public Response getSeason() {
-        // TODO Auto-generated method stub
-        return new Response(true, "Current Season is " + gameState.getGameTime().getSeason());
-    }
-
-    public Response getAdvancedDate(Request request) {
-        // TODO Auto-generated method stub
-
-        int amountOfDays = Integer.parseInt(request.body.get("amount"));
-
-            gameState.getGameTime().advancedDay(amountOfDays);
-
-        return new Response(true, "Time Traveling... (" + amountOfDays + "Days)");
-    }
-
-    public Response getAdvancedTime(Request request) {
-        int amountOfHours = Integer.parseInt(request.body.get("amount"));
-
-            gameState.getGameTime().advancedHour(amountOfHours);
-
-        return new Response(true, "Time Traveling... (" + amountOfHours + " hours)");
-    }
-
-    public Response getWeather() {
-        return new Response(true, "Current Weather is " + gameState.getGameTime().getWeather().getName());
-    }
-
-    public Response cheatWeather(Request request) {
-        String weather = request.body.get("Type");
-        Weather w;
-        try{
-            w = Weather.valueOf(weather.trim());
-
-        }
-        catch(Exception exception){
-            return new Response(false, "Invalid weather");
-        }
-        gameState.getGameTime().setNextDayWeather(w);
-        return new Response(true, "Tomorrow weather : " + w.getName());
-    }
-
-    public Response cheatThor(Request request) {
-        // TODO Auto-generated method stub
-        return new Response(false, "To Do We need to create the Thor After Map ");
-    }
-
-    public Response getWeatherForecast() {
-        return new Response(true, "Tomorrow Weather is " + gameState.getGameTime().getWeather().getName());
     }
 
     public Response getBuildGreenHouse() {
@@ -294,8 +228,8 @@ public class GameController {
         cameFrom.put(start, null);
 
         // Define 8 neighboring moves.
-        int[] dx = { -1, -1, -1, 0, 0, 1, 1, 1 };
-        int[] dy = { -1, 0, 1, -1, 1, -1, 0, 1 };
+        int[] dx = {-1, -1, -1, 0, 0, 1, 1, 1};
+        int[] dy = {-1, 0, 1, -1, 1, -1, 0, 1};
 
         while (!queue.isEmpty()) {
             Coordinate current = queue.poll();
@@ -343,39 +277,45 @@ public class GameController {
         return false;
     }
 
-        public Response handleShowInventory(Request request) {
-            StringBuilder sb = new StringBuilder();
-            for(java.util.Map.Entry<Ingredient, Integer> entry : App.getGameState().getCurrentPlayer().getBackpack()
-                    .getIngredientQuantity().entrySet()){
-                sb.append(String.format("%s quantity : %d" , entry.getKey().getClass().getSimpleName(), entry.getValue()));
-                sb.append("\n");
+    public Response handleShowInventory(Request request) {
+        StringBuilder sb = new StringBuilder();
+        for (java.util.Map.Entry<Ingredient, Integer> entry : App.getGameState().getCurrentPlayer().getBackpack()
+                .getIngredientQuantity().entrySet()) {
+            sb.append(String.format("%s quantity : %d", entry.getKey().getClass().getSimpleName(), entry.getValue()));
+            sb.append("\n");
+
+        }
+        return new Response(true, sb.toString());
+    }
+
+    public Response handleInventoryTrashing(Request request) {
+
+        String name = request.body.get("itemName");
+        String num = request.body.get("number");
+        boolean hasNumber = false;
+
+        if (num != null) {
+            hasNumber = true;
+        }
+        int number = Integer.parseInt(num);
+
+        for (java.util.Map.Entry<Ingredient, Integer> entry : App.getGameState().getCurrentPlayer().getBackpack()
+                .getIngredientQuantity().entrySet()) {
+            if (entry.getKey().getClass().getSimpleName().equals(name)) {
+                if (hasNumber) {
+                    App.getGameState().getCurrentPlayer().getBackpack().removeIngredients(entry.getKey(), number);
+                    return new Response(true, String.format("%s removed from backpack", entry.getKey()
+                            .getClass().getSimpleName()));
+                } else {
+                    int quantity = entry.getValue();
+                    App.getGameState().getCurrentPlayer().getBackpack().removeIngredients(entry.getKey(), quantity);
+                    return new Response(true, String.format("%s removed from backpack", entry.getKey()
+                            .getClass().getSimpleName()));
+                }
 
             }
-            return new Response(true , sb.toString());
         }
+        return new Response(true, String.format("%s not found", name));
+    }
 
-//    public Response handleInventoryTrashing(Request request) {
-//        // TODO
-//        return handleShowInventory(request);
-//    }
-//
-//    public Response handleToolsEquip(Request request) {
-//        // TODO
-//        return handleShowInventory(request);
-//    }
-//
-//    public Response handleToolsShow(Request request) {
-//        // TODO
-//        return handleShowInventory(request);
-//    }
-//
-//    public Response handleToolsShowAvailable(Request request) {
-//        // TODO
-//        return handleShowInventory(request);
-//    }
-//
-//    public Response handleToolsUseDirectionResponse(Request request) {
-//        // TODO
-//        return handleShowInventory(request);
-//    }
 }

@@ -23,6 +23,7 @@ public class Player {
     private String email;
     private Gender gender;
     private int energy;
+    private Tool currentTool;
     private boolean isFaintedToday = false;
     private boolean isInfinite = false;
     private int maxEnergy= 1000; // made this uppp :))) :))) 
@@ -71,6 +72,28 @@ public class Player {
 
         this.relationships = new HashMap<>();
     }
+
+//    public Farm getFarm(){
+//        return farm;
+//    }
+
+public void addEnergy(int energy) {
+    if(!isInfinite){
+        this.energy += energy;
+        this.energy = Math.min(this.energy, maxEnergy);
+    }
+
+
+
+}
+    public void setCurrentTool(Tool currentTool) {
+        this.currentTool = currentTool;
+    }
+
+    public Tool getCurrentTool() {
+        return currentTool;
+    }
+
     public Backpack getBackpack() {
         return backpack;
     }

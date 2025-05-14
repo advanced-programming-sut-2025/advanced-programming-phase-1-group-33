@@ -3,7 +3,6 @@ package com.yourgame.model.Item;
 import com.yourgame.model.ManuFactor.Ingredient;
 import com.yourgame.model.Placeable;
 import com.yourgame.model.enums.ItemType;
-import com.yourgame.model.enums.StoneType;
 
 import java.awt.*;
 
