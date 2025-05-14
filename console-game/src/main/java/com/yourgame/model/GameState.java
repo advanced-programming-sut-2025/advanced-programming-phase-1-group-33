@@ -7,8 +7,8 @@ import com.yourgame.model.Map.MapManager;
 import com.yourgame.model.Npc.NPC;
 import com.yourgame.model.Shop.Shop;
 import com.yourgame.model.UserInfo.Player;
-import com.yourgame.model.Weather.TimeSystem;
-import com.yourgame.model.Weather.Weather;
+import com.yourgame.model.WeatherAndTime.TimeSystem;
+import com.yourgame.model.WeatherAndTime.Weather;
 
 public class GameState {
     private Player currentPlayer;
@@ -35,6 +35,32 @@ public class GameState {
 
     public GameState() {
 
+    }
+    public void nextPlayerTurn() {
+        int size = players.size();
+        int currentIndex = players.indexOf(currentPlayer);
+        int checkedPlayers = 0;
+
+        while (checkedPlayers < size) {
+            currentIndex = (currentIndex + 1) % size;
+            Player nextPlayer = players.get(currentIndex);
+
+            if (!nextPlayer.isFaintedToday()) {
+                currentPlayer = nextPlayer;
+                break;
+            }
+            checkedPlayers++;
+        }
+
+        if (checkedPlayers == size) {
+
+            // method marboot be farda ro call mikonim.
+            //TODO
+        }
+
+        if (currentPlayer == players.get(0)) {
+            App.getGameState().getGameTime().advancedHour(1);
+        }
     }
 
     public MapManager getMapManager() {

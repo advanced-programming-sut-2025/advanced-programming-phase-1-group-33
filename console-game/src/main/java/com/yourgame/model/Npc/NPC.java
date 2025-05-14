@@ -1,22 +1,21 @@
 package com.yourgame.model.Npc;
 
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import com.yourgame.model.Item.Item;
 import com.yourgame.model.Map.Coordinate;
-import com.yourgame.model.Weather.TimeCondition;
+import com.yourgame.model.WeatherAndTime.TimeFrame;
 
 public class NPC {
     private String name;
     private Coordinate currentLocation;
-    private Map<TimeCondition, Coordinate> schedule;
+    private Map<TimeFrame, Coordinate> schedule;
     private Map<DialogueTrigger, String> dialogue;
     private Set<Item> likedGifts;
     private Set<Item> dislikedGifts;
 
-    public NPC(String name, Coordinate currentLocation, Map<TimeCondition, Coordinate> schedule,
+    public NPC(String name, Coordinate currentLocation, Map<TimeFrame, Coordinate> schedule,
                Map<DialogueTrigger, String> dialogue, Set<Item> likedGifts,
                Set<Item> dislikedGifts) {
         this.name = name;
@@ -46,11 +45,11 @@ public class NPC {
     }
 
     // Getter and Setter for schedule
-    public Map<TimeCondition, Coordinate> getSchedule() {
+    public Map<TimeFrame, Coordinate> getSchedule() {
         return schedule;
     }
 
-    public void setSchedule(Map<TimeCondition, Coordinate> schedule) {
+    public void setSchedule(Map<TimeFrame, Coordinate> schedule) {
         this.schedule = schedule;
     }
 

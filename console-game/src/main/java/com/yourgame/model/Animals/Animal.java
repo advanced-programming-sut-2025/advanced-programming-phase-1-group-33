@@ -1,8 +1,6 @@
 package com.yourgame.model.Animals;
 
-import com.yourgame.model.Building.Building;
-import com.yourgame.model.Item.Item;
-import com.yourgame.model.Weather.TimeSystem;
+import com.yourgame.model.WeatherAndTime.TimeSystem;
 import com.yourgame.model.*;
 
 public class Animal {

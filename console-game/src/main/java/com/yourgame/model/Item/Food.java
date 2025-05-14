@@ -1,29 +1,59 @@
 package com.yourgame.model.Item;
 
-import com.yourgame.model.enums.ItemType;
 
-public class Food extends Item {
-    private int energyRestored;
-    private FoodBuff buff;
+import com.yourgame.model.ManuFactor.Ingredient;
 
-    public Food(String id, String name, String description, int sellPrice, boolean isStackable,
-                int energyRestored, FoodBuff buff) {
-        super(id, name, description, ItemType.FOOD, sellPrice);
-        this.energyRestored = energyRestored;
-        this.buff = buff;
+import java.util.HashMap;
+
+public enum Food implements Ingredient {
+    FriedEgg(50, 35),
+    BakedFish(75, 100),
+    Salad(113, 110),
+    Omelet(100, 125),
+    PumpkinPie(225, 385),
+    Spaghetti(75, 120),
+    Pizza(150, 300),
+    Tortilla(50, 50),
+    MakiRoll(100, 220),
+    TripleShotEspresso(200, 450),
+    Cookie(90, 140),
+    HashBrowns(90, 120),
+    Pancakes(90, 80),
+    FruitSalad(263, 450),
+    RedPlate(240, 400),
+    Bread(50, 60),
+    SalmonDinner(125, 300),
+    VegetableMedley(165, 120),
+    FarmersLunch(200, 150),
+    SurvivalBurger(125, 180),
+    DishOTheSea(150, 220),
+    SeaFormPudding(175, 300),
+    MinersTreat(125, 200);
+
+    private final int energy;
+    private final int sellPrice;
+    private static final HashMap<String, Food> stringToFood = new HashMap<>();
+
+    static {
+        for (Food values : values()) {
+            stringToFood.put(values.name().toLowerCase(), values);
+        }
     }
 
-    public int getEnergyRestored() {
-        return energyRestored;
+    Food(int energy, int sellPrice) {
+        this.energy = energy;
+        this.sellPrice = sellPrice;
     }
 
-    public FoodBuff getBuff() {
-        return buff;
+    public int getEnergy() {
+        return energy;
     }
 
-    @Override
-    public void use() {
-        System.out.println("Consuming food: " + getName());
-        // Implement energy restoration and buff application logic here.
+    public int getSellPrice() {
+        return sellPrice;
+    }
+
+    public static Food getFoodByName(String name) {
+        return stringToFood.getOrDefault(name.toLowerCase(), null);
     }
 }

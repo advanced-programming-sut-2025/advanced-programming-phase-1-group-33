@@ -8,8 +8,8 @@ import com.yourgame.model.GameState;
 import com.yourgame.model.UserInfo.Player;
 import com.yourgame.model.IO.Response;
 import com.yourgame.model.Map.MapManager;
-import com.yourgame.model.Weather.TimeSystem;
-import com.yourgame.model.Weather.Weather;
+import com.yourgame.model.WeatherAndTime.TimeSystem;
+import com.yourgame.model.WeatherAndTime.Weather;
 import com.yourgame.model.enums.Commands.MenuTypes;
 
 public class PreGameController {

@@ -1,6 +1,6 @@
 package com.yourgame.model.data;
 
-import com.yourgame.model.Weather.Season;
+import com.yourgame.model.WeatherAndTime.Season;
 
 import java.util.List;
 

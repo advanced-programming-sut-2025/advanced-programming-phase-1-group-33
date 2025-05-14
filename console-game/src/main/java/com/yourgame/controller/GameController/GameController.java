@@ -1,6 +1,7 @@
 package com.yourgame.controller.GameController;
 
 import com.yourgame.model.GameState;
+import com.yourgame.model.ManuFactor.Ingredient;
 import com.yourgame.model.UserInfo.Player;
 import com.yourgame.model.UserInfo.User;
 import com.yourgame.model.IO.Request;
@@ -9,7 +10,7 @@ import com.yourgame.model.Map.Coordinate;
 import com.yourgame.model.Map.GameMap;
 import com.yourgame.model.Map.Portal;
 import com.yourgame.model.Map.Tile;
-import com.yourgame.model.Weather.Weather;
+import com.yourgame.model.WeatherAndTime.Weather;
 import com.yourgame.model.enums.TileType;
 import com.yourgame.view.ConsoleView;
 
@@ -24,7 +25,6 @@ import java.util.Scanner;
 import com.yourgame.controller.CommandParser;
 import com.yourgame.model.App;
 import com.yourgame.model.Command;
-import jdk.javadoc.doclet.Reporter;
 
 public class GameController {
     private GameState gameState;
@@ -128,7 +128,7 @@ public class GameController {
 
             gameState.getGameTime().advancedDay(amountOfDays);
 
-        return new Response(true, "How tf you cheated at the timeee dudeee!!" + amountOfDays + "Days");
+        return new Response(true, "Time Traveling... (" + amountOfDays + "Days)");
     }
 
     public Response getAdvancedTime(Request request) {
@@ -136,7 +136,7 @@ public class GameController {
 
             gameState.getGameTime().advancedHour(amountOfHours);
 
-        return new Response(true, "How tf you cheated at the timeee dudeee!!" + amountOfHours + " hours");
+        return new Response(true, "Time Traveling... (" + amountOfHours + " hours)");
     }
 
     public Response getWeather() {
@@ -344,34 +344,38 @@ public class GameController {
     }
 
         public Response handleShowInventory(Request request) {
-            String output = gameState.getCurrentPlayer().getInventory().showInventory();
-            if (output.isEmpty())
-                return new Response(true, "Your Backpack is empty!");
-            return new Response(true, output);
+            StringBuilder sb = new StringBuilder();
+            for(java.util.Map.Entry<Ingredient, Integer> entry : App.getGameState().getCurrentPlayer().getBackpack()
+                    .getIngredientQuantity().entrySet()){
+                sb.append(String.format("%s quantity : %d" , entry.getKey().getClass().getSimpleName(), entry.getValue()));
+                sb.append("\n");
+
+            }
+            return new Response(true , sb.toString());
         }
 
-    public Response handleInventoryTrashing(Request request) {
-        // TODO
-        return handleShowInventory(request);
-    }
-
-    public Response handleToolsEquip(Request request) {
-        // TODO
-        return handleShowInventory(request);
-    }
-
-    public Response handleToolsShow(Request request) {
-        // TODO
-        return handleShowInventory(request);
-    }
-
-    public Response handleToolsShowAvailable(Request request) {
-        // TODO
-        return handleShowInventory(request);
-    }
-
-    public Response handleToolsUseDirectionResponse(Request request) {
-        // TODO
-        return handleShowInventory(request);
-    }
+//    public Response handleInventoryTrashing(Request request) {
+//        // TODO
+//        return handleShowInventory(request);
+//    }
+//
+//    public Response handleToolsEquip(Request request) {
+//        // TODO
+//        return handleShowInventory(request);
+//    }
+//
+//    public Response handleToolsShow(Request request) {
+//        // TODO
+//        return handleShowInventory(request);
+//    }
+//
+//    public Response handleToolsShowAvailable(Request request) {
+//        // TODO
+//        return handleShowInventory(request);
+//    }
+//
+//    public Response handleToolsUseDirectionResponse(Request request) {
+//        // TODO
+//        return handleShowInventory(request);
+//    }
 }
