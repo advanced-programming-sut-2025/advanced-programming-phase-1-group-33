@@ -1,18 +1,19 @@
 package com.yourgame.model.Map;
+import com.yourgame.model.App;
 import com.yourgame.model.Item.Fertilizer;
 import com.yourgame.model.enums.SymbolType;
 import com.yourgame.model.enums.TileType;
 
 public class Tile {
     private Position position;
-    private boolean gotThunder;
+    private boolean gotThor;
     private SymbolType symbol = SymbolType.WALL;
     private boolean walkable ;
     private Placeable placeable;
     private boolean isPlowed = false;
     private Fertilizer fertilizer = null;
     public Tile(Position position) {
-        this.gotThunder = false;
+        this.gotThor = false;
         this.walkable = true;
         
     }
@@ -29,14 +30,23 @@ public class Tile {
     public SymbolType getSymbol() {
         return symbol;
     }
+    public SymbolType getSymbolToPrint() {
+        if(gotThor){
+            return SymbolType.Thor; 
+        }
+        if(getPlaceable()!= null){
+            return getPlaceable().getSymbol(); 
+        }
+        return symbol;
+    }
     public void setSymbol(SymbolType symbol) {
         this.symbol = symbol;
     }
-    public boolean isGotThunder() {
-        return gotThunder;
+    public boolean isGotThor() {
+        return gotThor;
     }
-    public void setGotThunder(boolean gotThunder) {
-        this.gotThunder = gotThunder;
+    public void setGotThor(boolean gotThunder) {
+        this.gotThor = gotThunder;
     }
 
     public boolean isWalkable() {

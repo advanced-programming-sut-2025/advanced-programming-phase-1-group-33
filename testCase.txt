@@ -16,9 +16,16 @@ day of the week
 cheat advance time 8h
 cheat advance time -2h
 cheat advance date 28d
+cheat thor -l 3, 5
+cheat thor -l 4, 5
+print map -l 0, 0 -s 10
+print map -l 1, 2 -s 10
+print map -h
 time
+print map -l 0, 0 -s 60
 date
 datetime
+help reading map
 season
 next turn 
 next turn 

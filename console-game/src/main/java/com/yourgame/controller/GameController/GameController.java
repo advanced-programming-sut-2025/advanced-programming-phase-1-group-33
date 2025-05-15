@@ -17,6 +17,7 @@ import com.yourgame.model.IO.Request;
 import com.yourgame.model.IO.Response;
 import com.yourgame.model.Map.Tile;
 import com.yourgame.model.WeatherAndTime.Weather;
+import com.yourgame.model.enums.SymbolType;
 import com.yourgame.view.ConsoleView;
 
 import java.util.*;
@@ -103,7 +104,6 @@ public class GameController {
         return new Response(false, "To Do We need to create Map after that we can have green house");
     }
 
-
     public Response getWalk(Request request) {
         // Obtain current player and destination.
         Player currentPlayer = gameState.getCurrentPlayer();
@@ -111,47 +111,47 @@ public class GameController {
         int y = Integer.parseInt(request.body.get("y"));
 
         List<Position> positions = new LinkedList<Position>();
-        Response response = findPath(x  ,y , positions);
+        Response response = findPath(x, y, positions);
         System.out.println(response.getMessage());
-        if(response.getSuccessful()){
-                return walk(x , y , positions);
+        if (response.getSuccessful()) {
+            return walk(x, y, positions);
         }
         return new Response(false, "");
     }
-    public Response walk(int endX , int endY , List<Position> positions){
+
+    public Response walk(int endX, int endY, List<Position> positions) {
         int energy = calculateEnergyBasedOnShortestDistance(positions);
-        if(energy > App.getGameState().getCurrentPlayer().getEnergy()){
+        if (energy > App.getGameState().getCurrentPlayer().getEnergy()) {
             App.getGameState().getCurrentPlayer().faint();
-            return new Response(false ,"you are fainted");
+            return new Response(false, "you are fainted");
         }
         App.getGameState().getCurrentPlayer().getPosition().setX(endX);
         App.getGameState().getCurrentPlayer().getPosition().setY(endY);
         App.getGameState().getCurrentPlayer().consumeEnergy(energy);
-        return new Response(true , String.format("you have teleported successfully to " + endX + " " + endY ));
+        return new Response(true, String.format("you have teleported successfully to " + endX + " " + endY));
     }
 
-    public int calculateEnergyBasedOnShortestDistance(List<Position> shortestPath){
+    public int calculateEnergyBasedOnShortestDistance(List<Position> shortestPath) {
         int energy = 0;
-        for(Position p : shortestPath){
+        for (Position p : shortestPath) {
             energy++;
         }
-        return  energy / 20;
+        return energy / 20;
     }
 
     // Helper method: findPath using BFS with 8–directions.
-    public Response findPath(int endX, int endY, List<Position> positions){
+    public Response findPath(int endX, int endY, List<Position> positions) {
         Tile destination = App.getGameState().getMap().findTile(endX, endY);
 
-
-        if(App.getGameState().getMap().findTile(endX , endY).getPlaceable() != null){
-            return new Response(false ,"Wrong place , Wrong Time");
+        if (App.getGameState().getMap().findTile(endX, endY).getPlaceable() != null) {
+            return new Response(false, "Wrong place , Wrong Time");
         }
-        for(Player p : App.getGameState().getPlayers()){
-            if(App.getGameState().getCurrentPlayer().equals(p)){
+        for (Player p : App.getGameState().getPlayers()) {
+            if (App.getGameState().getCurrentPlayer().equals(p)) {
                 continue;
             }
-            if(p.getFarm().getRectangle().contains(endX, endY)){
-                return new Response(false ,"this position is not in your farm");
+            if (p.getFarm().getRectangle().contains(endX, endY)) {
+                return new Response(false, "this position is not in your farm");
             }
         }
 
@@ -159,11 +159,10 @@ public class GameController {
                 App.getGameState().getMap(),
                 App.getGameState().getCurrentPlayer().getPosition().getX(),
                 App.getGameState().getCurrentPlayer().getPosition().getY(),
-                endX, endY
-        );
+                endX, endY);
 
-        if(path == null){
-            return new Response(false ,"No path found");
+        if (path == null) {
+            return new Response(false, "No path found");
         }
 
         positions.clear();
@@ -173,24 +172,25 @@ public class GameController {
         return new Response(true, String.format("energy needed: %d", energy));
     }
 
-    public List<Position> findShortestPath(Map map , int startX , int startY , int endX , int endY){
-        int[] dx= {1, -1 , 0 , 0};
-        int[] dy = {0 , 0 , 1 , -1};
+    public List<Position> findShortestPath(Map map, int startX, int startY, int endX, int endY) {
+        int[] dx = { 1, -1, 0, 0 };
+        int[] dy = { 0, 0, 1, -1 };
         boolean[][] visited = new boolean[250][200];
         Position[][] prev = new Position[250][200];
         Queue<Position> q = new LinkedList<>();
         q.add(new Position(startX, startY));
         visited[startX][startY] = true;
-        while(!q.isEmpty()){
+        while (!q.isEmpty()) {
             Position p = q.poll();
-            if(p.getX() == endX && p.getY() == endY){
+            if (p.getX() == endX && p.getY() == endY) {
                 break;
             }
-            for(int  i = 0 ; i < 4 ; i++){
+            for (int i = 0; i < 4; i++) {
                 int nx = p.getX() + dx[i];
                 int ny = p.getY() + dy[i];
 
-                if(nx >= 0 && nx < 250 && ny >= 0 && ny < 200 && !visited[nx][ny] && map.getTiles()[nx][ny].isWalkable()){
+                if (nx >= 0 && nx < 250 && ny >= 0 && ny < 200 && !visited[nx][ny]
+                        && map.getTiles()[nx][ny].isWalkable()) {
                     visited[nx][ny] = true;
                     prev[nx][ny] = p;
                     q.add(new Position(nx, ny));
@@ -204,7 +204,8 @@ public class GameController {
             shortestPath.add(at);
             at = prev[at.getX()][at.getY()];
         }
-        if (at == null) return null; // مسیر پیدا نشد
+        if (at == null)
+            return null; // مسیر پیدا نشد
         shortestPath.add(new Position(startX, startY));
         Collections.reverse(shortestPath);
         return shortestPath;
@@ -253,13 +254,13 @@ public class GameController {
         return new Response(true, String.format("%s not found", name));
     }
 
-
     public Response getTime() {
         return new Response(true, String.format("current time is: %d", gameState.getGameTime().getHour()));
     }
 
     public Response getDate() {
-        return new Response(true, String.format("current season is %s, in %d ", gameState.getGameTime().getSeason().name(), gameState.getGameTime().getDay()));
+        return new Response(true, String.format("current season is %s, in %d ",
+                gameState.getGameTime().getSeason().name(), gameState.getGameTime().getDay()));
     }
 
     public Response getDateTime() {
@@ -314,8 +315,14 @@ public class GameController {
     }
 
     public Response cheatThor(Request request) {
-        // TODO Auto-generated method stub
-        return new Response(false, "To Do We need to create the Thor After Map ");
+        int X = Integer.parseInt(request.body.get("X"));
+        int Y = Integer.parseInt(request.body.get("Y"));
+        Tile tile = findTilePosition(X, Y);
+        if (tile == null){
+            return new Response(true, "Tile not found");            
+        }
+        tile.setGotThor(true);
+        return new Response(false, "The tile with the postition : X:" + X + " Y: " + Y + " is under thor");
     }
 
     public Response getWeatherForecast() {
@@ -349,14 +356,14 @@ public class GameController {
         return new Response(true, "Available Tools : " + sb);
     }
 
-//    public Response handleToolsUpgrade(Request request) {
-//          //TODO
-//    }
+    // public Response handleToolsUpgrade(Request request) {
+    // //TODO
+    // }
 
-//    public Response handleToolsUseDirectionResponse(Request request) {
-//        // TODO
-//        return handleShowInventory(request);
-//    }
+    // public Response handleToolsUseDirectionResponse(Request request) {
+    // // TODO
+    // return handleShowInventory(request);
+    // }
 
     public Response craftInfo(Request request) {
         String craftName = request.body.get("craftName");
@@ -379,216 +386,225 @@ public class GameController {
 
         return new Response(true, output);
     }
-    //    public Response treeInfo(String treeName) {
-//        TreeType tree = TreeType.getTreeTypeByName(treeName);
-//
-//        if (tree == null)
-//            return new Response(false, "Tree <" + treeName + "> not found");
-//        String output = String.format("Name: %s\n", tree.getName()) +
-//                String.format("Source: %s\n", tree.getSource()) +
-//                String.format("Stages: %s\n", tree.getStages()) +
-//                String.format("Total Harvest Time: %d\n", tree.getTotalHarvestTime()) +
-//                String.format("Fruit: %s\n", tree.getFruit()) +
-//                String.format("HarvestCycle: %d\n", tree.getHarvestCycle()) +
-//                String.format("FruitBaseSellPrice: %d\n", tree.getFruitBaseSellPrice()) +
-//                String.format("IsFruitEdible: %s\n", tree.isFruitEdible()) +
-//                String.format("FruitEnergy: %d\n", tree.getFruitEnergy()) +
-//                String.format("Season: %s", tree.getSeason());
-//
-//        return new Response(true, output);
-//    }
-//
-//    public Response foragingCropInfo(String cropName) {
-//        ForagingCrop foragingCrop = ForagingCrop.getForagingCropByName(cropName);
-//
-//        if (foragingCrop == null)
-//            return new Response(false, "Foraging <" + cropName + "> not found");
-//
-//        String output = String.format("Name: %s\n", foragingCrop.getName()) +
-//                String.format("Season: %s\n", foragingCrop.getSeason()) +
-//                String.format("BaseSellPrice: %d\n", foragingCrop.getBaseSellPrice()) +
-//                String.format("Energy: %d", foragingCrop.getEnergy());
-//
-//        return new Response(true, output);
-//    }
-//
-//    public Response foragingTreeInfo(String treeName) {
-//        ForagingTreeSource foragingTreeSource = ForagingTreeSource.getForagingTreeSourceByName(treeName);
-//
-//        if (foragingTreeSource == null)
-//            return new Response(false, "Foraging <" + treeName + "> not found");
-//
-//        String output = String.format("Name: %s\n", foragingTreeSource.getName()) +
-//                String.format("Season: %s", foragingTreeSource.getSeason());
-//
-//        return new Response(true, output);
-//    }
+    // public Response treeInfo(String treeName) {
+    // TreeType tree = TreeType.getTreeTypeByName(treeName);
+    //
+    // if (tree == null)
+    // return new Response(false, "Tree <" + treeName + "> not found");
+    // String output = String.format("Name: %s\n", tree.getName()) +
+    // String.format("Source: %s\n", tree.getSource()) +
+    // String.format("Stages: %s\n", tree.getStages()) +
+    // String.format("Total Harvest Time: %d\n", tree.getTotalHarvestTime()) +
+    // String.format("Fruit: %s\n", tree.getFruit()) +
+    // String.format("HarvestCycle: %d\n", tree.getHarvestCycle()) +
+    // String.format("FruitBaseSellPrice: %d\n", tree.getFruitBaseSellPrice()) +
+    // String.format("IsFruitEdible: %s\n", tree.isFruitEdible()) +
+    // String.format("FruitEnergy: %d\n", tree.getFruitEnergy()) +
+    // String.format("Season: %s", tree.getSeason());
+    //
+    // return new Response(true, output);
+    // }
+    //
+    // public Response foragingCropInfo(String cropName) {
+    // ForagingCrop foragingCrop = ForagingCrop.getForagingCropByName(cropName);
+    //
+    // if (foragingCrop == null)
+    // return new Response(false, "Foraging <" + cropName + "> not found");
+    //
+    // String output = String.format("Name: %s\n", foragingCrop.getName()) +
+    // String.format("Season: %s\n", foragingCrop.getSeason()) +
+    // String.format("BaseSellPrice: %d\n", foragingCrop.getBaseSellPrice()) +
+    // String.format("Energy: %d", foragingCrop.getEnergy());
+    //
+    // return new Response(true, output);
+    // }
+    //
+    // public Response foragingTreeInfo(String treeName) {
+    // ForagingTreeSource foragingTreeSource =
+    // ForagingTreeSource.getForagingTreeSourceByName(treeName);
+    //
+    // if (foragingTreeSource == null)
+    // return new Response(false, "Foraging <" + treeName + "> not found");
+    //
+    // String output = String.format("Name: %s\n", foragingTreeSource.getName()) +
+    // String.format("Season: %s", foragingTreeSource.getSeason());
+    //
+    // return new Response(true, output);
+    // }
 
-
-//public Response harvestWithScythe(Growable plant, Tile targetTile) {
-//    Player player = App.getGameState().getCurrentPlayer();
-//
-//    if (!plant.isComplete())
-//        return new Response(false, "Plant hasn't grown completely!");
-//
-//    if (plant.canGrowAgain()) {
-//        if (plant.harvest()) {
-//            if (plant instanceof Crop crop)
-//                player.getBackpack().addIngredients(crop, 1);
-//            else if (plant instanceof Tree tree)
-//                player.getBackpack().addIngredients(tree.getType().getFruit(), 1);
-//
-//            player.getAbility().increaseFarmingRate(5);
-//
-//            return new Response(true,
-//                    String.format("You picked up %s\nThis plant can grow again!", plant.getNameOfProduct()));
-//        }
-//        else {
-//            return new Response(false, "The plant hasn't grown again completely!");
-//        }
-//    }
-//    else {
-//        player.getBackpack().addIngredients(((Crop) plant), 1);
-//        player.getFarm().getCrops().remove(plant);
-//        player.getFarm().getPlaceables().remove(plant);
-//        targetTile.setPlaceable(null);
-//        targetTile.setWalkable(true);
-//        targetTile.setSymbol('.');
-//        targetTile.setPlowed(false);
-//        player.getAbility().increaseFarmingRate(5);
-//        return new Result(true,
-//                String.format("You picked up %s\nThis plant cannot grow again!", plant.getNameOfProduct()));
-//    }
-//}
+    // public Response harvestWithScythe(Growable plant, Tile targetTile) {
+    // Player player = App.getGameState().getCurrentPlayer();
+    //
+    // if (!plant.isComplete())
+    // return new Response(false, "Plant hasn't grown completely!");
+    //
+    // if (plant.canGrowAgain()) {
+    // if (plant.harvest()) {
+    // if (plant instanceof Crop crop)
+    // player.getBackpack().addIngredients(crop, 1);
+    // else if (plant instanceof Tree tree)
+    // player.getBackpack().addIngredients(tree.getType().getFruit(), 1);
+    //
+    // player.getAbility().increaseFarmingRate(5);
+    //
+    // return new Response(true,
+    // String.format("You picked up %s\nThis plant can grow again!",
+    // plant.getNameOfProduct()));
+    // }
+    // else {
+    // return new Response(false, "The plant hasn't grown again completely!");
+    // }
+    // }
+    // else {
+    // player.getBackpack().addIngredients(((Crop) plant), 1);
+    // player.getFarm().getCrops().remove(plant);
+    // player.getFarm().getPlaceables().remove(plant);
+    // targetTile.setPlaceable(null);
+    // targetTile.setWalkable(true);
+    // targetTile.setSymbol('.');
+    // targetTile.setPlowed(false);
+    // player.getAbility().increaseFarmingRate(5);
+    // return new Result(true,
+    // String.format("You picked up %s\nThis plant cannot grow again!",
+    // plant.getNameOfProduct()));
+    // }
+    // }
 
     public void foragingRandom() {
-        //this method should call everyday
-        //TODO find an empty tile
+        // this method should call everyday
+        // TODO find an empty tile
         if (Math.random() <= 0.01) {
-            ArrayList<ForagingCrop> foragingCrops = ForagingCrop.getCropsBySeason(App.getGameState().getGameTime().getSeason());
+            ArrayList<ForagingCrop> foragingCrops = ForagingCrop
+                    .getCropsBySeason(App.getGameState().getGameTime().getSeason());
             ForagingCrop foragingCrop = foragingCrops.get(new Random().nextInt(foragingCrops.size()));
-            //TODO put it in backpack and in map
+            // TODO put it in backpack and in map
         }
     }
 
+    // public Response plant(String seedName, String directionName) {
+    // Direction direction = Direction.getDirectionByInput(directionName);
+    // Player player = App.getGame().getCurrentPlayingPlayer();
+    //
+    // if (direction == null) {
+    // return new Result(false, "Direction <" + directionName + "> not found");
+    // }
+    // Tile myTile = App.getGame().getMap().findTile(player.getPosition());
+    // Tile targetTile = App.getGame().getMap().getTileByDirection(myTile,
+    // direction);
+    //
+    // if (targetTile == null) {
+    // return new Result(false, "Tile in direction <" + directionName + "> not
+    // found!");
+    // }
+    // if (!targetTile.isPlowed()) {
+    // return new Result(false, "Tile is not plowed!");
+    // }
+    //
+    // Seeds seed = Seeds.getSeedByName(seedName);
+    // TreeSource treeSource = TreeSource.getTreeSourceByName(seedName);
+    //
+    // if (seed != null) {
+    //
+    // if (!seed.getSeason().equals(App.getGame().getTime().getSeason()))
+    // return new Result(false, "You can't plant this seed in this season!");
+    //
+    // CropType cropType = plantCrop(seed);
+    // Crop crop = new Crop(cropType, App.getGame().getTime(),
+    // targetTile.getFertilizer(),
+    // targetTile.getPosition().getX(), targetTile.getPosition().getY());
+    // player.getFarm().getCrops().add(crop);
+    // player.getFarm().getPlaceables().add(crop);
+    // targetTile.setPlaceable(crop);
+    // targetTile.setWalkable(false);
+    // targetTile.setSymbol(crop.getSymbol());
+    // player.getAbility().increaseFarmingRate(5);
+    // return new Result(true, "You successfully plant.");
+    //
+    // }
+    // else if (treeSource != null) {
+    //
+    // if
+    // (!treeSource.getTreeType().getSeason().equals(App.getGame().getTime().getSeason()))
+    // return new Result(false, "You can't plant this tree in this season!");
+    //
+    // Tree tree = new Tree(treeSource.getTreeType(), App.getGame().getTime(),
+    // targetTile.getFertilizer(),
+    // targetTile.getPosition().getX(), targetTile.getPosition().getY(), 1, 1);
+    // player.getFarm().getTrees().add(tree);
+    // player.getFarm().getPlaceables().add(tree);
+    // targetTile.setPlaceable(tree);
+    // targetTile.setWalkable(false);
+    // targetTile.setSymbol(tree.getSymbol());
+    // player.getAbility().increaseFarmingRate(5);
+    // return new Result(true, "You successfully plant.");
+    //
+    // }
+    // else {
+    // return new Result(false, "Tree_source/seed not found");
+    // }
+    // }
 
-//public Response plant(String seedName, String directionName) {
-//    Direction direction = Direction.getDirectionByInput(directionName);
-//    Player player = App.getGame().getCurrentPlayingPlayer();
-//
-//    if (direction == null) {
-//        return new Result(false, "Direction <" + directionName + "> not found");
-//    }
-//    Tile myTile = App.getGame().getMap().findTile(player.getPosition());
-//    Tile targetTile = App.getGame().getMap().getTileByDirection(myTile, direction);
-//
-//    if (targetTile == null) {
-//        return new Result(false, "Tile in direction <" + directionName + "> not found!");
-//    }
-//    if (!targetTile.isPlowed()) {
-//        return new Result(false, "Tile is not plowed!");
-//    }
-//
-//    Seeds seed = Seeds.getSeedByName(seedName);
-//    TreeSource treeSource = TreeSource.getTreeSourceByName(seedName);
-//
-//    if (seed != null) {
-//
-//        if (!seed.getSeason().equals(App.getGame().getTime().getSeason()))
-//            return new Result(false, "You can't plant this seed in this season!");
-//
-//        CropType cropType = plantCrop(seed);
-//        Crop crop = new Crop(cropType, App.getGame().getTime(), targetTile.getFertilizer(),
-//                targetTile.getPosition().getX(), targetTile.getPosition().getY());
-//        player.getFarm().getCrops().add(crop);
-//        player.getFarm().getPlaceables().add(crop);
-//        targetTile.setPlaceable(crop);
-//        targetTile.setWalkable(false);
-//        targetTile.setSymbol(crop.getSymbol());
-//        player.getAbility().increaseFarmingRate(5);
-//        return new Result(true, "You successfully plant.");
-//
-//    }
-//    else if (treeSource != null) {
-//
-//        if (!treeSource.getTreeType().getSeason().equals(App.getGame().getTime().getSeason()))
-//            return new Result(false, "You can't plant this tree in this season!");
-//
-//        Tree tree = new Tree(treeSource.getTreeType(), App.getGame().getTime(), targetTile.getFertilizer(),
-//                targetTile.getPosition().getX(), targetTile.getPosition().getY(), 1, 1);
-//        player.getFarm().getTrees().add(tree);
-//        player.getFarm().getPlaceables().add(tree);
-//        targetTile.setPlaceable(tree);
-//        targetTile.setWalkable(false);
-//        targetTile.setSymbol(tree.getSymbol());
-//        player.getAbility().increaseFarmingRate(5);
-//        return new Result(true, "You successfully plant.");
-//
-//    }
-//    else {
-//        return new Result(false, "Tree_source/seed not found");
-//    }
-//}
+    // private CropType plantCrop(Seeds seed) {
+    // CropType cropType;
+    //
+    // if (seed.equals(Seeds.MixedSeeds)) {
+    // ArrayList<CropType> possibleCrops =
+    // MixedSeeds.getSeasonCrops(App.getGameState().getGameTime().getSeason());
+    // cropType = possibleCrops.get(new Random().nextInt(possibleCrops.size()));
+    // }
+    // else
+    // cropType = seed.getCrop();
+    //
+    // return cropType;
+    // }
+    //
+    // public Result waterPlantWithUseTool(Growable plant) {
+    // plant.watering();
+    // return new Result(true, "You water this plant successfully!");
+    // }
+    //
+    // public Result fertilize(String fertilizerName, String directionName) {
+    // Direction direction = Direction.getDirectionByInput(directionName);
+    // Fertilizer fertilizer = Fertilizer.getFertilizerByName(fertilizerName);
+    // Player player = App.getGame().getCurrentPlayingPlayer();
+    // Tile myTile = App.getGame().getMap().findTile(player.getPosition());
+    // Tile targetTile = App.getGame().getMap().getTileByDirection(myTile,
+    // direction);
+    //
+    // if (!targetTile.isPlowed())
+    // return new Result(false, "This tile hasn't plowed yet!");
+    //
+    // if (!player.getBackpack().getIngredientQuantity().containsKey(fertilizer)) {
+    // return new Result(false, "You don't have this fertilizer in the backpack!");
+    // }
+    //
+    // player.getBackpack().removeIngredients(fertilizer, 1);
+    // targetTile.setFertilizer(fertilizer);
+    // return new Result(true, "You fertilize this tile successfully!");
+    // }
 
-//private CropType plantCrop(Seeds seed) {
-//    CropType cropType;
-//
-//    if (seed.equals(Seeds.MixedSeeds)) {
-//        ArrayList<CropType> possibleCrops = MixedSeeds.getSeasonCrops(App.getGameState().getGameTime().getSeason());
-//        cropType = possibleCrops.get(new Random().nextInt(possibleCrops.size()));
-//    }
-//    else
-//        cropType = seed.getCrop();
-//
-//    return cropType;
-//}
-//
-//public Result waterPlantWithUseTool(Growable plant) {
-//    plant.watering();
-//    return new Result(true, "You water this plant successfully!");
-//}
-//
-//public Result fertilize(String fertilizerName, String directionName) {
-//    Direction direction = Direction.getDirectionByInput(directionName);
-//    Fertilizer fertilizer = Fertilizer.getFertilizerByName(fertilizerName);
-//    Player player = App.getGame().getCurrentPlayingPlayer();
-//    Tile myTile = App.getGame().getMap().findTile(player.getPosition());
-//    Tile targetTile = App.getGame().getMap().getTileByDirection(myTile, direction);
-//
-//    if (!targetTile.isPlowed())
-//        return new Result(false, "This tile hasn't plowed yet!");
-//
-//    if (!player.getBackpack().getIngredientQuantity().containsKey(fertilizer)) {
-//        return new Result(false, "You don't have this fertilizer in the backpack!");
-//    }
-//
-//    player.getBackpack().removeIngredients(fertilizer, 1);
-//    targetTile.setFertilizer(fertilizer);
-//    return new Result(true, "You fertilize this tile successfully!");
-//}
-
-    //public Response showPlant(int x, int y) {
-//    Tile tile = App.getGameState().getMap().findTile(x, y);
-//
-//    if (tile == null)
-//        return new Result(false, "Tile not found!");
-//
-//    Placeable content = tile.getPlaceable();
-//    Growable plant;
-//    if (!(content instanceof Crop || content instanceof Tree)) {
-//        return new Result(false, "Here is no Plant!");
-//    }
-//    else
-//        plant = ((Growable) content);
-//
-//    return new Result(true,
-//            String.format("Name: %s\n", plant.getName()) +
-//                    String.format("Days to complete: %d\n", plant.getNumberOfDaysToComplete()) +
-//                    String.format("Current stage: %d\n", plant.getCurrentStage()) +
-//                    String.format("Has watered Today: %s\n", plant.hasWateredToday()) +
-//                    String.format("Has Fertilized: %s\n", plant.hasFertilized()) +
-//                    String.format("Fertilizer: %s", plant.getFertilizer()));
-//}
+    // public Response showPlant(int x, int y) {
+    // Tile tile = App.getGameState().getMap().findTile(x, y);
+    //
+    // if (tile == null)
+    // return new Result(false, "Tile not found!");
+    //
+    // Placeable content = tile.getPlaceable();
+    // Growable plant;
+    // if (!(content instanceof Crop || content instanceof Tree)) {
+    // return new Result(false, "Here is no Plant!");
+    // }
+    // else
+    // plant = ((Growable) content);
+    //
+    // return new Result(true,
+    // String.format("Name: %s\n", plant.getName()) +
+    // String.format("Days to complete: %d\n", plant.getNumberOfDaysToComplete()) +
+    // String.format("Current stage: %d\n", plant.getCurrentStage()) +
+    // String.format("Has watered Today: %s\n", plant.hasWateredToday()) +
+    // String.format("Has Fertilized: %s\n", plant.hasFertilized()) +
+    // String.format("Fertilizer: %s", plant.getFertilizer()));
+    // }
 
     public Response craftingShowRecipes(Request resquest) {
         Player player = App.getGameState().getCurrentPlayer();
@@ -627,7 +643,7 @@ public class GameController {
             player.getBackpack().addArtisanMachine(artisanMachine);
         if (recipe.equals(CraftingRecipes.MysticTreeSeed))
             player.getBackpack().addIngredients(TreeSource.MysticTreeSeeds, 1);
-        //TODO else
+        // TODO else
 
         player.consumeEnergy(2);
 
@@ -652,7 +668,7 @@ public class GameController {
             } else if (craftingRecipe.equals(CraftingRecipes.MysticTreeSeed)) {
                 player.getBackpack().addIngredients(TreeSource.MysticTreeSeeds, quantity);
             }
-            //TODO else
+            // TODO else
             return new Response(true, "You add <" + ItemName + "> successfully!");
         }
         CookingRecipe cookingRecipe = CookingRecipe.getRecipeByName(ItemName);
@@ -661,7 +677,7 @@ public class GameController {
             player.getBackpack().addIngredients(food, quantity);
             return new Response(true, "You add <" + ItemName + "> successfully!");
         }
-        //TODO else item
+        // TODO else item
         return new Response(false, "There is no such Item!");
     }
 
@@ -681,8 +697,7 @@ public class GameController {
             player.getBackpack().removeIngredients(food, 1);
             refrigerator.addItem(food, 1);
             return new Response(true, "You put <" + itemName + "> successfully in refrigerator!");
-        }
-        else {
+        } else {
             if (!(player.getBackpack().getRefrigerator().getQuantity(food) == 0))
                 return new Response(false, "You don't have this food in the Refrigerator!");
             player.getBackpack().getRefrigerator().removeItem(food, 1);
@@ -697,7 +712,7 @@ public class GameController {
         StringBuilder output = new StringBuilder();
         output.append("Cooking Recipes: \n");
         for (int i = 0; i < recipes.size(); i++) {
-            output.append(i+1).append(". ").append(recipes.get(i).toString()).append("\n");
+            output.append(i + 1).append(". ").append(recipes.get(i).toString()).append("\n");
         }
         return new Response(true, output.toString());
     }
@@ -723,7 +738,8 @@ public class GameController {
             if (ingredientInBackpack == null)
                 return new Response(false, "You don't have any <" + requiredIngredient + "> in your backpack!");
 
-            if (player.getBackpack().getIngredientQuantity().get(ingredientInBackpack) < requiredIngredients.get(ingredientInBackpack)) {
+            if (player.getBackpack().getIngredientQuantity().get(ingredientInBackpack) < requiredIngredients
+                    .get(ingredientInBackpack)) {
                 return new Response(false, "You don't have enough <" + requiredIngredient + "> in your backpack!");
             }
 
@@ -741,7 +757,8 @@ public class GameController {
     private Ingredient getIngredient(Ingredient requiredIngredient, Player player) {
         for (Ingredient myIngredient : player.getBackpack().getIngredientQuantity().keySet()) {
             if ((myIngredient instanceof Crop crop && crop.getType().equals(requiredIngredient)) ||
-                    (myIngredient instanceof AnimalGood animalGood && animalGood.getType().equals(requiredIngredient)) ||
+                    (myIngredient instanceof AnimalGood animalGood && animalGood.getType().equals(requiredIngredient))
+                    ||
                     (myIngredient instanceof Fish fish && fish.getType().equals(requiredIngredient)) ||
                     (myIngredient.equals(requiredIngredient))) {
                 return myIngredient;
@@ -762,9 +779,38 @@ public class GameController {
             player.addEnergy(food.getEnergy());
             return new Response(true,
                     "You eat <" + food + "> successfully!And increased your energy " + food.getEnergy() + "!");
-        }
-        else
+        } else
             return new Response(false, "You don't have Food <" + food + "> space in backpack!");
+    }
+
+    public Tile findTilePosition(int x, int y) {
+        for (int i = 0; i < gameState.getMap().getTiles().length; i++) {
+            for (int j = 0; j < gameState.getMap().getTiles().length; j++) {
+                if (i == x && j == y) {
+                    return gameState.getMap().getTiles()[i][j];
+                }
+            }
+        }
+        return null;
+    }
+    public Response printWholeMap() {
+        String mapString = gameState.getMap().printTheWholeMap();
+        return new Response(true, mapString); 
+    }
+
+    public Response printMap(Request request) {
+
+        int x = Integer.parseInt(request.body.get("x"));
+        int y = Integer.parseInt(request.body.get("y"));
+        int size = Integer.parseInt(request.body.get("size"));
+        String mapString = gameState.getMap().printMap(x, y, size);
+        return new Response(true, mapString); 
+    }
+
+	public Response getHelpRedning() {
+        String info = SymbolType.getSymbolsInfo(); 
+        return new Response(true, info); 
+        
     }
 
 }

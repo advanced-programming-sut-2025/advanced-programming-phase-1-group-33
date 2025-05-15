@@ -62,6 +62,8 @@ public class GameMenu implements AppMenu {
                 return getWalk(input);
             case PRINT_MAP:
                 return getPrintMap(input);
+            case PRINT_Whole_MAP:
+                return getPrintWholeMap(input); 
             case HELP_READING_MAP:
                 return getHelpRedning();
             case ENERGY_SHOW:
@@ -89,10 +91,10 @@ public class GameMenu implements AppMenu {
                 return getToolsShowResponse(input);
             case TOOLS_SHOW_AVAILABLE:
                 return getToolsShowAvailable(input);
-//          case TOOLS_USE_DIRECTION:
-//            return getToolsUseDirectionResponse(input);
-//          case TOOLS_UPGRADE:
-//                return getToolUpgradeResponse(input);
+            // case TOOLS_USE_DIRECTION:
+            // return getToolsUseDirectionResponse(input);
+            // case TOOLS_UPGRADE:
+            // return getToolUpgradeResponse(input);
             case CRAFT_INFO:
                 return showCraftInfo(input);
             case CRAFTING_SHOW_RECIPES:
@@ -176,25 +178,30 @@ public class GameMenu implements AppMenu {
         return response;
     }
 
-//    private Response getToolUpgradeResponse(String input) {
-//        Response response;
-//        Request request = new Request(input);
-//        request.body.put("name", GameViewCommands.TOOLS_EQUIP.getGroup(input, "name"));
-//        response = controller.handleToolsUpgrade(request);
-//        return response;
-//    }
+    // private Response getToolUpgradeResponse(String input) {
+    // Response response;
+    // Request request = new Request(input);
+    // request.body.put("name", GameViewCommands.TOOLS_EQUIP.getGroup(input,
+    // "name"));
+    // response = controller.handleToolsUpgrade(request);
+    // return response;
+    // }
 
     private Response getHelpRedning() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getHelpRedning'");
+        return controller.getHelpRedning(); 
     }
-
 
     private Response getPrintMap(String input) {
-        App.getGameState().getMap().printMap();
-        return new Response(true,"");
+        Request request = new Request(input);
+        request.body.put("x", GameViewCommands.PRINT_MAP.getGroup(input, "x"));
+        request.body.put("y", GameViewCommands.PRINT_MAP.getGroup(input, "y"));
+        request.body.put("size", GameViewCommands.PRINT_MAP.getGroup(input, "size"));
+        return controller.printMap(request);
     }
 
+    private Response getPrintWholeMap(String input) {
+        return controller.printWholeMap();
+    }
 
     private Response getWalk(String input) {
         // TODO Auto-generated method stub
@@ -205,13 +212,12 @@ public class GameMenu implements AppMenu {
         return controller.getWalk(request);
     }
 
-
-//    private Response getToolsUseDirectionResponse(String input) {
-//        Response response;
-//        Request request = new Request(input);
-//        response = controller.handleToolsUseDirectionResponse(request);
-//        return response;
-//    }
+    // private Response getToolsUseDirectionResponse(String input) {
+    // Response response;
+    // Request request = new Request(input);
+    // response = controller.handleToolsUseDirectionResponse(request);
+    // return response;
+    // }
 
     private Response getToolsShowAvailable(String input) {
         Response response;
@@ -237,7 +243,7 @@ public class GameMenu implements AppMenu {
     }
 
     //
-//
+    //
     private Response getInventoryTrashResponse(String input) {
         Response response;
         Request request = new Request(input);
@@ -270,7 +276,6 @@ public class GameMenu implements AppMenu {
     }
 
     private Response getWeather() {
-        // TODO Auto-generated method stub
         return controller.getWeather();
     }
 
@@ -278,8 +283,7 @@ public class GameMenu implements AppMenu {
         Request request = new Request(input);
         request.body.put("X", GameViewCommands.CHEAT_THOR.getGroup(input, "X"));
         request.body.put("Y", GameViewCommands.CHEAT_THOR.getGroup(input, "Y"));
-        // TODO Auto-generated methd stub
-        // return controller.getAdvancedTime(request);
+
         return controller.cheatThor(request);
     }
 

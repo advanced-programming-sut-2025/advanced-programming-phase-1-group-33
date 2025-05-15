@@ -144,21 +144,56 @@ public class Map {
         return npcHomes;
     }
 
-    // this method is only for debug!!!
-    public void printMap() {
+
+    public String printTheWholeMap() {
+        StringBuilder sb = new StringBuilder(); 
         for (int y = 0; y < 200; y++) {
             for (int x = 0; x < 250; x++) {
-                if(findTile(x, y).equals(findTile(App.getGameState().getCurrentPlayer().getPosition()))){
-                    System.out.print(SymbolType.PLAYER);
+                Tile tile = findTile(x, y);
+                if(tile.equals(findTile(App.getGameState().getCurrentPlayer().getPosition()))){
+                    sb.append(SymbolType.PLAYER);
                 }
                 else{
-                    System.out.print(tiles[x][y].getSymbol());
+                    sb.append(tile.getSymbolToPrint());
                 }
             }
-            System.out.println();
+            sb.append("\n");
         }
+        return sb.toString();
     }
 
+/**
+ * Prints a sub-region of the map starting at (positionX, positionY) 
+ * and covering a square area of given size.
+ * <p>
+ * It iterates from the starting coordinates up to size (or until the edge of the map)
+ * and prints the symbol for each tile. If the tile corresponds to the player's current position,
+ * it prints the player's symbol instead.
+ * </p>
+ *
+ * @param positionX the starting x-coordinate of the region to print
+ * @param positionY the starting y-coordinate of the region to print
+ * @param size the length of the side of the square region to print
+ * @return the formatted map region as a String
+ */
+public String printMap(int positionX, int positionY, int size) {
+    StringBuilder sb = new StringBuilder();
+    int maxX = Math.min(positionX + size, tiles.length);
+    int maxY = Math.min(positionY + size, tiles[0].length);
+
+    for (int y = positionY; y < maxY; y++) {
+        for (int x = positionX; x < maxX; x++) {
+            Tile tile = findTile(x, y);
+            if (tile.equals(findTile(App.getGameState().getCurrentPlayer().getPosition()))) {
+                sb.append(SymbolType.PLAYER.getColoredSymbol());
+            } else {
+                sb.append(tile.getSymbolToPrint());
+            }
+        }
+        sb.append("\n");
+    }
+    return sb.toString();
+}
 
 
     public void setBorderFarmsAndNpcVillage() {
@@ -254,9 +289,9 @@ public class Map {
             if(tile != null){
                 if(tile.getPlaceable() instanceof Tree tree){
                     tile.setWalkable(true );
-                    tile.setGotThunder(true);
+                    tile.setGotThor(true);
                     tile.setPlaceable(null);
-                    tile.setSymbol(SymbolType.ThunderBy);
+                    tile.setSymbol(SymbolType.Thor);
                 }
             }
         }

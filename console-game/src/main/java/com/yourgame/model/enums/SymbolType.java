@@ -14,23 +14,23 @@ public enum SymbolType {
     DefaultFloor('.', ANSI.BLUE, "Default Floor"),
     FARMBORDER('.', ANSI.BRIGHT_YELLOW, "Farm Border"),
     WalkableDoor('d', ANSI.BRIGHT_CYAN, "WalkableDoor"),
-    ThunderBy('.', ANSI.BRIGHT_BLACK, "Thundered By stormy weather"),
-    HabitatBarn('b', ANSI.BRIGHT_GREEN, "Habitat Barn"), 
-    HabitatDefault('c', ANSI.BRIGHT_GREEN, "Habitat Default"), 
-    Crop('c', ANSI.BRIGHT_GREEN, "Crop"), 
+    Thor('⚡', ANSI.BRIGHT_YELLOW, "Thor, the Bringer of Storms and Chaos"),
+    HabitatBarn('b', ANSI.BRIGHT_GREEN, "Habitat Barn"),
+    HabitatDefault('c', ANSI.BRIGHT_GREEN, "Habitat Default"),
+    Crop('c', ANSI.BRIGHT_GREEN, "Crop"),
     GRASS('.', ANSI.GREEN, "Grass"),
     Tree('T', ANSI.BRIGHT_GREEN, "Tree"),
     Cottage('C', ANSI.YELLOW, "Default for Cottage"),
     BUILDING('B', ANSI.YELLOW, "Default for Buildings"),
-    GreenHouse('G', ANSI.BRIGHT_BLUE, "Default for GreenHouse"), 
-    CarpenterShop('W', ANSI.WHITE, "Default for CarpenterShop"), 
-    Blacksmith('⚒', ANSI.GRAY, "Default for BlackSmith"), 
-    FishShop('≈', ANSI.BLUE, "Default for Fish Shop"), 
-    JojaMart('J', ANSI.WHITE, "Default for Joja mart"), 
-    MarnieRanch('♞', ANSI.WHITE, "Default for Marnie Rench"), 
-    PierreGeneralStore('⚙', ANSI.WHITE, "Default for PierreGeneralStore"), 
-    StardropSaloon('☕', ANSI.WHITE, "Default for StardropSaloon"), 
-    Quarry('Q', ANSI.RED, "Default for Querry"), 
+    GreenHouse('G', ANSI.BRIGHT_BLUE, "Default for GreenHouse"),
+    CarpenterShop('W', ANSI.WHITE, "Default for CarpenterShop"),
+    Blacksmith('⚒', ANSI.GRAY, "Default for BlackSmith"),
+    FishShop('≈', ANSI.BLUE, "Default for Fish Shop"),
+    JojaMart('J', ANSI.WHITE, "Default for Joja mart"),
+    MarnieRanch('♞', ANSI.WHITE, "Default for Marnie Rench"),
+    PierreGeneralStore('⚙', ANSI.WHITE, "Default for PierreGeneralStore"),
+    StardropSaloon('☕', ANSI.WHITE, "Default for StardropSaloon"),
+    Quarry('Q', ANSI.RED, "Default for Querry"),
     WATER('~', ANSI.CYAN, "Defualt for water "),
     Lake('L', ANSI.CYAN, "Defualt for Lake"),
     Stone('^', ANSI.WHITE, "Default for Stones"),
@@ -91,8 +91,9 @@ public enum SymbolType {
 
     @Override
     public String toString() {
-        return getColoredSymbol();
+        return getFixedWidthColoredSymbol();
     }
+
     /**
      * Returns a formatted string for every SymbolType, combining the colored symbol
      * and its description.
@@ -110,6 +111,17 @@ public enum SymbolType {
         return info.toString();
     }
 
+
+    /**
+     * Returns the colored symbol formatted to a fixed width.
+     * Adjust the width (example uses 3) according to your needs.
+     */
+    public String getFixedWidthColoredSymbol() {
+        // Using String.format to pad the symbol string.
+        String padded = String.format("%-3s", String.valueOf(symbol));
+        return colorCode + padded + ANSI.RESET;
+    }
+    
     // Example usage - you can run this to see the output in your terminal.
     public static void main(String[] args) {
         System.out.println(getSymbolsInfo());
