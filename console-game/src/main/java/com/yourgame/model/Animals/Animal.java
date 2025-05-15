@@ -56,7 +56,7 @@ public class Animal {
     }
 
     public boolean hasPettedToday() {
-        return lastPetTime.getDate() == App.getGameState().getGameTime().getDate();
+        return lastPetTime.getDay() == App.getGameState().getGameTime().getDay();
     }
 
     public void feed() {
@@ -64,16 +64,16 @@ public class Animal {
     }
 
     public boolean hasFedToday() {
-        return lastFeedTime.getDate() ==App.getGameState().getGameTime().getDate();
+        return lastFeedTime.getDay() ==App.getGameState().getGameTime().getDay();
     }
 
     public boolean isReadyProduct() {
         //TODO -> for pig is different
         TimeSystem today = App.getGameState().getGameTime().clone();
-        int dayOfToday = today.getDate();
+        int dayOfToday = today.getDay();
         if (today.getSeason().equals(lastProductTime.getSeason()))
             dayOfToday += 28;
-        return dayOfToday >= lastProductTime.getDate() + type.getDaysToGetProduct();
+        return dayOfToday >= lastProductTime.getDay() + type.getDaysToGetProduct();
     }
 
     public AnimalGood getProduct() {

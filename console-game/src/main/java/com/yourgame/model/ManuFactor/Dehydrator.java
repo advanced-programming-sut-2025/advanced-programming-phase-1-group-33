@@ -19,12 +19,12 @@ public class Dehydrator extends ArtisanMachine {
     public Response isReady() {
         if (timeOfRequest == null)
             return new Response(false, "You don't have any artisan goods in machine yet!!");
-        int todayDate = App.getGameState().getGameTime().getDate();
+        int todayDate = App.getGameState().getGameTime().getDay();
         if (App.getGameState().getGameTime().getSeason() != timeOfRequest.getSeason())
             todayDate += 28;
 
         //Next morning
-        if (todayDate > timeOfRequest.getDate())
+        if (todayDate > timeOfRequest.getDay())
             return new Response(true, "Your product is Ready.");
         else
             return new Response(false, "Your product is Not Ready.");

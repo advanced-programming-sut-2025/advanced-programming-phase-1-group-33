@@ -7,7 +7,7 @@ public class TimeSystem {
     public TimeSystem clone;
     private Season season;
     private DaysOfTheWeek dayOfWeek;
-    private int date;
+    private int day;
     private int hour;
     private Weather weather;
     private Weather nextDayWeather;
@@ -16,7 +16,7 @@ public class TimeSystem {
         this.hour = 9;
         this.dayOfWeek = DaysOfTheWeek.Saturday;
         this.season = Season.Spring;
-        this.date = 1;
+        this.day = 1;
         this.weather = Weather.Sunny;
         this.nextDayWeather = Weather.Sunny;
 
@@ -34,9 +34,9 @@ public class TimeSystem {
 
     public void advancedDay(int d) {
         for (int i = 0; i < d; i++) {
-            this.date++;
-            if (this.date > 28) {
-                this.date = 1;
+            this.day++;
+            if (this.day > 28) {
+                this.day = 1;
                 advancedSeason();
             }
             DaysOfTheWeek[] days = DaysOfTheWeek.values();
@@ -72,8 +72,8 @@ public class TimeSystem {
     }
 
 
-    public int getDate() {
-        return date;
+    public int getDay() {
+        return day;
     }
 
     public int getHour() {
@@ -117,7 +117,7 @@ public class TimeSystem {
         TimeSystem cloned = new TimeSystem();
         cloned.season = season;
         cloned.dayOfWeek = dayOfWeek;
-        cloned.date = date;
+        cloned.day = day;
         cloned.hour = hour;
         cloned.weather = weather;
         cloned.nextDayWeather = nextDayWeather;

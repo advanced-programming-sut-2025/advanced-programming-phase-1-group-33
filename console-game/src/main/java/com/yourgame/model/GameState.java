@@ -46,9 +46,7 @@ public class GameState {
         }
 
         if (checkedPlayers == size) {
-
-            // method marboot be farda ro call mikonim.
-            //TODO
+            time.advancedDay(1);;
         }
 
         if (currentPlayer == players.get(0)) {

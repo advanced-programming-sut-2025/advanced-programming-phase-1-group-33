@@ -40,12 +40,12 @@ public abstract class ArtisanMachine {
     public Response isReady() {
         if (timeOfRequest == null)
             return new Response(false, "You don't have any artisan goods in machine yet!!");
-        int todayDate = App.getGameState().getGameTime().getDate();
+        int todayDate = App.getGameState().getGameTime().getDay();
         int todayHour = App.getGameState().getGameTime().getHour();
         if (App.getGameState().getGameTime().getSeason() != timeOfRequest.getSeason()) {
             todayDate += 28;
-            if(timeOfRequest.getDate() + processingTimes.get(producingGood).getDays() < todayDate ||
-                    timeOfRequest.getDate() + processingTimes.get(producingGood).getDays() == todayDate &&
+            if(timeOfRequest.getDay() + processingTimes.get(producingGood).getDays() < todayDate ||
+                    timeOfRequest.getDay() + processingTimes.get(producingGood).getDays() == todayDate &&
                             timeOfRequest.getHour() + processingTimes.get(producingGood).getHours() <= todayHour)
                 return new Response(true, "Your product is Ready.");
         }

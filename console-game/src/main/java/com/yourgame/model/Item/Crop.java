@@ -55,7 +55,7 @@ public class Crop implements Ingredient, Growable , Placeable {
 
         int timeForGrow = type.getTimeForGrow(levelOfGrowth);
 
-        if (lastGrowthTime.getDate() + timeForGrow == today.getDate()) {
+        if (lastGrowthTime.getDay() + timeForGrow == today.getDay()) {
             levelOfGrowth++;
             lastGrowthTime = today;
         }
@@ -73,7 +73,7 @@ public class Crop implements Ingredient, Growable , Placeable {
         TimeSystem today = App.getGameState().getGameTime().clone();
         int timeForGrow = type.getRegrowthTime();
 
-        if (lastHarvestTime == null || lastHarvestTime.getDate() + timeForGrow <= today.getDate()) {
+        if (lastHarvestTime == null || lastHarvestTime.getDay() + timeForGrow <= today.getDay()) {
             lastHarvestTime = today;
             return true;
         }
@@ -89,7 +89,7 @@ public class Crop implements Ingredient, Growable , Placeable {
     }
 
     public boolean canBeAlive(TimeSystem today) {
-        return today.getDate() <= lastWaterTime.getDate() + numberOfDaysCanBeAliveWithoutWater;
+        return today.getDay() <= lastWaterTime.getDay() + numberOfDaysCanBeAliveWithoutWater;
     }
 
     public int getNumberOfDaysToComplete() {
@@ -97,7 +97,7 @@ public class Crop implements Ingredient, Growable , Placeable {
         for (int i = 0; i < levelOfGrowth; i++) {
             passedDays += type.getTimeForGrow(i);
         }
-        passedDays += App.getGameState().getGameTime().getDate() - lastGrowthTime.getDate();
+        passedDays += App.getGameState().getGameTime().getDay() - lastGrowthTime.getDay();
         return type.getTotalHarvestTime() - passedDays;
     }
 
@@ -106,7 +106,7 @@ public class Crop implements Ingredient, Growable , Placeable {
     }
 
     public boolean hasWateredToday() {
-        return App.getGameState().getGameTime().getDate() == lastWaterTime.getDate();
+        return App.getGameState().getGameTime().getDay() == lastWaterTime.getDay();
     }
 
     public boolean hasFertilized() {

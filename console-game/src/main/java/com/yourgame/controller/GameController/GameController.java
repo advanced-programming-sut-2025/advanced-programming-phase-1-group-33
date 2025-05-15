@@ -259,12 +259,12 @@ public class GameController {
     }
 
     public Response getDate() {
-        return new Response(true, String.format("current season is %s, in %d ", gameState.getGameTime().getSeason().name(), gameState.getGameTime().getDate()));
+        return new Response(true, String.format("current season is %s, in %d ", gameState.getGameTime().getSeason().name(), gameState.getGameTime().getDay()));
     }
 
     public Response getDateTime() {
         return new Response(true, String.format("Season : %s , Day : %d , Hour : %d", gameState.getGameTime()
-                .getSeason().name(), gameState.getGameTime().getDate(), gameState.getGameTime().getHour()));
+                .getSeason().name(), gameState.getGameTime().getDay(), gameState.getGameTime().getHour()));
     }
 
     public Response getDayOfWeek() {
