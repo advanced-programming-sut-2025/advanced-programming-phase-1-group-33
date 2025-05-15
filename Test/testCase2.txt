@@ -1,0 +1,13 @@
+enter login
+login -u aeen123 -p HImynameisCHIKI23@
+enter pregame
+game new aeen123 matin
+game map 1
+game map 2
+print map -l 0, 0 -s 10
+print map -l 0, 0 -s 60
+print map -l 1, 2 -s 10
+walk -l 31 , 31 
+walk -l 1, 0
+go back
+exit
