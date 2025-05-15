@@ -1,7 +1,8 @@
 package com.yourgame.model.Stores;
 
-import com.yourgame.model.Placeable;
+
 import com.yourgame.model.App;
+import com.yourgame.model.Placeable;
 
 import java.awt.*;
 
@@ -42,8 +43,15 @@ public abstract class Store implements Placeable {
     }
 
     public abstract char getSymbol();
-
     public void loadInventory() {
 
     }
+
+
+//    public abstract String showAllProducts();
+//
+//    public abstract String showAllAvailableProducts();
+//
+//    public abstract void purchase();
+
 }

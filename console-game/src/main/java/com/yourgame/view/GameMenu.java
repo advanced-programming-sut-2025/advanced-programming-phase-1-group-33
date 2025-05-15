@@ -14,22 +14,17 @@ import com.yourgame.model.enums.Commands.GameViewCommands;
 import com.yourgame.view.AppViews.AppMenu;
 
 public class GameMenu implements AppMenu {
-    private GameController gameController;
-    private CookingController cookingController;
-    private CraftingController craftingController;
-    private ForagingController foragingController;
-    private ToolController toolController;
-    private WeatherAndTimeController weatherAndTimeController;
+    private GameController controller;
 
     public Response handleMenu(String input, Scanner scanner) {
 
-        if (gameController == null) {
+        if (controller == null) {
             // Initialize only when game state exists
             if (App.getCurrentUser() == null || App.getGameState() == null) {
                 App.setCurrentMenu(MenuTypes.LoginMenu);
                 return new Response(false, "Game not initialized. Please start a new game.");
             }
-            gameController = new GameController();
+            controller = new GameController();
         }
 
         GameViewCommands command = GameViewCommands.parse(input);
@@ -123,20 +118,20 @@ public class GameMenu implements AppMenu {
         Response response;
         Request request = new Request(input);
         request.body.put("foodName", GameViewCommands.EAT.getGroup(input, "foodName"));
-        response = cookingController.handleEating(request);
+        response = controller.handleEating(request);
         return response;
     }
 
     private Response getCookingPrepareResponse(String input) {
         Request request = new Request(input);
         request.body.put("itemName", GameViewCommands.COOKING_PREPARE.getGroup(input, "itemName"));
-        return cookingController.handleCookingFood(request);
+        return controller.handleCookingFood(request);
     }
 
     private Response getShowCookingRecipesResponse(String input) {
         Response response;
         Request request = new Request(input);
-        response = cookingController.handleShowCookingRecipes(request);
+        response = controller.handleShowCookingRecipes(request);
         return response;
     }
 
@@ -145,7 +140,7 @@ public class GameMenu implements AppMenu {
         Request request = new Request(input);
         request.body.put("item", GameViewCommands.COOKING_REFRIGERATOR_PICK_PUT.getGroup(input, "item"));
         request.body.put("action", GameViewCommands.COOKING_REFRIGERATOR_PICK_PUT.getGroup(input, "action"));
-        response = cookingController.cookingRefrigerator(request);
+        response = controller.cookingRefrigerator(request);
         return response;
     }
 
@@ -154,7 +149,7 @@ public class GameMenu implements AppMenu {
         Request request = new Request(input);
         request.body.put("itemName", GameViewCommands.CHEAT_ADD_ITEM.getGroup(input, "itemName"));
         request.body.put("count", GameViewCommands.CHEAT_ADD_ITEM.getGroup(input, "count"));
-        response = craftingController.handleAddItemCheat(request);
+        response = controller.handleAddItemCheat(request);
         return response;
     }
 
@@ -162,14 +157,14 @@ public class GameMenu implements AppMenu {
         Response response;
         Request request = new Request(input);
         request.body.put("itemName", GameViewCommands.CRAFTING_CRAFT.getGroup(input, "itemName"));
-        response = craftingController.handleItemCrafting(request);
+        response = controller.handleItemCrafting(request);
         return response;
     }
 
     private Response craftShowRecipes(String input) {
         Response response;
         Request request = new Request(input);
-        response = craftingController.craftingShowRecipes(request);
+        response = controller.craftingShowRecipes(request);
         return response;
     }
 
@@ -177,7 +172,7 @@ public class GameMenu implements AppMenu {
         Response response;
         Request request = new Request(input);
         request.body.put("craftName", GameViewCommands.CRAFT_INFO.getGroup(input, "craftName"));
-        response = foragingController.craftInfo(request);
+        response = controller.craftInfo(request);
         return response;
     }
 
@@ -196,8 +191,8 @@ public class GameMenu implements AppMenu {
 
 
     private Response getPrintMap(String input) {
-        // TODO Auto-generated method stub
-        return gameController.PrintMap();
+        App.getGameState().getMap().printMap();
+        return new Response(true,"");
     }
 
 
@@ -207,7 +202,7 @@ public class GameMenu implements AppMenu {
         request.body.put("x", GameViewCommands.WALK.getGroup(input, "x"));
         request.body.put("y", GameViewCommands.WALK.getGroup(input, "y"));
 
-        return gameController.getWalk(request);
+        return controller.getWalk(request);
     }
 
 
@@ -221,7 +216,7 @@ public class GameMenu implements AppMenu {
     private Response getToolsShowAvailable(String input) {
         Response response;
         Request request = new Request(input);
-        response = toolController.handleToolsShowAvailable(request);
+        response = controller.handleToolsShowAvailable(request);
         return response;
     }
 
@@ -229,7 +224,7 @@ public class GameMenu implements AppMenu {
     private Response getToolsShowResponse(String input) {
         Response response;
         Request request = new Request(input);
-        response = toolController.handleToolsShow(request);
+        response = controller.handleToolsShow(request);
         return response;
     }
 
@@ -237,7 +232,7 @@ public class GameMenu implements AppMenu {
         Response response;
         Request request = new Request(input);
         request.body.put("toolName", GameViewCommands.TOOLS_EQUIP.getGroup(input, "toolName"));
-        response = toolController.handleToolsEquip(request);
+        response = controller.handleToolsEquip(request);
         return response;
     }
 
@@ -248,35 +243,35 @@ public class GameMenu implements AppMenu {
         Request request = new Request(input);
         request.body.put("itemName", GameViewCommands.INVENTORY_TRASH.getGroup(input, "itemName"));
         request.body.put("number", GameViewCommands.INVENTORY_TRASH.getGroup(input, "number"));
-        response = gameController.handleInventoryTrashing(request);
+        response = controller.handleInventoryTrashing(request);
         return response;
     }
 
     private Response getShowInventoryResponse(String input) {
         Response response;
         Request request = new Request(input);
-        response = gameController.handleShowInventory(request);
+        response = controller.handleShowInventory(request);
         return response;
     }
 
     private Response getBuildGreenHouse() {
-        return gameController.getBuildGreenHouse();
+        return controller.getBuildGreenHouse();
     }
 
     private Response getWeatherForcast() {
-        return weatherAndTimeController.getWeatherForecast();
+        return controller.getWeatherForecast();
     }
 
     private Response getCheatWeather(String input) {
         Request request = new Request(input);
         request.body.put("Type", GameViewCommands.CHEAT_WEATHER_SET.getGroup(input, "Type"));
         // return controller.getAdvancedTime(request);
-        return weatherAndTimeController.cheatWeather(request);
+        return controller.cheatWeather(request);
     }
 
     private Response getWeather() {
         // TODO Auto-generated method stub
-        return weatherAndTimeController.getWeather();
+        return controller.getWeather();
     }
 
     private Response getCheatThor(String input) {
@@ -285,46 +280,46 @@ public class GameMenu implements AppMenu {
         request.body.put("Y", GameViewCommands.CHEAT_THOR.getGroup(input, "Y"));
         // TODO Auto-generated methd stub
         // return controller.getAdvancedTime(request);
-        return weatherAndTimeController.cheatThor(request);
+        return controller.cheatThor(request);
     }
 
     private Response getAdvancedTime(String input) {
         Request request = new Request(input);
         request.body.put("amount", GameViewCommands.CHEAT_ADVANCE_TIME.getGroup(input, "amount"));
-        return weatherAndTimeController.getAdvancedTime(request);
+        return controller.getAdvancedTime(request);
     }
 
     private Response getAdvancedDate(String input) {
         Request request = new Request(input);
         request.body.put("amount", GameViewCommands.CHEAT_ADVANCE_DATE.getGroup(input, "amount"));
-        return weatherAndTimeController.getAdvancedDate(request);
+        return controller.getAdvancedDate(request);
     }
 
     private Response getSeason() {
         // TODO Auto-generated method stub
-        return weatherAndTimeController.getSeason();
+        return controller.getSeason();
     }
 
     private Response getDayOfWeek() {
         // TODO Auto-generated method stub
-        return weatherAndTimeController.getDayOfWeek();
+        return controller.getDayOfWeek();
     }
 
     private Response getDateTime() {
         // TODO Auto-generated method stub
-        return weatherAndTimeController.getDateTime();
+        return controller.getDateTime();
     }
 
     private Response getDate() {
-        return weatherAndTimeController.getDate();
+        return controller.getDate();
     }
 
     private Response getTime() {
-        return weatherAndTimeController.getTime();
+        return controller.getTime();
     }
 
     private Response getNextTurn() {
-        return gameController.NextTurn();
+        return controller.NextTurn();
     }
 
     private Response getExitFromGame(String input, Scanner scanner) {
@@ -336,17 +331,17 @@ public class GameMenu implements AppMenu {
     }
 
     private Response getEnergyUnlimited() {
-        return gameController.setCurrentPlayerEnergyUnlimited();
+        return controller.setCurrentPlayerEnergyUnlimited();
     }
 
     private Response getEnergySet(String input) {
         Request request = new Request(input);
         request.body.put("value", GameViewCommands.ENERGY_SET_VALUE.getGroup(input, "value"));
-        return gameController.setCurrentPlayerEnergy(request);
+        return controller.setCurrentPlayerEnergy(request);
     }
 
     private Response getEnergyShow() {
-        return gameController.getEnergy();
+        return controller.getEnergy();
     }
 
     private static Response getExitMenu(String input) {

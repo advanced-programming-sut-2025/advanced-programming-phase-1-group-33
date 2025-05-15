@@ -2,7 +2,9 @@ enter login
 login -u aeen123 -p HImynameisCHIKI23@
 
 enter pregame
-game new aeen123 matin 
+game new aeen123 matin
+game map 1
+game map 2
 energy show
 energy set -v 100
 energy unlimited

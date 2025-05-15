@@ -4,7 +4,6 @@ import java.awt.Dimension;
 import java.util.Map;
 
 import com.yourgame.model.Item.Item;
-import com.yourgame.model.Map.Coordinate;
 
 public class GreenHouse extends Building{
 

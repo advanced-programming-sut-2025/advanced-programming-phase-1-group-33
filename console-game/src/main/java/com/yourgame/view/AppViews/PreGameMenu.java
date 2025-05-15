@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import com.yourgame.controller.AppController.PreGameController;
 import com.yourgame.model.App;
@@ -24,8 +26,6 @@ public class PreGameMenu implements AppMenu {
                 return getNewGame(input);
             case LOAD_GAME:
                 return getLoadGame(input);
-            case GAME_MAP:
-                return getGameMap(input);
             case GO_Back:
                 App.setCurrentMenu(MenuTypes.MainMenu);
                 return new Response(true, "Going Back to MainMenu");
@@ -67,7 +67,7 @@ private Response getNewGame(String input) {
     }
 
     // Load each user and create a Player object for each
-    List<Player> players = new ArrayList<>();
+    ArrayList<Player> players = new ArrayList<>();
     try {
         for (String username : usernames) {
             players.add(new Player(userDAO.loadUser(username)));
@@ -75,9 +75,46 @@ private Response getNewGame(String input) {
     } catch (SQLException e) {
         return new Response(false, "Error loading users: " + e.getMessage());
     }
-    
-    controller.createNewGame(players);
+
+    System.out.println("players: ");
+    for(Player p : players){
+        System.out.println(p.getUsername());
+    }
     // Change the current menu to the game menu.
     App.setCurrentMenu(MenuTypes.GameMenu);
+    int[] startXForMap = {0 ,150 ,0 ,150 };
+    int[] startYForMap = {0 , 0 , 125 ,125};
+    Scanner scanner = new Scanner(System.in);
+    Pattern pattern = Pattern.compile("^\\s*game\\s+map\\s+(?<mapNumber>\\d+)$");
+    for(int i=0 ; i<players.size()  ; i++){
+        String command;
+        while((command = scanner.nextLine()) != null ){
+            Matcher matcher = pattern.matcher(command);
+            if(matcher.matches()){
+                String Map = matcher.group(1);
+                int mapNumber = Integer.parseInt(matcher.group(1));
+                Response response  = controller.selectMapForCreateNewGame(mapNumber, players.get(i) ,
+                        startXForMap[i] , startYForMap[i]);
+                System.out.println(response);
+                if(response.getSuccessful()){
+
+                    break;
+                }
+
+
+            }
+            else {
+                System.out.println("invalid command , please try again!");
+            }
+
+
+        }
+
+
+
+    }
+    System.out.println(controller.createNewGame(players));
+
+
     return new Response(true, "New game started! Entering Game...");
 }}

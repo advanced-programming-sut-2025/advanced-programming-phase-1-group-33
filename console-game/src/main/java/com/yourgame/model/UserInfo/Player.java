@@ -4,15 +4,17 @@ import java.util.*;
 
 import com.yourgame.model.Animals.AnimalType;
 import com.yourgame.model.App;
-import com.yourgame.model.Building.FarmMap;
 import com.yourgame.model.Inventory.BackpackType;
 import com.yourgame.model.Inventory.Tools.Axe;
 import com.yourgame.model.Inventory.Tools.Hoe;
 import com.yourgame.model.Inventory.Tools.Pickaxe;
 import com.yourgame.model.Inventory.Tools.Tool;
 import com.yourgame.model.Item.Wood;
-import com.yourgame.model.Map.Coordinate;
 import com.yourgame.model.Inventory.Backpack;
+import com.yourgame.model.Map.Farm;
+import com.yourgame.model.Map.Position;
+import com.yourgame.model.Npc.NPCType;
+import com.yourgame.model.Npc.RelationWithNPC;
 import com.yourgame.model.Skill.Ability;
 import com.yourgame.model.enums.Gender;
 
@@ -26,66 +28,47 @@ public class Player {
     private Tool currentTool;
     private boolean isFaintedToday = false;
     private boolean isInfinite = false;
-    private int maxEnergy= 1000; // made this uppp :))) :))) 
-    private boolean unlimitedEnergy= false; 
-    private int money;
-    private  final Backpack backpack = new Backpack(BackpackType.Primary);
-    private ArrayList<AnimalType> animals= new ArrayList<>();
-    private Coordinate currentLocation;
+    private int maxEnergy = 1000;
+    private boolean unlimitedEnergy = false;
+    private final Backpack backpack = new Backpack(BackpackType.Primary);
+    private ArrayList<AnimalType> animals = new ArrayList<>();
     private Backpack inventory;
-    private Tool equippedTool;
     private final Ability ability = new Ability(this);
-    // private Map<SkillType, Skill> skills;
-    private Map<String, Relationship> relationships; // NPC name or Player username -> Relationship
-    private FarmMap farmMapReference;
-    private String currentMapId;
-    private Coordinate currentCoordinate;
 
-    public Player(String username, String hashedPassword, String nickname, String email, Gender gender, int maxEnergy) {
-        this.username = username;
-        this.nickname = nickname;
-        this.email = email;
-        this.gender = gender;
-        this.maxEnergy = maxEnergy;
-        this.energy = maxEnergy; // Start with full energy
-        this.money = 0; // Start with no money
-        this.backpack.getTools().add(new Hoe());
-        this.backpack.getTools().add(new Pickaxe());
-        this.backpack.getTools().add(new Axe());
-        this.backpack.getIngredientQuantity().put(new Coin() , 20);
-        this.backpack.getIngredientQuantity().put(new Wood() , 100);
-        this.relationships = new HashMap<>();
-    }
 
-    // Business logic methods
+    private Farm farm;
+    private Position currentPosition;
+    private RelationWithNPC relationWithAbigail;
+    private RelationWithNPC relationWithSebastian;
+    private RelationWithNPC relationWithHarvey;
+    private RelationWithNPC relationWithLeah;
+    private RelationWithNPC relationWithRobin;
 
     public Player(User currentUser) {
-        this.username = currentUser.getUsername(); 
-        this.nickname = currentUser.getNickname(); 
-        this.energy = maxEnergy; // Start with full energy
-        this.money = 0; // Start with no money
+        this.username = currentUser.getUsername();
+        this.nickname = currentUser.getNickname();
+        this.energy = maxEnergy;
+        this.currentPosition = new Position(0 , 0);
         this.backpack.getTools().add(new Hoe());
         this.backpack.getTools().add(new Pickaxe());
         this.backpack.getTools().add(new Axe());
-        this.backpack.getIngredientQuantity().put(new Coin() , 20);
-        this.backpack.getIngredientQuantity().put(new Wood() , 100);
+        this.backpack.getIngredientQuantity().put(new Coin(), 20);
+        this.backpack.getIngredientQuantity().put(new Wood(), 100);
+        this.relationWithAbigail = new RelationWithNPC(NPCType.Abigail);
+        this.relationWithSebastian = new RelationWithNPC(NPCType.Sebastian);
+        this.relationWithHarvey = new RelationWithNPC(NPCType.Harvey);
+        this.relationWithLeah = new RelationWithNPC(NPCType.Leah);
+        this.relationWithRobin = new RelationWithNPC(NPCType.Robin);
 
-        this.relationships = new HashMap<>();
     }
 
-//    public Farm getFarm(){
-//        return farm;
-//    }
-
-public void addEnergy(int energy) {
-    if(!isInfinite){
-        this.energy += energy;
-        this.energy = Math.min(this.energy, maxEnergy);
+    public void addEnergy(int energy) {
+        if (!isInfinite) {
+            this.energy += energy;
+            this.energy = Math.min(this.energy, maxEnergy);
+        }
     }
 
-
-
-}
     public void setCurrentTool(Tool currentTool) {
         this.currentTool = currentTool;
     }
@@ -98,27 +81,11 @@ public void addEnergy(int energy) {
         return backpack;
     }
 
-    public void changeEnergy(int amount) {
-        this.energy = Math.max(0, Math.min(maxEnergy, this.energy + amount));
-    }
 
-    public boolean canAfford(int cost) {
-        return this.money >= cost;
-    }
-
-    public void addMoney(int amount) {
-        this.money += amount;
-    }
-
-    public void deductMoney(int amount) {
-        if (canAfford(amount)) {
-            this.money -= amount;
-        }
-    }
-
-    public Ability getAbility(){
+    public Ability getAbility() {
         return ability;
     }
+
     public void faint() {
         isFaintedToday = true;
         App.getGameState().nextPlayerTurn();
@@ -130,27 +97,15 @@ public void addEnergy(int energy) {
     }
 
     public void consumeEnergy(int energy) {
-        if(isInfinite){
+        if (isInfinite) {
             return;
         }
         this.energy -= energy;
-        if(this.energy < 0){
+        if (this.energy < 0) {
             this.energy = 0;
             faint();
         }
     }
-
-//    public void addItem(Item item) {
-//        inventory.addItem(item);
-//    }
-//
-//    public void removeItem(Item item) {
-//        inventory.removeItem(item);
-//    }
-//
-//    public boolean hasItem(Item item) {
-//        return inventory.hasItem(item);
-//    }
 
     public boolean isUnlimitedEnergy() {
         return unlimitedEnergy;
@@ -159,17 +114,6 @@ public void addEnergy(int energy) {
     public void setUnlimitedEnergy(boolean unlimitedEnergy) {
         this.unlimitedEnergy = unlimitedEnergy;
     }
-
-//    public void updateQuest(QuestStatus questStatus) {
-//        // Update quest logic here
-//    }
-
-    // public int getCurrentSkillLevel(SkillType skillType) {
-    //     Skill skill = skills.get(skillType);
-    //     return skill != null ? skill.getLevel() : 0;
-    // }
-
-    // Getters and setters for all attributes
 
     public String getUsername() {
         return username;
@@ -189,59 +133,64 @@ public void addEnergy(int energy) {
     }
 
 
-    public Coordinate getCurrentLocation() {
-        return currentLocation;
-    }
-
-    public void setCurrentLocation(Coordinate currentLocation) {
-        this.currentLocation = currentLocation;
-    }
-
     public Backpack getInventory() {
         return inventory;
     }
 
     public void setInventory(Backpack inventory) {
         this.inventory = inventory;
+
+    }
+
+    public Farm getFarm(){
+        return farm;
+    }
+
+    public void setFarm(Farm map){
+        this.farm = map;
+    }
+    public Position getPosition(){
+        return currentPosition;
     }
 
 
-    public Map<String, Relationship> getRelationships() {
-        return relationships;
+    public RelationWithNPC getRelationWithAbigail() {
+        return relationWithAbigail;
     }
 
-    public void setRelationships(Map<String, Relationship> relationships) {
-        this.relationships = relationships;
+    public void setRelationWithAbigail(RelationWithNPC relationWithAbigail) {
+        this.relationWithAbigail = relationWithAbigail;
     }
 
-    public FarmMap getFarmMapReference() {
-        return farmMapReference;
+    public RelationWithNPC getRelationWithSebastian() {
+        return relationWithSebastian;
     }
 
-    public void setFarmMapReference(FarmMap farmMapReference) {
-        this.farmMapReference = farmMapReference;
+    public void setRelationWithSebastian(RelationWithNPC relationWithSebastian) {
+        this.relationWithSebastian = relationWithSebastian;
     }
 
-
-    public String getCurrentMapId() {
-        return currentMapId;
+    public RelationWithNPC getRelationWithHarvey() {
+        return relationWithHarvey;
     }
 
-    public void setCurrentMapId(String currentMapId) {
-        this.currentMapId = currentMapId;
+    public void setRelationWithHarvey(RelationWithNPC relationWithHarvey) {
+        this.relationWithHarvey = relationWithHarvey;
     }
 
-    public Coordinate getCurrentCoordinate() {
-        return currentCoordinate;
+    public RelationWithNPC getRelationWithLeah() {
+        return relationWithLeah;
     }
 
-    public void setCurrentCoordinate(Coordinate currentCoordinate) {
-        this.currentCoordinate = currentCoordinate;
+    public void setRelationWithLeah(RelationWithNPC relationWithLeah) {
+        this.relationWithLeah = relationWithLeah;
     }
 
-    public void initializeFarm(FarmMap farmMap) {
-        setFarmMapReference(farmMap);
-        setCurrentMapId(farmMap.getMapId());
-        setCurrentCoordinate(new Coordinate(0, 0)); 
+    public RelationWithNPC getRelationWithRobin() {
+        return relationWithRobin;
+    }
+
+    public void setRelationWithRobin(RelationWithNPC relationWithRobin) {
+        this.relationWithRobin = relationWithRobin;
     }
 }

@@ -1,25 +1,17 @@
 package com.yourgame.model.Stores;
 
 import java.awt.*;
-import java.util.ArrayList;
 
-public class MarnieRanch extends Store {
+public class StardropSaloon extends Store {
 
-    private ArrayList<ShopItem> inventory;
 
-    public MarnieRanch(int x, int y, int width, int height) {
-        super(new Rectangle(x, y, width, height), "Marnie", 9, 16);
+    public StardropSaloon(int x, int y, int width, int height) {
+        super(new Rectangle(x,y,width,height),"Gus",12,24);
     }
-
 
     @Override
     public char getSymbol() {
-        return '♞';
-    }
-
-    @Override
-    public void loadInventory() {
-        
+        return '☕';
     }
 
 //    @Override

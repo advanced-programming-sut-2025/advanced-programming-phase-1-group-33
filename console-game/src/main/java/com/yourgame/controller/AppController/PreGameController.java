@@ -5,9 +5,11 @@ import java.util.List;
 
 import com.yourgame.model.App;
 import com.yourgame.model.GameState;
+import com.yourgame.model.Map.Farm;
+import com.yourgame.model.Map.FarmFactory;
+import com.yourgame.model.Map.Map;
 import com.yourgame.model.UserInfo.Player;
 import com.yourgame.model.IO.Response;
-import com.yourgame.model.Map.MapManager;
 import com.yourgame.model.WeatherAndTime.TimeSystem;
 import com.yourgame.model.WeatherAndTime.Weather;
 import com.yourgame.model.enums.Commands.MenuTypes;
@@ -59,22 +61,47 @@ public class PreGameController {
     // return Result.success("Unimplemented method 'LOAD_GAME'");
     // }
     //
-    public Response createNewGame(List<Player> players) {
+
+    public Response selectMapForCreateNewGame(int  mapInput, Player player , int sx , int sy) {
+        if(mapInput > 4 || mapInput < 1){
+            return new Response(false, "please select between available maps");
+        }
+
+        switch (mapInput){
+            case 1:
+                player.setFarm(FarmFactory.makeFarm1(sx  ,sy));
+                break;
+            case 2:
+                player.setFarm(FarmFactory.makeFarm2(sx , sy));
+                break;
+            case 3:
+                player.setFarm(FarmFactory.makeFarm3(sx ,sy));
+                break;
+            case 4:
+                player.setFarm(FarmFactory.makeFarm4(sx  ,sy));
+                break;
+
+        }
+
+
+        return new Response(true, "map selected successfully");
+    }
+
+    public Response createNewGame(ArrayList<Player> players) {
         // Create components for your game state
-        TimeSystem gameTime = new TimeSystem(); // initialize game time
-        Weather weather = Weather.Sunny; // initialize weather system
+        ArrayList<Farm> maps = new ArrayList<>();
+        for(Player p : players){
+            maps.add(p.getFarm());
 
-        // Create map manager and maps
-        MapManager mapManager = new MapManager(players);
+        }
 
-        // Create a new game state instance with the mapManager (change constructor if needed)
-        GameState gameState = new GameState(players, weather, mapManager, new ArrayList<>());
-        gameState.startGame();
-        gameState.setCurrentPlayer(players.get(0));
+        Map m = new Map(maps);
+        m.buildMap(players);
+        GameState x = new GameState(players, maps , App.getCurrentUser() , m);
 
-        // Optionally, store the mapManager in GameState or a global App class
-        App.setGameState(gameState);
-        App.setCurrentMenu(MenuTypes.GameMenu);
-        return new Response(true, "New game started! Entering game menu...");
+
+        App.setGameState(x);
+        App.getGameState().setCurrentPlayer(players.getFirst());
+        return new Response(true, "new game created successfully");
     }
 }

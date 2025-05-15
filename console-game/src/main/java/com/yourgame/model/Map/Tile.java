@@ -1,39 +1,71 @@
 package com.yourgame.model.Map;
+import com.yourgame.model.Item.Fertilizer;
+import com.yourgame.model.Placeable;
 import com.yourgame.model.enums.TileType;
 
 public class Tile {
-    private TileType type;
-    private Object content; // Could be Item, ResourceNode, Building, etc.
+    private Position position;
+    private boolean gotThunder;
+    private char symbol = '#';
+    private boolean walkable ;
+    private Placeable placeable;
+    private boolean isPlowed = false;
+    private Fertilizer fertilizer = null;
+    public Tile(Position position) {
+        this.position = position;
+        this.gotThunder = false;
+        this.walkable = true;
 
-    public Tile(TileType type) {
-        this.type = type;
-        // this.content = null;
+    }
+    public void setPosition(Position position) {
+        this.position = position;
     }
 
-    // Getters and Setters
 
-    public TileType getType() {
-        return type;
+    public Position getPosition() {
+        return position;
+
+    }
+    public char getSymbol() {
+        return symbol;
+    }
+    public void setSymbol(char symbol) {
+        this.symbol = symbol;
+    }
+    public boolean isGotThunder() {
+        return gotThunder;
+    }
+    public void setGotThunder(boolean gotThunder) {
+        this.gotThunder = gotThunder;
     }
 
-    public void setType(TileType type) {
-        this.type = type;
+    public boolean isWalkable() {
+        return walkable;
     }
 
-
-    public Object getContent() {
-        return content;
+    public void setWalkable(boolean walkable) {
+        this.walkable = walkable;
+    }
+    public Placeable getPlaceable() {
+        return placeable;
+    }
+    public void setPlaceable(Placeable placeable) {
+        this.placeable = placeable;
     }
 
-    public void setContent(Object content) {
-        this.content = content;
+    public boolean isPlowed() {
+        return isPlowed;
     }
 
-    public boolean isOccupied() {
-        return content != null;
+    public void setPlowed(boolean plowed) {
+        isPlowed = plowed;
     }
 
-    public void clearContent() {
-        this.content = null;
+    public Fertilizer getFertilizer() {
+        return fertilizer;
+    }
+
+    public void setFertilizer(Fertilizer fertilizer) {
+        this.fertilizer = fertilizer;
     }
 }
