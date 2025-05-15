@@ -16,6 +16,7 @@ import com.yourgame.model.UserInfo.Coin;
 import com.yourgame.model.UserInfo.Player;
 import com.yourgame.model.WeatherAndTime.Season;
 import com.yourgame.model.WeatherAndTime.Weather;
+import com.yourgame.model.enums.SymbolType;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -232,7 +233,7 @@ public class NPC {
         return this.type.getDialogues().get(index);
     }
 
-    public char getSymbol() {
+    public SymbolType getSymbol() {
         return this.type.getSymbol();
     }
 

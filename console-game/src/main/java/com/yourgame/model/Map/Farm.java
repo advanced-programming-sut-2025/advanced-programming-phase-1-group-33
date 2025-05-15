@@ -5,6 +5,7 @@ import com.yourgame.model.Animals.Habitat;
 import com.yourgame.model.Item.Crop;
 import com.yourgame.model.Item.Tree;
 import com.yourgame.model.Map.Water.Lake;
+import com.yourgame.model.enums.SymbolType;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -80,7 +81,7 @@ public class Farm {
     public void setTilesSymbol(Tile[][] tiles) {
         for(int i = this.rectangle.x ; i < this.rectangle.x+this.rectangle.width ; i++) {
             for(int j=this.rectangle.y ; j < this.rectangle.y+this.rectangle.height ; j++) {
-                tiles[i][j].setSymbol('.');
+                tiles[i][j].setSymbol(SymbolType.DefaultFloor);
             }
         }
     }

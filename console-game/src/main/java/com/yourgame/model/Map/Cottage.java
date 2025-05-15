@@ -3,6 +3,8 @@ package com.yourgame.model.Map;
 
 import java.awt.*;
 
+import com.yourgame.model.enums.SymbolType;
+
 public class Cottage implements Placeable {
     private final Rectangle bounds;
     public Cottage(int x, int y, int width, int height) {
@@ -11,8 +13,8 @@ public class Cottage implements Placeable {
     public Rectangle getBounds() {
         return bounds;
     }
-    public char getSymbol() {
-        return 'C';
+    public SymbolType getSymbol() {
+        return SymbolType.Cottage;
     }
 
 }

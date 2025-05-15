@@ -23,7 +23,7 @@ public class PreGameMenu implements AppMenu {
         PreGameMenuCommands command = PreGameMenuCommands.parse(input);
         switch (command) {
             case New_GAME:
-                return getNewGame(input);
+                return getNewGame(input, scanner);
             case LOAD_GAME:
                 return getLoadGame(input);
             case GO_Back:
@@ -45,7 +45,7 @@ public class PreGameMenu implements AppMenu {
         throw new UnsupportedOperationException("Unimplemented method 'getLoadGame'");
     }
 
-private Response getNewGame(String input) {
+private Response getNewGame(String input, Scanner scanner) {
     // Split input assuming format: "New_GAM user1 user2 user3"
     String stringUsers= PreGameMenuCommands.New_GAME.getGroup(input, "usernames");
     String[] tokens = stringUsers.trim().split("\\s+");
@@ -84,7 +84,6 @@ private Response getNewGame(String input) {
     App.setCurrentMenu(MenuTypes.GameMenu);
     int[] startXForMap = {0 ,150 ,0 ,150 };
     int[] startYForMap = {0 , 0 , 125 ,125};
-    Scanner scanner = new Scanner(System.in);
     Pattern pattern = Pattern.compile("^\\s*game\\s+map\\s+(?<mapNumber>\\d+)$");
     for(int i=0 ; i<players.size()  ; i++){
         String command;

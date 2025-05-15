@@ -3,6 +3,8 @@ package com.yourgame.model.Stores;
 import java.awt.*;
 import java.util.ArrayList;
 
+import com.yourgame.model.enums.SymbolType;
+
 public class MarnieRanch extends Store {
 
     private ArrayList<ShopItem> inventory;
@@ -13,8 +15,8 @@ public class MarnieRanch extends Store {
 
 
     @Override
-    public char getSymbol() {
-        return '♞';
+    public SymbolType getSymbol() {
+        return SymbolType.MarnieRanch;
     }
 
     @Override

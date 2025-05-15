@@ -3,7 +3,7 @@ package com.yourgame.model.Item;
 import com.yourgame.model.App;
 import com.yourgame.model.Map.Placeable;
 import com.yourgame.model.WeatherAndTime.TimeSystem;
-
+import com.yourgame.model.enums.SymbolType;
 
 import java.awt.*;
 
@@ -42,8 +42,8 @@ public class Tree implements Growable, Placeable {
         return bounds;
     }
 
-    public char getSymbol() {
-        return 'T';
+    public SymbolType getSymbol() {
+        return SymbolType.Tree;
     }
 
     public TreeType getType() {

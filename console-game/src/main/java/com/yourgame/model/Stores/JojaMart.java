@@ -2,6 +2,8 @@ package com.yourgame.model.Stores;
 
 import java.awt.*;
 
+import com.yourgame.model.enums.SymbolType;
+
 public class JojaMart extends Store {
 
 
@@ -10,8 +12,8 @@ public class JojaMart extends Store {
     }
 
     @Override
-    public char getSymbol() {
-        return 'J';
+    public SymbolType getSymbol() {
+        return SymbolType.JojaMart;
     }
 
 //    @Override

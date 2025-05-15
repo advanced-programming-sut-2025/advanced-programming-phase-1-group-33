@@ -2,6 +2,8 @@ package com.yourgame.model.Stores;
 
 import java.awt.*;
 
+import com.yourgame.model.enums.SymbolType;
+
 public class PierreGeneralStore extends Store {
 
 
@@ -10,8 +12,8 @@ public class PierreGeneralStore extends Store {
     }
 
     @Override
-    public char getSymbol() {
-        return '⚙';
+    public SymbolType getSymbol() {
+        return SymbolType.PierreGeneralStore;
     }
 
 //    @Override

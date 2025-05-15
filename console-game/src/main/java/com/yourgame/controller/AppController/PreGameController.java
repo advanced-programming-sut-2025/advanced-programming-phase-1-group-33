@@ -12,6 +12,7 @@ import com.yourgame.model.UserInfo.Player;
 import com.yourgame.model.IO.Response;
 import com.yourgame.model.WeatherAndTime.TimeSystem;
 import com.yourgame.model.WeatherAndTime.Weather;
+import com.yourgame.model.enums.TileType;
 import com.yourgame.model.enums.Commands.MenuTypes;
 
 public class PreGameController {
@@ -96,7 +97,7 @@ public class PreGameController {
         }
 
         Map m = new Map(maps);
-        m.buildMap(players);
+        m.buildMap(players, TileType.GRASS);
         GameState x = new GameState(players, maps , App.getCurrentUser() , m);
 
 

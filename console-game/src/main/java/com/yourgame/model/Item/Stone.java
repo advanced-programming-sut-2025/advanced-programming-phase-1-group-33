@@ -2,6 +2,7 @@ package com.yourgame.model.Item;
 
 import com.yourgame.model.ManuFactor.Ingredient;
 import com.yourgame.model.Map.Placeable;
+import com.yourgame.model.enums.SymbolType;
 
 import java.awt.*;
 
@@ -20,8 +21,8 @@ public class Stone implements Ingredient, Placeable {
         return bounds;
     }
 
-    public char getSymbol() {
-        return 'S';
+    public SymbolType getSymbol() {
+        return SymbolType.StoneItem;
     }
 
     @Override

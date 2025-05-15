@@ -1,33 +1,35 @@
 package com.yourgame.model.Map;
 import com.yourgame.model.Item.Fertilizer;
+import com.yourgame.model.enums.SymbolType;
+import com.yourgame.model.enums.TileType;
 
 public class Tile {
     private Position position;
     private boolean gotThunder;
-    private char symbol = '#';
+    private SymbolType symbol = SymbolType.WALL;
     private boolean walkable ;
     private Placeable placeable;
     private boolean isPlowed = false;
     private Fertilizer fertilizer = null;
     public Tile(Position position) {
-        this.position = position;
         this.gotThunder = false;
         this.walkable = true;
-
+        
     }
+
     public void setPosition(Position position) {
         this.position = position;
     }
-
-
+    
+    
     public Position getPosition() {
         return position;
 
     }
-    public char getSymbol() {
+    public SymbolType getSymbol() {
         return symbol;
     }
-    public void setSymbol(char symbol) {
+    public void setSymbol(SymbolType symbol) {
         this.symbol = symbol;
     }
     public boolean isGotThunder() {

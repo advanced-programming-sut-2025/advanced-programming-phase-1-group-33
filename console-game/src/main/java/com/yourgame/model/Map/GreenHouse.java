@@ -3,6 +3,8 @@ package com.yourgame.model.Map;
 
 import java.awt.*;
 
+import com.yourgame.model.enums.SymbolType;
+
 public class GreenHouse implements Placeable {
     private boolean isBroken;
     private final Rectangle bounds;
@@ -18,7 +20,7 @@ public class GreenHouse implements Placeable {
     public void setBroken(boolean broken) {
         isBroken = broken;
     }
-    public char getSymbol() {
-        return 'G';
+    public SymbolType getSymbol() {
+        return SymbolType.GreenHouse;
     }
 }

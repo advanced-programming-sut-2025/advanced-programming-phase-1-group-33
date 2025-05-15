@@ -2,6 +2,8 @@ package com.yourgame.model.Stores;
 
 import java.awt.*;
 
+import com.yourgame.model.enums.SymbolType;
+
 public class CarpenterShop extends Store {
 
     public CarpenterShop(int x , int y, int width, int height) {
@@ -9,8 +11,8 @@ public class CarpenterShop extends Store {
     }
 
     @Override
-    public char getSymbol() {
-        return 'w';
+    public SymbolType getSymbol() {
+        return SymbolType.CarpenterShop;
     }
 
 

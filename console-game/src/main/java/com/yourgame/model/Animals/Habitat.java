@@ -1,6 +1,7 @@
 package com.yourgame.model.Animals;
 
 import com.yourgame.model.Map.Placeable;
+import com.yourgame.model.enums.SymbolType;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -59,10 +60,10 @@ public class Habitat implements Placeable {
     public Rectangle getBounds() {
         return bounds;
     }
-    public char getSymbol() {
+    public SymbolType getSymbol() {
         if(type == HabitatType.Barn) {
-            return 'b';
+            return SymbolType.HabitatBarn;
         }
-        return 'c';
+        return SymbolType.HabitatDefault;
     }
 }

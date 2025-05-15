@@ -3,6 +3,7 @@ package com.yourgame.model.Stores;
 
 import com.yourgame.model.App;
 import com.yourgame.model.Map.Placeable;
+import com.yourgame.model.enums.SymbolType;
 
 import java.awt.*;
 
@@ -42,7 +43,7 @@ public abstract class Store implements Placeable {
         return App.getGameState().getGameTime().getHour() >= startHour && App.getGameState().getGameTime().getHour() <= endHour;
     }
 
-    public abstract char getSymbol();
+    public abstract SymbolType getSymbol();
     public void loadInventory() {
 
     }

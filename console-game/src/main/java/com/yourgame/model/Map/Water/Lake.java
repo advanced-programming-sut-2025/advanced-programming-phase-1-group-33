@@ -2,6 +2,7 @@ package com.yourgame.model.Map.Water;
 
 
 import com.yourgame.model.Map.Placeable;
+import com.yourgame.model.enums.SymbolType;
 
 import java.awt.*;
 
@@ -14,7 +15,7 @@ public class Lake extends WaterBody implements Placeable {
     public Rectangle getBounds() {
         return bounds;
     }
-    public char getSymbol() {
-        return 'L';
+    public SymbolType getSymbol() {
+        return SymbolType.Lake;
     }
 }

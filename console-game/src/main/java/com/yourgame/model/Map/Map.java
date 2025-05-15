@@ -13,6 +13,8 @@ import com.yourgame.model.Npc.NPCType;
 import com.yourgame.model.Stores.*;
 import com.yourgame.model.UserInfo.Player;
 import com.yourgame.model.WeatherAndTime.Weather;
+import com.yourgame.model.enums.SymbolType;
+import com.yourgame.model.enums.TileType;
 import com.yourgame.model.App;
 
 import java.awt.*;
@@ -45,7 +47,7 @@ public class Map {
         return findTile(position.getX(), position.getY());
     }
 
-    public void buildMap(ArrayList<Player> players) {
+    public void buildMap(ArrayList<Player> players, TileType tileType) {
         for (int i = 0; i < tiles.length; i++) {
             for (int j = 0; j < tiles[i].length; j++) {
                 tiles[i][j] = new Tile(new Position(i, j));
@@ -101,7 +103,7 @@ public class Map {
         }
         for(int i=this.npcVillage.getRectangle().x ; i<this.npcVillage.getRectangle().x + this.npcVillage.getRectangle().width; i++) {
             for(int j = this.npcVillage.getRectangle().y ; j < this.npcVillage.getRectangle().y + this.npcVillage.getRectangle().height; j++) {
-                tiles[i][j].setSymbol('.');
+                tiles[i][j].setSymbol(SymbolType.NpcVillageFLOOR);
             }
         }
         for(Placeable p : this.npcVillage.getPlaceables()){
@@ -147,7 +149,7 @@ public class Map {
         for (int y = 0; y < 200; y++) {
             for (int x = 0; x < 250; x++) {
                 if(findTile(x, y).equals(findTile(App.getGameState().getCurrentPlayer().getPosition()))){
-                    System.out.print('p');
+                    System.out.print(SymbolType.PLAYER);
                 }
                 else{
                     System.out.print(tiles[x][y].getSymbol());
@@ -162,12 +164,12 @@ public class Map {
     public void setBorderFarmsAndNpcVillage() {
 
         for(int i = 0 ; i < 200 ; i++){
-            tiles[99][i].setSymbol('+');
-            tiles[149][i].setSymbol('+');
+            tiles[99][i].setSymbol(SymbolType.FARMBORDER);
+            tiles[149][i].setSymbol(SymbolType.FARMBORDER);
         }
         for(int i =0 ; i<250 ; i++){
-            tiles[i][74].setSymbol('+');
-            tiles[i][124].setSymbol('+');
+            tiles[i][74].setSymbol(SymbolType.FARMBORDER);
+            tiles[i][124].setSymbol(SymbolType.FARMBORDER);
         }
 
     }
@@ -211,7 +213,7 @@ public class Map {
         for(int i=x ;i<x+ width ; i++){
             for(int j=y ;j<y+ height ;j++){
                 tiles[i][j].setWalkable(true);
-                tiles[i][j].setSymbol('d');
+                tiles[i][j].setSymbol(SymbolType.WalkableDoor);
             }
         }
     }
@@ -254,7 +256,7 @@ public class Map {
                     tile.setWalkable(true );
                     tile.setGotThunder(true);
                     tile.setPlaceable(null);
-                    tile.setSymbol('.');
+                    tile.setSymbol(SymbolType.ThunderBy);
                 }
             }
         }

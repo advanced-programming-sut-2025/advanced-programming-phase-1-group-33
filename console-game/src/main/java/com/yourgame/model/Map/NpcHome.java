@@ -2,6 +2,7 @@ package com.yourgame.model.Map;
 
 
 import com.yourgame.model.Npc.NPC;
+import com.yourgame.model.enums.SymbolType;
 
 import java.awt.*;
 
@@ -21,7 +22,7 @@ public class NpcHome implements Placeable {
         return npc;
     }
 
-    public char getSymbol() {
+    public SymbolType getSymbol() {
         return npc.getSymbol();
     }
 }

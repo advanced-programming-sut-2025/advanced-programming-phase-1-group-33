@@ -2,6 +2,7 @@ package com.yourgame.model.Map;
 
 
 import com.yourgame.model.Item.ForagingMineral;
+import com.yourgame.model.enums.SymbolType;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -16,8 +17,8 @@ public class Quarry implements Placeable {
     public Rectangle getBounds() {
         return bounds;
     }
-    public char getSymbol() {
-        return 'Q';
+    public SymbolType getSymbol() {
+        return SymbolType.Quarry;
     }
     public ArrayList<ForagingMineral> getForagingMinerals() {
         return foragingMinerals;

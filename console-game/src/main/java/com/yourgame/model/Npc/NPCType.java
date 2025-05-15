@@ -1,25 +1,27 @@
 package com.yourgame.model.Npc;
 import java.util.ArrayList;
 
+import com.yourgame.model.enums.SymbolType;
+
 public enum NPCType {
 
     Abigail("Abigail", "Gamer",
-            NPCDialogues.AbigailDialogues.getDialogues(), 'a'),
+            NPCDialogues.AbigailDialogues.getDialogues(), SymbolType.ABIGAIL),
     Sebastian("Sebastian", "Freelancer",
-            NPCDialogues.SebastianDialogues.getDialogues(), 's'),
+            NPCDialogues.SebastianDialogues.getDialogues(), SymbolType.SEBASTIAN),
     Harvey("Harvey", "Town doctor",
-            NPCDialogues.HarveyDialogues.getDialogues(), 'h'),
+            NPCDialogues.HarveyDialogues.getDialogues(), SymbolType.HARVEY),
     Leah("Leah", "Artist",
-            NPCDialogues.LeahDialogues.getDialogues(), 'l'),
+            NPCDialogues.LeahDialogues.getDialogues(), SymbolType.LEAH),
     Robin("Robin", "Carpenter",
-            NPCDialogues.RobinDialogues.getDialogues(), 'r');
+            NPCDialogues.RobinDialogues.getDialogues(), SymbolType.ROBIN);
 
     private final String name;
     private final String job;
     private final ArrayList<String> dialogues;
-    private final char symbol;
+    private final SymbolType symbol;
 
-    NPCType(String name, String job, ArrayList<String> dialogues, char symbol) {
+    NPCType(String name, String job, ArrayList<String> dialogues, SymbolType symbol) {
         this.name = name;
         this.job = job;
         this.dialogues = dialogues;
@@ -42,7 +44,7 @@ public enum NPCType {
         return 799;
     }
 
-    public char getSymbol() {
+    public SymbolType getSymbol() {
         return symbol;
     }
 }

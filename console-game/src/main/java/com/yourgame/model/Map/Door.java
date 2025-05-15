@@ -3,6 +3,8 @@ package com.yourgame.model.Map;
 
 import java.awt.*;
 
+import com.yourgame.model.enums.SymbolType;
+
 public class Door implements Placeable {
     private final Rectangle doorPosition;
     public Door(int x, int y , int width, int height) {
@@ -11,7 +13,7 @@ public class Door implements Placeable {
     public Rectangle getBounds() {
         return doorPosition;
     }
-    public char getSymbol() {
-        return 'd';
+    public SymbolType getSymbol() {
+        return SymbolType.WalkableDoor;
     }
 }

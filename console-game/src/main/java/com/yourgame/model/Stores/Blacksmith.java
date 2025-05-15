@@ -3,6 +3,7 @@ package com.yourgame.model.Stores;
 
 import com.yourgame.model.Item.ForagingMineral;
 import com.yourgame.model.ManuFactor.ArtisanGoodType;
+import com.yourgame.model.enums.SymbolType;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -17,12 +18,12 @@ public class Blacksmith extends Store {
 
 
     @Override
-    public char getSymbol() {
-        return '⚒';
+    public SymbolType getSymbol() {
+        return SymbolType.Blacksmith;
     }
 
     @Override
-    public void loadInventory() {
+        public void loadInventory() {
 
         this.inventory = new ArrayList<>();
         inventory.add(new BlackSmithStocksItem("Cooper Ore", ForagingMineral.Copper, 75 , Integer.MAX_VALUE));
