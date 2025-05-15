@@ -10,7 +10,6 @@ import com.yourgame.model.Item.ForagingMineral;
 import com.yourgame.model.Item.Tree;
 import com.yourgame.model.Npc.NPC;
 import com.yourgame.model.Npc.NPCType;
-import com.yourgame.model.Placeable;
 import com.yourgame.model.Stores.*;
 import com.yourgame.model.UserInfo.Player;
 import com.yourgame.model.WeatherAndTime.Weather;

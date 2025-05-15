@@ -5,7 +5,6 @@ import com.yourgame.model.Animals.Habitat;
 import com.yourgame.model.Item.Crop;
 import com.yourgame.model.Item.Tree;
 import com.yourgame.model.Map.Water.Lake;
-import com.yourgame.model.Placeable;
 
 import java.awt.*;
 import java.util.ArrayList;

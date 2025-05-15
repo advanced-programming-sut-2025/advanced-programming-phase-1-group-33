@@ -2,7 +2,6 @@ package com.yourgame.model.Map;
 
 
 import com.yourgame.model.ManuFactor.Ingredient;
-import com.yourgame.model.Placeable;
 
 import java.awt.*;
 

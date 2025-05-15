@@ -1,6 +1,5 @@
 package com.yourgame.model.Map;
 
-import com.yourgame.model.Placeable;
 import com.yourgame.model.Stores.*;
 
 import java.awt.*;

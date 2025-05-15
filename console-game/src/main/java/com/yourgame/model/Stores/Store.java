@@ -2,7 +2,7 @@ package com.yourgame.model.Stores;
 
 
 import com.yourgame.model.App;
-import com.yourgame.model.Placeable;
+import com.yourgame.model.Map.Placeable;
 
 import java.awt.*;
 

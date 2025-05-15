@@ -1,7 +1,6 @@
 package com.yourgame.model.Map;
 
 
-import com.yourgame.model.Placeable;
 import java.awt.*;
 
 public class Cottage implements Placeable {

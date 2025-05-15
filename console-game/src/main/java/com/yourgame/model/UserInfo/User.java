@@ -1,7 +1,5 @@
 package com.yourgame.model.UserInfo;
 
-import com.yourgame.model.SecurityQuestion;
-
 public class User {
     private String Username;
     private String Password;

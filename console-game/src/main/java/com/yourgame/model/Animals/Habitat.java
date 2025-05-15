@@ -1,6 +1,6 @@
 package com.yourgame.model.Animals;
 
-import com.yourgame.model.Placeable;
+import com.yourgame.model.Map.Placeable;
 
 import java.awt.*;
 import java.util.ArrayList;

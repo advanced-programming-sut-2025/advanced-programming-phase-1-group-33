@@ -1,7 +1,7 @@
 package com.yourgame.model.Map.Water;
 
 
-import com.yourgame.model.Placeable;
+import com.yourgame.model.Map.Placeable;
 
 import java.awt.*;
 

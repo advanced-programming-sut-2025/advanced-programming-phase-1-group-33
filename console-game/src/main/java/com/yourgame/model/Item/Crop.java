@@ -2,7 +2,7 @@ package com.yourgame.model.Item;
 
 import com.yourgame.model.App;
 import com.yourgame.model.ManuFactor.Ingredient;
-import com.yourgame.model.Placeable;
+import com.yourgame.model.Map.Placeable;
 import com.yourgame.model.WeatherAndTime.TimeSystem;
 
 import java.awt.*;

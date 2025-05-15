@@ -1,7 +1,5 @@
 package com.yourgame.model.Map;
 import com.yourgame.model.Item.Fertilizer;
-import com.yourgame.model.Placeable;
-import com.yourgame.model.enums.TileType;
 
 public class Tile {
     private Position position;

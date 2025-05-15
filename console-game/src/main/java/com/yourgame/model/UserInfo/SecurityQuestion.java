@@ -1,4 +1,4 @@
-package com.yourgame.model;
+package com.yourgame.model.UserInfo;
 
 public class SecurityQuestion {
     private final String question;

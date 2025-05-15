@@ -4,7 +4,7 @@ import com.yourgame.model.*;
 import com.yourgame.model.IO.*;
 import com.yourgame.model.UserInfo.User;
 import com.yourgame.model.enums.Commands.MenuTypes;
-import com.yourgame.model.SecurityQuestion;
+import com.yourgame.model.UserInfo.SecurityQuestion;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;

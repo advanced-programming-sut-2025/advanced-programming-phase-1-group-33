@@ -1,8 +1,6 @@
 package com.yourgame.model.Map;
 
 
-import com.yourgame.model.Placeable;
-
 import java.awt.*;
 
 public class GreenHouse implements Placeable {

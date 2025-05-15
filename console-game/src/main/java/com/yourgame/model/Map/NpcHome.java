@@ -2,7 +2,6 @@ package com.yourgame.model.Map;
 
 
 import com.yourgame.model.Npc.NPC;
-import com.yourgame.model.Placeable;
 
 import java.awt.*;
 
