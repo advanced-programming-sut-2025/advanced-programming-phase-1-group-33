@@ -57,13 +57,6 @@ walk -l 1, 0
 walk -l 1, 0
 walk -l 31 , 31 
 walk -l 1, 0
-walk -l 31 , 31 
-walk -l 1, 0
-walk -l 31 , 31 
-walk -l 1, 0
-walk -l 31 , 31 
-walk -l 1, 0
-walk -l 31 , 31 
 walk -l 1, 0
 walk -l 31 , 31 
 walk -l 1, 0
@@ -93,5 +86,13 @@ cheat add 2000 dollars
 time
 date
 tools upgrade axe
+walk -l 205, 37
+print map -l 205, 37 -s 90 
+walk -l 205, 41
+walk 2, 3 
+tools equip pickaxe
+tools use -d down
+tools use -d right
 go back
+
 exit

@@ -59,13 +59,15 @@ public class GameMenu implements AppMenu {
             case GREEN_HOUSE_BUILD:
                 return getBuildGreenHouse();
             case SHOW_MY_POSITION:
-                return getMyPOsition(); 
+                return getMyPOsition();
             case WALK:
                 return getWalk(input);
+            case WALK_FROM_HERE_AND_SHOW_MAP:
+                return getWalkFromHereAndShowMap(input);
             case PRINT_MAP:
                 return getPrintMap(input);
             case PRINT_Whole_MAP:
-                return getPrintWholeMap(input); 
+                return getPrintWholeMap(input);
             case HELP_READING_MAP:
                 return getHelpRedning();
             case ENERGY_SHOW:
@@ -98,7 +100,7 @@ public class GameMenu implements AppMenu {
             case TOOLS_UPGRADE:
                 return getToolUpgradeResponse(input);
             case CHEAT_ADD_DOLLARS:
-                return getAddDollars(input); 
+                return getAddDollars(input);
             case CRAFT_INFO:
                 return showCraftInfo(input);
             case CRAFTING_SHOW_RECIPES:
@@ -120,32 +122,39 @@ public class GameMenu implements AppMenu {
         }
     }
 
+    private Response getWalkFromHereAndShowMap(String input) {
+        Request request = new Request(input);
+        request.body.put("x", GameViewCommands.WALK_FROM_HERE_AND_SHOW_MAP.getGroup(input, "x"));
+        request.body.put("y", GameViewCommands.WALK_FROM_HERE_AND_SHOW_MAP.getGroup(input, "y"));
+        return controller.getWalk_FromHereAndShowMap(request);
+    }
+
     private Response getToolsUseDirection(String input) {
         Request request = new Request(input);
         request.body.put("direction", GameViewCommands.TOOLS_USE_DIRECTION.getGroup(input, "direction"));
-        
-        return controller.getUseTool(request); 
+
+        return controller.getUseTool(request);
     }
 
     private Response getAddDollars(String input) {
         Request request = new Request(input);
         request.body.put("amount", GameViewCommands.CHEAT_ADD_DOLLARS.getGroup(input, "amount"));
-        
-        return controller.getAddDollars(request); 
+
+        return controller.getAddDollars(request);
     }
 
-	private Response getToolUpgradeResponse(String input) {
+    private Response getToolUpgradeResponse(String input) {
         Request request = new Request(input);
         request.body.put("name", GameViewCommands.TOOLS_UPGRADE.getGroup(input, "name"));
 
-        return controller.getToolUpgrade(request); 
+        return controller.getToolUpgrade(request);
     }
 
-	private Response getMyPOsition() {
+    private Response getMyPOsition() {
         return controller.showMyPostion();
     }
 
-	private Response getEatResponse(String input) {
+    private Response getEatResponse(String input) {
         Response response;
         Request request = new Request(input);
         request.body.put("foodName", GameViewCommands.EAT.getGroup(input, "foodName"));
@@ -217,7 +226,7 @@ public class GameMenu implements AppMenu {
     // }
 
     private Response getHelpRedning() {
-        return controller.getHelpRedning(); 
+        return controller.getHelpRedning();
     }
 
     private Response getPrintMap(String input) {

@@ -13,9 +13,9 @@ public class Tile {
     private boolean isPlowed = false;
     private Fertilizer fertilizer = null;
     public Tile(Position position) {
+        this.position = position; 
         this.gotThor = false;
         this.walkable = true;
-        
     }
 
     public void setPosition(Position position) {
@@ -25,7 +25,6 @@ public class Tile {
     
     public Position getPosition() {
         return position;
-
     }
     public SymbolType getSymbol() {
         return symbol;

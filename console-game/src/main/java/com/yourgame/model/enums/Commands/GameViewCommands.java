@@ -3,8 +3,7 @@ package com.yourgame.model.enums.Commands;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-
-public enum GameViewCommands implements Command{
+public enum GameViewCommands implements Command {
     TIME("^time$"),
     DATE("^date$"),
     DATETIME("^datetime$"),
@@ -29,7 +28,8 @@ public enum GameViewCommands implements Command{
     TOOLS_UPGRADE("\\s*tools\\s+upgrade\\s+(?<name>\\S+)\\s*"),
     TOOLS_USE_DIRECTION("^tools\\s+use\\s+-d\\s+(?<direction>.+)$"),
     WALK("^walk\\s+-l\\s+(?<x>\\d+)\\s*,\\s*(?<y>\\d+)$"),
-    SHOW_MY_POSITION("^show\\s+my\\s+position$"), 
+    WALK_FROM_HERE_AND_SHOW_MAP("^walk\\s+(?<x>-?\\d+)\\s*,\\s*(?<y>-?\\d+)$"),
+    SHOW_MY_POSITION("^show\\s+my\\s+position$"),
     PRINT_MAP("^print\\s+map\\s+-l\\s+(?<x>\\d+)\\s*,\\s*(?<y>\\d+)\\s+-s\\s+(?<size>.+)$"),
     PRINT_Whole_MAP("^print\\s+map\\s+-h$"),
     HELP_READING_MAP("^help\\s+reading\\s+map$"),
@@ -98,7 +98,8 @@ public enum GameViewCommands implements Command{
     GameViewCommands(String pattern) {
         this.pattern = pattern;
     }
-        @Override
+
+    @Override
     public boolean matches(String input) {
         return getMatcher(input).matches();
     }
@@ -113,11 +114,11 @@ public enum GameViewCommands implements Command{
         matcher.find();
         String value = matcher.group(group);
         if (value != null && group.equals("loginFlag")) {
-            if (!value.equals("-stay-logged-in")) value = null;
+            if (!value.equals("-stay-logged-in"))
+                value = null;
         }
         return value != null ? value.trim() : null;
     }
-
 
     public static GameViewCommands parse(String input) {
         for (GameViewCommands command : values()) {

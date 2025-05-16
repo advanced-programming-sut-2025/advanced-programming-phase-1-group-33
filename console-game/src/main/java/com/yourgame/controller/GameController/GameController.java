@@ -378,7 +378,7 @@ public class GameController {
         for (Tool t : App.getGameState().getCurrentPlayer().getBackpack().getTools()) {
             if (t.getClass().getSimpleName().toLowerCase().equals(toolName)) {
                 App.getGameState().getCurrentPlayer().setCurrentTool(t);
-                return new Response(true, toolName + " equipped");
+                return new Response(true, t.getClass().getSimpleName()+ " equipped");
             }
         }
         return new Response(false, toolName + " not found in Tools");
@@ -1133,6 +1133,7 @@ public class GameController {
                                 .get(rand.nextInt(quarry.getForagingMinerals().size()));
                         quarry.getForagingMinerals().remove(fg);
                         p.getBackpack().addIngredients(fg, 1);
+
                         return new Response(true, "you add a foraging mineral to the backpack");
 
                     }
@@ -1163,6 +1164,8 @@ public class GameController {
                     p.getBackpack().addIngredients(wood, numberOfWoods);
                 }
                 p.getBackpack().addIngredients(tree.getType().getSource(), 2);
+                return new Response(true, energyConsumptionResponse.getMessage() + " and Tree has been cutted :)");
+
             }
 
             return new Response(false, "there is no tree for cut!");
@@ -1214,7 +1217,7 @@ public class GameController {
             return new Response(false, "please use command : collect produce -n <nameOfAnimal>");
         }
 
-        return new Response(false, "you don't have a tool , please set your current tool");
+        return new Response(false, "you don't have a tool , please set your current tool, current player tool" + tool.getClass().getName());
 
     }
 
@@ -1291,6 +1294,28 @@ public class GameController {
         }
 
         return new Response(true, output.toString());
+    }
+
+    public Response getWalk_FromHereAndShowMap(Request request) {
+        // Obtain current player and destination.
+        Response walkResponse;
+        String gameMapString;
+        Player currentPlayer = gameState.getCurrentPlayer();
+        int x = Integer.parseInt(request.body.get("x"));
+        int y = Integer.parseInt(request.body.get("y"));
+
+        List<Position> positions = new LinkedList<Position>();
+        Response response = findPath(currentPlayer.getPosition().getX() + x, currentPlayer.getPosition().getY() + y,
+                positions);
+        if (response.getSuccessful()) {
+            walkResponse = walk(currentPlayer, currentPlayer.getPosition().getX() + x,
+                    currentPlayer.getPosition().getY() + y, positions);
+            gameMapString = gameState.getMap().printMap(currentPlayer.getPosition().getX() - 1  , currentPlayer.getPosition().getY()-1 , 15);
+            return new Response(true , walkResponse.getMessage() + "\n" + gameMapString); 
+        } else {
+            return new Response(true, "Shirin cari is not possible");
+        }
+
     }
 
 }

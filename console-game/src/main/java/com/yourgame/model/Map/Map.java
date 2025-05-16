@@ -30,8 +30,9 @@ public class Map {
     }
 
     public Tile findTile(int x, int y) {
+        // System.out.println(tiles.);
         for (int i = 0; i < tiles.length; i++) {
-            for (int j = 0; j < tiles.length; j++) {
+            for (int j = 0; j < tiles[i].length; j++) {
                 if (x == i && y == j) {
                     return tiles[i][j];
                 }
