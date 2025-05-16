@@ -71,5 +71,21 @@ print map -l 0, 0 -s 10
 print map -l 1, 1 -s 10
 print map -h
 greenhouse build
+energy show
+energy set -v 100
+energy unlimited
+inventory show
+inventory trash -i Wood -n 20
+tools show available 
+inventory show
+tools equip axe
+tools show current
+tools upgrade axe
+walk -l 102 , 77
+walk -l 101 , 76
+tools upgrade axe
+walk -l 103 , 76
+print map -l 101, 76 -s 60
+tools upgrade axe
 go back
 exit

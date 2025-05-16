@@ -132,7 +132,7 @@ public class Keg extends ArtisanMachine {
 
                             producingGood = new ArtisanGood(ArtisanGoodType.Wine,
                                     (int) (1.75 * ((Fruit) ingredient).getEnergy()),
-                                    3 * ((Fruit) ingredient).getBaseSellPrice());
+                                    3 * ((Fruit) ingredient).getSellPrice());
                             return new Response(true, "Your product is being made.Please wait.");
                         }
                         return new Response(false, "You don't have enough Ingredients!");

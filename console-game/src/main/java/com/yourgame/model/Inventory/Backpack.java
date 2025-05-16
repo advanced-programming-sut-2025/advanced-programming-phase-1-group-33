@@ -1,6 +1,5 @@
 package com.yourgame.model.Inventory;
 
-
 import com.yourgame.model.Animals.Animal;
 import com.yourgame.model.Animals.AnimalGood;
 import com.yourgame.model.Animals.Fish;
@@ -18,10 +17,9 @@ import java.util.HashMap;
 
 public class Backpack {
 
-
     private BackpackType type;
     private int capacity = 12;
-    private final ArrayList<Tool> tools=  new ArrayList<>();
+    private final ArrayList<Tool> tools = new ArrayList<>();
     private final Hay hay = new Hay();
     private final ArrayList<CookingRecipe> cookingRecipes = new ArrayList<>();
     private final ArrayList<CraftingRecipes> craftingRecipes = new ArrayList<>();
@@ -31,11 +29,11 @@ public class Backpack {
     private final TrashCan trashCan = new TrashCan();
 
 
-    private final HashMap<Ingredient, Integer> ingredientQuantity = new HashMap<>();
+	private final HashMap<Ingredient, Integer> ingredientQuantity = new HashMap<>();
 
-    public Backpack(BackpackType type){
+    public Backpack(BackpackType type) {
         this.type = type;
-        switch(type){
+        switch (type) {
             case Primary:
                 break;
             case Big:
@@ -47,7 +45,7 @@ public class Backpack {
     }
 
     public void changeType(BackpackType type) {
-        switch(type){
+        switch (type) {
             case Big:
                 this.type = BackpackType.Big;
                 this.capacity = 24;
@@ -89,36 +87,32 @@ public class Backpack {
 
     }
 
-
-
     public void addIngredients(Ingredient ingredient, int quantity) {
-        if(capacity > ingredientQuantity.size()){
-            int value = ingredientQuantity.getOrDefault(ingredient , 0);
+        if (capacity > ingredientQuantity.size()) {
+            int value = ingredientQuantity.getOrDefault(ingredient, 0);
             ingredientQuantity.put(ingredient, value + quantity);
         }
-
-
     }
 
     public void removeIngredients(Ingredient ingredient, int quantity) {
-        int value = ingredientQuantity.getOrDefault(ingredient , 0);
-        if(value == quantity){
+        int value = ingredientQuantity.getOrDefault(ingredient, 0);
+        if (value == quantity) {
             ingredientQuantity.remove(ingredient);
 
             int returnPercentage = trashCan.getReturnValuePercentage();
 
             int refund = 0;
-            if(ingredient instanceof AnimalGood ag)
+            if (ingredient instanceof AnimalGood ag)
                 refund = ag.getSellPrice() * returnPercentage / 100;
-            else if(ingredient instanceof Fish f)
+            else if (ingredient instanceof Fish f)
                 refund = f.getSellPrice() * returnPercentage / 100;
-            else if(ingredient instanceof Crop c)
+            else if (ingredient instanceof Crop c)
                 refund = c.getSellPrice() * returnPercentage / 100;
-            else if(ingredient instanceof Fruit fr)
-                refund = fr.getBaseSellPrice() * returnPercentage / 100;
-            else if(ingredient instanceof Food fd)
+            else if (ingredient instanceof Fruit fr)
+                refund = fr.getSellPrice() * returnPercentage / 100;
+            else if (ingredient instanceof Food fd)
                 refund = fd.getSellPrice() * returnPercentage / 100;
-            else if(ingredient instanceof ForagingMineral fm)
+            else if (ingredient instanceof ForagingMineral fm)
                 refund = fm.getSellPrice() * returnPercentage / 100;
 
             if (refund > 0) {
@@ -129,7 +123,6 @@ public class Backpack {
             ingredientQuantity.put(ingredient, value - quantity);
         }
     }
-
 
     public HashMap<Ingredient, Integer> getIngredientQuantity() {
         return ingredientQuantity;
@@ -218,4 +211,12 @@ public class Backpack {
     public int getNumberOfHay() {
         return hay.getNumber();
     }
+
+
+    public TrashCan getTrashCan() {
+		return trashCan;
+	}
+
+
+
 }

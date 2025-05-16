@@ -67,7 +67,7 @@ public class Dehydrator extends ArtisanMachine {
                             if (ingredient instanceof Fruit)
                                 producingGood = new ArtisanGood(ArtisanGoodType.DriedFruit,
                                         75,
-                                        (int) (7.5 * ((Fruit) ingredient).getBaseSellPrice() + 25));
+                                        (int) (7.5 * ((Fruit) ingredient).getSellPrice() + 25));
                             else
                                 producingGood = new ArtisanGood(ArtisanGoodType.DriedFruit,
                                         75,

@@ -11,7 +11,9 @@ import com.yourgame.model.Inventory.BackpackType;
 import com.yourgame.model.Inventory.Tools.Axe;
 import com.yourgame.model.Inventory.Tools.Hoe;
 import com.yourgame.model.Inventory.Tools.Pickaxe;
+import com.yourgame.model.Inventory.Tools.Scythe;
 import com.yourgame.model.Inventory.Tools.Tool;
+import com.yourgame.model.Inventory.Tools.WateringCan;
 import com.yourgame.model.Item.Wood;
 import com.yourgame.model.Inventory.Backpack;
 import com.yourgame.model.Map.Farm;
@@ -57,6 +59,8 @@ public class Player {
         this.backpack.getTools().add(new Hoe());
         this.backpack.getTools().add(new Pickaxe());
         this.backpack.getTools().add(new Axe());
+        this.backpack.getTools().add(new WateringCan());
+        this.backpack.getTools().add(new Scythe());        
         this.backpack.getIngredientQuantity().put(new Coin(), 20);
         this.backpack.getIngredientQuantity().put(new Wood(), 100);
         this.relationWithAbigail = new RelationWithNPC(NPCType.Abigail);
@@ -64,7 +68,12 @@ public class Player {
         this.relationWithHarvey = new RelationWithNPC(NPCType.Harvey);
         this.relationWithLeah = new RelationWithNPC(NPCType.Leah);
         this.relationWithRobin = new RelationWithNPC(NPCType.Robin);
-
+        for (Tool tool : this.backpack.getTools()) {
+            if (tool instanceof Axe) {
+                setCurrentTool(tool);
+                break;
+            }
+        }
     }
 
     public void addEnergy(int energy) {
@@ -110,7 +119,8 @@ public class Player {
         if (consumedEnergyInThisTurn >= 50 && this.energy > 0) {
             App.getGameState().nextPlayerTurn();
             return new Response(false,
-                    "You consumed " + this.consumedEnergyInThisTurn + " energy in your turn! The turn will be changed!\n");
+                    "You consumed " + this.consumedEnergyInThisTurn
+                            + " energy in your turn! The turn will be changed!\n");
         }
         if (this.energy < 0) {
             this.energy = 0;
@@ -171,7 +181,7 @@ public class Player {
 
     public void setFarm(Farm map) {
         this.farm = map;
-        this.currentPosition = farm.getPlayerDefaultPosition(); 
+        this.currentPosition = farm.getPlayerDefaultPosition();
     }
 
     public Position getPosition() {

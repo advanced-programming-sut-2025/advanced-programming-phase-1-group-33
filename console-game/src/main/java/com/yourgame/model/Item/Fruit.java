@@ -31,7 +31,7 @@ public enum Fruit implements Ingredient {
         return energy;
     }
 
-    public int getBaseSellPrice() {
+    public int getSellPrice() {
         return baseSellPrice;
     }
 }

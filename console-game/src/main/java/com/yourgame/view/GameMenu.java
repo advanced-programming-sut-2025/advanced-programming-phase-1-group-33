@@ -95,8 +95,8 @@ public class GameMenu implements AppMenu {
                 return getToolsShowAvailable(input);
             // case TOOLS_USE_DIRECTION:
             // return getToolsUseDirectionResponse(input);
-            // case TOOLS_UPGRADE:
-            // return getToolUpgradeResponse(input);
+            case TOOLS_UPGRADE:
+                return getToolUpgradeResponse(input);
             case CRAFT_INFO:
                 return showCraftInfo(input);
             case CRAFTING_SHOW_RECIPES:
@@ -118,7 +118,15 @@ public class GameMenu implements AppMenu {
         }
     }
 
-    private Response getMyPOsition() {
+    private Response getToolUpgradeResponse(String input) {
+        Response response;
+        Request request = new Request(input);
+        request.body.put("name", GameViewCommands.TOOLS_UPGRADE.getGroup(input, "name"));
+
+        return controller.getToolUpgrade(request); 
+    }
+
+	private Response getMyPOsition() {
         return controller.showMyPostion();
     }
 
