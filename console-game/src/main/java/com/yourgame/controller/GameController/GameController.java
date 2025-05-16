@@ -378,7 +378,7 @@ public class GameController {
         for (Tool t : App.getGameState().getCurrentPlayer().getBackpack().getTools()) {
             if (t.getClass().getSimpleName().toLowerCase().equals(toolName)) {
                 App.getGameState().getCurrentPlayer().setCurrentTool(t);
-                return new Response(true, t.getClass().getSimpleName()+ " equipped");
+                return new Response(true, t.getClass().getSimpleName() + " equipped");
             }
         }
         return new Response(false, toolName + " not found in Tools");
@@ -430,90 +430,6 @@ public class GameController {
 
         return new Response(true, output);
     }
-    // public Response treeInfo(String treeName) {
-    // TreeType tree = TreeType.getTreeTypeByName(treeName);
-    //
-    // if (tree == null)
-    // return new Response(false, "Tree <" + treeName + "> not found");
-    // String output = String.format("Name: %s\n", tree.getName()) +
-    // String.format("Source: %s\n", tree.getSource()) +
-    // String.format("Stages: %s\n", tree.getStages()) +
-    // String.format("Total Harvest Time: %d\n", tree.getTotalHarvestTime()) +
-    // String.format("Fruit: %s\n", tree.getFruit()) +
-    // String.format("HarvestCycle: %d\n", tree.getHarvestCycle()) +
-    // String.format("FruitBaseSellPrice: %d\n", tree.getFruitBaseSellPrice()) +
-    // String.format("IsFruitEdible: %s\n", tree.isFruitEdible()) +
-    // String.format("FruitEnergy: %d\n", tree.getFruitEnergy()) +
-    // String.format("Season: %s", tree.getSeason());
-    //
-    // return new Response(true, output);
-    // }
-    //
-    // public Response foragingCropInfo(String cropName) {
-    // ForagingCrop foragingCrop = ForagingCrop.getForagingCropByName(cropName);
-    //
-    // if (foragingCrop == null)
-    // return new Response(false, "Foraging <" + cropName + "> not found");
-    //
-    // String output = String.format("Name: %s\n", foragingCrop.getName()) +
-    // String.format("Season: %s\n", foragingCrop.getSeason()) +
-    // String.format("BaseSellPrice: %d\n", foragingCrop.getBaseSellPrice()) +
-    // String.format("Energy: %d", foragingCrop.getEnergy());
-    //
-    // return new Response(true, output);
-    // }
-    //
-    // public Response foragingTreeInfo(String treeName) {
-    // ForagingTreeSource foragingTreeSource =
-    // ForagingTreeSource.getForagingTreeSourceByName(treeName);
-    //
-    // if (foragingTreeSource == null)
-    // return new Response(false, "Foraging <" + treeName + "> not found");
-    //
-    // String output = String.format("Name: %s\n", foragingTreeSource.getName()) +
-    // String.format("Season: %s", foragingTreeSource.getSeason());
-    //
-    // return new Response(true, output);
-    // }
-
-    // public Response harvestWithScythe(Growable plant, Tile targetTile) {
-    // Player player = App.getGameState().getCurrentPlayer();
-    //
-    // if (!plant.isComplete())
-    // return new Response(false, "Plant hasn't grown completely!");
-    //
-    // if (plant.canGrowAgain()) {
-    // if (plant.harvest()) {
-    // if (plant instanceof Crop crop)
-    // player.getBackpack().addIngredients(crop, 1);
-    // else if (plant instanceof Tree tree)
-    // player.getBackpack().addIngredients(tree.getType().getFruit(), 1);
-    //
-    // player.getAbility().increaseFarmingRate(5);
-    //
-    // return new Response(true,
-    // String.format("You picked up %s\nThis plant can grow again!",
-    // plant.getNameOfProduct()));
-    // }
-    // else {
-    // return new Response(false, "The plant hasn't grown again completely!");
-    // }
-    // }
-    // else {
-    // player.getBackpack().addIngredients(((Crop) plant), 1);
-    // player.getFarm().getCrops().remove(plant);
-    // player.getFarm().getPlaceables().remove(plant);
-    // targetTile.setPlaceable(null);
-    // targetTile.setWalkable(true);
-    // targetTile.setSymbol('.');
-    // targetTile.setPlowed(false);
-    // player.getAbility().increaseFarmingRate(5);
-    // return new Result(true,
-    // String.format("You picked up %s\nThis plant cannot grow again!",
-    // plant.getNameOfProduct()));
-    // }
-    // }
-
     public void foragingRandom() {
         // this method should call everyday
         // TODO find an empty tile
@@ -1217,7 +1133,8 @@ public class GameController {
             return new Response(false, "please use command : collect produce -n <nameOfAnimal>");
         }
 
-        return new Response(false, "you don't have a tool , please set your current tool, current player tool" + tool.getClass().getName());
+        return new Response(false, "you don't have a tool , please set your current tool, current player tool"
+                + tool.getClass().getName());
 
     }
 
@@ -1310,12 +1227,97 @@ public class GameController {
         if (response.getSuccessful()) {
             walkResponse = walk(currentPlayer, currentPlayer.getPosition().getX() + x,
                     currentPlayer.getPosition().getY() + y, positions);
-            gameMapString = gameState.getMap().printMap(currentPlayer.getPosition().getX() - 1  , currentPlayer.getPosition().getY()-1 , 15);
-            return new Response(true , walkResponse.getMessage() + "\n" + gameMapString); 
+            gameMapString = gameState.getMap().printMap(currentPlayer.getPosition().getX() - 1,
+                    currentPlayer.getPosition().getY() - 1, 15);
+            return new Response(true, walkResponse.getMessage() + "\n" + gameMapString);
         } else {
             return new Response(true, "Shirin cari is not possible");
         }
 
+    }
+
+    public Response Plant(Request request) {
+        String seedName = request.body.get("seed");
+        String directionName = request.body.get("direction");
+        Player player = gameState.getCurrentPlayer();
+        Direction direction = Direction.getDirectionByInput(directionName);
+        if (direction == null) {
+            return new Response(false, "Direction " + directionName + " not found");
+        }
+
+        Tile myTile = gameState.getMap().findTile(player.getPosition());
+        Tile targetTile = gameState.getMap().getTileByDirection(myTile, direction);
+
+        if (targetTile == null) {
+            return new Response(false, "Tile in direction <" + directionName + "> not found!");
+        }
+        if (targetTile.getPlaceable() != null) {
+            return new Response(false, "You cannot plant in this tile!it isn't free.");
+        }
+        if (!targetTile.isPlowed()) {
+            return new Response(false, "Tile is not plowed!");
+        }
+
+        Seeds seed = Seeds.getSeedByName(seedName);
+        TreeSource treeSource = TreeSource.getTreeSourceByName(seedName);
+
+        if (seed != null) {
+
+            if (!player.getBackpack().getIngredientQuantity().containsKey(seed))
+                return new Response(false, "You don't have this seed!");
+
+            if (!seed.getSeason().equals(Season.Special) &&
+                    !seed.getSeason().equals(gameState.getGameTime().getSeason()))
+                return new Response(false, "You can't plant this seed in this season!");
+
+            player.getBackpack().removeIngredients(seed, 1);
+            CropType cropType = plantCrop(seed);
+            Crop crop = new Crop(cropType, gameState.getGameTime(), targetTile.getFertilizer(),
+                    targetTile.getPosition().getX(), targetTile.getPosition().getY());
+            player.getFarm().getCrops().add(crop);
+            player.getFarm().getPlaceables().add(crop);
+            targetTile.setPlaceable(crop);
+            targetTile.setWalkable(false);
+            targetTile.setSymbol(crop.getSymbol());
+            player.getAbility().increaseFarmingRate(5);
+            return new Response(true, "You plant <" + crop.getType() + "> successfully!");
+
+        } else if (treeSource != null) {
+
+            if (!player.getBackpack().getIngredientQuantity().containsKey(treeSource))
+                return new Response(false, "You don't have this seed!");
+
+            if (!treeSource.getTreeType().getSeason().equals(gameState.getGameTime().getSeason()))
+                return new Response(false, "You can't plant this tree in this season!");
+
+            player.getBackpack().removeIngredients(treeSource, 1);
+            Tree tree = new Tree(treeSource.getTreeType(), gameState.getGameTime(), targetTile.getFertilizer(),
+                    targetTile.getPosition().getX(), targetTile.getPosition().getY(), 1, 1);
+            player.getFarm().getTrees().add(tree);
+            player.getFarm().getPlaceables().add(tree);
+            targetTile.setPlaceable(tree);
+            targetTile.setWalkable(false);
+            targetTile.setSymbol(tree.getSymbol());
+            player.getAbility().increaseFarmingRate(5);
+            return new Response(true, "You successfully plant.");
+
+        } else {
+            return new Response(false, "Tree_source/seed not found");
+        }
+
+    }
+
+    private CropType plantCrop(Seeds seed) {
+        CropType cropType;
+
+        if (seed.equals(Seeds.MixedSeeds)) {
+            ArrayList<CropType> possibleCrops = MixedSeeds.getSeasonCrops(gameState.getGameTime().getSeason());
+            cropType = possibleCrops.get(new Random().nextInt(possibleCrops.size()));
+        } else {
+            cropType = seed.getCrop();
+        }
+
+        return cropType;
     }
 
 }

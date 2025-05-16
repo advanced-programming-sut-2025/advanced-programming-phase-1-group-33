@@ -93,6 +93,12 @@ walk 2, 3
 tools equip pickaxe
 tools use -d down
 tools use -d right
+tools equip hoe
+tools use -d down
+tools use -d right
+craftinfo -n BlueJazz
+cheat add item -n JazzSeeds -c 10
+plant -s JazzSeeds -d down
 go back
 
 exit
