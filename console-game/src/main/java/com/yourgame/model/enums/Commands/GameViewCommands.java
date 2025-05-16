@@ -38,7 +38,7 @@ public enum GameViewCommands implements Command {
     Plant("plant\\s+-s\\s+(?<seed>\\S+)\\s+-d\\s+(?<direction>\\S+)\\s*"),
     FERTILIZE("fertilize\\s+-f\\s+(?<fertilizer>\\S+)\\s+-d\\s+(?<direction>\\S+)\\s*"),
     SHOWPLANT("show\\s+plant\\s+-l\\s+(?<X>\\d+)\\s*,\\s*(?<Y>\\d+)\\s*"),
-    HowMuchWater("howMuch\\s+water\\s*"),
+    HowMuchWater("howmuch\\s+water\\s*"),
     CRAFTING_SHOW_RECIPES("^crafting\\s+show\\s+recipes$"),
     CRAFTING_CRAFT("^crafting\\s+craft\\s+(?<itemName>.+)$"),
     // PLACE_ITEM(""),

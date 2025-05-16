@@ -1445,4 +1445,17 @@ public class GameController {
         return (distance + 10 * numberOfTurns) / 20;
     }
 
+    public Response getHowMuchWater() {
+        for (Tool t : gameState.getCurrentPlayer().getBackpack().getTools()) {
+
+            if (t.getClass().getSimpleName().toLowerCase().equals("wateringcan")) {
+                int capacity = ((WateringCan) t).getWaterCapacity();
+                return new Response(true, "Current WateringCan Capacity is "+capacity );
+            }
+        }
+
+        return new Response(false, "Error happend While Searching for Capacity"); 
+
+    }
+
 }

@@ -137,8 +137,8 @@ public class GameMenu implements AppMenu {
     }
 
     private Response getHowMuchWater() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getHowMuchWater'");
+        return controller.getHowMuchWater();
+
     }
 
     private Response getPrintMapForCurrentPlayer() {

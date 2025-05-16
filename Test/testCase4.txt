@@ -34,5 +34,10 @@ fertilize -f WaterFertilizer -d right
 show plant -l 50 , 38
 cheat advance date 1d 
 show plant -l 51 , 37
+howmuch water
+tools equip wateringcan
+tools use -d down
+tools use -d right
+howmuch water
 go back
 exit
