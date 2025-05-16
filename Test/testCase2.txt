@@ -9,5 +9,65 @@ print map -l 0, 0 -s 60
 print map -l 1, 2 -s 10
 walk -l 31 , 31 
 walk -l 1, 0
+walk -l 31 , 31 
+walk -l 1, 0
+walk -l 31 , 31 
+walk -l 1, 0
+walk -l 31 , 31 
+walk -l 1, 0
+walk -l 31 , 31 
+walk -l 1, 0
+walk -l 31 , 31 
+walk -l 1, 0
+walk -l 31 , 31 
+walk -l 1, 0
+walk -l 1, 0
+walk -l 31 , 31 
+walk -l 1, 0
+energy show
+walk -l 31 , 31 
+show my position
+walk -l 1, 0
+show my position
+print map -l 200, 37 -s 60
+show my position
+walk -l 205, 50
+energy show
+walk -l 205, 37
+walk -l 205, 50
+energy show
+walk -l 205, 37
+walk -l 205, 37
+walk -l 205, 50
+walk -l 205, 37
+walk -l 205, 50
+show my position
+print map -l 200, 37 -s 60
+energy show
+walk -l 31 , 31 
+walk -l 1, 0
+walk -l 31 , 31 
+walk -l 1, 0
+walk -l 31 , 31 
+walk -l 1, 0
+walk -l 31 , 31 
+walk -l 1, 0
+walk -l 31 , 31 
+walk -l 1, 0
+walk -l 1, 0
+walk -l 31 , 31 
+walk -l 1, 0
+walk -l 31 , 31 
+walk -l 1, 0
+walk -l 31 , 31 
+walk -l 1, 0
+walk -l 31 , 31 
+walk -l 1, 0
+walk -l 31 , 31 
+walk -l 1, 0
+walk -l 31 , 31 
+walk -l 1, 0
+print map -l 0, 0 -s 10
+print map -l 1, 1 -s 10
 go back
 exit

@@ -112,23 +112,27 @@ public class GameController {
 
         List<Position> positions = new LinkedList<Position>();
         Response response = findPath(x, y, positions);
-        System.out.println(response.getMessage());
         if (response.getSuccessful()) {
-            return walk(x, y, positions);
+            return walk(currentPlayer, x, y, positions);
         }
-        return new Response(false, "");
+        return new Response(false, response.getMessage());
     }
 
-    public Response walk(int endX, int endY, List<Position> positions) {
+    public Response walk(Player currentPlayer, int endX, int endY, List<Position> positions) {
         int energy = calculateEnergyBasedOnShortestDistance(positions);
-        if (energy > App.getGameState().getCurrentPlayer().getEnergy()) {
-            App.getGameState().getCurrentPlayer().faint();
+        if (energy > currentPlayer.getEnergy()) {
+            currentPlayer.faint();
             return new Response(false, "you are fainted");
         }
-        App.getGameState().getCurrentPlayer().getPosition().setX(endX);
-        App.getGameState().getCurrentPlayer().getPosition().setY(endY);
-        App.getGameState().getCurrentPlayer().consumeEnergy(energy);
-        return new Response(true, String.format("you have teleported successfully to " + endX + " " + endY));
+        Response response = currentPlayer.consumeEnergy(energy);
+        if(response.getSuccessful()){
+            currentPlayer.getPosition().setX(endX);
+            currentPlayer.getPosition().setY(endY);
+            return new Response(true, String.format(response.getMessage()+ "you have been walked to " + endX + " " + endY));
+        }
+        else{
+            return response;
+        }
     }
 
     public int calculateEnergyBasedOnShortestDistance(List<Position> shortestPath) {
@@ -136,7 +140,7 @@ public class GameController {
         for (Position p : shortestPath) {
             energy++;
         }
-        return energy / 20;
+        return (int) Math.ceil((double) energy / 20);
     }
 
     // Helper method: findPath using BFS with 8–directions.
@@ -191,7 +195,7 @@ public class GameController {
 
                 if (nx >= 0 && nx < 250 && ny >= 0 && ny < 200 && !visited[nx][ny]
                         && map.getTiles()[nx][ny].isWalkable()) {
-                    visited[nx][ny] = true;
+                visited[nx][ny] = true;
                     prev[nx][ny] = p;
                     q.add(new Position(nx, ny));
                 }
@@ -811,6 +815,12 @@ public class GameController {
         String info = SymbolType.getSymbolsInfo(); 
         return new Response(true, info); 
         
+    }
+
+	public Response showMyPostion() {
+        Position pos = gameState.getCurrentPlayer().getPosition(); 
+        return new Response(true, "You are in " + pos); 
+
     }
 
 }

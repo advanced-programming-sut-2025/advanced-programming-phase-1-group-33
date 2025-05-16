@@ -2,6 +2,7 @@ package com.yourgame.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.yourgame.model.Map.Farm;
 import com.yourgame.model.Map.Map;
@@ -29,29 +30,49 @@ public class GameState {
 //        relationInitializer(players);
     }
 
+    /**
+     * Advances the game turn:
+     * <ul>
+     *   <li>If all players are fainted, it skips the day and resets players for the new day.</li>
+     *   <li>Otherwise, it selects the next active (non-fainted) player.</li>
+     *   <li>If a full round is completed (wraps around), it advances the game clock by one hour.</li>
+     * </ul>
+     */
     public void nextPlayerTurn() {
-        int size = players.size();
-        int currentIndex = players.indexOf(currentPlayer);
-        int checkedPlayers = 0;
+        // Filter to get the active players (i.e., not fainted)
+        List<Player> activePlayers = players.stream()
+            .filter(p -> !p.isFaintedToday())
+            .collect(Collectors.toList());
 
-        while (checkedPlayers < size) {
-            currentIndex = (currentIndex + 1) % size;
-            Player nextPlayer = players.get(currentIndex);
-
-            if (!nextPlayer.isFaintedToday()) {
-                currentPlayer = nextPlayer;
-                break;
-            }
-            checkedPlayers++;
+        // If all players are fainted, skip the day
+        if (activePlayers.isEmpty()) {
+            time.advancedDay(1);
+            MakePlayersReadyForNextDay();
+            // Reset currentPlayer (assuming players list is not empty)
+            currentPlayer = players.get(0);
+            return;
         }
 
-        if (checkedPlayers == size) {
-            time.advancedDay(1);;
+        // Find the index of the current player in the active players list
+        int size = activePlayers.size();
+        int currentIndex = activePlayers.indexOf(currentPlayer);
+        
+        // If the current player is not in the active list, start with the first one
+        if (currentIndex == -1) {
+            currentPlayer = activePlayers.get(0);
+            return;
         }
-
-        if (currentPlayer == players.get(0)) {
-            App.getGameState().getGameTime().advancedHour(1);
+        
+        // Determine the next player's index
+        int nextIndex = (currentIndex + 1) % size;
+        // If we've wrapped around to the start, advance one hour on the clock.
+        if (nextIndex == 0) {
+            time.advancedHour(1);
         }
+        
+        // Set the next active player and reset their consumed energy.
+        currentPlayer = activePlayers.get(nextIndex);
+        currentPlayer.setConsumedEnergyInThisTurn(0);
     }
 
     public Map getMap() {
@@ -81,5 +102,13 @@ public class GameState {
 
 
     public void startGame() {
+    }
+
+	public void MakePlayersReadyForNextDay() {
+        for(Player player: players){
+            player.setEnergy(200);
+            player.setConsumedEnergyInThisTurn(0);
+            player.setFaintedToday(false); 
+        }
     }
 }

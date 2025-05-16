@@ -3,6 +3,9 @@ package com.yourgame.model.WeatherAndTime;
 import java.util.ArrayList;
 import java.util.Random;
 
+import com.yourgame.model.App;
+import com.yourgame.model.GameState;
+
 public class TimeSystem {
     public TimeSystem clone;
     private Season season;
@@ -49,8 +52,8 @@ public class TimeSystem {
         } else {
             this.weather = createNextDayWeather();
             this.nextDayWeather = createNextDayWeather();
-
         }
+        App.getGameState().MakePlayersReadyForNextDay(); 
     }
 
     public void advancedSeason() {

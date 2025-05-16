@@ -2,7 +2,10 @@ package com.yourgame.model.UserInfo;
 
 import java.util.*;
 
+import javax.naming.spi.DirStateFactory.Result;
+
 import com.yourgame.model.Animals.AnimalType;
+import com.yourgame.model.IO.Response;
 import com.yourgame.model.App;
 import com.yourgame.model.Inventory.BackpackType;
 import com.yourgame.model.Inventory.Tools.Axe;
@@ -27,14 +30,16 @@ public class Player {
     private int energy;
     private Tool currentTool;
     private boolean isFaintedToday = false;
+
     private boolean isInfinite = false;
-    private int maxEnergy = 1000;
+    private int consumedEnergyInThisTurn = 0;
+
+    private int maxEnergy = 200;
     private boolean unlimitedEnergy = false;
     private final Backpack backpack = new Backpack(BackpackType.Primary);
     private ArrayList<AnimalType> animals = new ArrayList<>();
     private Backpack inventory;
     private final Ability ability = new Ability(this);
-
 
     private Farm farm;
     private Position currentPosition;
@@ -48,7 +53,7 @@ public class Player {
         this.username = currentUser.getUsername();
         this.nickname = currentUser.getNickname();
         this.energy = maxEnergy;
-        this.currentPosition = new Position(0 , 0);
+        this.currentPosition = new Position(0, 0);
         this.backpack.getTools().add(new Hoe());
         this.backpack.getTools().add(new Pickaxe());
         this.backpack.getTools().add(new Axe());
@@ -81,7 +86,6 @@ public class Player {
         return backpack;
     }
 
-
     public Ability getAbility() {
         return ability;
     }
@@ -96,19 +100,40 @@ public class Player {
         return isFaintedToday;
     }
 
-    public void consumeEnergy(int energy) {
+    public Response consumeEnergy(int energy) {
         if (isInfinite) {
-            return;
+            return new Response(true, "infinite energy for this turn\n ");
         }
         this.energy -= energy;
+        this.consumedEnergyInThisTurn += energy;
+
+        if (consumedEnergyInThisTurn >= 50 && this.energy > 0) {
+            App.getGameState().nextPlayerTurn();
+            return new Response(false,
+                    "You consumed " + this.consumedEnergyInThisTurn + " energy in your turn! The turn will be changed!\n");
+        }
         if (this.energy < 0) {
             this.energy = 0;
             faint();
+            return new Response(false, "You Fainted... Dummy\n");
         }
+        return new Response(true, "You consumed " + this.consumedEnergyInThisTurn + " in this turn until now!\n");
     }
 
     public boolean isUnlimitedEnergy() {
         return unlimitedEnergy;
+    }
+
+    public void setFaintedToday(boolean isFaintedToday) {
+        this.isFaintedToday = isFaintedToday;
+    }
+
+    public int getConsumedEnergyInThisTurn() {
+        return consumedEnergyInThisTurn;
+    }
+
+    public void setConsumedEnergyInThisTurn(int consumedEnergyInThisTurn) {
+        this.consumedEnergyInThisTurn = consumedEnergyInThisTurn;
     }
 
     public void setUnlimitedEnergy(boolean unlimitedEnergy) {
@@ -118,7 +143,6 @@ public class Player {
     public String getUsername() {
         return username;
     }
-
 
     public int getEnergy() {
         return energy;
@@ -132,7 +156,6 @@ public class Player {
         return maxEnergy;
     }
 
-
     public Backpack getInventory() {
         return inventory;
     }
@@ -142,17 +165,18 @@ public class Player {
 
     }
 
-    public Farm getFarm(){
+    public Farm getFarm() {
         return farm;
     }
 
-    public void setFarm(Farm map){
+    public void setFarm(Farm map) {
         this.farm = map;
-    }
-    public Position getPosition(){
-        return currentPosition;
+        this.currentPosition = farm.getPlayerDefaultPosition(); 
     }
 
+    public Position getPosition() {
+        return currentPosition;
+    }
 
     public RelationWithNPC getRelationWithAbigail() {
         return relationWithAbigail;

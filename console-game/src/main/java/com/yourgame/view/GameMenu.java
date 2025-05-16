@@ -58,6 +58,8 @@ public class GameMenu implements AppMenu {
                 return getWeatherForcast();
             case GREEN_HOUSE_BUILD:
                 return getBuildGreenHouse();
+            case SHOW_MY_POSITION:
+                return getMyPOsition(); 
             case WALK:
                 return getWalk(input);
             case PRINT_MAP:
@@ -116,7 +118,11 @@ public class GameMenu implements AppMenu {
         }
     }
 
-    private Response getEatResponse(String input) {
+    private Response getMyPOsition() {
+        return controller.showMyPostion();
+    }
+
+	private Response getEatResponse(String input) {
         Response response;
         Request request = new Request(input);
         request.body.put("foodName", GameViewCommands.EAT.getGroup(input, "foodName"));
@@ -208,7 +214,6 @@ public class GameMenu implements AppMenu {
         Request request = new Request(input);
         request.body.put("x", GameViewCommands.WALK.getGroup(input, "x"));
         request.body.put("y", GameViewCommands.WALK.getGroup(input, "y"));
-
         return controller.getWalk(request);
     }
 

@@ -28,6 +28,7 @@ public enum GameViewCommands implements Command{
     TOOLS_SHOW_AVAILABLE("^tools\\s+show\\s+available$"),
     TOOLS_USE_DIRECTION("^tools\\s+use\\s+-d\\s+(?<direction>.+)$"),
     WALK("^walk\\s+-l\\s+(?<x>\\d+)\\s*,\\s*(?<y>\\d+)$"),
+    SHOW_MY_POSITION("^show\\s+my\\s+position$"), 
     PRINT_MAP("^print\\s+map\\s+-l\\s+(?<x>\\d+)\\s*,\\s*(?<y>\\d+)\\s+-s\\s+(?<size>.+)$"),
     PRINT_Whole_MAP("^print\\s+map\\s+-h$"),
     HELP_READING_MAP("^help\\s+reading\\s+map$"),
