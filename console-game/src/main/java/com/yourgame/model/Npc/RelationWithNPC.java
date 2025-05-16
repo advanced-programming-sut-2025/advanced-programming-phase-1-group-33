@@ -1,6 +1,11 @@
 package com.yourgame.model.Npc;
 
+import com.yourgame.model.App;
+import com.yourgame.model.Map.NpcHome;
+import com.yourgame.model.UserInfo.Player;
+
 public class RelationWithNPC {
+
     private final NPCType type;
     private NPCFriendshipLevel npcFriendshipLevel;
     private int numericalFriendShipLevel;
@@ -13,6 +18,7 @@ public class RelationWithNPC {
     public RelationWithNPC(NPCType type) {
         this.type = type;
         this.npcFriendshipLevel = NPCFriendshipLevel.LevelZero;
+        this.numericalFriendShipLevel = 0;
     }
 
     public NPCFriendshipLevel getNpcFriendshipLevel() {
@@ -95,13 +101,17 @@ public class RelationWithNPC {
         }
     }
 
-    public void increaseNumOfDaysAfterUnlockingSecondQuest() {
+    private void increaseNumOfDaysAfterUnlockingSecondQuest() {
         if (!this.isSecondQuestLocked) {
             this.numOfDaysAfterUnlockingSecondQuest++;
         }
     }
 
-    public void checkUnlockingThirdQuest() {
+    public int getNumericalFriendShipLevel() {
+        return numericalFriendShipLevel;
+    }
+
+    private void checkUnlockingThirdQuest() {
         if (this.type.equals(NPCType.Abigail)) {
             if (this.numOfDaysAfterUnlockingSecondQuest >= 100) {this.isThirdQuestLocked = false;}
         } else if (this.type.equals(NPCType.Sebastian)) {
@@ -112,6 +122,23 @@ public class RelationWithNPC {
             if (this.numOfDaysAfterUnlockingSecondQuest >= 130) {this.isThirdQuestLocked = false;}
         } else if (this.type.equals(NPCType.Robin)) {
             if (this.numOfDaysAfterUnlockingSecondQuest >= 140) {this.isThirdQuestLocked = false;}
+        }
+
+    }
+
+    public void checkEveryNight(Player player) {
+
+        isFirstTimeToSpeakWithNPC = true;
+        isFirstTimeGiftToNPC = true;
+        increaseNumOfDaysAfterUnlockingSecondQuest();
+        checkUnlockingThirdQuest();
+
+        if (this.npcFriendshipLevel.equals(NPCFriendshipLevel.LevelThree)) {
+            for (NpcHome home : App.getGameState().getMap().getNpcHomes()) {
+                if (home.getNpc().getType().equals(this.type)) {
+                    home.getNpc().giveRandomGiftToPlayer(player);
+                }
+            }
         }
 
     }

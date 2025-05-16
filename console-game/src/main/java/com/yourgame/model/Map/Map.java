@@ -33,7 +33,6 @@ public class Map {
     }
 
     public Tile findTile(int x, int y) {
-        // System.out.println(tiles.);
         for (int i = 0; i < tiles.length; i++) {
             for (int j = 0; j < tiles[i].length; j++) {
                 if (x == i && y == j) {
@@ -256,6 +255,7 @@ public class Map {
             }
         }
     }
+
     public ArrayList<ShippingBin> getShippingBins() {
         return shippingBins;
     }
@@ -307,6 +307,27 @@ public class Map {
         }
     }
 
+    public void generateRandomStoneFarm(Farm farm) {
+        int numberOfStone = rand.nextInt(2) + 1;
+        int counter = 0;
+
+        while (counter < numberOfStone) {
+            int x = rand.nextInt(farm.getRectangle().width) + farm.getRectangle().x;
+            int y = rand.nextInt(farm.getRectangle().height) + farm.getRectangle().y;
+            Tile tile = findTile(x, y);
+
+            if (tile.getPlaceable() == null) {
+                Stone stone = new Stone(x, y);
+                tile.setPlaceable(stone);
+                tile.setWalkable(false);
+                tile.setSymbol(stone.getSymbol());
+                farm.getStones().add(stone);
+                farm.getPlaceables().add(stone);
+            }
+            counter++;
+        }
+    }
+
     public boolean isAroundPlaceable(Player p, Placeable placeable) {
         if (p.getPosition().getX() - 1 >= 0 && p.getPosition().getX() + 1 <= 250 && p.getPosition().getY() - 1 >= 0
                 && p.getPosition().getY() + 1 <= 200) {
@@ -345,6 +366,7 @@ public class Map {
         }
 
     }
+
     public CropType generateRandomCropType() {
         CropType[] cropTypes = CropType.values();
         return cropTypes[rand.nextInt(cropTypes.length)];

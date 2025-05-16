@@ -68,6 +68,8 @@ public class GameMenu implements AppMenu {
                 return getPrintMap(input);
             case PRINT_Whole_MAP:
                 return getPrintWholeMap(input);
+            case Print_map_for_current_player:
+                return getPrintMapForCurrentPlayer(); 
             case HELP_READING_MAP:
                 return getHelpRedning();
             case ENERGY_SHOW:
@@ -123,6 +125,8 @@ public class GameMenu implements AppMenu {
                 return getFirtilizeResponse(input);
             case SHOWPLANT:
                 return getShowPlantResponse(input);
+            case HowMuchWater:
+                return getHowMuchWater(); 
             case BUILD:
                 return getbuildResponse(input);
             case BUYANIMAL:
@@ -130,6 +134,15 @@ public class GameMenu implements AppMenu {
             default:
                 return getInvalidCommand();
         }
+    }
+
+    private Response getHowMuchWater() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getHowMuchWater'");
+    }
+
+    private Response getPrintMapForCurrentPlayer() {
+        return controller.getCurrentPlayerMapPosition();
     }
 
     private Response getBuyAnimalResponse(String input) {
@@ -150,8 +163,8 @@ public class GameMenu implements AppMenu {
     private Response getShowPlantResponse(String input) {
         Response response;
         Request request = new Request(input);
-        request.body.put("x", GameViewCommands.SHOWPLANT.getGroup(input, "x"));
-        request.body.put("y", GameViewCommands.SHOWPLANT.getGroup(input, "y"));
+        request.body.put("x", GameViewCommands.SHOWPLANT.getGroup(input, "X"));
+        request.body.put("y", GameViewCommands.SHOWPLANT.getGroup(input, "Y"));
         response = controller.handleShowPlant(request);
         return response;
     }
@@ -452,5 +465,9 @@ public class GameMenu implements AppMenu {
         Request request = new Request(input);
         Response response = LoginMenuController.handleShowMenu(request);
         return response;
+    }
+
+    public void doNights() {
+        System.out.println(controller.walkPlayersToHome());
     }
 }

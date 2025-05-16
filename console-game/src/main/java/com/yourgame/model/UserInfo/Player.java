@@ -27,6 +27,7 @@ public class Player {
     private String username;
     private String hashedPassword;
     private String nickname;
+
     private String email;
     private Gender gender;
     private int energy;
@@ -42,6 +43,8 @@ public class Player {
     private ArrayList<AnimalType> animals = new ArrayList<>();
     private Backpack inventory;
     private final Ability ability = new Ability(this);
+
+    private int remainingDaysAfterMarigDenied = 0;
 
     private Farm farm;
     private Position currentPosition;
@@ -60,7 +63,7 @@ public class Player {
         this.backpack.getTools().add(new Pickaxe());
         this.backpack.getTools().add(new Axe());
         this.backpack.getTools().add(new WateringCan());
-        this.backpack.getTools().add(new Scythe());        
+        this.backpack.getTools().add(new Scythe());
         this.backpack.getIngredientQuantity().put(new Coin(), 20);
         this.backpack.getIngredientQuantity().put(new Wood(), 100);
         this.relationWithAbigail = new RelationWithNPC(NPCType.Abigail);
@@ -227,4 +230,21 @@ public class Player {
     public void setRelationWithRobin(RelationWithNPC relationWithRobin) {
         this.relationWithRobin = relationWithRobin;
     }
+
+    public int getRemainingDaysAfterMarigDenied() {
+        return remainingDaysAfterMarigDenied;
+    }
+
+    public void setRemainingDaysAfterMarigDenied(int remainingDaysAfterMarigDenied) {
+        this.remainingDaysAfterMarigDenied = remainingDaysAfterMarigDenied;
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
 }

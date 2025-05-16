@@ -59,16 +59,25 @@ public class Animal {
         return lastPetTime.getDay() == App.getGameState().getGameTime().getDay();
     }
 
+    public boolean hasPettedYesterday() {
+        return lastPetTime.getDay() == App.getGameState().getGameTime().getDay() - 1;
+    }
+
     public void feed() {
         lastFeedTime = App.getGameState().getGameTime().clone();
     }
 
     public boolean hasFedToday() {
-        return lastFeedTime.getDay() ==App.getGameState().getGameTime().getDay();
+        return lastFeedTime.getDay() == App.getGameState().getGameTime().getDay();
+    }
+
+
+    public boolean hasFedYesterday() {
+        return lastFeedTime.getDay() == App.getGameState().getGameTime().getDay() - 1;
     }
 
     public boolean isReadyProduct() {
-        //TODO -> for pig is different
+        // TODO -> for pig is different
         TimeSystem today = App.getGameState().getGameTime().clone();
         int dayOfToday = today.getDay();
         if (today.getSeason().equals(lastProductTime.getSeason()))

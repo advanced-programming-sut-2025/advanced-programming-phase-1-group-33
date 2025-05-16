@@ -58,7 +58,7 @@ public class Crop implements Ingredient, Growable , Placeable, Sellable {
 
         if (lastGrowthTime.getDay() + timeForGrow == today.getDay()) {
             levelOfGrowth++;
-            lastGrowthTime = today;
+            lastGrowthTime = today.clone();
         }
 
     }

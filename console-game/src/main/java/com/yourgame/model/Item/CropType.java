@@ -2,7 +2,6 @@ package com.yourgame.model.Item;
 
 import com.yourgame.model.ManuFactor.Ingredient;
 import com.yourgame.model.WeatherAndTime.Season;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -34,7 +33,7 @@ public enum CropType implements Ingredient {
             10, false, 3, 40, true, 25,
             new ArrayList<>(List.of(Season.Spring)), false),
     Kale(Seeds.KaleSeeds,
-            new ArrayList<>(Arrays.asList(1 ,2, 2, 1)),
+            new ArrayList<>(Arrays.asList(1, 2, 2, 1)),
             6, true, 0, 110, true, 50,
             new ArrayList<>(List.of(Season.Spring)), false),
     Parsnip(Seeds.ParsnipSeeds,
@@ -184,16 +183,25 @@ public enum CropType implements Ingredient {
     private final int energy;
     private final ArrayList<Season> Seasons;
     private final boolean canBecomeGiant;
+
     private final static HashMap<String, CropType> stringToCropType = new HashMap<>();
+    // Add a map for Seeds to CropType lookup
+    private final static HashMap<Seeds, CropType> seedsToCropType = new HashMap<>();
+
 
     static {
         for (CropType value : CropType.values()) {
             stringToCropType.put(value.name().toLowerCase(), value);
+            // Populate the Seeds to CropType map
+            if (value.source != null) { // Handle cases like MixedSeeds in your original Seeds enum
+                seedsToCropType.put(value.source, value);
+            }
         }
     }
 
     CropType(Seeds source, ArrayList<Integer> stages, int totalHarvestTime, boolean oneTime, int regrowthTime,
-             int baseSellPrice, boolean isEdible, int energy, ArrayList<Season> seasons, boolean canBecomeGiant) {
+            int baseSellPrice, boolean isEdible, int energy, ArrayList<Season> seasons,
+            boolean canBecomeGiant) {
         this.source = source;
         this.stages = stages;
         this.totalHarvestTime = totalHarvestTime;
@@ -258,9 +266,36 @@ public enum CropType implements Ingredient {
         return canBecomeGiant;
     }
 
+    @Override
+    public String toString() {
+        return getName();
+    }
+
+    public String cropTypeDetail() {
+        return "CropType: " + getName() +
+                "\n  Source Seed: " + (source != null ? source.name() : "None") +
+                "\n  Stages: " + stages +
+                "\n  Total Harvest Time: " + totalHarvestTime +
+                "\n  One Time Harvest: " + oneTime +
+                "\n  Regrowth Time: " + regrowthTime +
+                "\n  Base Sell Price: " + baseSellPrice +
+                "\n  Edible: " + isEdible +
+                "\n  Energy: " + energy +
+                "\n  Seasons: " + Seasons +
+                "\n  Can Become Giant: " + canBecomeGiant;
+    }
+
     public static CropType getCropTypeByName(String name) {
         if (name == null || name.isEmpty())
             return null;
         return stringToCropType.getOrDefault(name.toLowerCase(), null);
+    }
+
+    // Add a static method to look up CropType by Seed
+    public static CropType getCropForSeed(Seeds seed) {
+        if (seed == null) {
+            return null;
+        }
+        return seedsToCropType.get(seed);
     }
 }

@@ -53,6 +53,7 @@ public class TimeSystem {
             this.weather = createNextDayWeather();
             this.nextDayWeather = createNextDayWeather();
         }
+        App.getGameState().MakeGameReadyForNextDay(); 
         App.getGameState().MakePlayersReadyForNextDay(); 
     }
 

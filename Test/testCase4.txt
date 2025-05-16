@@ -1,0 +1,38 @@
+enter login
+login -u aeen123 -p HImynameisCHIKI23@
+enter pregame
+game new aeen123 matin
+game map 1
+game map 2
+print map -h
+help reading map
+print map -l 0, 0 -s 10
+print map -l 0, 0 -s 60
+print map -l 1, 2 -s 10
+tools equip pickaxe
+tools use -d down
+tools use -d right
+tools equip hoe
+tools use -d down
+tools use -d right
+craftinfo -n BlueJazz
+cheat add item -n JazzSeeds -c 10
+plant -s JazzSeeds -d down
+cheat add item -n ApricotSapling -c 10
+plant -s ApricotSapling -d right
+plant -s MapleSeeds -d right
+craftinfo -n MapleSeeds
+show my position
+show plant -l 50 , 38 
+print map
+show my position
+show plant -l 50 , 37 
+show plant -l 51 , 37
+fertilize -f WaterFertilizer -d right
+cheat add item -n WaterFertilizer -c 10
+fertilize -f WaterFertilizer -d right
+show plant -l 50 , 38
+cheat advance date 1d 
+show plant -l 51 , 37
+go back
+exit

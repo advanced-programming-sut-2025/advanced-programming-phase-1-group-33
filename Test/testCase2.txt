@@ -107,5 +107,4 @@ craftinfo -n BlueJazz
 cheat add item -n JazzSeeds -c 10
 plant -s JazzSeeds -d down
 go back
-
 exit
