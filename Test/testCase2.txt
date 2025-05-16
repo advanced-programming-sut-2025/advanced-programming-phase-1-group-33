@@ -4,6 +4,8 @@ enter pregame
 game new aeen123 matin
 game map 1
 game map 2
+print map -h
+help reading map
 print map -l 0, 0 -s 10
 print map -l 0, 0 -s 60
 print map -l 1, 2 -s 10
@@ -63,7 +65,12 @@ walk -l 1, 0
 print map -l 0, 0 -s 10
 print map -l 1, 1 -s 10
 print map -h
+inventory show
+cheat add item -n wood -c 20000
+cheat add 20000 dollars
+inventory show
 greenhouse build
+inventory show
 energy show
 energy set -v 100
 energy unlimited

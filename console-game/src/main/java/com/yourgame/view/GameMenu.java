@@ -119,9 +119,31 @@ public class GameMenu implements AppMenu {
                 return getCookingPrepareResponse(input);
             case EAT:
                 return getEatResponse(input);
+            case FERTILIZE:
+                return getFirtilizeResponse(input);
+            case SHOWPLANT:
+                return getShowPlantResponse(input);
             default:
                 return getInvalidCommand();
         }
+    }
+
+    private Response getShowPlantResponse(String input) {
+        Response response;
+        Request request = new Request(input);
+        request.body.put("x", GameViewCommands.SHOWPLANT.getGroup(input, "x"));
+        request.body.put("y", GameViewCommands.SHOWPLANT.getGroup(input, "y"));
+        response = controller.handleShowPlant(request);
+        return response;
+    }
+
+    private Response getFirtilizeResponse(String input) {
+        Response response;
+        Request request = new Request(input);
+        request.body.put("fertilizer", GameViewCommands.FERTILIZE.getGroup(input, "fertilizer"));
+        request.body.put("direction", GameViewCommands.FERTILIZE.getGroup(input, "direction"));
+        response = controller.handleFertilization(request);
+        return response;
     }
 
     private Response getPlant(String input) {

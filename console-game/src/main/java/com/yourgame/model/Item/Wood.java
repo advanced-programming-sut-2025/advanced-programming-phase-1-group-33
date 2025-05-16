@@ -12,4 +12,5 @@ public class Wood implements Ingredient {
     public boolean equals(Object obj) {
         return obj instanceof Wood;
     }
+
 }

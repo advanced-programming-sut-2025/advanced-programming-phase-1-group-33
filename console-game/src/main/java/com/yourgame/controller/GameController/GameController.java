@@ -16,14 +16,14 @@ import com.yourgame.model.Inventory.Tools.Shear;
 import com.yourgame.model.Inventory.Tools.Tool;
 import com.yourgame.model.Inventory.Tools.WateringCan;
 import com.yourgame.model.Item.*;
+import com.yourgame.model.Item.Stone;
+import com.yourgame.model.Item.Wood;
 import com.yourgame.model.ManuFactor.ArtisanGood;
 import com.yourgame.model.ManuFactor.ArtisanGoodType;
 import com.yourgame.model.ManuFactor.ArtisanMachine;
 import com.yourgame.model.ManuFactor.Ingredient;
-import com.yourgame.model.Map.Direction;
+import com.yourgame.model.Map.*;
 import com.yourgame.model.Map.Map;
-import com.yourgame.model.Map.Position;
-import com.yourgame.model.Map.Quarry;
 import com.yourgame.model.Recipes.CookingRecipe;
 import com.yourgame.model.Recipes.CraftingRecipes;
 import com.yourgame.model.Stores.Blacksmith;
@@ -32,7 +32,6 @@ import com.yourgame.model.UserInfo.Player;
 import com.yourgame.model.UserInfo.User;
 import com.yourgame.model.IO.Request;
 import com.yourgame.model.IO.Response;
-import com.yourgame.model.Map.Tile;
 import com.yourgame.model.Map.Water.Lake;
 import com.yourgame.model.WeatherAndTime.Season;
 import com.yourgame.model.WeatherAndTime.Weather;
@@ -141,7 +140,7 @@ public class GameController {
         inventory.put(coin, inventory.get(coin) - 1000);
         inventory.put(wood, inventory.get(wood) - 500);
         gameState.getCurrentPlayer().getFarm().getGreenHouse().setBroken(false);
-        return new Response(false, "To Do We need to create Map after that we can have green house");
+        return new Response(false, "greenhouse built successfully");
     }
 
     public Response getWalk(Request request) {
@@ -217,8 +216,8 @@ public class GameController {
     }
 
     public List<Position> findShortestPath(Map map, int startX, int startY, int endX, int endY) {
-        int[] dx = { 1, -1, 0, 0 };
-        int[] dy = { 0, 0, 1, -1 };
+        int[] dx = {1, -1, 0, 0};
+        int[] dy = {0, 0, 1, -1};
         boolean[][] visited = new boolean[250][200];
         Position[][] prev = new Position[250][200];
         Queue<Position> q = new LinkedList<>();
@@ -430,6 +429,7 @@ public class GameController {
 
         return new Response(true, output);
     }
+
     public void foragingRandom() {
         // this method should call everyday
         // TODO find an empty tile
@@ -678,6 +678,11 @@ public class GameController {
         Fertilizer fertilizer = Fertilizer.getByName(ItemName);
         if (fertilizer != null) {
             player.getBackpack().addIngredients(fertilizer, quantity);
+            return new Response(true, "You added<" + ItemName + "> successfully!");
+        }
+
+        if(Objects.equals(ItemName, "wood")){
+            player.getBackpack().addIngredients(new Wood(), quantity);
             return new Response(true, "You added<" + ItemName + "> successfully!");
         }
 
@@ -1320,4 +1325,48 @@ public class GameController {
         return cropType;
     }
 
+    public Response handleFertilization(Request request) {
+        String fertilizerName = request.body.get("fertilizer");
+        String directionName = request.body.get("direction");
+        Direction direction = Direction.getDirectionByInput(directionName);
+        Fertilizer fertilizer = Fertilizer.getFertilizerByName(fertilizerName);
+        Player player = gameState.getCurrentPlayer();
+        Tile myTile = gameState.getMap().findTile(player.getPosition());
+        Tile targetTile = gameState.getMap().getTileByDirection(myTile, direction);
+
+        if (!targetTile.isPlowed())
+            return new Response(false, "This tile hasn't plowed yet!");
+
+        if (!player.getBackpack().getIngredientQuantity().containsKey(fertilizer)) {
+            return new Response(false, "You don't have this fertilizer in the backpack!");
+        }
+
+        player.getBackpack().removeIngredients(fertilizer, 1);
+        targetTile.setFertilizer(fertilizer);
+        return new Response(true, "You fertilize this tile successfully!");
+    }
+
+    public Response handleShowPlant(Request request) {
+        int x = Integer.parseInt(request.body.get("x"));
+        int y = Integer.parseInt(request.body.get("y"));
+        Tile tile = gameState.getMap().findTile(x, y);
+
+        if (tile == null)
+            return new Response(false, "Tile not found!");
+
+        Placeable content = tile.getPlaceable();
+        Growable plant;
+        if (!(content instanceof Crop || content instanceof Tree)) {
+            return new Response(false, "Here is no Plant!");
+        } else
+            plant = ((Growable) content);
+
+        return new Response(true,
+                String.format("Name:              %s\n", plant.getName()) +
+                        String.format("Days to complete:  %d\n", plant.getNumberOfDaysToComplete()) +
+                        String.format("Current stage:     %d\n", plant.getCurrentStage()) +
+                        String.format("Has Watered Today: %s\n", plant.hasWateredToday()) +
+                        String.format("Has Fertilized:    %s\n", plant.hasFertilized()) +
+                        String.format("Fertilizer:        %s", plant.getFertilizer()));
+    }
 }
