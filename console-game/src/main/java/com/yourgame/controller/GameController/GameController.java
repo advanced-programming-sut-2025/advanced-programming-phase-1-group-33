@@ -1368,9 +1368,9 @@ public class GameController {
     }
 
     public Response build(Request request) {
-        String buildingName = request.body.get("build");
-        int x = Integer.parseInt(request.body.get("x"));
-        int y = Integer.parseInt(request.body.get("y"));
+        String buildingName = request.body.get("buildingName");
+        int x = Integer.parseInt(request.body.get("X"));
+        int y = Integer.parseInt(request.body.get("Y"));
 
         Player player = gameState.getCurrentPlayer();
         Map map = gameState.getMap();

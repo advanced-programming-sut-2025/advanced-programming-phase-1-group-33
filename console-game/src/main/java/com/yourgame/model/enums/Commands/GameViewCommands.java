@@ -47,7 +47,7 @@ public enum GameViewCommands implements Command {
     COOKING_SHOW_RECIPES("^cooking\\s+show\\s+recipes$"),
     COOKING_PREPARE("^cooking\\s+prepare\\s+(?<itemName>.+)$"),
     EAT("^eat\\s+(?<foodName>.+)$"),
-    BUILD("build\\s+" + "-a\\s+(?<buildingName>.+?)\\s+" + "-l\\s+(?<X>\\d+)\\s*,\\s*(?<Y>\\d+)\\s*"),
+    BUILD("build\\s+-a\\s+(?<buildingName>.+?)\\s+-l\\s+(?<X>\\d+)\\s*,\\s*(?<Y>\\d+)\\s*"),
     BUYANIMAL("buy\\s+animal\\s+" + "-a\\s+(?<animal>\\S+)\\s+" + "-n\\s+(?<name>.+?)\\s*"),
     // PET(""),
     // CHEAT_SET_FRIENDSHIP(""),

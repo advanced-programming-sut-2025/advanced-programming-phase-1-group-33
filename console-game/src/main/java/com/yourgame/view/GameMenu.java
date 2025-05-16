@@ -142,8 +142,8 @@ public class GameMenu implements AppMenu {
     private Response getbuildResponse(String input) {
         Request request = new Request(input);
         request.body.put("buildingName", GameViewCommands.BUILD.getGroup(input, "buildingName"));
-        request.body.put("x", GameViewCommands.BUILD.getGroup(input, "x"));
-        request.body.put("y", GameViewCommands.BUILD.getGroup(input, "y"));
+        request.body.put("X", GameViewCommands.BUILD.getGroup(input, "X"));
+        request.body.put("Y", GameViewCommands.BUILD.getGroup(input, "Y"));
         return controller.build(request);
     }
 
