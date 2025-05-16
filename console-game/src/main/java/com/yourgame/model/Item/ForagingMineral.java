@@ -34,4 +34,14 @@ public enum ForagingMineral implements Ingredient {
     public int getSellPrice() {
         return sellPrice;
     }
+
+    public static ForagingMineral getByName(String name) {
+        for (ForagingMineral type : ForagingMineral.values()) {
+            if (type.name().equalsIgnoreCase(name)) {
+                return type;
+            }
+        }
+        return null;
+    }
+
 }

@@ -1,5 +1,6 @@
 package com.yourgame.model.Item;
 
+import com.yourgame.model.ManuFactor.ArtisanGoodType;
 import com.yourgame.model.ManuFactor.Ingredient;
 
 public enum Fruit implements Ingredient {
@@ -34,4 +35,14 @@ public enum Fruit implements Ingredient {
     public int getSellPrice() {
         return baseSellPrice;
     }
+
+    public static Fruit getByName(String name) {
+        for (Fruit type : Fruit.values()) {
+            if (type.name().equalsIgnoreCase(name)) {
+                return type;
+            }
+        }
+        return null;
+    }
+
 }

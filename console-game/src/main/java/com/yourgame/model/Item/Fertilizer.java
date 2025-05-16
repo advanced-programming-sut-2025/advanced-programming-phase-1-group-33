@@ -12,4 +12,14 @@ public enum Fertilizer implements Ingredient {
         else
             return WaterFertilizer;
     }
+
+    public static Fertilizer getByName(String name) {
+        for (Fertilizer type : Fertilizer.values()) {
+            if (type.name().equalsIgnoreCase(name)) {
+                return type;
+            }
+        }
+        return null;
+    }
+
 }

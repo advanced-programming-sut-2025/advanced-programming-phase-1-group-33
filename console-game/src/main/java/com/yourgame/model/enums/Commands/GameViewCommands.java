@@ -63,7 +63,7 @@ public enum GameViewCommands implements Command{
     // SHOW_ALL_PRODUCTS(""),
     // SHOW_ALL_AVAILABLE_PRODUCTS(""),
     // PURCHASE(""),
-    // CHEAT_ADD_DOLLARS(""),
+    CHEAT_ADD_DOLLARS("\\s*cheat\\s+add\\s+(?<amount>-?\\d+)\\s+dollars"),
     // SELL_PRODUCT(""),
     // FRIENDSHIPS(""),
     // TALK(""),

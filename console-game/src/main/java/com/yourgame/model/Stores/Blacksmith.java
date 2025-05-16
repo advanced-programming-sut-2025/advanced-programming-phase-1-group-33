@@ -28,7 +28,7 @@ public class Blacksmith extends Store {
         inventory.add(new BlackSmithStocksItem("Iron Ore", ForagingMineral.Iron, 150, Integer.MAX_VALUE));
         inventory.add(new BlackSmithStocksItem("Coal", ForagingMineral.Coal, 150, Integer.MAX_VALUE));
         inventory.add(new BlackSmithStocksItem("Gold Ore", ForagingMineral.Gold, 400, Integer.MAX_VALUE));
-        inventory.add(new BlackSmithToolUpgradeItem("Cooper Tool", ArtisanGoodType.CopperBar, 5, 2000, 1));
+        inventory.add(new BlackSmithToolUpgradeItem("Copper Tool", ArtisanGoodType.CopperBar, 5, 2000, 1));
         inventory.add(new BlackSmithToolUpgradeItem("Steel Tool", ArtisanGoodType.IronBar, 5, 5000, 1));
         inventory.add(new BlackSmithToolUpgradeItem("Gold Tool", ArtisanGoodType.GoldBar, 5, 10000, 1));
         inventory.add(new BlackSmithToolUpgradeItem("Iridium Tool", ArtisanGoodType.IridiumBar, 5, 25000, 1));

@@ -1,6 +1,6 @@
 package com.yourgame.model.ManuFactor;
 
-public enum ArtisanGoodType {
+public enum ArtisanGoodType implements Ingredient {
     Honey(75, 350),
     CheeseByMilk(100, 230),
     CheeseByLargeMilk(100, 345),
@@ -48,5 +48,20 @@ public enum ArtisanGoodType {
 
     public int getSellPrice() {
         return sellPrice;
+    }
+
+    /**
+     * Looks up an ArtisanGoodType by name (ignoring case).
+     * 
+     * @param name the name of the good to find.
+     * @return the matching ArtisanGoodType, or null if not found.
+     */
+    public static ArtisanGoodType getByName(String name) {
+        for (ArtisanGoodType type : ArtisanGoodType.values()) {
+            if (type.name().equalsIgnoreCase(name)) {
+                return type;
+            }
+        }
+        return null;
     }
 }

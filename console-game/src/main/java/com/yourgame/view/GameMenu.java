@@ -97,6 +97,8 @@ public class GameMenu implements AppMenu {
             // return getToolsUseDirectionResponse(input);
             case TOOLS_UPGRADE:
                 return getToolUpgradeResponse(input);
+            case CHEAT_ADD_DOLLARS:
+                return getAddDollars(input); 
             case CRAFT_INFO:
                 return showCraftInfo(input);
             case CRAFTING_SHOW_RECIPES:
@@ -118,8 +120,14 @@ public class GameMenu implements AppMenu {
         }
     }
 
-    private Response getToolUpgradeResponse(String input) {
-        Response response;
+    private Response getAddDollars(String input) {
+        Request request = new Request(input);
+        request.body.put("amount", GameViewCommands.CHEAT_ADD_DOLLARS.getGroup(input, "amount"));
+        
+        return controller.getAddDollars(request); 
+    }
+
+	private Response getToolUpgradeResponse(String input) {
         Request request = new Request(input);
         request.body.put("name", GameViewCommands.TOOLS_UPGRADE.getGroup(input, "name"));
 

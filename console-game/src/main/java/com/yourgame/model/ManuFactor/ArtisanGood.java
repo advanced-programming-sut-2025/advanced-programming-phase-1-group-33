@@ -2,7 +2,7 @@ package com.yourgame.model.ManuFactor;
 
 import java.util.Objects;
 
-public class ArtisanGood implements Ingredient {
+public class ArtisanGood implements Ingredient{
     private final ArtisanGoodType type;
     private final int energy;
     private final int sellPrice;

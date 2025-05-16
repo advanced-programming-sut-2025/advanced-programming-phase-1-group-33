@@ -82,4 +82,14 @@ public enum ForagingCrop implements Ingredient {
             return null;
         return stringToForagingCrop.getOrDefault(name.toLowerCase(), null);
     }
+
+    public static ForagingCrop getByName(String name) {
+        for (ForagingCrop type : ForagingCrop.values()) {
+            if (type.name().equalsIgnoreCase(name)) {
+                return type;
+            }
+        }
+        return null;
+    }
+
 }
