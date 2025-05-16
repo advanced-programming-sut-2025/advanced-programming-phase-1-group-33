@@ -69,5 +69,7 @@ walk -l 31 , 31
 walk -l 1, 0
 print map -l 0, 0 -s 10
 print map -l 1, 1 -s 10
+print map -h
+greenhouse build
 go back
 exit

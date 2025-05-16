@@ -22,6 +22,7 @@ public enum SymbolType {
     Tree('T', ANSI.BRIGHT_GREEN, "Tree"),
     Cottage('C', ANSI.YELLOW, "Default for Cottage"),
     BUILDING('B', ANSI.YELLOW, "Default for Buildings"),
+    BrokenGreenHouse('G', ANSI.YELLOW, "Broken GreenHouse"),
     GreenHouse('G', ANSI.BRIGHT_BLUE, "Default for GreenHouse"),
     CarpenterShop('W', ANSI.WHITE, "Default for CarpenterShop"),
     Blacksmith('⚒', ANSI.GRAY, "Default for BlackSmith"),

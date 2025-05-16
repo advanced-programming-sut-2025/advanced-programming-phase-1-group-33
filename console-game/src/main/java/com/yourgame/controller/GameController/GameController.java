@@ -11,6 +11,7 @@ import com.yourgame.model.Map.Map;
 import com.yourgame.model.Map.Position;
 import com.yourgame.model.Recipes.CookingRecipe;
 import com.yourgame.model.Recipes.CraftingRecipes;
+import com.yourgame.model.UserInfo.Coin;
 import com.yourgame.model.UserInfo.Player;
 import com.yourgame.model.UserInfo.User;
 import com.yourgame.model.IO.Request;
@@ -21,6 +22,8 @@ import com.yourgame.model.enums.SymbolType;
 import com.yourgame.view.ConsoleView;
 
 import java.util.*;
+
+import javax.naming.spi.DirStateFactory.Result;
 
 import com.yourgame.controller.CommandParser;
 import com.yourgame.model.App;
@@ -88,7 +91,6 @@ public class GameController {
     }
 
     public Response setCurrentPlayerEnergyUnlimited() {
-        // TODO Auto-generated method stub
         gameState.getCurrentPlayer().setUnlimitedEnergy(true);
         return new Response(true, "Your energy is unlimited");
     }
@@ -100,7 +102,27 @@ public class GameController {
     }
 
     public Response getBuildGreenHouse() {
-        // TODO Auto-generated method stub
+        HashMap<Ingredient, Integer> inventory = gameState.getCurrentPlayer().getBackpack().getIngredientQuantity();
+        Ingredient coin = null,
+                wood = null;
+
+        for (Ingredient ing : inventory.keySet()) {
+            if (ing instanceof Coin)
+                coin = ing;
+            if (ing instanceof Wood)
+                wood = ing;
+        }
+
+        if (coin == null || inventory.get(coin) < 1000) {
+            return new Response(false, "you don't have enough money");
+        }
+        if (wood == null || inventory.get(wood) < 500) {
+            return new Response(false, "you don't have enough woods");
+        }
+
+        inventory.put(coin, inventory.get(coin) - 1000);
+        inventory.put(wood, inventory.get(wood) - 500);
+        gameState.getCurrentPlayer().getFarm().getGreenHouse().setBroken(false); 
         return new Response(false, "To Do We need to create Map after that we can have green house");
     }
 
@@ -125,12 +147,12 @@ public class GameController {
             return new Response(false, "you are fainted");
         }
         Response response = currentPlayer.consumeEnergy(energy);
-        if(response.getSuccessful()){
+        if (response.getSuccessful()) {
             currentPlayer.getPosition().setX(endX);
             currentPlayer.getPosition().setY(endY);
-            return new Response(true, String.format(response.getMessage()+ "you have been walked to " + endX + " " + endY));
-        }
-        else{
+            return new Response(true,
+                    String.format(response.getMessage() + "you have been walked to " + endX + " " + endY));
+        } else {
             return response;
         }
     }
@@ -195,7 +217,7 @@ public class GameController {
 
                 if (nx >= 0 && nx < 250 && ny >= 0 && ny < 200 && !visited[nx][ny]
                         && map.getTiles()[nx][ny].isWalkable()) {
-                visited[nx][ny] = true;
+                    visited[nx][ny] = true;
                     prev[nx][ny] = p;
                     q.add(new Position(nx, ny));
                 }
@@ -322,8 +344,8 @@ public class GameController {
         int X = Integer.parseInt(request.body.get("X"));
         int Y = Integer.parseInt(request.body.get("Y"));
         Tile tile = findTilePosition(X, Y);
-        if (tile == null){
-            return new Response(true, "Tile not found");            
+        if (tile == null) {
+            return new Response(true, "Tile not found");
         }
         tile.setGotThor(true);
         return new Response(false, "The tile with the postition : X:" + X + " Y: " + Y + " is under thor");
@@ -797,9 +819,10 @@ public class GameController {
         }
         return null;
     }
+
     public Response printWholeMap() {
         String mapString = gameState.getMap().printTheWholeMap();
-        return new Response(true, mapString); 
+        return new Response(true, mapString);
     }
 
     public Response printMap(Request request) {
@@ -808,18 +831,18 @@ public class GameController {
         int y = Integer.parseInt(request.body.get("y"));
         int size = Integer.parseInt(request.body.get("size"));
         String mapString = gameState.getMap().printMap(x, y, size);
-        return new Response(true, mapString); 
+        return new Response(true, mapString);
     }
 
-	public Response getHelpRedning() {
-        String info = SymbolType.getSymbolsInfo(); 
-        return new Response(true, info); 
-        
+    public Response getHelpRedning() {
+        String info = SymbolType.getSymbolsInfo();
+        return new Response(true, info);
+
     }
 
-	public Response showMyPostion() {
-        Position pos = gameState.getCurrentPlayer().getPosition(); 
-        return new Response(true, "You are in " + pos); 
+    public Response showMyPostion() {
+        Position pos = gameState.getCurrentPlayer().getPosition();
+        return new Response(true, "You are in " + pos);
 
     }
 
