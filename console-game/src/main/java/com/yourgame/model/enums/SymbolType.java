@@ -39,7 +39,8 @@ public enum SymbolType {
     DIRT('.', ANSI.RED, "Default For Dirt"),
     SAND('.', ANSI.YELLOW, "Default for Sand"),
     PORTAL('@', ANSI.PURPLE, "Default for Portal"), 
-    BrokenStone('.', ANSI.GRAY, "A cracked and broken stone"),;
+    BrokenStone('.', ANSI.GRAY, "A cracked and broken stone"),
+    SIPPINGBIN('ø', ANSI.GRAY, "Default for SIPPINGBIN"),;
 
     private final char symbol;
     private final String colorCode;
