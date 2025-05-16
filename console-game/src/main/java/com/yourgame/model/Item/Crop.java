@@ -3,12 +3,13 @@ package com.yourgame.model.Item;
 import com.yourgame.model.App;
 import com.yourgame.model.ManuFactor.Ingredient;
 import com.yourgame.model.Map.Placeable;
+import com.yourgame.model.Stores.Sellable;
 import com.yourgame.model.WeatherAndTime.TimeSystem;
 import com.yourgame.model.enums.SymbolType;
 
 import java.awt.*;
 
-public class Crop implements Ingredient, Growable , Placeable {
+public class Crop implements Ingredient, Growable , Placeable, Sellable {
     private final CropType type;
     private int levelOfGrowth;
     private TimeSystem lastGrowthTime;

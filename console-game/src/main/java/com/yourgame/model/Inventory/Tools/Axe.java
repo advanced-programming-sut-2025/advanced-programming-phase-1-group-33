@@ -59,7 +59,7 @@ public class Axe extends Tool {
             return energyConsumptionResult;
         }
 
-        return new Response(true, "");
+        return energyConsumptionResult;
 
         
 

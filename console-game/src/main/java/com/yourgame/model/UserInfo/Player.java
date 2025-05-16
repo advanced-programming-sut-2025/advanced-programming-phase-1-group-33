@@ -127,7 +127,7 @@ public class Player {
             faint();
             return new Response(false, "You Fainted... Dummy\n");
         }
-        return new Response(true, "You consumed " + this.consumedEnergyInThisTurn + " in this turn until now!\n");
+        return new Response(true, "You consumed " + this.consumedEnergyInThisTurn + " in this turn until now! ");
     }
 
     public boolean isUnlimitedEnergy() {

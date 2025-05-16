@@ -2,6 +2,7 @@ package com.yourgame.model.Animals;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 public enum AnimalType {
@@ -27,8 +28,14 @@ public enum AnimalType {
     private final HabitatSize habitatSize;
     private final int Price;
     private final int daysToGetProduct;
+    private final static HashMap<String, AnimalType> stringToAnimalType = new HashMap<>();
     private final ArrayList<AnimalGoodType> animalGoodTypes;
 
+    static {
+        for (AnimalType value : AnimalType.values()) {
+            stringToAnimalType.put(value.name().toLowerCase(), value);
+        }
+    }
 
      AnimalType(HabitatType habitatType, HabitatSize habitatSize, int price, int daysToGetProduct, ArrayList<AnimalGoodType> animalGoodTypes){
         this.habitatType = habitatType;
@@ -46,8 +53,8 @@ public enum AnimalType {
         return habitatType;
     }
 
-    public HabitatSize getHabitatSize() {
-         return habitatSize;
+    public static AnimalType getAnimalTypeByInput(String input) {
+        return stringToAnimalType.getOrDefault(input, null);
     }
 
     public int getDaysToGetProduct() {

@@ -99,7 +99,7 @@ public class LoginMenuController extends Controller {
         if (System.getenv("APP_MODE") != null && System.getenv("APP_MODE").equals("TEST")) {
             userPassword = password;
         }
-       System.out.println("Enter 'pick question -q <question number> -a <answer> -c <confirm answer>' to choose security question\n");
+       System.out.println("choose security question\n");
 
         int counter = 0;
         for (SecurityQuestion sq : App.securityQuestions) {

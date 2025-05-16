@@ -2,6 +2,7 @@ package com.yourgame.model.Stores;
 
 
 import com.yourgame.model.App;
+import com.yourgame.model.IO.Response;
 import com.yourgame.model.Map.Placeable;
 import com.yourgame.model.enums.SymbolType;
 
@@ -44,15 +45,15 @@ public abstract class Store implements Placeable {
     }
 
     public abstract SymbolType getSymbol();
-    public void loadInventory() {
 
+    public void loadInventory() {
     }
 
+    public abstract String showAllProducts();
 
-//    public abstract String showAllProducts();
-//
-//    public abstract String showAllAvailableProducts();
-//
-//    public abstract void purchase();
+    public abstract String showAvailableProducts();
 
+    public abstract Response purchaseProduct(int value, String productName);
+
+    public abstract void ResetQuantityEveryNight();
 }

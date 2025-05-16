@@ -2,10 +2,11 @@ package com.yourgame.model.Item;
 
 
 import com.yourgame.model.ManuFactor.Ingredient;
+import com.yourgame.model.Stores.Sellable;
 
 import java.util.HashMap;
 
-public enum Food implements Ingredient {
+public enum Food implements Ingredient, Sellable {
     FriedEgg(50, 35),
     BakedFish(75, 100),
     Salad(113, 110),
@@ -28,6 +29,8 @@ public enum Food implements Ingredient {
     SurvivalBurger(125, 180),
     DishOTheSea(150, 220),
     SeaFormPudding(175, 300),
+    JojaCola(13,25),
+    TroutSoup(100,100),
     MinersTreat(125, 200);
 
     private final int energy;

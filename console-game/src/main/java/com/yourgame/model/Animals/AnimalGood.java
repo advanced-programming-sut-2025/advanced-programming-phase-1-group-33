@@ -1,8 +1,9 @@
 package com.yourgame.model.Animals;
 
 import com.yourgame.model.ManuFactor.Ingredient;
+import com.yourgame.model.Stores.Sellable;
 
-public class AnimalGood implements Ingredient {
+public class AnimalGood implements Ingredient, Sellable {
     private final AnimalGoodType type;
     private final Quality quality;
     private final int sellPrice;

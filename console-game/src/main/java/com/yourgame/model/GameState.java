@@ -1,14 +1,22 @@
 package com.yourgame.model;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.yourgame.model.Animals.Animal;
+import com.yourgame.model.Item.Crop;
+import com.yourgame.model.Item.Growable;
+import com.yourgame.model.Item.Tree;
 import com.yourgame.model.Map.Farm;
+import com.yourgame.model.Map.GreenHouse;
 import com.yourgame.model.Map.Map;
+import com.yourgame.model.Map.Tile;
 import com.yourgame.model.UserInfo.Player;
 import com.yourgame.model.UserInfo.User;
 import com.yourgame.model.WeatherAndTime.TimeSystem;
+import com.yourgame.view.GameMenu;
 
 public class GameState {
     private final ArrayList<Player> players = new ArrayList<>();
@@ -100,6 +108,117 @@ public class GameState {
         return time;
     }
 
+
+//    public void callMethodsForTomorrow() {
+//        ((GameMenu) App.getCurrentMenu().getMenu()).doNights();
+//
+//        for (Player player : players) {
+//            int ratio = 1;
+//            if (player.getRemainingNumsAfterMarriageRequestDenied() > 0){
+//                ratio = 2;
+//                player.setRemainingNumsAfterMarriageRequestDenied(player.getRemainingNumsAfterMarriageRequestDenied() - 1);
+//            }
+//            if (player.isFaintedToday()) {
+//                player.setEnergy(150/ratio);
+//            }
+//            else {
+//                player.setEnergy(200/ratio);
+//            }
+//            player.setFaintedToday(false);
+//            Iterator<Tree> treeIterator = player.getFarm().getTrees().iterator();
+//            while (treeIterator.hasNext()) {
+//                Tree tree = treeIterator.next();
+//                tree.grow(time);
+//                if (!tree.canBeAlive(time)) {
+//                    treeIterator.remove();
+//                    player.getFarm().getPlaceables().remove(tree);
+//                    Tile tile = map.findTile(tree.getBounds().x, tree.getBounds().y);
+//                    tile.setWalkable(true);
+//                    tile.setPlaceable(null);
+//                    tile.setSymbol();
+//                    tile.setFertilizer(null);
+//                    tile.setPlowed(false);
+//                }
+//            }
+//
+//            Iterator<Crop> cropIterator = player.getFarm().getCrops().iterator();
+//            while (cropIterator.hasNext()) {
+//                Crop crop = cropIterator.next();
+//                crop.grow(time);
+//                if (!crop.canBeAlive(time)) {
+//                    cropIterator.remove();
+//
+//                    player.getFarm().getPlaceables().removeIf(p -> p == crop);
+//                    Tile tile = map.findTile(crop.getBounds().x, crop.getBounds().y);
+//                    tile.setWalkable(true);
+//                    tile.setPlaceable(null);
+//                    tile.setSymbol('.');
+//                    tile.setFertilizer(null);
+//                    tile.setPlowed(false);
+//                }
+//            }
+//
+//            GreenHouse gh = player.getFarm().getGreenHouse();
+//            Iterator<Growable> cropIterator2 = gh.getGrowables().iterator();
+//            if(!gh.isBroken()) {
+//                while (cropIterator2.hasNext()) {
+//                    Growable growable = cropIterator2.next();
+//                    growable.grow(time);
+//                    if (!growable.canBeAlive(time)) {
+//                        cropIterator2.remove();
+//                        if (growable instanceof Crop) {
+//                            player.getFarm().getPlaceables().removeIf(p -> p == growable);
+//
+//                        } else if (growable instanceof Tree) {
+//                            player.getFarm().getPlaceables().remove(growable);
+//                        }
+//                    }
+//                }
+//            }
+//            map.generateRandomForagingCrop(player.getFarm());
+//            map.generateRandomStoneFarm(player.getFarm());
+//
+//            for (Animal animal : player.getBackpack().getAllAnimals()) {
+//                if (animal.isOutOfHabitat()) {
+//                    animal.decrementFriendShip(20);
+//                }
+//                if (!animal.hasFedYesterday()) {
+//                    animal.decrementFriendShip(20);
+//                }
+//                if (!animal.hasPettedYesterday()) {
+//                    animal.decrementFriendShip((animal.getFriendShip() / 200) + 10);
+//                }
+//            }
+//        }
+//        map.GotThunderByStormyWeather();
+//        map.randomForagingMineralGenerator();
+//        setCurrentPlayer(players.getFirst());
+//
+//        for (ShippingBin bin : this.map.getShippingBins()) {
+//            bin.checkEveryNight();
+//        }
+//
+//        for (RelationWithPlayers relation : App.getGame().relationsBetweenPlayers.relationNetwork.values()) {
+//            relation.checkEveryNight();
+//        }
+//
+//        for (Player player : players) {
+//            player.getRelationWithAbigail().checkEveryNight(player);
+//            player.getRelationWithHarvey().checkEveryNight(player);
+//            player.getRelationWithLeah().checkEveryNight(player);
+//            player.getRelationWithRobin().checkEveryNight(player);
+//            player.getRelationWithSebastian().checkEveryNight(player);
+//        }
+//
+//        this.getMap().getNpcVillage().getBlacksmith().ResetQuantityEveryNight();
+//        this.getMap().getNpcVillage().getMarnieRanch().ResetQuantityEveryNight();
+//        this.getMap().getNpcVillage().getPierreGeneralStore().ResetQuantityEveryNight();
+//        this.getMap().getNpcVillage().getJojaMart().ResetQuantityEveryNight();
+//        this.getMap().getNpcVillage().getFishShop().ResetQuantityEveryNight();
+//        this.getMap().getNpcVillage().getCarpenterShop().ResetQuantityEveryNight();
+//        this.getMap().getNpcVillage().getStardopSaloon().ResetQuantityEveryNight();
+//
+//    }
 
     public void startGame() {
     }

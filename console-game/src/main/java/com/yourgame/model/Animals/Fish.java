@@ -2,8 +2,9 @@ package com.yourgame.model.Animals;
 
 
 import com.yourgame.model.ManuFactor.Ingredient;
+import com.yourgame.model.Stores.Sellable;
 
-public class Fish implements Ingredient {
+public class Fish implements Ingredient, Sellable {
     private final FishType type;
     private final int sellPrice;
     private final Quality quality;

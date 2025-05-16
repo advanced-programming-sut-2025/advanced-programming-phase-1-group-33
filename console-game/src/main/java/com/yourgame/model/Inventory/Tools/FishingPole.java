@@ -9,6 +9,10 @@ import com.yourgame.model.WeatherAndTime.Weather;
 public class FishingPole extends Tool {
     private PoleType type = PoleType.Training;
 
+    public FishingPole(PoleType type) {
+        this.type = type;
+    }
+
     public void upgradeTool() {
         if(type == PoleType.Training) {
             type = PoleType.Bamboo;

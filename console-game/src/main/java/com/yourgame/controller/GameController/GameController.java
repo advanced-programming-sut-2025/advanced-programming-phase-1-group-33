@@ -1,9 +1,6 @@
 package com.yourgame.controller.GameController;
 
-import com.yourgame.model.Animals.AnimalGood;
-import com.yourgame.model.Animals.Fish;
-import com.yourgame.model.Animals.FishType;
-import com.yourgame.model.Animals.Quality;
+import com.yourgame.model.Animals.*;
 import com.yourgame.model.GameState;
 import com.yourgame.model.Inventory.TrashCan;
 import com.yourgame.model.Inventory.Tools.Axe;
@@ -1085,7 +1082,7 @@ public class GameController {
                     p.getBackpack().addIngredients(wood, numberOfWoods);
                 }
                 p.getBackpack().addIngredients(tree.getType().getSource(), 2);
-                return new Response(true, energyConsumptionResponse.getMessage() + " and Tree has been cutted :)");
+                return new Response(true, energyConsumptionResponse.getMessage() + "and Tree has been cutted :)");
 
             }
 
@@ -1368,5 +1365,86 @@ public class GameController {
                         String.format("Has Watered Today: %s\n", plant.hasWateredToday()) +
                         String.format("Has Fertilized:    %s\n", plant.hasFertilized()) +
                         String.format("Fertilizer:        %s", plant.getFertilizer()));
+    }
+
+    public Response build(Request request) {
+        String buildingName = request.body.get("build");
+        int x = Integer.parseInt(request.body.get("x"));
+        int y = Integer.parseInt(request.body.get("y"));
+
+        Player player = gameState.getCurrentPlayer();
+        Map map = gameState.getMap();
+        HabitatType habitatType = Habitat.getHabitatTypeByInput(buildingName);
+        HabitatSize habitatSize = Habitat.getHabitatSizeByInput(buildingName);
+
+        if (habitatType == null || habitatSize == null)
+            return new Response(false, "Invalid building name or type");
+        if (!map.isAroundPlaceable(player, map.getNpcVillage().getCarpenterShop()))
+            return new Response(false, "You should be near CarpenterShop");
+
+        for (int i = x; i < x + habitatType.getLengthX(); i++) {
+            for (int j = y; j < y + habitatType.getLengthY(); j++) {
+                Tile tile = map.findTile(i, j);
+                if (tile == null)
+                    return new Response(false, "Invalid tile");
+                if (tile.getPlaceable() != null)
+                    return new Response(false, "You cannot build in this area! The area is not empty!");
+            }
+        }
+
+        Response storeResult = map.getNpcVillage().getCarpenterShop().purchaseBuilding(habitatType, habitatSize);
+        if (!storeResult.getSuccessful())
+            return storeResult;
+
+        Habitat habitat = new Habitat(habitatType, habitatSize, x, y);
+
+        for (int i = x; i < x + habitatType.getLengthX(); i++) {
+            for (int j = y; j < y + habitatType.getLengthY(); j++) {
+                Tile tile = map.findTile(i, j);
+                tile.setPlaceable(habitat);
+                tile.setWalkable(false);
+                tile.setSymbol(habitat.getSymbol());
+            }
+        }
+
+        player.getFarm().addHabitat(habitat);
+        player.getFarm().getPlaceables().add(habitat);
+
+        return new Response(true, "A <" + buildingName + "> was built successfully!");
+    }
+
+    public Response handleBuyAnimal(Request request) {
+        String animalT = request.body.get("animal");
+        String name = request.body.get("name");
+        Player player = App.getGameState().getCurrentPlayer();
+        Map map = App.getGameState().getMap();
+        AnimalType animalType = AnimalType.getAnimalTypeByInput(animalT);
+
+        if (player.getBackpack().getAnimalByName(name) != null)
+            return new Response(false, "Animal with this name already exists! Please choose another name");
+        if (animalType == null)
+            return new Response(false, "Invalid animal type!");
+        if(!map.isAroundPlaceable(player, map.getNpcVillage().getMarnieRanch()))
+            return new Response(false, "You should be near Marnie Ranch Shop");
+
+        Habitat habitat = null;
+        for (Habitat habitat1 : player.getFarm().getHabitats()) {
+            if (habitat1.getType().equals(animalType.getAnimalHabitat()) && habitat1.hasEmptyCapacity()) {
+                habitat = habitat1;
+                break;
+            }
+        }
+        if (habitat == null)
+            return new Response(false, "You don't have any enough capacity to buy this animalT!");
+
+        Response storeResult = map.getNpcVillage().getMarnieRanch().PurchaseAnimal(animalType);
+        if (!storeResult.getSuccessful())
+            return storeResult;
+
+        Animal animal = new Animal(animalType, name, habitat);
+        player.getBackpack().addAnimal(animal);
+        habitat.addAnimal(animal);
+
+        return new Response(true, "You buy a <" + animalType + "> with name <" + name + "> successfully!");
     }
 }

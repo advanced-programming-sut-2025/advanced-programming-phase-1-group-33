@@ -104,7 +104,7 @@ public class GameMenu implements AppMenu {
             case CRAFT_INFO:
                 return showCraftInfo(input);
             case Plant:
-                return getPlant(input); 
+                return getPlant(input);
             case CRAFTING_SHOW_RECIPES:
                 return craftShowRecipes(input);
             case CRAFTING_CRAFT:
@@ -123,9 +123,28 @@ public class GameMenu implements AppMenu {
                 return getFirtilizeResponse(input);
             case SHOWPLANT:
                 return getShowPlantResponse(input);
+            case BUILD:
+                return getbuildResponse(input);
+            case BUYANIMAL:
+                return getBuyAnimalResponse(input);
             default:
                 return getInvalidCommand();
         }
+    }
+
+    private Response getBuyAnimalResponse(String input) {
+        Request request = new Request(input);
+        request.body.put("animal", GameViewCommands.BUYANIMAL.getGroup(input, "animal"));
+        request.body.put("name", GameViewCommands.BUYANIMAL.getGroup(input, "name"));
+        return controller.handleBuyAnimal(request);
+    }
+
+    private Response getbuildResponse(String input) {
+        Request request = new Request(input);
+        request.body.put("buildingName", GameViewCommands.BUILD.getGroup(input, "buildingName"));
+        request.body.put("x", GameViewCommands.BUILD.getGroup(input, "x"));
+        request.body.put("y", GameViewCommands.BUILD.getGroup(input, "y"));
+        return controller.build(request);
     }
 
     private Response getShowPlantResponse(String input) {

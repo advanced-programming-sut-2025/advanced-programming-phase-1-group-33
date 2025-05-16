@@ -3,6 +3,8 @@ package com.yourgame.model.Map;
 // need a way from farms to npc village  .....
 // doors are completed , but we need ways from each farm to npc village.
 
+import com.yourgame.model.Item.Crop;
+import com.yourgame.model.Item.CropType;
 import com.yourgame.model.Item.ForagingMineral;
 import com.yourgame.model.Item.Tree;
 import com.yourgame.model.Npc.NPC;
@@ -24,6 +26,7 @@ public class Map {
     private ArrayList<Farm> farms = new ArrayList<>();
     private NpcVillage npcVillage;
     private final ArrayList<NpcHome> npcHomes = new ArrayList<>();
+    private final ArrayList<ShippingBin> shippingBins = new ArrayList<>();
 
     public Map(ArrayList<Farm> farms) {
         this.farms = farms;
@@ -253,6 +256,26 @@ public class Map {
             }
         }
     }
+    public ArrayList<ShippingBin> getShippingBins() {
+        return shippingBins;
+    }
+
+    public boolean addShippingBin(int x, int y) {
+        if (!(tiles[x][y].getPlaceable() == null)) {
+            return false;
+        }
+
+        ShippingBin temp = new ShippingBin(x, y);
+
+        this.shippingBins.add(temp);
+        tiles[x][y].setPlaceable(temp);
+        tiles[x][y].setPlowed(false);
+        tiles[x][y].setWalkable(false);
+        tiles[x][y].setSymbol(temp.getSymbol());
+        tiles[x][y].setFertilizer(null);
+
+        return true;
+    }
 
     public Tile getTileByDirection(Tile currentTile, Direction direction) {
         return switch (direction) {
@@ -299,5 +322,31 @@ public class Map {
         }
 
         return false;
+    }
+
+    public void generateRandomForagingCrop(Farm farm) {
+
+        int numberOfRandomCrops = 6;
+        int counter = 0;
+        while (counter < numberOfRandomCrops) {
+            int x = rand.nextInt(farm.getRectangle().width) + farm.getRectangle().x;
+            int y = rand.nextInt(farm.getRectangle().height) + farm.getRectangle().y;
+            Tile tile = findTile(x, y);
+            if (tile.getPlaceable() == null) {
+                Crop crop = new Crop(generateRandomCropType(), App.getGameState().getGameTime(), null, x, y);
+                tile.setPlaceable(crop);
+                tile.setWalkable(false);
+                tile.setSymbol(crop.getSymbol());
+                farm.getCrops().add(crop);
+                farm.getPlaceables().add(crop);
+            }
+            counter++;
+
+        }
+
+    }
+    public CropType generateRandomCropType() {
+        CropType[] cropTypes = CropType.values();
+        return cropTypes[rand.nextInt(cropTypes.length)];
     }
 }

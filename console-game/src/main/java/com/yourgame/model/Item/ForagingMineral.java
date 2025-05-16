@@ -1,8 +1,9 @@
 package com.yourgame.model.Item;
 
 import com.yourgame.model.ManuFactor.Ingredient;
+import com.yourgame.model.Stores.Sellable;
 
-public enum ForagingMineral implements Ingredient {
+public enum ForagingMineral implements Ingredient, Sellable {
     Quartz(25),
     EarthCrystal(50),
     FrozenTear(75),

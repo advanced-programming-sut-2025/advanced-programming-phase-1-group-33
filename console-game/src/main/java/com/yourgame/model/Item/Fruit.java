@@ -2,8 +2,9 @@ package com.yourgame.model.Item;
 
 import com.yourgame.model.ManuFactor.ArtisanGoodType;
 import com.yourgame.model.ManuFactor.Ingredient;
+import com.yourgame.model.Stores.Sellable;
 
-public enum Fruit implements Ingredient {
+public enum Fruit implements Ingredient , Sellable {
     Apricot(75, 100),
     Cherry(75, 100),
     Banana(75, 100),
