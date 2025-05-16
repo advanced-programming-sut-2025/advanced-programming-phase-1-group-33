@@ -31,13 +31,22 @@ show plant -l 51 , 37
 fertilize -f WaterFertilizer -d right
 cheat add item -n WaterFertilizer -c 10
 fertilize -f WaterFertilizer -d right
-show plant -l 50 , 38
-cheat advance date 1d 
-show plant -l 51 , 37
 howmuch water
 tools equip wateringcan
-tools use -d down
+show plant -l 50 , 38
 tools use -d right
+cheat advance date 1d
+show plant -l 50 , 38
+tools use -d right
+cheat advance date 1d
+tools use -d right
+show plant -l 50 , 38
+tools use -d right
+cheat advance date 1d
+show plant -l 50 , 38
+tools use -d right
+cheat advance date 1d
+show plant -l 50 , 38
 howmuch water
 go back
 exit

@@ -35,12 +35,18 @@ public class ArtisanGood implements Ingredient, Sellable {
 
     @Override
     public boolean equals(Object o) {
-        if (!(o instanceof ArtisanGood that)) return false;
+        if (!(o instanceof ArtisanGood that))
+            return false;
         return type == that.type;
     }
 
     @Override
     public int hashCode() {
         return Objects.hashCode(type);
+    }
+
+    @Override
+    public String toString() {
+        return type.toString();
     }
 }

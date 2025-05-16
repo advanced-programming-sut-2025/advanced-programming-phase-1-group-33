@@ -173,11 +173,13 @@ public class GameState {
     }
 
     public void MakeGameReadyForNextDay() {
-        if (App.getCurrentMenu() != null && App.getCurrentMenu().getMenu() instanceof GameMenu) {
-            ((GameMenu) App.getCurrentMenu().getMenu()).doNights();
-        }
+        // To do 
+        // if (App.getCurrentMenu() != null && App.getCurrentMenu().getMenu() instanceof GameMenu) {
+        //     ((GameMenu) App.getCurrentMenu().getMenu()).doNights();
+        // }
 
         for (Player player : players) {
+            player.setConsumedEnergyInThisTurn(0);
             int ratio = 1;
             if (player.getRemainingDaysAfterMarigDenied() > 0) {
                 ratio = 2;

@@ -10,7 +10,6 @@ import com.yourgame.model.ManuFactor.Ingredient;
 
 import java.util.HashMap;
 import java.util.Map;
-
 public enum CraftingRecipes {
     CherryBomb(new HashMap<>(Map.of(
             ForagingMineral.Copper, 4,

@@ -1,0 +1,18 @@
+enter login
+login -u aeen123 -p HImynameisCHIKI23@
+enter pregame
+game new aeen123 matin
+game map 1
+game map 2
+crafting show recipes
+cheat add item -n CherryBomb -c 10
+cheat add item -n CharcoalKiln -c 10
+crafting show recipes
+cheat add item -n MakiRoll -c 10
+cooking show recipes
+cheat add item -n Sprinkler -c 10
+cheat add item -n CopperBar -c 10
+cheat add item -n IronBar -c 10
+crafting craft Sprinkler
+go back
+exit

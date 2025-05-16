@@ -442,13 +442,17 @@ public class GameController {
 
     public Response craftingShowRecipes(Request resquest) {
         Player player = App.getGameState().getCurrentPlayer();
-        ArrayList<CraftingRecipes> recipes = player.getBackpack().getCraftingRecipes();
+        HashSet<CraftingRecipes> recipes = player.getBackpack().getCraftingRecipes();
         StringBuilder output = new StringBuilder();
         output.append("Crafting Recipes: \n");
-        for (int i = 0; i < recipes.size(); i++) {
-            output.append(i + 1).append(". ").append(recipes.get(i).toString()).append("\n");
+        int counter = 1;
+        for (CraftingRecipes recipe : recipes) {
+            output.append(String.format("%-2d. %s\n", counter, recipe));
+            counter++;
         }
+
         return new Response(true, output.toString());
+
     }
 
     public Response handleItemCrafting(Request request) {
@@ -462,6 +466,9 @@ public class GameController {
             return new Response(false, "You don't have <" + itemName + "> CraftingRecipe in your backpack!");
         if (!player.getBackpack().hasCapacity())
             return new Response(false, "You don't have enough space in backpack!");
+        Response energyConsumptionResult = player.consumeEnergy(2);
+        if (!energyConsumptionResult.getSuccessful())
+            return energyConsumptionResult;
 
         HashMap<Ingredient, Integer> ingredients = recipe.getIngredients();
         for (Ingredient ingredient : ingredients.keySet()) {
@@ -477,9 +484,6 @@ public class GameController {
             player.getBackpack().addArtisanMachine(artisanMachine);
         if (recipe.equals(CraftingRecipes.MysticTreeSeed))
             player.getBackpack().addIngredients(TreeSource.MysticTreeSeeds, 1);
-        // TODO else
-
-        player.consumeEnergy(2);
 
         return new Response(true, "You craft <" + itemName + "> successfully!");
     }
@@ -503,6 +507,7 @@ public class GameController {
             } else if (craftingRecipe.equals(CraftingRecipes.MysticTreeSeed)) {
                 player.getBackpack().addIngredients(TreeSource.MysticTreeSeeds, quantity);
             }
+            player.getBackpack().addRecipe(craftingRecipe);
             return new Response(true, "You added<" + ItemName + "> successfully!");
         }
 
@@ -510,6 +515,7 @@ public class GameController {
         if (cookingRecipe != null) {
             Food food = Food.getFoodByName(ItemName);
             player.getBackpack().addIngredients(food, quantity);
+            player.getBackpack().addRecipe(cookingRecipe);
             return new Response(true, "You added<" + ItemName + "> successfully!");
         }
 
@@ -617,13 +623,16 @@ public class GameController {
 
     public Response handleShowCookingRecipes(Request request) {
         Player player = App.getGameState().getCurrentPlayer();
-        ArrayList<CookingRecipe> recipes = player.getBackpack().getCookingRecipes();
+        HashSet<CookingRecipe> recipes = player.getBackpack().getCookingRecipes();
         StringBuilder output = new StringBuilder();
         output.append("Cooking Recipes: \n");
-        for (int i = 0; i < recipes.size(); i++) {
-            output.append(i + 1).append(". ").append(recipes.get(i).toString()).append("\n");
+        int counter = 1;
+        for (CookingRecipe recipe : recipes) {
+            output.append(String.format("%-2d. %s\n", counter, recipe));
+            counter++;
         }
         return new Response(true, output.toString());
+
     }
 
     public Response handleCookingFood(Request request) {
@@ -1450,11 +1459,11 @@ public class GameController {
 
             if (t.getClass().getSimpleName().toLowerCase().equals("wateringcan")) {
                 int capacity = ((WateringCan) t).getWaterCapacity();
-                return new Response(true, "Current WateringCan Capacity is "+capacity );
+                return new Response(true, "Current WateringCan Capacity is " + capacity);
             }
         }
 
-        return new Response(false, "Error happend While Searching for Capacity"); 
+        return new Response(false, "Error happend While Searching for Capacity");
 
     }
 

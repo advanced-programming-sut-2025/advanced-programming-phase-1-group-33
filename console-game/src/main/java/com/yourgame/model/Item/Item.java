@@ -21,9 +21,6 @@ public abstract class Item {
         public void use(){}
         // Getters and Setters
 
-        public Item(String name2, String description2, int sellPrice, boolean isStackable) {
-            //TODO Auto-generated constructor stub
-        }
 
         public String getId() {
             return id;

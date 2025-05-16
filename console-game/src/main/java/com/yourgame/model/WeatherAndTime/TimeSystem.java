@@ -54,7 +54,6 @@ public class TimeSystem {
             this.nextDayWeather = createNextDayWeather();
         }
         App.getGameState().MakeGameReadyForNextDay(); 
-        App.getGameState().MakePlayersReadyForNextDay(); 
     }
 
     public void advancedSeason() {
