@@ -2,17 +2,28 @@ package com.yourgame.controller.GameController;
 
 import com.yourgame.model.Animals.AnimalGood;
 import com.yourgame.model.Animals.Fish;
+import com.yourgame.model.Animals.FishType;
+import com.yourgame.model.Animals.Quality;
 import com.yourgame.model.GameState;
 import com.yourgame.model.Inventory.TrashCan;
+import com.yourgame.model.Inventory.Tools.Axe;
 import com.yourgame.model.Inventory.Tools.FishingPole;
+import com.yourgame.model.Inventory.Tools.Hoe;
+import com.yourgame.model.Inventory.Tools.MilkPail;
+import com.yourgame.model.Inventory.Tools.Pickaxe;
+import com.yourgame.model.Inventory.Tools.Scythe;
+import com.yourgame.model.Inventory.Tools.Shear;
 import com.yourgame.model.Inventory.Tools.Tool;
+import com.yourgame.model.Inventory.Tools.WateringCan;
 import com.yourgame.model.Item.*;
 import com.yourgame.model.ManuFactor.ArtisanGood;
 import com.yourgame.model.ManuFactor.ArtisanGoodType;
 import com.yourgame.model.ManuFactor.ArtisanMachine;
 import com.yourgame.model.ManuFactor.Ingredient;
+import com.yourgame.model.Map.Direction;
 import com.yourgame.model.Map.Map;
 import com.yourgame.model.Map.Position;
+import com.yourgame.model.Map.Quarry;
 import com.yourgame.model.Recipes.CookingRecipe;
 import com.yourgame.model.Recipes.CraftingRecipes;
 import com.yourgame.model.Stores.Blacksmith;
@@ -22,6 +33,8 @@ import com.yourgame.model.UserInfo.User;
 import com.yourgame.model.IO.Request;
 import com.yourgame.model.IO.Response;
 import com.yourgame.model.Map.Tile;
+import com.yourgame.model.Map.Water.Lake;
+import com.yourgame.model.WeatherAndTime.Season;
 import com.yourgame.model.WeatherAndTime.Weather;
 import com.yourgame.model.enums.SymbolType;
 import com.yourgame.view.ConsoleView;
@@ -379,10 +392,10 @@ public class GameController {
 
     public Response handleToolsShowAvailable(Request request) {
         StringBuilder sb = new StringBuilder();
-        for (Tool t : App.getGameState().getCurrentPlayer().getBackpack().getTools()) {
+        for (Tool t : gameState.getCurrentPlayer().getBackpack().getTools()) {
+            sb.append("Name: ").append(t.getClass().getSimpleName()).append("\n");
             sb.append(t.getClass().getSimpleName());
             sb.append("\n");
-
         }
         return new Response(true, "Available Tools : \n" + sb);
     }
@@ -514,7 +527,7 @@ public class GameController {
 
     // public Response plant(String seedName, String directionName) {
     // Direction direction = Direction.getDirectionByInput(directionName);
-    // Player player = App.getGame().getCurrentPlayingPlayer();
+    // Player player = gameState.getCurrentPlayingPlayer();
     //
     // if (direction == null) {
     // return new Result(false, "Direction <" + directionName + "> not found");
@@ -1073,6 +1086,211 @@ public class GameController {
         int amount = Integer.parseInt(request.body.get("amount"));
         gameState.getCurrentPlayer().getBackpack().addIngredients(new Coin(), amount);
         return new Response(true, amount + "g added");
+    }
+
+    public Response getUseTool(Request request) {
+        String directionInput = request.body.get("direction");
+        Direction direction = Direction.getDirectionByInput(directionInput);
+        Player p = gameState.getCurrentPlayer();
+        Tile tile = gameState.getMap().findTile(p.getPosition());
+        Tool tool = p.getCurrentTool();
+
+        if (direction == null) {
+            return new Response(false, "Invalid direction");
+        }
+        Tile targetTile = gameState.getMap().getTileByDirection(tile, direction);
+
+        if (tool instanceof Hoe hoe) {
+            if (gameState.getMap().getTileByDirection(tile, direction) != null &&
+                    gameState.getMap().getTileByDirection(tile, direction).getPlaceable() == null) {
+                Response energyConsumptionResult = hoe.useTool();
+                if (!energyConsumptionResult.getSuccessful())
+                    return energyConsumptionResult;
+                gameState.getMap().getTileByDirection(tile, direction).setPlowed(true);
+                return new Response(true, "tile plowed successfully!");
+            } else
+                return new Response(false, "You can't plow this tile with Hoe!");
+        }
+        if (tool instanceof Pickaxe pickaxe) {
+            Response energyConsumptionResult = pickaxe.useTool();
+            if (!energyConsumptionResult.getSuccessful())
+                return energyConsumptionResult;
+
+            if (targetTile.getPlaceable() != null) {
+                if (targetTile.getPlaceable() instanceof Stone stone) {
+                    targetTile.setPlaceable(null);
+                    p.getFarm().getStones().remove(stone);
+                    p.getFarm().getPlaceables().remove(stone);
+                    targetTile.setSymbol(SymbolType.DefaultFloor);
+                    p.getBackpack().addIngredients(stone, 1);
+                    return new Response(true, "stone broken");
+
+                } else if (targetTile.getPlaceable() instanceof Quarry quarry) {
+                    Random rand = new Random();
+                    if (!quarry.getForagingMinerals().isEmpty()) {
+
+                        ForagingMineral fg = quarry.getForagingMinerals()
+                                .get(rand.nextInt(quarry.getForagingMinerals().size()));
+                        quarry.getForagingMinerals().remove(fg);
+                        p.getBackpack().addIngredients(fg, 1);
+                        return new Response(true, "you add a foraging mineral to the backpack");
+
+                    }
+                    return new Response(false, "this quarry is empty");
+                }
+
+            } else {
+                targetTile.setPlowed(false);
+                return new Response(true, "target tile unPlowed successfully!");
+            }
+        }
+        if (tool instanceof Axe axe) {
+
+            if (targetTile.getPlaceable() instanceof Tree tree) {
+                Response energyConsumptionResponse = axe.useTool();
+                if (!energyConsumptionResponse.getSuccessful())
+                    return energyConsumptionResponse;
+                p.getFarm().getTrees().remove(tree);
+                p.getFarm().getPlaceables().remove(tree);
+                targetTile.setPlaceable(null);
+                targetTile.setSymbol(SymbolType.DefaultFloor);
+                targetTile.setPlowed(false);
+                targetTile.setFertilizer(null);
+                targetTile.setWalkable(true);
+                int numberOfWoods = tree.getCurrentStage();
+                if (numberOfWoods > 0) {
+                    Wood wood = new Wood();
+                    p.getBackpack().addIngredients(wood, numberOfWoods);
+                }
+                p.getBackpack().addIngredients(tree.getType().getSource(), 2);
+            }
+
+            return new Response(false, "there is no tree for cut!");
+        }
+        if (tool instanceof FishingPole fishingPole) {
+
+            if (targetTile.getPlaceable() instanceof Lake lake) {
+                Response energyConsumptionResponse = fishingPole.useTool();
+                if (!energyConsumptionResponse.getSuccessful())
+                    return energyConsumptionResponse;
+                return fishing(fishingPole);
+            }
+
+            return new Response(false, "there is no lake for fishing!");
+        }
+        if (tool instanceof Scythe scythe) {
+
+            if (targetTile.getPlaceable() instanceof Growable plant) {
+                Response energyConsumptionResponse = scythe.useTool();
+                if (!energyConsumptionResponse.getSuccessful())
+                    return energyConsumptionResponse;
+                return harvestWithScythe(plant, targetTile);
+            }
+
+            return new Response(false, "there is no tree or crop for harvest!");
+        }
+        if (tool instanceof WateringCan wateringCan) {
+
+            if (targetTile.getPlaceable() instanceof Growable plant) {
+                if (wateringCan.getWaterCapacity() <= 0) {
+                    return new Response(false, "your wateringCan is empty");
+                }
+                Response energyConsumptionResponse = wateringCan.useTool();
+                if (!energyConsumptionResponse.getSuccessful())
+                    return energyConsumptionResponse;
+                return waterPlantWithUseTool(plant);
+            }
+            if (targetTile.getPlaceable() instanceof Lake) {
+                Response energyConsumptionResponse = wateringCan.useTool();
+                if (!energyConsumptionResponse.getSuccessful())
+                    return energyConsumptionResponse;
+                wateringCan.makeFull();
+            }
+
+            return new Response(false, "there is no plant or lake!");
+
+        }
+        if (tool instanceof MilkPail || tool instanceof Shear) {
+            return new Response(false, "please use command : collect produce -n <nameOfAnimal>");
+        }
+
+        return new Response(false, "you don't have a tool , please set your current tool");
+
+    }
+
+    private Response waterPlantWithUseTool(Growable plant) {
+        plant.watering();
+        return new Response(true, "You water this plant successfully!");
+
+    }
+
+    private Response harvestWithScythe(Growable plant, Tile targetTile) {
+        Player player = gameState.getCurrentPlayer();
+        if (!plant.isComplete())
+            return new Response(false, "Plant hasn't grown completely!");
+
+        if (plant.canGrowAgain()) {
+            if (plant.harvest()) {
+                if (plant instanceof Crop crop)
+                    player.getBackpack().addIngredients(crop, 1);
+                else if (plant instanceof Tree tree)
+                    player.getBackpack().addIngredients(tree.getType().getFruit(), 1);
+
+                player.getAbility().increaseFarmingRate(5);
+
+                return new Response(true,
+                        String.format("You picked up %s\nThis plant can grow again!", plant.getNameOfProduct()));
+            } else {
+                return new Response(false, "The plant hasn't grown again completely!");
+            }
+        } else {
+            player.getBackpack().addIngredients(((Crop) plant), 1);
+            player.getFarm().getCrops().removeIf(a -> a == plant);
+            player.getFarm().getPlaceables().removeIf(a -> a == plant);
+            targetTile.setPlaceable(null);
+            targetTile.setWalkable(true);
+            targetTile.setSymbol(SymbolType.DefaultFloor);
+            targetTile.setPlowed(false);
+            targetTile.setFertilizer(null);
+            player.getAbility().increaseFarmingRate(5);
+            return new Response(true,
+                    String.format("You picked up %s\nThis plant cannot grow again!", plant.getNameOfProduct()));
+        }
+    }
+
+    private Response fishing(FishingPole fishingPole) {
+        Player player = gameState.getCurrentPlayer();
+        int fishingLevel = player.getAbility().getFishingLevel();
+        Weather weather = gameState.getGameTime().getWeather();
+        Season season = gameState.getGameTime().getSeason();
+
+        int numberOfFish = (int) Math.ceil(Math.random() * weather.getEffectivenessOnFishing() * (fishingLevel + 2));
+        numberOfFish = Math.min(numberOfFish, 6);
+
+        ArrayList<Fish> caughtFish = new ArrayList<>();
+        ArrayList<FishType> availableFishType = FishType.getFishesBySeason(season, fishingLevel);
+
+        for (int i = 0; i < numberOfFish; i++) {
+            FishType fishType = availableFishType.get(new Random().nextInt(availableFishType.size()));
+            double qualityValue = (Math.random() * (fishingLevel + 2) * fishingPole.getType().getEffectiveness()) /
+                    (7 - weather.getEffectivenessOnFishing());
+            Quality quality = Quality.getQualityByValue(qualityValue);
+            caughtFish.add(new Fish(fishType, quality));
+        }
+
+        StringBuilder output = new StringBuilder();
+        output.append(String.format("Number of Fishes: %d\n", numberOfFish));
+        for (Fish fish : caughtFish) {
+            output.append("\t").append(fish.toString()).append("\n");
+        }
+
+        player.getAbility().increaseFishingRate(5);
+
+        for (Fish fish : caughtFish) {
+            player.getBackpack().addIngredients(fish, 1);
+        }
+
+        return new Response(true, output.toString());
     }
 
 }

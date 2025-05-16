@@ -38,7 +38,8 @@ public enum SymbolType {
     StoneItem('S', ANSI.WHITE, "Default for Stone as Item"),
     DIRT('.', ANSI.RED, "Default For Dirt"),
     SAND('.', ANSI.YELLOW, "Default for Sand"),
-    PORTAL('@', ANSI.PURPLE, "Default for Portal");
+    PORTAL('@', ANSI.PURPLE, "Default for Portal"), 
+    BrokenStone('.', ANSI.GRAY, "A cracked and broken stone"),;
 
     private final char symbol;
     private final String colorCode;

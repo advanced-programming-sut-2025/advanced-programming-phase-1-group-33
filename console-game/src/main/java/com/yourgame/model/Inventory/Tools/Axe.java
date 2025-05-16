@@ -4,6 +4,7 @@ package com.yourgame.model.Inventory.Tools;
 import com.yourgame.model.Skill.Ability;
 import com.yourgame.model.WeatherAndTime.Weather;
 import com.yourgame.model.App;
+import com.yourgame.model.IO.Response;
 
 public class Axe extends Tool {
     private ToolType type = ToolType.Primary;
@@ -26,7 +27,7 @@ public class Axe extends Tool {
     }
 
     @Override
-    public  void useTool() {
+    public  Response useTool() {
         Weather weather = App.getGameState().getGameTime().getWeather();
         int multiple = switch (weather) {
             case Rainy -> 2;
@@ -53,8 +54,14 @@ public class Axe extends Tool {
                 default -> 0;
             };
         }
-        App.getGameState().getCurrentPlayer().consumeEnergy(consumedEnergy);
+        Response energyConsumptionResult = App.getGameState().getCurrentPlayer().consumeEnergy(consumedEnergy);
+        if (!energyConsumptionResult.getSuccessful()){
+            return energyConsumptionResult;
+        }
 
+        return new Response(true, "");
+
+        
 
     }
     public ToolType getToolType() {

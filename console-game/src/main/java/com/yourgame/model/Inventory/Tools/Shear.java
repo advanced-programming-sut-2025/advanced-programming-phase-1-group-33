@@ -1,5 +1,8 @@
 package com.yourgame.model.Inventory.Tools;
 
+import com.yourgame.model.App;
+import com.yourgame.model.IO.Response;
+
 public class Shear extends Tool {
     @Override
     protected int getConsumptionEnergy() {
@@ -7,7 +10,12 @@ public class Shear extends Tool {
     }
 
     @Override
-    protected void useTool() {
+    public Response useTool() {
+                Response energyConsumptionResponse = App.getGameState().getCurrentPlayer().consumeEnergy(4);
+        if (!energyConsumptionResponse.getSuccessful())
+            return energyConsumptionResponse;
+
+        return new Response(true, "");
 
     }
     public ToolType getToolType() {

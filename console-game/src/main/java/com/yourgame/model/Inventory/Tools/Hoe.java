@@ -1,6 +1,7 @@
 package com.yourgame.model.Inventory.Tools;
 
 import com.yourgame.model.App;
+import com.yourgame.model.IO.Response;
 
 public class Hoe extends Tool {
     private ToolType type = ToolType.Primary;
@@ -10,7 +11,7 @@ public class Hoe extends Tool {
     }
 
     @Override
-    public void useTool() {
+    public Response useTool() {
         int consumedEnergy = switch (type) {
             case Primary -> 5;
             case Coppery -> 4;
@@ -19,7 +20,12 @@ public class Hoe extends Tool {
             case Iridium -> 1;
             default -> 0;
         };
-        App.getGameState().getCurrentPlayer().consumeEnergy(consumedEnergy);
+
+        Response energyConsumptionResponse = App.getGameState().getCurrentPlayer().consumeEnergy(consumedEnergy);
+        if (!energyConsumptionResponse.getSuccessful())
+            return energyConsumptionResponse;
+
+        return new Response(true, "");
 
     }
 

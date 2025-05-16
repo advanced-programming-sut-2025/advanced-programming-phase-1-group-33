@@ -93,8 +93,8 @@ public class GameMenu implements AppMenu {
                 return getToolsShowResponse(input);
             case TOOLS_SHOW_AVAILABLE:
                 return getToolsShowAvailable(input);
-            // case TOOLS_USE_DIRECTION:
-            // return getToolsUseDirectionResponse(input);
+            case TOOLS_USE_DIRECTION:
+                return getToolsUseDirection(input);
             case TOOLS_UPGRADE:
                 return getToolUpgradeResponse(input);
             case CHEAT_ADD_DOLLARS:
@@ -118,6 +118,13 @@ public class GameMenu implements AppMenu {
             default:
                 return getInvalidCommand();
         }
+    }
+
+    private Response getToolsUseDirection(String input) {
+        Request request = new Request(input);
+        request.body.put("direction", GameViewCommands.TOOLS_USE_DIRECTION.getGroup(input, "direction"));
+        
+        return controller.getUseTool(request); 
     }
 
     private Response getAddDollars(String input) {
