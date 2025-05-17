@@ -21,15 +21,15 @@ public class Blacksmith extends Store {
     public void loadInventory() {
 
         inventory = new ArrayList<>();
-        inventory.add(new BlackSmithStocksItem("Cooper Ore", ForagingMineral.Copper, 75, Integer.MAX_VALUE));
+        inventory.add(new BlackSmithStocksItem("Copper Ore", ForagingMineral.Copper, 75, Integer.MAX_VALUE));
         inventory.add(new BlackSmithStocksItem("Iron Ore", ForagingMineral.Iron, 150, Integer.MAX_VALUE));
         inventory.add(new BlackSmithStocksItem("Coal", ForagingMineral.Coal, 150, Integer.MAX_VALUE));
         inventory.add(new BlackSmithStocksItem("Gold Ore", ForagingMineral.Gold, 400, Integer.MAX_VALUE));
-        inventory.add(new BlackSmithToolUpgradeItem("Cooper Tool", 2000, 1));
+        inventory.add(new BlackSmithToolUpgradeItem("Copper Tool", 2000, 1));
         inventory.add(new BlackSmithToolUpgradeItem("Steel Tool", 5000, 1));
         inventory.add(new BlackSmithToolUpgradeItem("Gold Tool", 10000, 1));
         inventory.add(new BlackSmithToolUpgradeItem("Iridium Tool", 25000, 1));
-        inventory.add(new BlackSmithToolUpgradeItem("Cooper Trash Can", 1000, 1));
+        inventory.add(new BlackSmithToolUpgradeItem("Copper Trash Can", 1000, 1));
         inventory.add(new BlackSmithToolUpgradeItem("Steel Trash Can", 2500, 1));
         inventory.add(new BlackSmithToolUpgradeItem("Gold Trash Can", 5000, 1));
         inventory.add(new BlackSmithToolUpgradeItem("Iridium Trash Can", 12500, 1));
@@ -118,13 +118,12 @@ public class Blacksmith extends Store {
             if (item instanceof BlackSmithStocksItem) {
                 continue;
             }
-            if (item.name.equals(toolName)) {
+            if (item.name.toLowerCase().equals(toolName.toLowerCase())) {
                 if (item.remainingQuantity > 0) {
                     return true;
                 }
             }
         }
-
         return false;
     }
 

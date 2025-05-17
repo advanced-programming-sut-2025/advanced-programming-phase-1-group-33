@@ -1,0 +1,14 @@
+enter login
+login -u aeen123 -p HImynameisCHIKI23@
+enter pregame
+game new aeen123 matin
+game map 1
+game map 2
+tools equip axe
+tools show current
+walk -l 101 , 76
+cheat add item -n copperbar -c 10000
+cheat add 2000 dollars
+tools upgrade axe
+cheat advance date 1d
+tools upgrade axe

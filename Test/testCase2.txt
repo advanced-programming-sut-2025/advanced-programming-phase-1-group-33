@@ -93,6 +93,10 @@ cheat add 2000 dollars
 time
 date
 tools upgrade axe
+cheat add item -n copperbar -c 10000
+tools upgrade axe
+walk -l 103 , 76
+cheat add item -n JazzSeeds -c 10
 walk -l 205, 37
 print map -l 205, 37 -s 90 
 walk -l 205, 41
