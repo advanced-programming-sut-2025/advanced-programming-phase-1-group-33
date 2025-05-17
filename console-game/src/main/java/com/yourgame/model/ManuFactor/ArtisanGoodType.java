@@ -19,23 +19,21 @@ public enum ArtisanGoodType implements Ingredient {
     DinosaurMayonnaise(125, 800),
     TruffleOil(38, 1065),
     Oil(13, 100),
-    DriedMushroom(),
-    DriedFruit(),
-    Jelly(),
-    Juice(),
-    Pickles(),
-    SmokedFish(),
-    Wine(),
-    IronBar(),
-    IridiumBar(),
-    CopperBar(),
-    GoldBar();
+    DriedMushroom(50, 100),
+    DriedFruit(45, 150),
+    Jelly(23, 85),
+    Juice(65, 220),
+    Pickles(43, 120),
+    SmokedFish(95, 195),
+    Wine(10, 120),
+    IronBar(0, 200),
+    IridiumBar(0, 540),
+    CopperBar(0, 295),
+    GoldBar(0, 450);
+
 
     private int energy;
     private int sellPrice;
-
-    ArtisanGoodType() {
-    }
 
     ArtisanGoodType(int energy, int sellPrice) {
         this.energy = energy;

@@ -18,6 +18,7 @@ import com.yourgame.model.Item.Wood;
 import com.yourgame.model.ManuFactor.ArtisanGood;
 import com.yourgame.model.ManuFactor.ArtisanGoodType;
 import com.yourgame.model.ManuFactor.ArtisanMachine;
+import com.yourgame.model.ManuFactor.Bouquet;
 import com.yourgame.model.ManuFactor.Ingredient;
 import com.yourgame.model.Map.*;
 import com.yourgame.model.Map.Map;
@@ -40,8 +41,10 @@ import com.yourgame.model.IO.Response;
 import com.yourgame.model.Map.Water.Lake;
 import com.yourgame.model.WeatherAndTime.Season;
 import com.yourgame.model.WeatherAndTime.Weather;
+import com.yourgame.model.enums.Gender;
 import com.yourgame.model.enums.SymbolType;
 import com.yourgame.model.enums.Commands.MenuTypes;
+import com.yourgame.model.notification.MarriageRequest;
 import com.yourgame.model.notification.Notification;
 import com.yourgame.view.ConsoleView;
 
@@ -127,8 +130,7 @@ public class GameController {
 
     public Response getBuildGreenHouse() {
         HashMap<Ingredient, Integer> inventory = gameState.getCurrentPlayer().getBackpack().getIngredientQuantity();
-        Ingredient coin = null,
-                wood = null;
+        Ingredient coin = null, wood = null;
 
         for (Ingredient ing : inventory.keySet()) {
             if (ing instanceof Coin)
@@ -205,11 +207,9 @@ public class GameController {
             }
         }
 
-        List<Position> path = findShortestPath(
-                App.getGameState().getMap(),
+        List<Position> path = findShortestPath(App.getGameState().getMap(),
                 App.getGameState().getCurrentPlayer().getPosition().getX(),
-                App.getGameState().getCurrentPlayer().getPosition().getY(),
-                endX, endY);
+                App.getGameState().getCurrentPlayer().getPosition().getY(), endX, endY);
 
         if (path == null) {
             return new Response(false, "No path found");
@@ -290,13 +290,13 @@ public class GameController {
             if (entry.getKey().getClass().getSimpleName().equals(name)) {
                 if (hasNumber) {
                     App.getGameState().getCurrentPlayer().getBackpack().removeIngredients(entry.getKey(), number);
-                    return new Response(true, String.format("%s removed from backpack", entry.getKey()
-                            .getClass().getSimpleName()));
+                    return new Response(true,
+                            String.format("%s removed from backpack", entry.getKey().getClass().getSimpleName()));
                 } else {
                     int quantity = entry.getValue();
                     App.getGameState().getCurrentPlayer().getBackpack().removeIngredients(entry.getKey(), quantity);
-                    return new Response(true, String.format("%s removed from backpack", entry.getKey()
-                            .getClass().getSimpleName()));
+                    return new Response(true,
+                            String.format("%s removed from backpack", entry.getKey().getClass().getSimpleName()));
                 }
 
             }
@@ -314,8 +314,9 @@ public class GameController {
     }
 
     public Response getDateTime() {
-        return new Response(true, String.format("Season : %s , Day : %d , Hour : %d", gameState.getGameTime()
-                .getSeason().name(), gameState.getGameTime().getDay(), gameState.getGameTime().getHour()));
+        return new Response(true,
+                String.format("Season : %s , Day : %d , Hour : %d", gameState.getGameTime().getSeason().name(),
+                        gameState.getGameTime().getDay(), gameState.getGameTime().getHour()));
     }
 
     public Response getDayOfWeek() {
@@ -389,8 +390,8 @@ public class GameController {
 
     //
     public Response handleToolsShow(Request request) {
-        return new Response(true, "Current Tool : " + App.getGameState().getCurrentPlayer()
-                .getCurrentTool().getClass().getSimpleName());
+        return new Response(true,
+                "Current Tool : " + App.getGameState().getCurrentPlayer().getCurrentTool().getClass().getSimpleName());
     }
 
     public Response handleToolsShowAvailable(Request request) {
@@ -419,17 +420,16 @@ public class GameController {
         if (crop == null)
             return new Response(false, "Craft <" + craftName + "> not found");
 
-        String output = String.format("Name: %s\n", crop.getName()) +
-                String.format("Source: %s\n", crop.getSource()) +
-                String.format("Stages: %s\n", crop.getStages()) +
-                String.format("Total Harvest Time: %d\n", crop.getTotalHarvestTime()) +
-                String.format("One Time: %s\n", crop.isOneTime()) +
-                String.format("Regrowth Time: %d\n", crop.getRegrowthTime()) +
-                String.format("Base Sell Price: %d\n", crop.getBaseSellPrice()) +
-                String.format("Is Edible: %s\n", crop.isEdible()) +
-                String.format("Base Energy: %d\n", crop.getEnergy()) +
-                String.format("Season: %s\n", crop.getSeasons()) +
-                String.format("Can Become Giant: %s", crop.CanBecomeGiant());
+        String output = String.format("Name: %s\n", crop.getName()) + String.format("Source: %s\n", crop.getSource())
+                + String.format("Stages: %s\n", crop.getStages())
+                + String.format("Total Harvest Time: %d\n", crop.getTotalHarvestTime())
+                + String.format("One Time: %s\n", crop.isOneTime())
+                + String.format("Regrowth Time: %d\n", crop.getRegrowthTime())
+                + String.format("Base Sell Price: %d\n", crop.getBaseSellPrice())
+                + String.format("Is Edible: %s\n", crop.isEdible())
+                + String.format("Base Energy: %d\n", crop.getEnergy())
+                + String.format("Season: %s\n", crop.getSeasons())
+                + String.format("Can Become Giant: %s", crop.CanBecomeGiant());
 
         return new Response(true, output);
     }
@@ -477,9 +477,8 @@ public class GameController {
 
         HashMap<Ingredient, Integer> ingredients = recipe.getIngredients();
         for (Ingredient ingredient : ingredients.keySet()) {
-            if (!(player.getBackpack().getIngredientQuantity().containsKey(ingredient) &&
-                    player.getBackpack().getIngredientQuantity().getOrDefault(ingredient, 0) >= ingredients
-                            .get(ingredient))) {
+            if (!(player.getBackpack().getIngredientQuantity().containsKey(ingredient) && player.getBackpack()
+                    .getIngredientQuantity().getOrDefault(ingredient, 0) >= ingredients.get(ingredient))) {
                 return new Response(false, "You don't have enough <" + ingredient + "> in your backpack!");
             }
             player.getBackpack().removeIngredients(ingredient, ingredients.get(ingredient));
@@ -693,11 +692,11 @@ public class GameController {
 
     private Ingredient getIngredient(Ingredient requiredIngredient, Player player) {
         for (Ingredient myIngredient : player.getBackpack().getIngredientQuantity().keySet()) {
-            if ((myIngredient instanceof Crop crop && crop.getType().equals(requiredIngredient)) ||
-                    (myIngredient instanceof AnimalGood animalGood && animalGood.getType().equals(requiredIngredient))
-                    ||
-                    (myIngredient instanceof Fish fish && fish.getType().equals(requiredIngredient)) ||
-                    (myIngredient.equals(requiredIngredient))) {
+            if ((myIngredient instanceof Crop crop && crop.getType().equals(requiredIngredient))
+                    || (myIngredient instanceof AnimalGood animalGood
+                            && animalGood.getType().equals(requiredIngredient))
+                    || (myIngredient instanceof Fish fish && fish.getType().equals(requiredIngredient))
+                    || (myIngredient.equals(requiredIngredient))) {
                 return myIngredient;
             }
         }
@@ -786,50 +785,50 @@ public class GameController {
             }
 
             switch (price) {
-                case 0: {
-                    return new Response(false, "This tool is at the highest level");
+            case 0: {
+                return new Response(false, "This tool is at the highest level");
+            }
+            case 1000: {
+                if (ingredients.getOrDefault(new ArtisanGood(ArtisanGoodType.CopperBar), 0) < 5) {
+                    return new Response(false, "you don't have enough Copper bar");
                 }
-                case 1000: {
-                    if (ingredients.getOrDefault(new ArtisanGood(ArtisanGoodType.CopperBar), 0) < 5) {
-                        return new Response(false, "you don't have enough Copper bar");
-                    }
-                    if (!map.getNpcVillage().getBlacksmith().canUpgradeTool("Copper Trash Can")) {
-                        return new Response(false, "Insufficient remaining upgrades for today");
-                    }
-                    player.getBackpack().addIngredients(new ArtisanGood(ArtisanGoodType.CopperBar), -5);
+                if (!map.getNpcVillage().getBlacksmith().canUpgradeTool("Copper Trash Can")) {
+                    return new Response(false, "Insufficient remaining upgrades for today");
+                }
+                player.getBackpack().addIngredients(new ArtisanGood(ArtisanGoodType.CopperBar), -5);
 
-                    break;
+                break;
+            }
+            case 2500: {
+                if (ingredients.getOrDefault(new ArtisanGood(ArtisanGoodType.IronBar), 0) < 5) {
+                    return new Response(false, "you don't have enough Iron bar");
                 }
-                case 2500: {
-                    if (ingredients.getOrDefault(new ArtisanGood(ArtisanGoodType.IronBar), 0) < 5) {
-                        return new Response(false, "you don't have enough Iron bar");
-                    }
-                    if (!map.getNpcVillage().getBlacksmith().canUpgradeTool("Steel Trash Can")) {
-                        return new Response(false, "Insufficient remaining upgrades for today");
-                    }
-                    player.getBackpack().addIngredients(new ArtisanGood(ArtisanGoodType.IronBar), -5);
-                    break;
+                if (!map.getNpcVillage().getBlacksmith().canUpgradeTool("Steel Trash Can")) {
+                    return new Response(false, "Insufficient remaining upgrades for today");
                 }
-                case 5000: {
-                    if (ingredients.getOrDefault(new ArtisanGood(ArtisanGoodType.GoldBar), 0) < 5) {
-                        return new Response(false, "you don't have enough Gold bar");
-                    }
-                    if (!map.getNpcVillage().getBlacksmith().canUpgradeTool("Gold Trash Can")) {
-                        return new Response(false, "Insufficient remaining upgrades for today");
-                    }
-                    player.getBackpack().addIngredients(new ArtisanGood(ArtisanGoodType.GoldBar), -5);
-                    break;
+                player.getBackpack().addIngredients(new ArtisanGood(ArtisanGoodType.IronBar), -5);
+                break;
+            }
+            case 5000: {
+                if (ingredients.getOrDefault(new ArtisanGood(ArtisanGoodType.GoldBar), 0) < 5) {
+                    return new Response(false, "you don't have enough Gold bar");
                 }
-                case 12500: {
-                    if (ingredients.getOrDefault(new ArtisanGood(ArtisanGoodType.IridiumBar), 0) < 5) {
-                        return new Response(false, "you don't have enough Iridium bar");
-                    }
-                    if (!map.getNpcVillage().getBlacksmith().canUpgradeTool("Iridium Trash Can")) {
-                        return new Response(false, "Insufficient remaining upgrades for today");
-                    }
-                    player.getBackpack().addIngredients(new ArtisanGood(ArtisanGoodType.IridiumBar), -5);
-                    break;
+                if (!map.getNpcVillage().getBlacksmith().canUpgradeTool("Gold Trash Can")) {
+                    return new Response(false, "Insufficient remaining upgrades for today");
                 }
+                player.getBackpack().addIngredients(new ArtisanGood(ArtisanGoodType.GoldBar), -5);
+                break;
+            }
+            case 12500: {
+                if (ingredients.getOrDefault(new ArtisanGood(ArtisanGoodType.IridiumBar), 0) < 5) {
+                    return new Response(false, "you don't have enough Iridium bar");
+                }
+                if (!map.getNpcVillage().getBlacksmith().canUpgradeTool("Iridium Trash Can")) {
+                    return new Response(false, "Insufficient remaining upgrades for today");
+                }
+                player.getBackpack().addIngredients(new ArtisanGood(ArtisanGoodType.IridiumBar), -5);
+                break;
+            }
 
             }
 
@@ -857,50 +856,50 @@ public class GameController {
                 }
 
                 switch (price) {
-                    case 0: {
-                        return new Response(false, toolName + " is at the highest level");
+                case 0: {
+                    return new Response(false, toolName + " is at the highest level");
+                }
+                case 2000: {
+                    if (ingredients.getOrDefault(new ArtisanGood(ArtisanGoodType.CopperBar), 0) < 5) {
+                        return new Response(false, "you don't have enough Copper bar");
                     }
-                    case 2000: {
-                        if (ingredients.getOrDefault(new ArtisanGood(ArtisanGoodType.CopperBar), 0) < 5) {
-                            return new Response(false, "you don't have enough Copper bar");
-                        }
-                        if (!map.getNpcVillage().getBlacksmith().canUpgradeTool("Copper Tool")) {
-                            return new Response(false, "Insufficient remaining upgrades for today");
-                        }
-                        player.getBackpack().addIngredients(new ArtisanGood(ArtisanGoodType.CopperBar), -5);
+                    if (!map.getNpcVillage().getBlacksmith().canUpgradeTool("Copper Tool")) {
+                        return new Response(false, "Insufficient remaining upgrades for today");
+                    }
+                    player.getBackpack().addIngredients(new ArtisanGood(ArtisanGoodType.CopperBar), -5);
 
-                        break;
+                    break;
+                }
+                case 5000: {
+                    if (ingredients.getOrDefault(new ArtisanGood(ArtisanGoodType.IronBar), 0) < 5) {
+                        return new Response(false, "you don't have enough Iron bar");
                     }
-                    case 5000: {
-                        if (ingredients.getOrDefault(new ArtisanGood(ArtisanGoodType.IronBar), 0) < 5) {
-                            return new Response(false, "you don't have enough Iron bar");
-                        }
-                        if (!map.getNpcVillage().getBlacksmith().canUpgradeTool("Steel Tool")) {
-                            return new Response(false, "Insufficient remaining upgrades for today");
-                        }
-                        player.getBackpack().addIngredients(new ArtisanGood(ArtisanGoodType.IronBar), -5);
-                        break;
+                    if (!map.getNpcVillage().getBlacksmith().canUpgradeTool("Steel Tool")) {
+                        return new Response(false, "Insufficient remaining upgrades for today");
                     }
-                    case 10000: {
-                        if (ingredients.getOrDefault(new ArtisanGood(ArtisanGoodType.GoldBar), 0) < 5) {
-                            return new Response(false, "you don't have enough Gold bar");
-                        }
-                        if (!map.getNpcVillage().getBlacksmith().canUpgradeTool("Gold Tool")) {
-                            return new Response(false, "Insufficient remaining upgrades for today");
-                        }
-                        player.getBackpack().addIngredients(new ArtisanGood(ArtisanGoodType.GoldBar), -5);
-                        break;
+                    player.getBackpack().addIngredients(new ArtisanGood(ArtisanGoodType.IronBar), -5);
+                    break;
+                }
+                case 10000: {
+                    if (ingredients.getOrDefault(new ArtisanGood(ArtisanGoodType.GoldBar), 0) < 5) {
+                        return new Response(false, "you don't have enough Gold bar");
                     }
-                    case 25000: {
-                        if (ingredients.getOrDefault(new ArtisanGood(ArtisanGoodType.IridiumBar), 0) < 5) {
-                            return new Response(false, "you don't have enough Iridium bar");
-                        }
-                        if (!map.getNpcVillage().getBlacksmith().canUpgradeTool("Iridium Tool")) {
-                            return new Response(false, "Insufficient remaining upgrades for today");
-                        }
-                        player.getBackpack().addIngredients(new ArtisanGood(ArtisanGoodType.IridiumBar), -5);
-                        break;
+                    if (!map.getNpcVillage().getBlacksmith().canUpgradeTool("Gold Tool")) {
+                        return new Response(false, "Insufficient remaining upgrades for today");
                     }
+                    player.getBackpack().addIngredients(new ArtisanGood(ArtisanGoodType.GoldBar), -5);
+                    break;
+                }
+                case 25000: {
+                    if (ingredients.getOrDefault(new ArtisanGood(ArtisanGoodType.IridiumBar), 0) < 5) {
+                        return new Response(false, "you don't have enough Iridium bar");
+                    }
+                    if (!map.getNpcVillage().getBlacksmith().canUpgradeTool("Iridium Tool")) {
+                        return new Response(false, "Insufficient remaining upgrades for today");
+                    }
+                    player.getBackpack().addIngredients(new ArtisanGood(ArtisanGoodType.IridiumBar), -5);
+                    break;
+                }
 
                 }
 
@@ -947,8 +946,8 @@ public class GameController {
         Tile targetTile = gameState.getMap().getTileByDirection(tile, direction);
 
         if (tool instanceof Hoe hoe) {
-            if (gameState.getMap().getTileByDirection(tile, direction) != null &&
-                    gameState.getMap().getTileByDirection(tile, direction).getPlaceable() == null) {
+            if (gameState.getMap().getTileByDirection(tile, direction) != null
+                    && gameState.getMap().getTileByDirection(tile, direction).getPlaceable() == null) {
                 Response energyConsumptionResult = hoe.useTool();
                 if (!energyConsumptionResult.getSuccessful())
                     return energyConsumptionResult;
@@ -1122,8 +1121,8 @@ public class GameController {
 
         for (int i = 0; i < numberOfFish; i++) {
             FishType fishType = availableFishType.get(new Random().nextInt(availableFishType.size()));
-            double qualityValue = (Math.random() * (fishingLevel + 2) * fishingPole.getType().getEffectiveness()) /
-                    (7 - weather.getEffectivenessOnFishing());
+            double qualityValue = (Math.random() * (fishingLevel + 2) * fishingPole.getType().getEffectiveness())
+                    / (7 - weather.getEffectivenessOnFishing());
             Quality quality = Quality.getQualityByValue(qualityValue);
             caughtFish.add(new Fish(fishType, quality));
         }
@@ -1208,8 +1207,8 @@ public class GameController {
                 return new Response(false, "You don't have this seed!");
             }
 
-            if (!seed.getSeason().equals(Season.Special) &&
-                    !seed.getSeason().equals(gameState.getGameTime().getSeason())) {
+            if (!seed.getSeason().equals(Season.Special)
+                    && !seed.getSeason().equals(gameState.getGameTime().getSeason())) {
                 return new Response(false, "You can't plant this seed in this season!");
             }
 
@@ -1303,12 +1302,12 @@ public class GameController {
         }
 
         return new Response(true,
-                String.format("Name:              %s\n", plant.getName()) +
-                        String.format("Days to complete:  %d\n", plant.getNumberOfDaysToComplete()) +
-                        String.format("Current stage:     %d\n", plant.getCurrentStage()) +
-                        String.format("Has Watered Today: %s\n", plant.hasWateredToday()) +
-                        String.format("Has Fertilized:    %s\n", plant.hasFertilized()) +
-                        String.format("Fertilizer:        %s", plant.getFertilizer()));
+                String.format("Name:              %s\n", plant.getName())
+                        + String.format("Days to complete:  %d\n", plant.getNumberOfDaysToComplete())
+                        + String.format("Current stage:     %d\n", plant.getCurrentStage())
+                        + String.format("Has Watered Today: %s\n", plant.hasWateredToday())
+                        + String.format("Has Fertilized:    %s\n", plant.hasFertilized())
+                        + String.format("Fertilizer:        %s", plant.getFertilizer()));
     }
 
     public Response build(Request request) {
@@ -1420,10 +1419,7 @@ public class GameController {
             int cottageX = p.getFarm().getCottage().getBounds().x;
             int cottageY = p.getFarm().getCottage().getBounds().y;
             System.out.println("their cottage is in x:" + cottageX + " and y:" + cottageY);
-            List<Position> path = findShortestPath(
-                    gameState.getMap(),
-                    p.getPosition().getX(),
-                    p.getPosition().getY(),
+            List<Position> path = findShortestPath(gameState.getMap(), p.getPosition().getX(), p.getPosition().getY(),
                     cottageX, cottageY);
 
             System.out.println(path);
@@ -1623,8 +1619,8 @@ public class GameController {
 
         for (Animal animal : animals) {
             if (animal.isReadyProduct())
-                output.append(String.format("%-20s (%-9s ->   %-25s\n",
-                        animal.getName(), animal.getType() + ")", animal.getType().getAnimalGoods()));
+                output.append(String.format("%-20s (%-9s ->   %-25s\n", animal.getName(), animal.getType() + ")",
+                        animal.getType().getAnimalGoods()));
         }
 
         return new Response(true, output.toString());
@@ -1993,6 +1989,310 @@ public class GameController {
         return new Response(true, message.toString());
     }
 
-    
+    public Response getGiftRate(Request request) {
+        int rate = Integer.parseInt(request.body.get("rate"));
+        int id = Integer.parseInt(request.body.get("giftNumber"));
+        BetweenPlayersGift tempGift = null;
+
+        if (rate <= 0 || id >= 6) {
+            return new Response(false, "Invalid gift rate");
+        }
+
+        for (BetweenPlayersGift gift : App.getGameState().getGifts()) {
+            if (gift.getId() == id) {
+                tempGift = gift;
+                break;
+            }
+        }
+
+        if (tempGift == null) {
+            return new Response(false, "Gift not found");
+        }
+
+        if (!tempGift.getReceiver().equals(App.getGameState().getCurrentPlayer())) {
+            return new Response(false, "you can't rate this gift");
+        }
+
+        if (tempGift.isRated()) {
+            return new Response(false, "you have already rated this gift");
+        }
+
+        tempGift.setRate(rate);
+        tempGift.setRated();
+
+        RelationNetwork tempNetwork = App.getGameState().getRelationsBetweenPlayers();
+        Set<Player> lookUpKey = new HashSet<>();
+        lookUpKey.add(tempGift.getReceiver());
+        lookUpKey.add(tempGift.getSender());
+
+        RelationWithPlayers tempRelation = tempNetwork.relationNetwork.get(lookUpKey);
+        if (!tempRelation.HaveGaveGiftToday()) {
+            tempRelation.changeXp((rate - 3) * 30 + 15);
+        }
+        tempRelation.setHaveGaveGiftToday(true);
+        tempNetwork.relationNetwork.put(lookUpKey, tempRelation);
+
+        return new Response(true, "you rated this gift successfully");
+
+    }
+
+    public Response getGiftHistory(Request request) {
+
+        String username = request.body.get("username");
+
+        Player temp = null;
+
+        for (Player p : App.getGameState().getPlayers()) {
+            if (p.getUsername().equals(username)) {
+                temp = p;
+                break;
+            }
+        }
+
+        if (temp == null) {
+            return new Response(false, "Player not found");
+        }
+
+        if (temp.equals(App.getGameState().getCurrentPlayer())) {
+            return new Response(false, "you can't choose yourself");
+        }
+
+        StringBuilder message = new StringBuilder("GiftHistory:");
+
+        for (BetweenPlayersGift gift : App.getGameState().getGifts()) {
+            if (gift.getReceiver().equals(App.getGameState().getCurrentPlayer()) && gift.getSender().equals(temp)
+                    || gift.getSender().equals(App.getGameState().getCurrentPlayer())
+                            && gift.getReceiver().equals(temp)) {
+                message.append("\n");
+                message.append(gift.toStringWithReceiver());
+            }
+        }
+
+        return new Response(true, message.toString());
+    }
+
+    public Response getHug(Request request) {
+        String username = request.body.get("name");
+
+        Player temp = null;
+
+        if (App.getGameState().getCurrentPlayer().getUsername().equals(username)) {
+            return new Response(false, "You can not Hug yourself.");
+        }
+
+        for (Player p : App.getGameState().getPlayers()) {
+            if (p.getUsername().equals(username)) {
+                temp = p;
+                break;
+            }
+        }
+
+        if (temp == null) {
+            return new Response(false, "Player not found");
+        }
+
+        if (temp.equals(App.getGameState().getCurrentPlayer())) {
+            return new Response(false, "you can't choose yourself");
+        }
+
+        int distanceSquare = (App.getGameState().getCurrentPlayer().getPosition().getX() - temp.getPosition().getX())
+                * (App.getGameState().getCurrentPlayer().getPosition().getX() - temp.getPosition().getX())
+                + (App.getGameState().getCurrentPlayer().getPosition().getY() - temp.getPosition().getY())
+                        * (App.getGameState().getCurrentPlayer().getPosition().getY() - temp.getPosition().getY());
+
+        if (distanceSquare > 2) {
+            return new Response(false, "You are too far away");
+        }
+
+        RelationNetwork tempNetwork = App.getGameState().getRelationsBetweenPlayers();
+        Set<Player> lookUpKey = new HashSet<>();
+        lookUpKey.add(App.getGameState().getCurrentPlayer());
+        lookUpKey.add(temp);
+
+        RelationWithPlayers tempRelation = tempNetwork.relationNetwork.get(lookUpKey);
+
+        if (tempRelation.canHug()) {
+            if (!tempRelation.HaveHuggedToday()) {
+                tempRelation.setHaveHuggedToday(true);
+                tempRelation.changeXp(60);
+            }
+
+            if (tempRelation.isMarriage()) {
+                App.getGameState().getCurrentPlayer().addEnergy(50);
+                temp.addEnergy(50);
+            }
+
+            return new Response(true, "masadigh mohtavaye mojremane");
+        }
+
+        return new Response(false, "your friendship level must be at least two");
+
+    }
+
+    public Response getFlower(Request request) {
+        String username = request.body.get("username");
+
+        Player temp = null;
+
+        if (App.getGameState().getCurrentPlayer().getUsername().equals(username)) {
+            return new Response(false, "You can not give flower to yourself.");
+        }
+
+        for (Player p : App.getGameState().getPlayers()) {
+            if (p.getUsername().equals(username)) {
+                temp = p;
+                break;
+            }
+        }
+
+        if (temp == null) {
+            return new Response(false, "Player not found");
+        }
+
+        if (temp.equals(App.getGameState().getCurrentPlayer())) {
+            return new Response(false, "you can't choose yourself");
+        }
+
+        int distanceSquare = (App.getGameState().getCurrentPlayer().getPosition().getX() - temp.getPosition().getX())
+                * (App.getGameState().getCurrentPlayer().getPosition().getX() - temp.getPosition().getX())
+                + (App.getGameState().getCurrentPlayer().getPosition().getY() - temp.getPosition().getY())
+                        * (App.getGameState().getCurrentPlayer().getPosition().getY() - temp.getPosition().getY());
+
+        if (distanceSquare > 2) {
+            return new Response(false, "You are too far away");
+        }
+
+        if (App.getGameState().getCurrentPlayer().getBackpack().getIngredientQuantity().getOrDefault(new Bouquet(),
+                0) == 0) {
+            return new Response(false, "You don't have Bouquet");
+        }
+
+        RelationNetwork tempNetwork = App.getGameState().getRelationsBetweenPlayers();
+        Set<Player> lookUpKey = new HashSet<>();
+        lookUpKey.add(App.getGameState().getCurrentPlayer());
+        lookUpKey.add(temp);
+
+        RelationWithPlayers tempRelation = tempNetwork.relationNetwork.get(lookUpKey);
+
+        if (tempRelation.canGiveFlower()) {
+            tempRelation.setGaveFlower();
+            tempRelation.setHaveGaveFlowerToday(true);
+            App.getGameState().getCurrentPlayer().getBackpack().removeIngredients(new Bouquet(), 1);
+            temp.getBackpack().addIngredients(new Bouquet(), 1);
+            if (tempRelation.isMarriage()) {
+                App.getGameState().getCurrentPlayer().addEnergy(50);
+                temp.addEnergy(50);
+            }
+            tempRelation.changeXp(0);
+            return new Response(true, "You two hugged each other");
+        }
+
+        return new Response(false, "you can't hug this this player");
+
+    }
+
+    public Response getAskMarrige(Request request) {
+        String username = request.body.get("username");
+        String ringString = request.body.get("ring");
+
+        if (App.getGameState().getCurrentPlayer().getUsername().equals(username)) {
+            return new Response(false, "You can not propse to yourself.");
+        }
+
+        Player temp = null;
+
+        for (Player p : App.getGameState().getPlayers()) {
+            if (p.getUsername().equals(username)) {
+                temp = p;
+                break;
+            }
+        }
+
+        if (temp == null) {
+            return new Response(false, "Player not found");
+        }
+
+        if (temp.equals(App.getGameState().getCurrentPlayer())) {
+            return new Response(false, "you can't choose yourself");
+        }
+
+        int distanceSquare = (App.getGameState().getCurrentPlayer().getPosition().getX() - temp.getPosition().getX())
+                * (App.getGameState().getCurrentPlayer().getPosition().getX() - temp.getPosition().getX())
+                + (App.getGameState().getCurrentPlayer().getPosition().getY() - temp.getPosition().getY())
+                        * (App.getGameState().getCurrentPlayer().getPosition().getY() - temp.getPosition().getY());
+
+        if (distanceSquare > 2) {
+            return new Response(false, "You are too far away");
+        }
+
+        if (temp.isMarried()) {
+            return new Response(false, "Married and Committed");
+        }
+
+        RelationNetwork tempNetwork = App.getGameState().getRelationsBetweenPlayers();
+        Set<Player> lookUpKey = new HashSet<>();
+        lookUpKey.add(App.getGameState().getCurrentPlayer());
+        lookUpKey.add(temp);
+
+        RelationWithPlayers tempRelation = tempNetwork.relationNetwork.get(lookUpKey);
+        if (!tempRelation.canRequestMarriage()) {
+            return new Response(false, "you can't request marriage in this friendship level");
+        }
+
+        temp.addNotification(
+                new MarriageRequest("Mishe ba man ezdevaj konii azizam", App.getGameState().getCurrentPlayer()));
+
+        return new Response(true, "Marriage requested");
+    }
+
+    public Response getResspondMarige(Request request) {
+        String username = request.body.get("username");
+        String state = request.body.get("state");
+
+
+        MarriageRequest temp = null;
+
+        for (Notification n : App.getGameState().getCurrentPlayer().getNotifications()) {
+
+            if (n instanceof MarriageRequest) {
+                if (!n.isChecked() && n.getSender().getUsername().equals(username)) {
+                    temp = (MarriageRequest) n;
+                    break;
+                }
+            }
+        }
+
+        if (temp == null) {
+            return new Response(false, "No such marriage request");
+        }
+
+        temp.setChecked(true);
+
+        RelationNetwork tempNetwork = App.getGameState().getRelationsBetweenPlayers();
+        Set<Player> lookUpKey = new HashSet<>();
+        lookUpKey.add(App.getGameState().getCurrentPlayer());
+        lookUpKey.add(temp.getSender());
+
+        RelationWithPlayers tempRelation = tempNetwork.relationNetwork.get(lookUpKey);
+
+        if (state.equals("accept")) {
+
+            App.getGameState().getCurrentPlayer().setMarried(true);
+            temp.getSender().setMarried(true);
+
+            tempRelation.setMarriage();
+            tempRelation.setFriendshipLevel(FriendshipLevelsWithPlayers.LevelFour);
+
+            return new Response(true, "You accepted the marriage request");
+
+        } else {
+
+            tempRelation.setFriendshipLevel(FriendshipLevelsWithPlayers.LevelZero);
+
+            temp.getSender().setRemainingDaysAfterMarigDenied(7);
+            return new Response(true, "You rejected the marriage request");
+        }
+
+    }
 
 }

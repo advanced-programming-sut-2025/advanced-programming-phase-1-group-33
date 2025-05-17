@@ -44,7 +44,9 @@ talk -u aeen123 -m heyy to chetoriii
 next turn
 friendships
 cheat add item -n Pomegranate -c 30
-gift -u matin -i Pomegranate -a 20
+gift -u aeen123 -i Pomegranate -a 20
 gift list
 next turn
 gift list
+gift rate -i 1 -r 5
+gift history -u matin

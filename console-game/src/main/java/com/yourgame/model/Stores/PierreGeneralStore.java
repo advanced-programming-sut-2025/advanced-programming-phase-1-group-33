@@ -11,6 +11,7 @@ import com.yourgame.model.Item.Seeds;
 import com.yourgame.model.Item.TreeSource;
 import com.yourgame.model.ManuFactor.ArtisanGood;
 import com.yourgame.model.ManuFactor.ArtisanGoodType;
+import com.yourgame.model.ManuFactor.Bouquet;
 import com.yourgame.model.ManuFactor.Dehydrator;
 import com.yourgame.model.UserInfo.Coin;
 import com.yourgame.model.WeatherAndTime.Season;
@@ -199,10 +200,10 @@ public class PierreGeneralStore extends Store {
                     App.getGameState().getCurrentPlayer().getBackpack().addIngredients(CropType.UnMilledRice,value);
                     break;
                 }
-//                case "Bouquet":{
-//                    App.getGameState().getCurrentPlayer().getBackpack().addIngredients(new Bouquet(),value);
-//                    break;
-//                }
+               case "Bouquet":{
+                   App.getGameState().getCurrentPlayer().getBackpack().addIngredients(new Bouquet(),value);
+                   break;
+               }
                 case "Dehydrator":{
                     App.getGameState().getCurrentPlayer().getBackpack().addArtisanMachine(new Dehydrator());
                     break;

@@ -167,35 +167,67 @@ public class GameMenu implements AppMenu {
                 return getGiftList();
             case GIFT_RATE:
                 return getGiftRate(input);
+            case GIFT_HISTORY:
+                return getGiftHistory(input);
             case HUG:
                 return getHug(input);
             case FLOWER:
                 return getFlower(input);
             case ASK_MARRIAGE:
                 return getAskMarrige(input);
+            case RESPOND_MARRIAGE:
+                return getRsponsedMarrige(input); 
             default:
                 return getInvalidCommand();
         }
     }
 
+    private Response getRsponsedMarrige(String input) {
+        Request request = new Request(input);
+        request.body.put("username", GameViewCommands.RESPOND_MARRIAGE.getGroup(input, "username"));
+        request.body.put("state", GameViewCommands.RESPOND_MARRIAGE.getGroup(input, "state"));
+        return controller.getResspondMarige(request);
+        
+    }
+
+    private Response getGiftHistory(String input) {
+        Request request = new Request(input);
+        request.body.put("username", GameViewCommands.GIFT_HISTORY.getGroup(input, "username"));
+        return controller.getGiftHistory(request);
+
+    }
+
     private Response getAskMarrige(String input) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getAskMarrige'");
+
+        Request request = new Request(input);
+        request.body.put("username", GameViewCommands.ASK_MARRIAGE.getGroup(input, "username"));
+        request.body.put("ring", GameViewCommands.ASK_MARRIAGE.getGroup(input, "ring"));
+        return controller.getAskMarrige(request);
     }
 
     private Response getFlower(String input) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getFlower'");
+        Request request = new Request(input);
+        request.body.put("username", GameViewCommands.FLOWER.getGroup(input, "username"));
+        request.body.put("flowerName", GameViewCommands.FLOWER.getGroup(input, "flowerName"));
+
+        return controller.getFlower(request);
+
     }
 
     private Response getHug(String input) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getHug'");
+
+        Request request = new Request(input);
+        request.body.put("giftNumber", GameViewCommands.HUG.getGroup(input, "giftNumber"));
+
+        return controller.getHug(request);
     }
 
     private Response getGiftRate(String input) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getGiftRate'");
+        Request request = new Request(input);
+        request.body.put("giftNumber", GameViewCommands.GIFT_RATE.getGroup(input, "giftNumber"));
+        request.body.put("rate", GameViewCommands.GIFT_RATE.getGroup(input, "rate"));
+
+        return controller.getGiftRate(request);
     }
 
     private Response getGiftList() {
