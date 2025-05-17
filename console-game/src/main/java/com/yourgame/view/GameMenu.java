@@ -150,12 +150,92 @@ public class GameMenu implements AppMenu {
             case ARTISAN_USE:
                 return getArtistanUse(input);
             case ARTISAN_GET:
-                return getArtistanGet(input); 
+                return getArtistanGet(input);
             case StoreMenu:
-                return getGoToStoreMenu(input); 
+                return getGoToStoreMenu(input);
+            case SELL_PRODUCT:
+                return getSellProduct(input);
+            case FRIENDSHIPS:
+                return getFriendShips();
+            case TALK:
+                return getTalk(input);
+            case TALK_HISTORY:
+                return getTalkHistory(input);
+            case GIFT:
+                return getGift(input);
+            case GIFT_LIST:
+                return getGiftList();
+            case GIFT_RATE:
+                return getGiftRate(input);
+            case HUG:
+                return getHug(input);
+            case FLOWER:
+                return getFlower(input);
+            case ASK_MARRIAGE:
+                return getAskMarrige(input);
             default:
                 return getInvalidCommand();
         }
+    }
+
+    private Response getAskMarrige(String input) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getAskMarrige'");
+    }
+
+    private Response getFlower(String input) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getFlower'");
+    }
+
+    private Response getHug(String input) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getHug'");
+    }
+
+    private Response getGiftRate(String input) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getGiftRate'");
+    }
+
+    private Response getGiftList() {
+        return controller.getGiftList();
+
+    }
+
+    private Response getGift(String input) {
+
+        Request request = new Request(input);
+        request.body.put("name", GameViewCommands.GIFT.getGroup(input, "username"));
+        request.body.put("item", GameViewCommands.GIFT.getGroup(input, "item"));
+        request.body.put("amount", GameViewCommands.GIFT.getGroup(input, "amount"));
+        return controller.GiftToUSer(request);
+
+    }
+
+    private Response getTalkHistory(String input) {
+        Request request = new Request(input);
+        request.body.put("name", GameViewCommands.TALK_HISTORY.getGroup(input, "username"));
+        return controller.talkHistory(request);
+    }
+
+    private Response getTalk(String input) {
+
+        Request request = new Request(input);
+        request.body.put("name", GameViewCommands.TALK.getGroup(input, "username"));
+        request.body.put("message", GameViewCommands.TALK.getGroup(input, "message"));
+        return controller.getTalk(request);
+    }
+
+    private Response getFriendShips() {
+        return controller.getFriendShips();
+    }
+
+    private Response getSellProduct(String input) {
+        Request request = new Request(input);
+        request.body.put("name", GameViewCommands.SELL_PRODUCT.getGroup(input, "productName"));
+        request.body.put("count", GameViewCommands.SELL_PRODUCT.getGroup(input, "count"));
+        return controller.getSellProduct(request);
     }
 
     private Response getGoToStoreMenu(String input) {
@@ -167,8 +247,7 @@ public class GameMenu implements AppMenu {
         request.body.put("name", GameViewCommands.ARTISAN_GET.getGroup(input, "artisanName"));
         return controller.getArtistanGet(request);
     }
-    
-    
+
     private Response getArtistanUse(String input) {
         Request request = new Request(input);
         request.body.put("name", GameViewCommands.ARTISAN_USE.getGroup(input, "artisanName"));

@@ -137,6 +137,10 @@ public class GameState {
         giftIndex++;
     }
 
+    public ArrayList<BetweenPlayersGift> getGifts() {
+        return gifts;
+    }
+
     public void addToGifts(BetweenPlayersGift gift) {
         gifts.add(gift);
     }

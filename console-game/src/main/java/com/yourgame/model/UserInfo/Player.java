@@ -8,6 +8,7 @@ import com.yourgame.model.Animals.AnimalType;
 import com.yourgame.model.IO.Response;
 import com.yourgame.model.App;
 import com.yourgame.model.Inventory.BackpackType;
+import com.yourgame.model.Inventory.TrashCan;
 import com.yourgame.model.Inventory.Tools.Axe;
 import com.yourgame.model.Inventory.Tools.Hoe;
 import com.yourgame.model.Inventory.Tools.Pickaxe;
@@ -22,6 +23,7 @@ import com.yourgame.model.Npc.NPCType;
 import com.yourgame.model.Npc.RelationWithNPC;
 import com.yourgame.model.Skill.Ability;
 import com.yourgame.model.enums.Gender;
+import com.yourgame.model.notification.Notification;
 
 public class Player {
     private String username;
@@ -33,6 +35,7 @@ public class Player {
     private int energy;
     private Tool currentTool;
     private boolean isFaintedToday = false;
+    private boolean isMarried = false;
 
     private boolean isInfinite = false;
     private int consumedEnergyInThisTurn = 0;
@@ -40,6 +43,10 @@ public class Player {
     private int maxEnergy = 200;
     private boolean unlimitedEnergy = false;
     private final Backpack backpack = new Backpack(BackpackType.Primary);
+    private final TrashCan trashCan = new TrashCan();
+
+    private final ArrayList<Notification> notifications = new ArrayList<>();
+
     private ArrayList<AnimalType> animals = new ArrayList<>();
     private Backpack inventory;
     private final Ability ability = new Ability(this);
@@ -241,6 +248,22 @@ public class Player {
 
     public String getNickname() {
         return nickname;
+    }
+
+    public void addNotification(Notification notification) {
+        this.notifications.add(notification);
+    }
+
+    public ArrayList<Notification> getNotifications() {
+        return notifications;
+    }
+
+    public boolean isMarried() {
+        return isMarried;
+    }
+
+    public void setMarried(boolean married) {
+        isMarried = married;
     }
 
     public void setNickname(String nickname) {

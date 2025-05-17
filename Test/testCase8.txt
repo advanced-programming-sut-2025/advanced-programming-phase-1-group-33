@@ -1,0 +1,23 @@
+enter login
+login -u aeen123 -p HImynameisCHIKI23@
+enter pregame
+game new aeen123 matin
+game map 1
+game map 2
+friendships
+walk -l 102, 100
+next turn
+walk -l 102, 101
+next turn
+talk -u matin -m heyy chetoriii
+next turn
+talk history -u aeen123
+talk -u aeen123 -m heyy to chetoriii
+talk history -u aeen123
+next turn
+talk history -u aeen123
+talk -u aeen123 -m heyy to chetoriii
+talk history -u aeen123
+cheat add item -n Wood -c 30
+gift -u matin -i Wood -c 20
+gift list

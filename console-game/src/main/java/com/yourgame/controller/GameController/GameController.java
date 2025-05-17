@@ -26,8 +26,14 @@ import com.yourgame.model.Recipes.CraftingRecipes;
 import com.yourgame.model.Stores.Blacksmith;
 import com.yourgame.model.Stores.CarpenterShop;
 import com.yourgame.model.Stores.MarnieRanch;
+import com.yourgame.model.Stores.Sellable;
+import com.yourgame.model.UserInfo.BetweenPlayersGift;
 import com.yourgame.model.UserInfo.Coin;
+import com.yourgame.model.UserInfo.DialoguesBetweenPlayers;
+import com.yourgame.model.UserInfo.FriendshipLevelsWithPlayers;
 import com.yourgame.model.UserInfo.Player;
+import com.yourgame.model.UserInfo.RelationNetwork;
+import com.yourgame.model.UserInfo.RelationWithPlayers;
 import com.yourgame.model.UserInfo.User;
 import com.yourgame.model.IO.Request;
 import com.yourgame.model.IO.Response;
@@ -36,6 +42,7 @@ import com.yourgame.model.WeatherAndTime.Season;
 import com.yourgame.model.WeatherAndTime.Weather;
 import com.yourgame.model.enums.SymbolType;
 import com.yourgame.model.enums.Commands.MenuTypes;
+import com.yourgame.model.notification.Notification;
 import com.yourgame.view.ConsoleView;
 
 import java.util.*;
@@ -1696,7 +1703,7 @@ public class GameController {
         Player player = gameState.getCurrentPlayer();
         ArtisanMachine artisanMachine = player.getBackpack().getArtisanMachineByName(artisanName);
 
-        if (artisanMachine == null){
+        if (artisanMachine == null) {
             return new Response(false, "Artisan Machine not found!");
         }
 
@@ -1757,5 +1764,235 @@ public class GameController {
         }
 
     }
+
+    public Response getSellProduct(Request request) {
+        int amount = Integer.parseInt(request.body.get("count"));
+        String productName = request.body.get("name");
+
+        ShippingBin temp = null;
+
+        for (ShippingBin bin : gameState.getMap().getShippingBins()) {
+            if (gameState.getMap().isAroundPlaceable(gameState.getCurrentPlayer(), bin)) {
+                temp = bin;
+                break;
+            }
+        }
+
+        if (temp == null) {
+            return new Response(false, "you must be near a shipping bin");
+        }
+
+        if (!Sellable.isSellable(productName)) {
+            return new Response(false, "you can't sell this product");
+        }
+
+        if (gameState.getCurrentPlayer().getBackpack().getIngredientQuantity()
+                .getOrDefault((Ingredient) Sellable.getSellableByName(productName), 0) < amount) {
+            return new Response(false, "Not enough stock");
+        }
+
+        int price = amount * Sellable.getSellableByName(productName).getSellPrice();
+
+        gameState.getCurrentPlayer().getBackpack()
+                .removeIngredients((Ingredient) Sellable.getSellableByName(productName), amount);
+        temp.increaseRevenue(gameState.getCurrentPlayer(), price);
+
+        return new Response(true, "you have sold this product successfully");
+    }
+
+    public Response getFriendShips() {
+
+        StringBuilder message = new StringBuilder("FriendShips:");
+
+        for (Set<Player> key : gameState.getRelationsBetweenPlayers().relationNetwork.keySet()) {
+
+            message.append("\n");
+
+            Iterator<Player> iterator = key.iterator();
+            Player p1 = iterator.next();
+            Player p2 = iterator.next();
+
+            message.append(p1.getUsername()).append(" and ").append(p2.getUsername()).append(":");
+            message.append(gameState.getRelationsBetweenPlayers().relationNetwork.get(key).toString());
+
+        }
+
+        return new Response(true, message.toString());
+
+    }
+
+    public Response getTalk(Request request) {
+        String username = request.body.get("name");
+        String message = request.body.get("message");
+
+        Player receiver = null;
+        if (App.getGameState().getCurrentPlayer().getUsername().equals(username)) {
+            return new Response(false, "Dude Ba Khodet Ke nemitoni HarfBezani");
+        }
+
+        for (Player p : App.getGameState().getPlayers()) {
+            if (p.getUsername().equals(username)) {
+                receiver = p;
+                break;
+            }
+        }
+
+        if (receiver == null) {
+            return new Response(false, "Player not found");
+        }
+
+        int distanceSquare = (int) Math
+                .sqrt(App.getGameState().getCurrentPlayer().getPosition().getX() - receiver.getPosition().getX());
+        distanceSquare += (int) Math
+                .sqrt(App.getGameState().getCurrentPlayer().getPosition().getY() - receiver.getPosition().getY());
+
+        if (distanceSquare > 2) {
+            return new Response(false, "You are too far away");
+        }
+
+        RelationNetwork tempNetwork = App.getGameState().getRelationsBetweenPlayers();
+        Set<Player> lookUpKey = new HashSet<>();
+        lookUpKey.add(receiver);
+        lookUpKey.add(App.getGameState().getCurrentPlayer());
+
+        RelationWithPlayers tempRelation = tempNetwork.relationNetwork.get(lookUpKey);
+        if (!tempRelation.HaveTalkedToday()) {
+            tempRelation.changeXp(20);
+            tempRelation.setHaveTalkedToday(true);
+        }
+
+        if (tempRelation.isMarriage()) {
+            App.getGameState().getCurrentPlayer().addEnergy(50);
+            receiver.addEnergy(50);
+        }
+
+        tempRelation.addDialogue(new DialoguesBetweenPlayers(App.getGameState().getCurrentPlayer(), receiver, message));
+        tempNetwork.relationNetwork.put(lookUpKey, tempRelation);
+        receiver.addNotification(new Notification(message, App.getGameState().getCurrentPlayer()));
+
+        return new Response(true, "message Sent : )");
+    }
+
+    public Response talkHistory(Request request) {
+        String username = request.body.get("name");
+        if (App.getGameState().getCurrentPlayer().getUsername().equals(username)) {
+            return new Response(false, "Dude Ba Khodet Ke nemitoni HarfBezani");
+        }
+        Player temp = null;
+
+        for (Player p : App.getGameState().getPlayers()) {
+            if (p.getUsername().equals(username)) {
+                temp = p;
+                break;
+            }
+        }
+
+        if (temp == null) {
+            return new Response(false, "Player not found");
+        }
+
+        RelationNetwork tempNetwork = App.getGameState().getRelationsBetweenPlayers();
+        Set<Player> lookUpKey = new HashSet<>();
+        lookUpKey.add(temp);
+        lookUpKey.add(App.getGameState().getCurrentPlayer());
+        RelationWithPlayers tempRelation = tempNetwork.relationNetwork.get(lookUpKey);
+
+        String message = "Talking History:\n";
+        message += tempRelation.getTalkHistory() + "\n";
+
+        return new Response(true, message);
+
+    }
+
+    public Response GiftToUSer(Request request) {
+        String username = request.body.get("name");
+        String item = request.body.get("item");
+        int amount = Integer.parseInt(request.body.get("amount"));
+
+        if (App.getGameState().getCurrentPlayer().getUsername().equals(username)) {
+            return new Response(false, "Dude Ba Khodet Ke nemitoni HarfBezani");
+        }
+
+        Player receiver = null;
+
+        for (Player p : App.getGameState().getPlayers()) {
+            if (p.getUsername().equals(username)) {
+                receiver = p;
+                break;
+            }
+        }
+
+        if (receiver == null) {
+            return new Response(false, "Player not found");
+        }
+
+        int distanceSquare = (int) Math
+                .sqrt(App.getGameState().getCurrentPlayer().getPosition().getX() - receiver.getPosition().getX());
+        distanceSquare += (int) Math
+                .sqrt(App.getGameState().getCurrentPlayer().getPosition().getY() - receiver.getPosition().getY());
+
+        if (distanceSquare > 2) {
+            return new Response(false, "You are too far away");
+        }
+
+        RelationNetwork tempNetwork = App.getGameState().getRelationsBetweenPlayers();
+        Set<Player> lookUpKey = new HashSet<>();
+        lookUpKey.add(App.getGameState().getCurrentPlayer());
+        lookUpKey.add(receiver);
+
+        RelationWithPlayers tempRelation = tempNetwork.relationNetwork.get(lookUpKey);
+
+        if (tempRelation.getFriendshipLevel().equals(FriendshipLevelsWithPlayers.LevelZero)) {
+            return new Response(false, "you can't gift this player at this friendship level");
+        }
+
+        if (!Sellable.isSellable(item)) {
+            return new Response(false, "you can't gift this item");
+        }
+
+        if (Sellable.getSellableByName(item) == null) {
+            return new Response(false, "Not enough stock");
+        }
+
+        if (App.getGameState().getCurrentPlayer().getBackpack().getIngredientQuantity()
+                .getOrDefault((Ingredient) Sellable.getSellableByName(item), 0) < amount) {
+            return new Response(false, "Not enough stock");
+        }
+
+        App.getGameState().addGiftsIndex();
+        BetweenPlayersGift tempGift = new BetweenPlayersGift(Sellable.getSellableByName(item),
+                App.getGameState().getCurrentPlayer(), receiver, App.getGameState().getGiftIndex());
+        App.getGameState().addToGifts(tempGift);
+
+        App.getGameState().getCurrentPlayer().getBackpack()
+                .removeIngredients((Ingredient) Sellable.getSellableByName(item), amount);
+        receiver.getBackpack().addIngredients((Ingredient) Sellable.getSellableByName(item), amount);
+
+        receiver.addNotification(new Notification("you have received a gift", App.getGameState().getCurrentPlayer()));
+
+        if (tempRelation.isMarriage()) {
+            App.getGameState().getCurrentPlayer().addEnergy(50);
+            receiver.addEnergy(50);
+        }
+
+        return new Response(true, "He/She received your gift with id " + App.getGameState().getGiftIndex());
+
+    }
+
+    public Response getGiftList() {
+
+        StringBuilder message = new StringBuilder("GiftList:");
+
+        for (BetweenPlayersGift gift : App.getGameState().getGifts()) {
+            if (gift.getReceiver().equals(App.getGameState().getCurrentPlayer())) {
+                message.append("\n");
+                message.append(gift);
+            }
+
+        }
+        return new Response(true, message.toString());
+    }
+
+    
 
 }
