@@ -4,5 +4,15 @@ enter pregame
 game new aeen123 matin
 game map 1
 game map 2
-artisan use 
+cheat add
+crafting show recipes
+cheat add item -n Keg -c 10
+cheat add item -n Wood -c 30
+crafting show recipes
+cheat add item -n IronBar -c 30
+cheat add item -n CopperBar -c 30
+crafting craft Keg
+artisan use keg Beer
+artisan use Keg Beer
+artisan get Keg
 exit

@@ -29,8 +29,7 @@ public class Backpack {
     private final Refrigerator refrigerator = new Refrigerator();
     private final TrashCan trashCan = new TrashCan();
 
-
-	private final HashMap<Ingredient, Integer> ingredientQuantity = new HashMap<>();
+    private final HashMap<Ingredient, Integer> ingredientQuantity = new HashMap<>();
 
     public Backpack(BackpackType type) {
         this.type = type;
@@ -143,7 +142,9 @@ public class Backpack {
 
     public ArtisanMachine getArtisanMachineByName(String name) {
         ArtisanMachine machineIns = ArtisanMachine.getArtisanMachineByRecipe(CraftingRecipes.getRecipeByName(name));
-
+        if (machineIns == null) {
+            return null;
+        }
         for (ArtisanMachine machine : artisanMachines) {
             if (machine.getClass() == machineIns.getClass())
                 return machine;
@@ -213,11 +214,8 @@ public class Backpack {
         return hay.getNumber();
     }
 
-
     public TrashCan getTrashCan() {
-		return trashCan;
-	}
-
-
+        return trashCan;
+    }
 
 }

@@ -1696,8 +1696,9 @@ public class GameController {
         Player player = gameState.getCurrentPlayer();
         ArtisanMachine artisanMachine = player.getBackpack().getArtisanMachineByName(artisanName);
 
-        if (artisanMachine == null)
+        if (artisanMachine == null){
             return new Response(false, "Artisan Machine not found!");
+        }
 
         Response Response = artisanMachine.canUse(player, itemName);
         if (Response.getSuccessful()) {

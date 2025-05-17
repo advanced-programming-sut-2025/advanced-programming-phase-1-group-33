@@ -59,7 +59,7 @@ public enum GameViewCommands implements Command {
     COLLECT_PRODUCE("^collect\\s+produce\\s+-n\\s+(?<name>.+)$"),
     SELL_ANIMAL("^sell\\s+animal\\s+-n\\s+(?<name>.+)$"),
     // FISHING(""),
-    ARTISAN_USE("^artisan\\s+use\\s+-n\\s+(?<artisanName>.+?)(\\s+-i\\s+(?<item1Name>.+))?$"),
+    ARTISAN_USE("^artisan\\s+use\\s+(?<artisanName>.+?)(\\s+-i\\s+(?<item1Name>.+))?$"),
     ARTISAN_GET("^artisan\\s+get\\s+(?<artisanName>.+)$"),
 
     // go to store
