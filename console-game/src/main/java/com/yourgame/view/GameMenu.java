@@ -208,7 +208,6 @@ public class GameMenu implements AppMenu {
     private Response getFlower(String input) {
         Request request = new Request(input);
         request.body.put("username", GameViewCommands.FLOWER.getGroup(input, "username"));
-        request.body.put("flowerName", GameViewCommands.FLOWER.getGroup(input, "flowerName"));
 
         return controller.getFlower(request);
 
@@ -217,7 +216,7 @@ public class GameMenu implements AppMenu {
     private Response getHug(String input) {
 
         Request request = new Request(input);
-        request.body.put("giftNumber", GameViewCommands.HUG.getGroup(input, "giftNumber"));
+        request.body.put("username", GameViewCommands.HUG.getGroup(input, "username"));
 
         return controller.getHug(request);
     }

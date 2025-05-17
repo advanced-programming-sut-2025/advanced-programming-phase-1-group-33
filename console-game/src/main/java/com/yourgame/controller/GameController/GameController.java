@@ -604,6 +604,11 @@ public class GameController {
             return new Response(true, "You add <" + ItemName + "> successfully!");
         }
 
+        if (ItemName.equalsIgnoreCase("bouquet")) {
+            player.getBackpack().addIngredients(new Bouquet(), quantity);
+            return new Response(true, "You add <" + ItemName + "> successfully!");
+        }
+
         return new Response(false, "There is no such Item!");
     }
 
@@ -2072,7 +2077,7 @@ public class GameController {
     }
 
     public Response getHug(Request request) {
-        String username = request.body.get("name");
+        String username = request.body.get("username");
 
         Player temp = null;
 
@@ -2122,7 +2127,7 @@ public class GameController {
                 temp.addEnergy(50);
             }
 
-            return new Response(true, "masadigh mohtavaye mojremane");
+            return new Response(true, "BAghaasllll ");
         }
 
         return new Response(false, "your friendship level must be at least two");
@@ -2184,10 +2189,10 @@ public class GameController {
                 temp.addEnergy(50);
             }
             tempRelation.changeXp(0);
-            return new Response(true, "You two hugged each other");
+            return new Response(true, "You gave the flower.");
         }
 
-        return new Response(false, "you can't hug this this player");
+        return new Response(false, "you Cannot give the flower to tihs person");
 
     }
 

@@ -50,3 +50,37 @@ next turn
 gift list
 gift rate -i 1 -r 5
 gift history -u matin
+hug -u matin
+next turn
+friendships
+cheat add item -n Pomegranate -c 30
+gift -u aeen123 -i Pomegranate -a 20
+cheat advance date 1d
+friendships
+cheat add item -n Pomegranate -c 30
+gift -u aeen123 -i Pomegranate -a 20
+friendships
+cheat add item -n Pomegranate -c 30
+gift -u aeen123 -i Pomegranate -a 20
+cheat advance date 1d
+friendships
+cheat add item -n Pomegranate -c 30
+gift -u aeen123 -i Pomegranate -a 20
+cheat advance date 1d
+friendships
+cheat add item -n Pomegranate -c 30
+gift -u aeen123 -i Pomegranate -a 20
+cheat advance date 1d
+friendships
+cheat add item -n Pomegranate -c 30
+gift -u aeen123 -i Pomegranate -a 20
+next turn
+hug -u matin
+datetime
+flower -u matin
+cheat add item -n bouquet -c 30
+friendships
+
+ask marriage -u matin -r ring
+
+respond -accept -u aeen123

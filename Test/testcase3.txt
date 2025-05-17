@@ -9,12 +9,12 @@ register -u aeen745 -p Abcd1234! -pc Abcd1234! -n Moz -e moz@gmail.com -g male  
 show current menu
 login -u aeen -p Abcd123!       // wrong pass
 login -u aeen8 -p Abcd1234!   //username not found        // forget password added later
-login -u aeen -p Abcd1234!     //valid
+login -u aeen20 -p Abcd1234!     //valid
 show current menu
 enter profile
 show current menu
 user info
-change username -u aeen20
+change username -u aeen
 enter pregame
 game new aeen123 matin
 game map 1
