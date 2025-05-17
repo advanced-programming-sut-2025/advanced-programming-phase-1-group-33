@@ -35,6 +35,7 @@ import com.yourgame.model.Map.Water.Lake;
 import com.yourgame.model.WeatherAndTime.Season;
 import com.yourgame.model.WeatherAndTime.Weather;
 import com.yourgame.model.enums.SymbolType;
+import com.yourgame.model.enums.Commands.MenuTypes;
 import com.yourgame.view.ConsoleView;
 
 import java.util.*;
@@ -311,18 +312,15 @@ public class GameController {
     }
 
     public Response getDayOfWeek() {
-        // TODO Auto-generated method stub
         return new Response(true, String.format("Day : %s ", gameState.getGameTime().getDayOfWeek().name()));
 
     }
 
     public Response getSeason() {
-        // TODO Auto-generated method stub
         return new Response(true, "Current Season is " + gameState.getGameTime().getSeason());
     }
 
     public Response getAdvancedDate(Request request) {
-        // TODO Auto-generated method stub
 
         int amountOfDays = Integer.parseInt(request.body.get("amount"));
 
@@ -473,7 +471,8 @@ public class GameController {
         HashMap<Ingredient, Integer> ingredients = recipe.getIngredients();
         for (Ingredient ingredient : ingredients.keySet()) {
             if (!(player.getBackpack().getIngredientQuantity().containsKey(ingredient) &&
-                    player.getBackpack().getIngredientQuantity().getOrDefault(ingredient, 0) >= ingredients.get(ingredient))) {
+                    player.getBackpack().getIngredientQuantity().getOrDefault(ingredient, 0) >= ingredients
+                            .get(ingredient))) {
                 return new Response(false, "You don't have enough <" + ingredient + "> in your backpack!");
             }
             player.getBackpack().removeIngredients(ingredient, ingredients.get(ingredient));
@@ -669,7 +668,7 @@ public class GameController {
             if (ingredientInBackpack == null)
                 return new Response(false, "You don't have any <" + requiredIngredient + "> in your backpack!");
 
-            if (player.getBackpack().getIngredientQuantity().getOrDefault(ingredientInBackpack, 0 ) < requiredIngredients
+            if (player.getBackpack().getIngredientQuantity().getOrDefault(ingredientInBackpack, 0) < requiredIngredients
                     .get(ingredientInBackpack)) {
                 return new Response(false, "You don't have enough <" + requiredIngredient + "> in your backpack!");
             }
@@ -1389,7 +1388,7 @@ public class GameController {
             }
         }
         if (habitat == null)
-            return new Response(false, "You don't have any enough capacity to buy this animalT!");
+            return new Response(false, "You don't have any enough capacity to buy this animal!");
 
         Response storeResult = map.getNpcVillage().getMarnieRanch().PurchaseAnimal(animalType);
         if (!storeResult.getSuccessful())
@@ -1474,6 +1473,287 @@ public class GameController {
         }
 
         return new Response(false, "Error happend While Searching for Capacity");
+
+    }
+
+    public Response getSellAnimal(Request request) {
+        String animalName = request.body.get("name");
+        Player player = gameState.getCurrentPlayer();
+        Animal animal = player.getBackpack().getAnimalByName(animalName);
+
+        if (animal == null) {
+            return new Response(false, "Animal <" + animalName + "> not found!");
+        }
+
+        double price = animal.getType().getPrice() * (((double) (animal.getFriendShip()) / 1000) + 0.3);
+
+        player.getBackpack().addIngredients(new Coin(), ((int) price));
+        player.getBackpack().getAllAnimals().remove(animal);
+        animal.getHabitat().getAnimals().remove(animal);
+
+        return new Response(true, "You sell Animal <" + animalName + "> $" + price + "!");
+
+    }
+
+    public Response getPetAnimal(Request request) {
+        String animalName = request.body.get("name");
+        Player player = gameState.getCurrentPlayer();
+        Animal animal = player.getBackpack().getAnimalByName(animalName);
+
+        if (animal == null) {
+            return new Response(false, "Animal <" + animalName + "> not found!");
+
+        }
+
+        animal.pet();
+
+        return new Response(true, "You pet <" + animalName + "> successfully!");
+    }
+
+    public Response getCheatSetFriendShip(Request request) {
+        String animalName = request.body.get("name");
+        int amount = Integer.parseInt(request.body.get("amount"));
+        Player player = gameState.getCurrentPlayer();
+        Animal animal = player.getBackpack().getAnimalByName(animalName);
+
+        if (animal == null) {
+            return new Response(false, "Animal <" + animalName + "> not found!");
+        }
+        if (amount <= 0) {
+            return new Response(false, "You can't set friendship to negative amount!");
+        }
+
+        animal.setFriendShip(amount);
+
+        return new Response(true, "You set friendship with <" + animalName + "> to " + amount + "!");
+    }
+
+    public Response getAnimals() {
+        Player player = gameState.getCurrentPlayer();
+        ArrayList<Animal> animals = player.getBackpack().getAllAnimals();
+
+        if (animals.isEmpty()) {
+            return new Response(false, "No animals found!");
+        }
+        StringBuilder animalsInfo = new StringBuilder();
+        animalsInfo.append("Animals:\n");
+        for (int i = 0; i < animals.size(); i++) {
+            animalsInfo.append(String.format("\t%-2d: \n", i + 1));
+            animalsInfo.append(String.format("\t    Name: %s\n", animals.get(i).getName()));
+            animalsInfo.append(String.format("\t    Type: %s\n", animals.get(i).getType()));
+            animalsInfo.append(String.format("\t    LevelOfFriendship: %d\n", animals.get(i).getFriendShip()));
+            animalsInfo.append(String.format("\t    hasPettedToday: %s\n", animals.get(i).hasPettedToday()));
+            animalsInfo.append(String.format("\t    hasFedToday: %s\n", animals.get(i).hasFedToday()));
+        }
+
+        return new Response(true, animalsInfo.toString());
+
+    }
+
+    public Response getAnimalShepherd(Request request) {
+        String animalName = request.body.get("name");
+        int x = Integer.parseInt(request.body.get("x"));
+        int y = Integer.parseInt(request.body.get("y"));
+        Player player = gameState.getCurrentPlayer();
+        Animal animal = player.getBackpack().getAnimalByName(animalName);
+        Tile tile = gameState.getMap().findTile(x, y);
+
+        if (animal == null) {
+            return new Response(false, "Animal <" + animalName + "> not found!");
+        }
+        if (tile == null) {
+            return new Response(false, "This position not found!");
+        }
+        if (tile.getPlaceable() != null) {
+            return new Response(false, "This position is not free!");
+        }
+
+        if (animal.isOutOfHabitat()) {
+            animal.goToHabitat();
+            return new Response(true, "You put <" + animalName + "> in the habitat!");
+        }
+
+        if (!gameState.getGameTime().getWeather().equals(Weather.Sunny)) {
+            return new Response(false, "Weather is not Sunny! you can't shepherd your animal!");
+        }
+
+        animal.shepherdAnimal();
+        animal.feed();
+        animal.incrementFriendShip(8);
+
+        return new Response(true, "You shepherd your animal!");
+    }
+
+    public Response feedHey(Request request) {
+        String animalName = request.body.get("name");
+        Player player = gameState.getCurrentPlayer();
+        Animal animal = player.getBackpack().getAnimalByName(animalName);
+
+        if (animal == null) {
+            return new Response(false, "Animal <" + animalName + "> not found!");
+        }
+
+        if (!player.getBackpack().hasEnoughHay(1)) {
+            return new Response(false, "You don't have enough hay to feed animal!");
+        }
+
+        player.getBackpack().decreaseHay(1);
+        animal.feed();
+        animal.incrementFriendShip(4);
+
+        return new Response(true, "You feed animal <" + animalName + "> successfully!");
+
+    }
+
+    public Response getProduces() {
+        Player player = gameState.getCurrentPlayer();
+        ArrayList<Animal> animals = player.getBackpack().getAllAnimals();
+        if (animals.isEmpty())
+            return new Response(false, "No animals found!");
+
+        StringBuilder output = new StringBuilder();
+        output.append("Animals that their products haven't been collected yet:\n");
+
+        for (Animal animal : animals) {
+            if (animal.isReadyProduct())
+                output.append(String.format("%-20s (%-9s ->   %-25s\n",
+                        animal.getName(), animal.getType() + ")", animal.getType().getAnimalGoods()));
+        }
+
+        return new Response(true, output.toString());
+
+    }
+
+    public Response getCollectProduces(Request request) {
+
+        String animalName = request.body.get("name");
+        Player player = gameState.getCurrentPlayer();
+        Animal animal = player.getBackpack().getAnimalByName(animalName);
+
+        if (animal == null) {
+            return new Response(false, "Animal <" + animalName + "> not found!");
+        }
+        if (!animal.isReadyProduct()) {
+            return new Response(false, "Product is not ready!");
+        }
+
+        Tool tool = player.getCurrentTool();
+        if (tool == null) {
+            return new Response(false, "you don't have a tool, please set your current tool!");
+        }
+
+        if (animal.getType().equals(AnimalType.Sheep)) {
+
+            if (!(tool instanceof Shear shear))
+                return new Response(false, "Your current tool is not Shear!");
+
+            Response energyConsumptionResult = shear.useTool();
+            if (!energyConsumptionResult.getSuccessful()) {
+                return energyConsumptionResult;
+            }
+        } else if (animal.getType().equals(AnimalType.Cow) || animal.getType().equals(AnimalType.Goat)) {
+
+            if (!(tool instanceof MilkPail milkPail)) {
+                return new Response(false, "Your current tool is not MilkPail!");
+            }
+
+            Response energyConsumptionResult = milkPail.useTool();
+            if (!energyConsumptionResult.getSuccessful()) {
+                return energyConsumptionResult;
+            }
+        }
+
+        AnimalGood animalGood = animal.getProduct();
+        player.getBackpack().addIngredients(animalGood, 1);
+        player.getAbility().increaseFarmingRate(5);
+        animal.incrementFriendShip(5);
+
+        return new Response(true,
+                String.format("You collect %s with quality %s. Previous price: %s -> New Price: %s",
+                        animalGood.getType(), animalGood.getQuality(), animalGood.getType().getPrice(),
+                        animalGood.getSellPrice()));
+    }
+
+    public Response getArtistanGet(Request request) {
+        String artisanName = request.body.get("name");
+        Player player = gameState.getCurrentPlayer();
+        ArtisanMachine artisanMachine = player.getBackpack().getArtisanMachineByName(artisanName);
+
+        if (artisanMachine == null)
+            return new Response(false, "Artisan Machine not found!");
+
+        Response result = artisanMachine.isReady();
+        if (result.getSuccessful()) {
+            player.getBackpack().addIngredients(artisanMachine.get(), 1);
+            artisanMachine.reset();
+        }
+        return result;
+    }
+
+    public Response getArtistanUse(Request request) {
+        String artisanName = request.body.get("name");
+        String itemName = request.body.get("itemName");
+        Player player = gameState.getCurrentPlayer();
+        ArtisanMachine artisanMachine = player.getBackpack().getArtisanMachineByName(artisanName);
+
+        if (artisanMachine == null)
+            return new Response(false, "Artisan Machine not found!");
+
+        Response Response = artisanMachine.canUse(player, itemName);
+        if (Response.getSuccessful()) {
+            artisanMachine.use();
+        }
+        return Response;
+    }
+
+    public Response goToStoreMenu() {
+        Map gameMap = App.getGameState().getMap();
+        if (gameMap.isAroundPlaceable(App.getGameState().getCurrentPlayer(), gameMap.getNpcVillage().getBlacksmith())) {
+
+            App.setCurrentMenu(MenuTypes.BlackSmithMenu);
+            return new Response(true, "Now you are in the blacksmith");
+
+        } else if (gameMap.isAroundPlaceable(App.getGameState().getCurrentPlayer(),
+                gameMap.getNpcVillage().getCarpenterShop())) {
+
+            App.setCurrentMenu(MenuTypes.CarpenterShopMenu);
+            return new Response(true, "Now you are in the carpenterShop");
+
+        } else if (gameMap.isAroundPlaceable(App.getGameState().getCurrentPlayer(),
+                gameMap.getNpcVillage().getMarnieRanch())) {
+
+            App.setCurrentMenu(MenuTypes.MarnieRanchMenu);
+            return new Response(true, "Now you are in the Marnie's Ranch");
+
+        } else if (gameMap.isAroundPlaceable(App.getGameState().getCurrentPlayer(),
+                gameMap.getNpcVillage().getJojaMart())) {
+
+            App.setCurrentMenu(MenuTypes.JojaMartMenu);
+            return new Response(true, "Now you are in the Joja Mart");
+
+        } else if (gameMap.isAroundPlaceable(App.getGameState().getCurrentPlayer(),
+                gameMap.getNpcVillage().getPierreGeneralStore())) {
+
+            App.setCurrentMenu(MenuTypes.PierreGeneralStoreMenu);
+            return new Response(true, "Now you are in the Pierre General Store");
+
+        } else if (gameMap.isAroundPlaceable(App.getGameState().getCurrentPlayer(),
+                gameMap.getNpcVillage().getFishShop())) {
+
+            App.setCurrentMenu(MenuTypes.FishShopMenu);
+            return new Response(true, "Now you are in the Fish Shop");
+
+        } else if (gameMap.isAroundPlaceable(App.getGameState().getCurrentPlayer(),
+                gameMap.getNpcVillage().getStardopSaloon())) {
+
+            App.setCurrentMenu(MenuTypes.StardopSaloonMenu);
+            return new Response(true, "Now you are in the Stardop Saloon");
+
+        } else {
+
+            return new Response(false, "you must be near a store");
+
+        }
 
     }
 

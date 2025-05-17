@@ -18,8 +18,8 @@ public class Animal {
         this.type = type;
         this.name = name;
         this.friendShip = 0;
-        this.lastPetTime = null;
-        this.lastFeedTime = null;
+        this.lastPetTime = App.getGameState().getGameTime().clone();
+        this.lastFeedTime = App.getGameState().getGameTime().clone();
         this.lastProductTime = App.getGameState().getGameTime().clone();
         isOutOfHabitat = false;
         this.habitat = habitat;

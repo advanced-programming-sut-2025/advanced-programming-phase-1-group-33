@@ -69,7 +69,7 @@ public class GameMenu implements AppMenu {
             case PRINT_Whole_MAP:
                 return getPrintWholeMap(input);
             case Print_map_for_current_player:
-                return getPrintMapForCurrentPlayer(); 
+                return getPrintMapForCurrentPlayer();
             case HELP_READING_MAP:
                 return getHelpRedning();
             case ENERGY_SHOW:
@@ -126,14 +126,103 @@ public class GameMenu implements AppMenu {
             case SHOWPLANT:
                 return getShowPlantResponse(input);
             case HowMuchWater:
-                return getHowMuchWater(); 
+                return getHowMuchWater();
             case BUILD:
                 return getbuildResponse(input);
             case BUYANIMAL:
                 return getBuyAnimalResponse(input);
+            case CHEAT_SET_FRIENDSHIP:
+                return getCheatSetFriendShip(input);
+            case ANIMALS:
+                return getAnimals();
+            case SHEPHERD:
+                return getShepherd(input);
+            case FEED_HAY:
+                return getFeedHey(input);
+            case PRODUCES:
+                return getProduces();
+            case COLLECT_PRODUCE:
+                return getCollectProduces(input);
+            case SELL_ANIMAL:
+                return getSellAnimal(input);
+            case PET:
+                return getPetAnimal(input);
+            case ARTISAN_USE:
+                return getArtistanUse(input);
+            case ARTISAN_GET:
+                return getArtistanGet(input); 
+            case StoreMenu:
+                return getGoToStoreMenu(input); 
             default:
                 return getInvalidCommand();
         }
+    }
+
+    private Response getGoToStoreMenu(String input) {
+        return controller.goToStoreMenu();
+    }
+
+    private Response getArtistanGet(String input) {
+        Request request = new Request(input);
+        request.body.put("name", GameViewCommands.ARTISAN_GET.getGroup(input, "artisanName"));
+        return controller.getArtistanGet(request);
+    }
+    
+    
+    private Response getArtistanUse(String input) {
+        Request request = new Request(input);
+        request.body.put("name", GameViewCommands.ARTISAN_USE.getGroup(input, "artisanName"));
+        request.body.put("item1Name", GameViewCommands.ARTISAN_USE.getGroup(input, "item1Name"));
+        return controller.getArtistanUse(request);
+    }
+
+    private Response getPetAnimal(String input) {
+        Request request = new Request(input);
+        request.body.put("name", GameViewCommands.PET.getGroup(input, "name"));
+        return controller.getPetAnimal(request);
+
+    }
+
+    private Response getSellAnimal(String input) {
+        Request request = new Request(input);
+        request.body.put("name", GameViewCommands.SELL_ANIMAL.getGroup(input, "name"));
+        return controller.getSellAnimal(request);
+    }
+
+    private Response getCollectProduces(String input) {
+        Request request = new Request(input);
+        request.body.put("name", GameViewCommands.COLLECT_PRODUCE.getGroup(input, "name"));
+        return controller.getCollectProduces(request);
+
+    }
+
+    private Response getProduces() {
+        return controller.getProduces();
+    }
+
+    private Response getFeedHey(String input) {
+        Request request = new Request(input);
+        request.body.put("name", GameViewCommands.FEED_HAY.getGroup(input, "animalName"));
+        return controller.feedHey(request);
+    }
+
+    private Response getShepherd(String input) {
+        Request request = new Request(input);
+        request.body.put("name", GameViewCommands.SHEPHERD.getGroup(input, "animalName"));
+        request.body.put("x", GameViewCommands.SHEPHERD.getGroup(input, "x"));
+        request.body.put("y", GameViewCommands.SHEPHERD.getGroup(input, "y"));
+        return controller.getAnimalShepherd(request);
+    }
+
+    private Response getAnimals() {
+        return controller.getAnimals();
+    }
+
+    private Response getCheatSetFriendShip(String input) {
+        Request request = new Request(input);
+        request.body.put("name", GameViewCommands.CHEAT_SET_FRIENDSHIP.getGroup(input, "name"));
+        request.body.put("amount", GameViewCommands.CHEAT_SET_FRIENDSHIP.getGroup(input, "amount"));
+        return controller.getCheatSetFriendShip(request);
     }
 
     private Response getHowMuchWater() {

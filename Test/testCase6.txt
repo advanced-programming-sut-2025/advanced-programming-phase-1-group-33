@@ -17,5 +17,22 @@ print map -l 1, 1 -s 30
 greenhouse build 
 print map -l 1, 1 -s 70
 help reading map
+buy animal -a cow -n morghman
+walk -l 117, 92 
+buy animal -a cow -n gavMan
+go to store
+show all products
+show all available products
+purchase Goat -n 1
+exit 
+pet -n gavMan
+cheat set friendship -n gavMan -c 100
+print map -l 105, 90 -s 30
+animals
+collect produce -n gavMan
+cheat add item -n MilkPail -c 10
+tools equip milkpail
+collect produce -n gavMan
+sell animal -n gavMan
 go back
 exit

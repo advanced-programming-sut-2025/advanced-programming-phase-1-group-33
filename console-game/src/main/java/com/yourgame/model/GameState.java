@@ -35,6 +35,7 @@ public class GameState {
     private final User gameCreator;
     private Player currentPlayer;
     private RelationNetwork relationsBetweenPlayers;
+
     private final ArrayList<BetweenPlayersGift> gifts = new ArrayList<>();
     private int giftIndex = 0;
 
@@ -173,9 +174,10 @@ public class GameState {
     }
 
     public void MakeGameReadyForNextDay() {
-        // To do 
-        // if (App.getCurrentMenu() != null && App.getCurrentMenu().getMenu() instanceof GameMenu) {
-        //     ((GameMenu) App.getCurrentMenu().getMenu()).doNights();
+        // To do
+        // if (App.getCurrentMenu() != null && App.getCurrentMenu().getMenu() instanceof
+        // GameMenu) {
+        // ((GameMenu) App.getCurrentMenu().getMenu()).doNights();
         // }
 
         for (Player player : players) {
@@ -283,4 +285,13 @@ public class GameState {
         this.getMap().getNpcVillage().getStardopSaloon().ResetQuantityEveryNight();
 
     }
+
+    public RelationNetwork getRelationsBetweenPlayers() {
+        return relationsBetweenPlayers;
+    }
+
+    public void setRelationsBetweenPlayers(RelationNetwork relationsBetweenPlayers) {
+        this.relationsBetweenPlayers = relationsBetweenPlayers;
+    }
+
 }
