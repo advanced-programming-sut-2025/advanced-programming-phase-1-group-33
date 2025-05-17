@@ -28,7 +28,7 @@ public class SebastianQuests {
                 App.getGameState().getCurrentPlayer().getBackpack().getIngredientQuantity().keySet()) {
             if (ingredient.equals(ForagingMineral.Iron)) {
                 int value =
-                        App.getGameState().getCurrentPlayer().getBackpack().getIngredientQuantity().get(ingredient);
+                        App.getGameState().getCurrentPlayer().getBackpack().getIngredientQuantity().getOrDefault(ingredient, 0 );
                 if (value >= 50) {
                     App.getGameState().getCurrentPlayer().getBackpack().getIngredientQuantity().put(ingredient,
                             value - 50);
@@ -66,7 +66,7 @@ public class SebastianQuests {
 
         for (Ingredient ingredient : App.getGameState().getCurrentPlayer().getBackpack().getIngredientQuantity().keySet()) {
             if (ingredient.equals(Food.PumpkinPie)) {
-                int value = App.getGameState().getCurrentPlayer().getBackpack().getIngredientQuantity().get(ingredient);
+                int value = App.getGameState().getCurrentPlayer().getBackpack().getIngredientQuantity().getOrDefault(ingredient, 0 );
                 if (value > 0) {
                     App.getGameState().getCurrentPlayer().getBackpack().getIngredientQuantity().put(ingredient,value-1);
                     isPumpkinPieAvailable = true;
@@ -83,7 +83,7 @@ public class SebastianQuests {
                 App.getGameState().getCurrentPlayer().getBackpack().getIngredientQuantity().keySet()) {
             if (ingredient instanceof Coin) {
                 int value =
-                        App.getGameState().getCurrentPlayer().getBackpack().getIngredientQuantity().get(ingredient);
+                        App.getGameState().getCurrentPlayer().getBackpack().getIngredientQuantity().getOrDefault(ingredient, 0 );
                 if (isRewardTwice) {
                     App.getGameState().getCurrentPlayer().getBackpack().getIngredientQuantity().put(ingredient,
                             value + 10000);
@@ -110,7 +110,7 @@ public class SebastianQuests {
 
         for (Ingredient ingredient : App.getGameState().getCurrentPlayer().getBackpack().getIngredientQuantity().keySet()) {
             if (ingredient instanceof Stone) {
-                int value = App.getGameState().getCurrentPlayer().getBackpack().getIngredientQuantity().get(ingredient);
+                int value = App.getGameState().getCurrentPlayer().getBackpack().getIngredientQuantity().getOrDefault(ingredient, 0);
                 if (value >= 150) {
                     App.getGameState().getCurrentPlayer().getBackpack().getIngredientQuantity().put(ingredient,
                             value - 150);

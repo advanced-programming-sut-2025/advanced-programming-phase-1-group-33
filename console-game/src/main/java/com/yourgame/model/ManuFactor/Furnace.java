@@ -24,7 +24,7 @@ public class Furnace extends ArtisanMachine {
             case "Iron_Bar", "iron_bar" -> {
                 for (Ingredient ingredient : player.getBackpack().getIngredientQuantity().keySet()) {
                     if (ingredient.equals(ForagingMineral.Iron) &&
-                            player.getBackpack().getIngredientQuantity().get(ingredient) >= 5) {
+                            player.getBackpack().getIngredientQuantity().getOrDefault(ingredient, 0) >= 5) {
 
                         for (Ingredient ingredient1 : player.getBackpack().getIngredientQuantity().keySet()) {
                             if (ingredient1.equals(new ArtisanGood(ArtisanGoodType.Coal)) ||
@@ -47,7 +47,7 @@ public class Furnace extends ArtisanMachine {
             case "Iridium_Bar", "iridium_bar" -> {
                 for (Ingredient ingredient : player.getBackpack().getIngredientQuantity().keySet()) {
                     if (ingredient.equals(ForagingMineral.Iridium) &&
-                            player.getBackpack().getIngredientQuantity().get(ingredient) >= 5) {
+                            player.getBackpack().getIngredientQuantity().getOrDefault(ingredient, 0) >= 5) {
 
                         for (Ingredient ingredient1 : player.getBackpack().getIngredientQuantity().keySet()) {
                             if (ingredient1.equals(new ArtisanGood(ArtisanGoodType.Coal)) ||
@@ -70,7 +70,7 @@ public class Furnace extends ArtisanMachine {
             case "Copper_Bar", "copper_bar" -> {
                 for (Ingredient ingredient : player.getBackpack().getIngredientQuantity().keySet()) {
                     if (ingredient.equals(ForagingMineral.Copper) &&
-                            player.getBackpack().getIngredientQuantity().get(ingredient) >= 5) {
+                            player.getBackpack().getIngredientQuantity().getOrDefault(ingredient, 0) >= 5) {
 
                         for (Ingredient ingredient1 : player.getBackpack().getIngredientQuantity().keySet()) {
                             if (ingredient1.equals(new ArtisanGood(ArtisanGoodType.Coal)) ||
@@ -93,7 +93,7 @@ public class Furnace extends ArtisanMachine {
             case "Gold_Bar", "gold_bar" -> {
                 for (Ingredient ingredient : player.getBackpack().getIngredientQuantity().keySet()) {
                     if (ingredient.equals(ForagingMineral.Gold) &&
-                            player.getBackpack().getIngredientQuantity().get(ingredient) >= 5) {
+                            player.getBackpack().getIngredientQuantity().getOrDefault(ingredient, 0) >= 5) {
 
                         for (Ingredient ingredient1 : player.getBackpack().getIngredientQuantity().keySet()) {
                             if (ingredient1.equals(new ArtisanGood(ArtisanGoodType.Coal)) ||

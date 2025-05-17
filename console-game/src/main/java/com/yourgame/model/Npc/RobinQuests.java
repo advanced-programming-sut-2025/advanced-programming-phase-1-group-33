@@ -29,7 +29,7 @@ public class RobinQuests{
                 App.getGameState().getCurrentPlayer().getBackpack().getIngredientQuantity().keySet()) {
             if (ingredient instanceof Wood) {
                 int value =
-                        App.getGameState().getCurrentPlayer().getBackpack().getIngredientQuantity().get(ingredient);
+                        App.getGameState().getCurrentPlayer().getBackpack().getIngredientQuantity().getOrDefault(ingredient, 0);
                 if (value >= 80) {
                     App.getGameState().getCurrentPlayer().getBackpack().getIngredientQuantity().put(ingredient,
                             value - 80);
@@ -45,7 +45,7 @@ public class RobinQuests{
 
         for (Ingredient ingredient : App.getGameState().getCurrentPlayer().getBackpack().getIngredientQuantity().keySet()) {
             if (ingredient instanceof Coin) {
-                int value = App.getGameState().getCurrentPlayer().getBackpack().getIngredientQuantity().get(ingredient);
+                int value = App.getGameState().getCurrentPlayer().getBackpack().getIngredientQuantity().getOrDefault(ingredient, 0);
                 if (isRewardTwice) {
                     App.getGameState().getCurrentPlayer().getBackpack().getIngredientQuantity().put(ingredient, value + 2000);
                 } else {
@@ -71,7 +71,7 @@ public class RobinQuests{
         for (Ingredient ingredient : App.getGameState().getCurrentPlayer().getBackpack().getIngredientQuantity().keySet()) {
             if (ingredient instanceof ArtisanGood) {
                 if (((ArtisanGood) ingredient).getType().equals(ArtisanGoodType.IronBar)) {
-                    int value = App.getGameState().getCurrentPlayer().getBackpack().getIngredientQuantity().get(ingredient);
+                    int value = App.getGameState().getCurrentPlayer().getBackpack().getIngredientQuantity().getOrDefault(ingredient, 0);
                     if ( value >= 10) {
                         App.getGameState().getCurrentPlayer().getBackpack().getIngredientQuantity().put(ingredient, value-10);
                         are10IronBarAvailable= true;
@@ -110,7 +110,7 @@ public class RobinQuests{
                 App.getGameState().getCurrentPlayer().getBackpack().getIngredientQuantity().keySet()) {
             if (ingredient instanceof Wood) {
                 int value =
-                        App.getGameState().getCurrentPlayer().getBackpack().getIngredientQuantity().get(ingredient);
+                        App.getGameState().getCurrentPlayer().getBackpack().getIngredientQuantity().getOrDefault(ingredient, 0);
                 if (value >= 1000) {
                     App.getGameState().getCurrentPlayer().getBackpack().getIngredientQuantity().put(ingredient,
                             value - 1000);
@@ -126,7 +126,7 @@ public class RobinQuests{
 
         for (Ingredient ingredient : App.getGameState().getCurrentPlayer().getBackpack().getIngredientQuantity().keySet()) {
             if (ingredient instanceof Coin) {
-                int value = App.getGameState().getCurrentPlayer().getBackpack().getIngredientQuantity().get(ingredient);
+                int value = App.getGameState().getCurrentPlayer().getBackpack().getIngredientQuantity().getOrDefault(ingredient, 0);
                 if (isRewardTwice) {
                     App.getGameState().getCurrentPlayer().getBackpack().getIngredientQuantity().put(ingredient, value + 50000);
                 } else {

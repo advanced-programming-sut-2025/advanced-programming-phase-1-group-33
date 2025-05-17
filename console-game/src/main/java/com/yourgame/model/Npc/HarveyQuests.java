@@ -32,7 +32,7 @@ public class HarveyQuests {
         boolean are12PlantAvailable = false;
         for (Ingredient ingredient : App.getGameState().getCurrentPlayer().getBackpack().getIngredientQuantity().keySet()) {
             if (ingredient instanceof Crop || ingredient instanceof CropType || ingredient instanceof Fruit) {
-                int value = App.getGameState().getCurrentPlayer().getBackpack().getIngredientQuantity().get(ingredient);
+                int value = App.getGameState().getCurrentPlayer().getBackpack().getIngredientQuantity().getOrDefault(ingredient, 0);
                 if (value >= 12) {
                     App.getGameState().getCurrentPlayer().getBackpack().getIngredientQuantity().put(ingredient, value-12);
                     are12PlantAvailable = true;
@@ -49,7 +49,7 @@ public class HarveyQuests {
                 App.getGameState().getCurrentPlayer().getBackpack().getIngredientQuantity().keySet()) {
             if (ingredient instanceof Coin) {
                 int value =
-                        App.getGameState().getCurrentPlayer().getBackpack().getIngredientQuantity().get(ingredient);
+                        App.getGameState().getCurrentPlayer().getBackpack().getIngredientQuantity().getOrDefault(ingredient, 0);
                 if (isRewardTwice) {
                     App.getGameState().getCurrentPlayer().getBackpack().getIngredientQuantity().put(ingredient,
                             value + 1500);
@@ -77,7 +77,7 @@ public class HarveyQuests {
         for (Ingredient ingredient : App.getGameState().getCurrentPlayer().getBackpack().getIngredientQuantity().keySet()) {
             if (ingredient instanceof Fish) {
                 if (((Fish) ingredient).getType().equals(FishType.Salmon)) {
-                    int value = App.getGameState().getCurrentPlayer().getBackpack().getIngredientQuantity().get(ingredient);
+                    int value = App.getGameState().getCurrentPlayer().getBackpack().getIngredientQuantity().getOrDefault(ingredient, 0);
                     if (value > 0) {
                         App.getGameState().getCurrentPlayer().getBackpack().getIngredientQuantity().put(ingredient, value-1);
                         isSalmonAvailable = true;
@@ -114,7 +114,7 @@ public class HarveyQuests {
             if (ingredient instanceof ArtisanGood) {
                 if (((ArtisanGood) ingredient).getType().equals(ArtisanGoodType.Wine)) {
                     int value =
-                            App.getGameState().getCurrentPlayer().getBackpack().getIngredientQuantity().get(ingredient);
+                            App.getGameState().getCurrentPlayer().getBackpack().getIngredientQuantity().getOrDefault(ingredient, 0);
                     if (value > 0) {
                         App.getGameState().getCurrentPlayer().getBackpack().getIngredientQuantity().put(ingredient,
                                 value - 1);

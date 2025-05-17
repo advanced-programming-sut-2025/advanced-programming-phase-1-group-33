@@ -21,7 +21,7 @@ public class PreservesJar extends ArtisanMachine {
             for (Ingredient ingredient : player.getBackpack().getIngredientQuantity().keySet()) {
                 if (ingredient instanceof Crop crop) {
 
-                    if (player.getBackpack().getIngredientQuantity().get(ingredient) >= 1) {
+                    if (player.getBackpack().getIngredientQuantity().getOrDefault(ingredient, 0) >= 1) {
 
                         player.getBackpack().removeIngredients(ingredient, 1);
 

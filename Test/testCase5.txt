@@ -16,11 +16,14 @@ cheat add item -n IronBar -c 10
 crafting craft Sprinkler
 cooking prepare Omelet
 cheat add item -n Omelet -c 10
+cooking show recipes
 cheat add item -n Egg -c 10
 cooking prepare Omelet
 cheat add item -n Milk -c 10
 cooking prepare Omelet
+cooking prepare Omelet
 eat Omelet
-cooking refrigerator put 
+cooking refrigerator put Omelet
+cooking refrigerator pick Omelet
 go back
 exit

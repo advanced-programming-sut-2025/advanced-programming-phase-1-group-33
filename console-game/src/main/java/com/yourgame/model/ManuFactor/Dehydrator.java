@@ -40,7 +40,7 @@ public class Dehydrator extends ArtisanMachine {
                             ingredient.equals(ForagingCrop.RedMushroom) ||
                             ingredient.equals(ForagingCrop.PurpleMushroom)) {
 
-                        if (player.getBackpack().getIngredientQuantity().get(ingredient) >= 5) {
+                        if (player.getBackpack().getIngredientQuantity().getOrDefault(ingredient, 0) >= 5) {
 
                             player.getBackpack().removeIngredients(ingredient, 5);
 
@@ -60,7 +60,7 @@ public class Dehydrator extends ArtisanMachine {
                     if (ingredient instanceof Fruit ||
                             ingredient instanceof Crop crop && !(crop.getType().equals(CropType.Grape))) {
 
-                        if (player.getBackpack().getIngredientQuantity().get(ingredient) >= 5) {
+                        if (player.getBackpack().getIngredientQuantity().getOrDefault(ingredient, 0) >= 5) {
 
                             player.getBackpack().removeIngredients(ingredient, 5);
 
@@ -84,7 +84,7 @@ public class Dehydrator extends ArtisanMachine {
 
                     if (ingredient instanceof Crop crop && crop.getType().equals(CropType.Grape)) {
 
-                        if (player.getBackpack().getIngredientQuantity().get(ingredient) >= 5) {
+                        if (player.getBackpack().getIngredientQuantity().getOrDefault(ingredient, 0) >= 5) {
 
                             player.getBackpack().removeIngredients(ingredient, 5);
 

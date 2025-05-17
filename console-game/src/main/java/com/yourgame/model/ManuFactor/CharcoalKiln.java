@@ -19,7 +19,7 @@ public class CharcoalKiln extends ArtisanMachine {
             for (Ingredient ingredient : player.getBackpack().getIngredientQuantity().keySet()) {
 
                 if (ingredient instanceof Wood) {
-                    if (player.getBackpack().getIngredientQuantity().get(ingredient) >= 10) {
+                    if (player.getBackpack().getIngredientQuantity().getOrDefault(ingredient, 0 ) >= 10) {
 
                         player.getBackpack().removeIngredients(ingredient, 10);
 

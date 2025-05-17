@@ -29,7 +29,7 @@ public class AbigailQuests {
         for (Ingredient ingredient : App.getGameState().getCurrentPlayer().getBackpack().getIngredientQuantity().keySet()) {
             if (ingredient instanceof ArtisanGood) {
                 if (((ArtisanGood) ingredient).getType().equals(ArtisanGoodType.GoldBar)) {
-                    int value = App.getGameState().getCurrentPlayer().getBackpack().getIngredientQuantity().get(ingredient);
+                    int value = App.getGameState().getCurrentPlayer().getBackpack().getIngredientQuantity().getOrDefault(ingredient, 0);
                     if ( value > 0) {
                         App.getGameState().getCurrentPlayer().getBackpack().getIngredientQuantity().put(ingredient, value-1);
                         isGoldBarAvailable = true;
@@ -65,7 +65,7 @@ public class AbigailQuests {
         for (Ingredient ingredient : App.getGameState().getCurrentPlayer().getBackpack().getIngredientQuantity().keySet()) {
             if (ingredient instanceof Crop) {
                 if (((Crop) ingredient).getType().equals(CropType.Pumpkin)) {
-                    int value = App.getGameState().getCurrentPlayer().getBackpack().getIngredientQuantity().get(ingredient);
+                    int value = App.getGameState().getCurrentPlayer().getBackpack().getIngredientQuantity().getOrDefault(ingredient, 0);
                     if ( value > 0) {
                         App.getGameState().getCurrentPlayer().getBackpack().getIngredientQuantity().put(ingredient, value-1);
                         isPumpkinAvailable= true;
@@ -81,7 +81,7 @@ public class AbigailQuests {
 
         for (Ingredient ingredient : App.getGameState().getCurrentPlayer().getBackpack().getIngredientQuantity().keySet()) {
             if (ingredient instanceof Coin) {
-                int value = App.getGameState().getCurrentPlayer().getBackpack().getIngredientQuantity().get(ingredient);
+                int value = App.getGameState().getCurrentPlayer().getBackpack().getIngredientQuantity().getOrDefault(ingredient, 0);
                 if (isRewardTwice) {
                     App.getGameState().getCurrentPlayer().getBackpack().getIngredientQuantity().put(ingredient, value + 1000);
                 } else {
@@ -107,7 +107,7 @@ public class AbigailQuests {
         for (Ingredient ingredient : App.getGameState().getCurrentPlayer().getBackpack().getIngredientQuantity().keySet()) {
             if (ingredient instanceof Crop) {
                 if (((Crop) ingredient).getType().equals(CropType.Wheat)) {
-                    int value = App.getGameState().getCurrentPlayer().getBackpack().getIngredientQuantity().get(ingredient);
+                    int value = App.getGameState().getCurrentPlayer().getBackpack().getIngredientQuantity().getOrDefault(ingredient, 0);
                     if ( value >= 50) {
                         App.getGameState().getCurrentPlayer().getBackpack().getIngredientQuantity().put(ingredient, value-50);
                         are50WheatAvailable = true;

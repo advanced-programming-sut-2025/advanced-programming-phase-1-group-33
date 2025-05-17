@@ -473,7 +473,7 @@ public class GameController {
         HashMap<Ingredient, Integer> ingredients = recipe.getIngredients();
         for (Ingredient ingredient : ingredients.keySet()) {
             if (!(player.getBackpack().getIngredientQuantity().containsKey(ingredient) &&
-                    player.getBackpack().getIngredientQuantity().get(ingredient) >= ingredients.get(ingredient))) {
+                    player.getBackpack().getIngredientQuantity().getOrDefault(ingredient, 0) >= ingredients.get(ingredient))) {
                 return new Response(false, "You don't have enough <" + ingredient + "> in your backpack!");
             }
             player.getBackpack().removeIngredients(ingredient, ingredients.get(ingredient));
@@ -604,7 +604,7 @@ public class GameController {
 
     public Response cookingRefrigerator(Request request) {
         String action = request.body.get("action");
-        String itemName = request.body.get("itemName");
+        String itemName = request.body.get("item");
         Food food = Food.getFoodByName(itemName);
         Player player = App.getGameState().getCurrentPlayer();
         Refrigerator refrigerator = player.getBackpack().getRefrigerator();
@@ -669,7 +669,7 @@ public class GameController {
             if (ingredientInBackpack == null)
                 return new Response(false, "You don't have any <" + requiredIngredient + "> in your backpack!");
 
-            if (player.getBackpack().getIngredientQuantity().get(ingredientInBackpack) < requiredIngredients
+            if (player.getBackpack().getIngredientQuantity().getOrDefault(ingredientInBackpack, 0 ) < requiredIngredients
                     .get(ingredientInBackpack)) {
                 return new Response(false, "You don't have enough <" + requiredIngredient + "> in your backpack!");
             }

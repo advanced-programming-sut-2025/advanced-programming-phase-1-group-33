@@ -28,7 +28,7 @@ public class Keg extends ArtisanMachine {
                 for (Ingredient ingredient : player.getBackpack().getIngredientQuantity().keySet()) {
                     if (ingredient instanceof Crop crop && crop.getType().equals(CropType.Wheat)) {
 
-                        if (player.getBackpack().getIngredientQuantity().get(ingredient) >= 1) {
+                        if (player.getBackpack().getIngredientQuantity().getOrDefault(ingredient, 0) >= 1) {
 
                             player.getBackpack().removeIngredients(ingredient, 1);
 
@@ -44,7 +44,7 @@ public class Keg extends ArtisanMachine {
                 for (Ingredient ingredient : player.getBackpack().getIngredientQuantity().keySet()) {
                     if (ingredient instanceof Crop crop && crop.getType().equals(CropType.UnMilledRice)) {
 
-                        if (player.getBackpack().getIngredientQuantity().get(ingredient) >= 1) {
+                        if (player.getBackpack().getIngredientQuantity().getOrDefault(ingredient, 0) >= 1) {
 
                             player.getBackpack().removeIngredients(ingredient, 1);
 
@@ -60,7 +60,7 @@ public class Keg extends ArtisanMachine {
                 for (Ingredient ingredient : player.getBackpack().getIngredientQuantity().keySet()) {
                     if (ingredient instanceof Crop crop && crop.getType().equals(CropType.CoffeeBean)) {
 
-                        if (player.getBackpack().getIngredientQuantity().get(ingredient) >= 5) {
+                        if (player.getBackpack().getIngredientQuantity().getOrDefault(ingredient, 0) >= 5) {
 
                             player.getBackpack().removeIngredients(ingredient, 5);
 
@@ -76,7 +76,7 @@ public class Keg extends ArtisanMachine {
                 for (Ingredient ingredient : player.getBackpack().getIngredientQuantity().keySet()) {
                     if (ingredient instanceof Crop crop) {
 
-                        if (player.getBackpack().getIngredientQuantity().get(ingredient) >= 1) {
+                        if (player.getBackpack().getIngredientQuantity().getOrDefault(ingredient, 0) >= 1) {
 
                             player.getBackpack().removeIngredients(ingredient, 1);
 
@@ -94,7 +94,7 @@ public class Keg extends ArtisanMachine {
                 for (Ingredient ingredient : player.getBackpack().getIngredientQuantity().keySet()) {
                     if (ingredient instanceof ArtisanGood artisanGood && artisanGood.getType().equals(ArtisanGoodType.Honey)) {
 
-                        if (player.getBackpack().getIngredientQuantity().get(ingredient) >= 1) {
+                        if (player.getBackpack().getIngredientQuantity().getOrDefault(ingredient, 0) >= 1) {
 
                             player.getBackpack().removeIngredients(ingredient, 1);
 
@@ -110,7 +110,7 @@ public class Keg extends ArtisanMachine {
                 for (Ingredient ingredient : player.getBackpack().getIngredientQuantity().keySet()) {
                     if (ingredient instanceof Crop crop && crop.getType().equals(CropType.Hops)) {
 
-                        if (player.getBackpack().getIngredientQuantity().get(ingredient) >= 1) {
+                        if (player.getBackpack().getIngredientQuantity().getOrDefault(ingredient, 0) >= 1) {
 
                             player.getBackpack().removeIngredients(ingredient, 1);
 
@@ -126,7 +126,7 @@ public class Keg extends ArtisanMachine {
                 for (Ingredient ingredient : player.getBackpack().getIngredientQuantity().keySet()) {
                     if (ingredient instanceof Fruit) {
 
-                        if (player.getBackpack().getIngredientQuantity().get(ingredient) >= 1) {
+                        if (player.getBackpack().getIngredientQuantity().getOrDefault(ingredient, 0) >= 1) {
 
                             player.getBackpack().removeIngredients(ingredient, 1);
 

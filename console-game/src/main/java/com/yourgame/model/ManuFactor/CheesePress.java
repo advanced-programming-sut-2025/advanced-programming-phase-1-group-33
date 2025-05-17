@@ -27,7 +27,7 @@ public class CheesePress extends ArtisanMachine {
                         (animalGood.getType().equals(AnimalGoodType.Milk) ||
                                 animalGood.getType().equals(AnimalGoodType.LargeMilk))) {
 
-                    if (player.getBackpack().getIngredientQuantity().get(ingredient) >= 1) {
+                    if (player.getBackpack().getIngredientQuantity().getOrDefault(ingredient, 0 ) >= 1) {
 
                         player.getBackpack().removeIngredients(ingredient, 1);
 
@@ -47,7 +47,7 @@ public class CheesePress extends ArtisanMachine {
                         (animalGood.getType().equals(AnimalGoodType.GoatMilk) ||
                                 animalGood.getType().equals(AnimalGoodType.LargeGoatMilk))) {
 
-                    if (player.getBackpack().getIngredientQuantity().get(ingredient) >= 1) {
+                    if (player.getBackpack().getIngredientQuantity().getOrDefault(ingredient, 0) >= 1) {
 
                         player.getBackpack().removeIngredients(ingredient, 1);
 

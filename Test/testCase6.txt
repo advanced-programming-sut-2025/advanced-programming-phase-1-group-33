@@ -1,0 +1,21 @@
+enter login
+login -u aeen123 -p HImynameisCHIKI23@
+enter pregame
+game new aeen123 matin
+game map 1
+game map 2
+build -a barn -l 4, 8  
+walk -l 105,  80 
+print map -l 1, 1 -s 30
+build -a barn -l 5, 1
+cheat add 20000 dollars
+build -a barn -l 2, 5
+cheat add item -n stone -c 1000
+cheat add item -n wood -c 1000
+build -a barn -l 2, 5
+print map -l 1, 1 -s 30
+greenhouse build 
+print map -l 1, 1 -s 70
+help reading map
+go back
+exit

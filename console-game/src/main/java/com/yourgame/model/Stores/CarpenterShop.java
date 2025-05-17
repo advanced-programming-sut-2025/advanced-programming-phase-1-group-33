@@ -90,15 +90,15 @@ public class CarpenterShop extends Store {
             return new Response(false , "No such product");
         }
 
-        if (App.getGameState().getCurrentPlayer().getBackpack().getIngredientQuantity().get(new Coin()) < item.price) {
+        if (App.getGameState().getCurrentPlayer().getBackpack().getIngredientQuantity().getOrDefault(new Coin(), 0) < item.price) {
             return new Response(false , "You don't have enough money");
         }
 
-        if (App.getGameState().getCurrentPlayer().getBackpack().getIngredientQuantity().get(new Stone()) < ((CarpenterShopFarmBuildingsItem) item).getStoneCost()) {
+        if (App.getGameState().getCurrentPlayer().getBackpack().getIngredientQuantity().getOrDefault(new Stone(), 0 ) < ((CarpenterShopFarmBuildingsItem) item).getStoneCost()) {
             return new Response(false , "You don't have enough stones");
         }
 
-        if (App.getGameState().getCurrentPlayer().getBackpack().getIngredientQuantity().get(new Wood()) < ((CarpenterShopFarmBuildingsItem) item).getWoodCost()) {
+        if (App.getGameState().getCurrentPlayer().getBackpack().getIngredientQuantity().getOrDefault(new Wood(), 0 ) < ((CarpenterShopFarmBuildingsItem) item).getWoodCost()) {
             return new Response(false , "You don't have enough woods");
         }
 
