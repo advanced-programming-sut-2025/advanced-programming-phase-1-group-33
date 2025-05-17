@@ -19,5 +19,32 @@ talk history -u aeen123
 talk -u aeen123 -m heyy to chetoriii
 talk history -u aeen123
 cheat add item -n Wood -c 30
-gift -u matin -i Wood -c 20
+talk -u matin -m heyy to chetoriii
+talk -u matin -m heyy to chetoriii
+talk -u matin -m heyy to chetoriii
+talk -u matin -m heyy to chetoriii
+cheat advance date 1d
+talk -u matin -m heyy to chetoriii
+talk -u matin -m heyy to chetoriii
+talk -u matin -m heyy to chetoriii
+talk -u matin -m heyy to chetoriii
+talk -u matin -m heyy to chetoriii
+talk -u matin -m heyy to chetoriii
+talk -u matin -m heyy to chetoriii
+talk -u matin -m heyy to chetoriii
+cheat advance date 1d
+talk -u matin -m heyy to chetoriii
+cheat advance date 1d
+talk -u matin -m heyy to chetoriii
+cheat advance date 1d
+talk -u matin -m heyy to chetoriii
+cheat advance date 1d
+talk -u matin -m heyy to chetoriii
+talk -u aeen123 -m heyy to chetoriii
+next turn
+friendships
+cheat add item -n Pomegranate -c 30
+gift -u matin -i Pomegranate -a 20
+gift list
+next turn
 gift list
