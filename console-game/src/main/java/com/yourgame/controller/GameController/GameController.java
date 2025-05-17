@@ -578,6 +578,12 @@ public class GameController {
             player.getBackpack().addIngredients(fertilizer, quantity);
             return new Response(true, "You added<" + ItemName + "> successfully!");
         }
+
+        AnimalGoodType animalGoodType = AnimalGoodType.getAnimalGoodTypeByName(ItemName);
+        if (animalGoodType != null) {
+            player.getBackpack().addIngredients(animalGoodType, quantity);
+            return new Response(true, "You added<" + ItemName + "> successfully!");
+        }
         if (ItemName.equalsIgnoreCase("hay")) {
             player.getBackpack().increaseHay(quantity);
             return new Response(true, "You add <" + ItemName + "> successfully!");
@@ -609,12 +615,16 @@ public class GameController {
         if (action.equals("put")) {
             if (!player.getBackpack().getIngredientQuantity().containsKey(food))
                 return new Response(false, "You don't have this food in the backpack!");
+            if (!player.getBackpack().getRefrigerator().hasCapacity())
+                return new Response(false, "You don't have enough capacity in refrigerator!");
             player.getBackpack().removeIngredients(food, 1);
             refrigerator.addItem(food, 1);
             return new Response(true, "You put <" + itemName + "> successfully in refrigerator!");
         } else {
-            if (!(player.getBackpack().getRefrigerator().getQuantity(food) == 0))
+            if (!player.getBackpack().getRefrigerator().containFood(food))
                 return new Response(false, "You don't have this food in the Refrigerator!");
+            if (!player.getBackpack().hasCapacity())
+                return new Response(false, "You don't have enough space in the Backpack!");
             player.getBackpack().getRefrigerator().removeItem(food, 1);
             player.getBackpack().addIngredients(food, 1);
             return new Response(true, "You pickUp <" + itemName + "> successfully!");
@@ -638,7 +648,7 @@ public class GameController {
     public Response handleCookingFood(Request request) {
         String ItemName = request.body.get("itemName");
         CookingRecipe recipe = CookingRecipe.getRecipeByName(ItemName);
-        Player player = App.getGameState().getCurrentPlayer();
+        Player player = gameState.getCurrentPlayer();
 
         if (recipe == null) {
             return new Response(false, "Recipe <" + ItemName + "> not found!");
