@@ -33,7 +33,7 @@ public class GameState {
     private final ArrayList<Farm> farms = new ArrayList<>();
     private TimeSystem time;
     private Map map;
-    private final User gameCreator;
+
     private Player currentPlayer;
     private RelationNetwork relationsBetweenPlayers;
 
@@ -46,7 +46,6 @@ public class GameState {
     public GameState(ArrayList<Player> players, ArrayList<Farm> farms, User u, Map x) {
         this.farms.addAll(farms);
         this.players.addAll(players);
-        this.gameCreator = u;
         this.time = new TimeSystem();
         this.map = x;
         relationInitializer(players);
@@ -81,14 +80,16 @@ public class GameState {
 
         if (checkedPlayers == size) {
             time.advancedDay(1);
-        //    return new Response(true, "All players have been fainted! Next day is started!\n";
+            // return new Response(true, "All players have been fainted! Next day is
+            // started!\n";
 
         }
 
         if (currentPlayer.equals(players.get(0))) {
             time.advancedHour(1);
-//            return new Response(true, "An hour passed!\n");
-//                    "Current player: " + players.getFirst().getUsername() + "\n\n" + players.getFirst().UncheckedNotifications());
+            // return new Response(true, "An hour passed!\n");
+            // "Current player: " + players.getFirst().getUsername() + "\n\n" +
+            // players.getFirst().UncheckedNotifications());
         }
     }
 
@@ -193,22 +194,11 @@ public class GameState {
             }
             player.setFaintedToday(false);
             Iterator<Tree> treeIterator = player.getFarm().getTrees().iterator();
-            while (treeIterator.hasNext()) {
-                Tree tree = treeIterator.next();
-                tree.grow(time);
-                if (!tree.canBeAlive(time)) {
-                    treeIterator.remove();
-                    player.getFarm().getPlaceables().remove(tree);
-                    Tile tile = map.findTile(tree.getBounds().x, tree.getBounds().y);
-                    tile.setWalkable(true);
-                    tile.setPlaceable(null);
-                    tile.setSymbol(SymbolType.DefaultFloor);
-                    tile.setFertilizer(null);
-                    tile.setPlowed(false);
-                }
-            }
-
             Iterator<Crop> cropIterator = player.getFarm().getCrops().iterator();
+            GreenHouse gh = player.getFarm().getGreenHouse();
+            Iterator<Growable> greenHouseCrops = gh.getGrowables().iterator();
+
+
             while (cropIterator.hasNext()) {
                 Crop crop = cropIterator.next();
                 crop.grow(time);
@@ -224,19 +214,32 @@ public class GameState {
                     tile.setPlowed(false);
                 }
             }
-            GreenHouse gh = player.getFarm().getGreenHouse();
-            Iterator<Growable> cropIterator2 = gh.getGrowables().iterator();
+            while (treeIterator.hasNext()) {
+                Tree tree = treeIterator.next();
+                tree.grow(time);
+                if (!tree.canBeAlive(time)) {
+                    treeIterator.remove();
+                    player.getFarm().getPlaceables().remove(tree);
+                    Tile tile = map.findTile(tree.getBounds().x, tree.getBounds().y);
+                    tile.setWalkable(true);
+                    tile.setPlaceable(null);
+                    tile.setSymbol(SymbolType.DefaultFloor);
+                    tile.setFertilizer(null);
+                    tile.setPlowed(false);
+                }
+            }
+
             if (!gh.isBroken()) {
-                while (cropIterator2.hasNext()) {
-                    Growable growable = cropIterator2.next();
+                while (greenHouseCrops.hasNext()) {
+                    Growable growable = greenHouseCrops.next();
                     growable.grow(time);
                     if (!growable.canBeAlive(time)) {
-                        cropIterator2.remove();
+                        greenHouseCrops.remove();
                         if (growable instanceof Crop) {
                             player.getFarm().getPlaceables().removeIf(p -> p == growable);
 
-                        } else if (growable instanceof Tree) {
-                            player.getFarm().getPlaceables().remove(growable);
+                        } else if (growable instanceof Tree tree) {
+                            player.getFarm().getPlaceables().remove(tree);
                         }
                     }
                 }
@@ -275,12 +278,12 @@ public class GameState {
         }
 
         this.getMap().getNpcVillage().getBlacksmith().ResetQuantityEveryNight();
-        this.getMap().getNpcVillage().getMarnieRanch().ResetQuantityEveryNight();
         this.getMap().getNpcVillage().getPierreGeneralStore().ResetQuantityEveryNight();
-        this.getMap().getNpcVillage().getJojaMart().ResetQuantityEveryNight();
+        this.getMap().getNpcVillage().getMarnieRanch().ResetQuantityEveryNight();
         this.getMap().getNpcVillage().getFishShop().ResetQuantityEveryNight();
-        this.getMap().getNpcVillage().getCarpenterShop().ResetQuantityEveryNight();
+        this.getMap().getNpcVillage().getJojaMart().ResetQuantityEveryNight();
         this.getMap().getNpcVillage().getStardopSaloon().ResetQuantityEveryNight();
+        this.getMap().getNpcVillage().getCarpenterShop().ResetQuantityEveryNight();
 
     }
 
