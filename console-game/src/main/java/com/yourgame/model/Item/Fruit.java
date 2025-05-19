@@ -4,7 +4,7 @@ import com.yourgame.model.ManuFactor.ArtisanGoodType;
 import com.yourgame.model.ManuFactor.Ingredient;
 import com.yourgame.model.Stores.Sellable;
 
-public enum Fruit implements Ingredient , Sellable {
+public enum Fruit implements Ingredient, Sellable {
     Apricot(75, 100),
     Cherry(75, 100),
     Banana(75, 100),
@@ -23,18 +23,17 @@ public enum Fruit implements Ingredient , Sellable {
     private final int energy;
     private final int baseSellPrice;
 
-
     Fruit(int energy, int baseSellPrice) {
         this.energy = energy;
         this.baseSellPrice = baseSellPrice;
     }
 
-    public int getEnergy() {
-        return energy;
-    }
-
     public int getSellPrice() {
         return baseSellPrice;
+    }
+
+    public int getEnergy() {
+        return energy;
     }
 
     public static Fruit getByName(String name) {
