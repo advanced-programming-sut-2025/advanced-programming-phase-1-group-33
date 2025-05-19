@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 
 import com.yourgame.controller.GameController.GameController;
 import com.yourgame.model.Animals.Animal;
+import com.yourgame.model.IO.Response;
 import com.yourgame.model.Item.Crop;
 import com.yourgame.model.Item.Growable;
 import com.yourgame.model.Item.Tree;
@@ -62,40 +63,33 @@ public class GameState {
      * </ul>
      */
     public void nextPlayerTurn() {
-        // Filter to get the active players (i.e., not fainted)
-        List<Player> activePlayers = players.stream()
-                .filter(p -> !p.isFaintedToday())
-                .collect(Collectors.toList());
+        int size = players.size();
+        int currentIndex = players.indexOf(currentPlayer);
+        int checkedPlayers = 0;
 
-        // If all players are fainted, skip the day
-        if (activePlayers.isEmpty()) {
+        while (checkedPlayers < size) {
+            currentIndex = (currentIndex + 1) % size;
+            Player nextPlayer = players.get(currentIndex);
+
+            if (!nextPlayer.isFaintedToday()) {
+                setCurrentPlayer(nextPlayer);
+
+                break;
+            }
+            checkedPlayers++;
+        }
+
+        if (checkedPlayers == size) {
             time.advancedDay(1);
-            MakePlayersReadyForNextDay();
-            // Reset currentPlayer (assuming players list is not empty)
-            currentPlayer = players.get(0);
-            return;
+        //    return new Response(true, "All players have been fainted! Next day is started!\n";
+
         }
 
-        // Find the index of the current player in the active players list
-        int size = activePlayers.size();
-        int currentIndex = activePlayers.indexOf(currentPlayer);
-
-        // If the current player is not in the active list, start with the first one
-        if (currentIndex == -1) {
-            currentPlayer = activePlayers.get(0);
-            return;
-        }
-
-        // Determine the next player's index
-        int nextIndex = (currentIndex + 1) % size;
-        // If we've wrapped around to the start, advance one hour on the clock.
-        if (nextIndex == 0) {
+        if (currentPlayer.equals(players.get(0))) {
             time.advancedHour(1);
+//            return new Response(true, "An hour passed!\n");
+//                    "Current player: " + players.getFirst().getUsername() + "\n\n" + players.getFirst().UncheckedNotifications());
         }
-
-        // Set the next active player and reset their consumed energy.
-        currentPlayer = activePlayers.get(nextIndex);
-        currentPlayer.setConsumedEnergyInThisTurn(0);
     }
 
     public Map getMap() {

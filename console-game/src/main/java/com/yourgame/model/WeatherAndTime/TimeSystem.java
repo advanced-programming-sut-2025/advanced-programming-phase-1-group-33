@@ -25,10 +25,11 @@ public class TimeSystem {
 
     }
 
-    public void advancedHour(int h) {
+    public void advancedHour(int h){
         this.hour += h;
-        while (this.hour >= 24) {
-            this.hour -= 24;
+        while (this.hour >= 22){
+            this.hour -= 22 ;
+            this.hour += 9;
             advancedDay(1);
 
         }

@@ -174,6 +174,7 @@ public class RelationWithPlayers {
         checkXp();
     }
 
+
     public void addDialogue(DialoguesBetweenPlayers dialogue) {
         this.dialogues.add(dialogue);
     }
@@ -199,7 +200,7 @@ public class RelationWithPlayers {
 
     @Override
     public String toString() {
-        return  friendshipLevel.toString();
+        return  friendshipLevel.toString() + "      xp: " + this.xp ;
     }
 
 }

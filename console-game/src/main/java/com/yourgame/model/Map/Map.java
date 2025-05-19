@@ -301,7 +301,8 @@ public class Map {
                     tile.setWalkable(true);
                     tile.setGotThor(true);
                     tile.setPlaceable(null);
-                    tile.setSymbol(SymbolType.Thor);
+                    tile.setSymbol(SymbolType.BurnedTree);
+                    App.getGameState().getCurrentPlayer().getBackpack().addIngredients(ForagingMineral.Coal, 1);
                 }
             }
         }

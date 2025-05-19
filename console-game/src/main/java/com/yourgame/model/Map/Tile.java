@@ -30,9 +30,9 @@ public class Tile {
         return symbol;
     }
     public SymbolType getSymbolToPrint() {
-        if(gotThor){
-            return SymbolType.Thor; 
-        }
+//        if(gotThor){
+//            return SymbolType.Thor;
+//        }
         if(getPlaceable()!= null){
             return getPlaceable().getSymbol(); 
         }

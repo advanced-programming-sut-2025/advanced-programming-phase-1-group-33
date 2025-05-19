@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.util.Scanner;
 
 import com.yourgame.controller.GameController.StoreController.StoreController;
+import com.yourgame.model.IO.Request;
 import com.yourgame.model.IO.Response;
 import com.yourgame.model.enums.Commands.GameViewCommands;
 import com.yourgame.model.enums.Commands.StoreMenuCommands;
@@ -35,9 +36,10 @@ public class StoreMenu implements AppMenu {
     }
 
     private Response getPurchaseProduct(String input) {
-        String productName = StoreMenuCommands.PurchaseProduct.getGroup(input, "productName");
-        int count = Integer.parseInt(StoreMenuCommands.PurchaseProduct.getGroup(input, "count")) ; 
-        return controller.PurchaseProduct(count,productName); 
+        Request request = new Request(input);
+        request.body.put("productName", StoreMenuCommands.PurchaseProduct.getGroup(input, "productName"));
+        request.body.put("count", StoreMenuCommands.PurchaseProduct.getGroup(input, "count"));
+        return controller.ProcessPurchaseCommand(request);
     }
 
 }

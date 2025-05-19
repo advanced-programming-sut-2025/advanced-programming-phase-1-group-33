@@ -329,20 +329,22 @@ public class GameController {
     }
 
     public Response getAdvancedDate(Request request) {
-
-        int amountOfDays = Integer.parseInt(request.body.get("amount"));
-
-        gameState.getGameTime().advancedDay(amountOfDays);
-
-        return new Response(true, "Time Traveling... (" + amountOfDays + "Days)");
+        int h = Integer.parseInt(request.body.get("amount"));
+        if(h <= 0){
+            return new Response(false , "day is less than 0");
+        }
+        App.getGameState().getGameTime().advancedDay(h);
+        return new Response(true , "new advanced date is : " + App.getGameState().getGameTime().getDay());
     }
 
     public Response getAdvancedTime(Request request) {
-        int amountOfHours = Integer.parseInt(request.body.get("amount"));
+        int h = Integer.parseInt(request.body.get("amount"));
+        if(h <= 0){
+            return new Response(false , "hour is less than 0");
 
-        gameState.getGameTime().advancedHour(amountOfHours);
-
-        return new Response(true, "Time Traveling... (" + amountOfHours + " hours)");
+        }
+        App.getGameState().getGameTime().advancedHour(h);
+        return new Response(true , String.format("new advanced hour is : %d", App.getGameState().getGameTime().getHour()));
     }
 
     public Response getWeather() {
@@ -368,6 +370,14 @@ public class GameController {
         Tile tile = findTilePosition(X, Y);
         if (tile == null) {
             return new Response(true, "Tile not found");
+        }
+        if(tile.getPlaceable() instanceof Growable){
+            tile.setPlaceable(null);
+            tile.setSymbol(SymbolType.BurnedTree);
+            App.getGameState().getCurrentPlayer().getBackpack().addIngredients(ForagingMineral.Coal, 1);
+            tile.setFertilizer(null);
+            tile.setPlowed(false);
+
         }
         tile.setGotThor(true);
         return new Response(false, "The tile with the postition : X:" + X + " Y: " + Y + " is under thor");
@@ -1076,6 +1086,27 @@ public class GameController {
         plant.watering();
         return new Response(true, "You water this plant successfully!");
 
+    }
+
+    public Response treeInfo(Request request) {
+        String treeName = request.body.get("treeName");
+        TreeType tree = TreeType.getTreeTypeByName(treeName);
+
+        if (tree == null)
+            return new Response(false, "Tree <" + treeName + "> not found");
+        String output =
+                String.format("Name:               %s\n", tree.getName()) +
+                        String.format("Source:             %s\n", tree.getSource()) +
+                        String.format("Stages:             %s\n", tree.getStages()) +
+                        String.format("Total Harvest Time: %d\n", tree.getTotalHarvestTime()) +
+                        String.format("Fruit:              %s\n", tree.getFruit()) +
+                        String.format("HarvestCycle:       %d\n", tree.getHarvestCycle()) +
+                        String.format("FruitBaseSellPrice: %d\n", tree.getFruitBaseSellPrice()) +
+                        String.format("IsFruitEdible:      %s\n", tree.isFruitEdible()) +
+                        String.format("FruitEnergy:        %d\n", tree.getFruitEnergy()) +
+                        String.format("Season:             %s\n", tree.getSeason());
+
+        return new Response(true, output);
     }
 
     private Response harvestWithScythe(Growable plant, Tile targetTile) {
@@ -2300,4 +2331,36 @@ public class GameController {
 
     }
 
+    public Response foragingTreeInfo(Request request) {
+        String treeName = request.body.get("treeName");
+        ForagingTreeSource foragingTreeSource = ForagingTreeSource.getForagingTreeSourceByName(treeName);
+
+        if (foragingTreeSource == null)
+            return new Response(false, "Foraging <" + treeName + "> not found");
+
+        String output =
+                String.format("Name:   %s\n", foragingTreeSource.getName()) +
+                        String.format("Season: %s\n", foragingTreeSource.getSeason());
+
+        return new Response(true, output);
+    }
+
+    public Response animalProduces() {
+        Player player = App.getGameState().getCurrentPlayer();
+        ArrayList<Animal> animals = player.getBackpack().getAllAnimals();
+
+        if (animals.isEmpty())
+            return new Response(false, "No animals found!");
+
+        StringBuilder output = new StringBuilder();
+        output.append("Animals that their products haven't been collected yet:\n");
+
+        for (Animal animal : animals) {
+            if (animal.isReadyProduct())
+                output.append(String.format("%-20s (%-9s ->   %-25s\n",
+                        animal.getName(), animal.getType() + ")", animal.getType().getAnimalGoods()));
+        }
+
+        return new Response(true, output.toString());
+    }
 }

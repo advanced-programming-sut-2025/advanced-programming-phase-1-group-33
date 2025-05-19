@@ -117,7 +117,7 @@ public class MarnieRanch extends Store {
         }
 
         if (item instanceof MarnieRanchLiveStockItem) {
-            return new Response(false, "You must use buy animal command in game menu");
+            return new Response(false, "You must use buy animal in game menu");
         }
 
         int totalPrice = item.getPrice() * value;

@@ -176,10 +176,32 @@ public class GameMenu implements AppMenu {
             case ASK_MARRIAGE:
                 return getAskMarrige(input);
             case RESPOND_MARRIAGE:
-                return getRsponsedMarrige(input); 
+                return getRsponsedMarrige(input);
+            case TreeInfo:
+                return getTreeInfo(input);
+            case ForagingTreeInfo:
+                return getForagingTreeInfo(input);
+            case AnimalsProduces:
+                return getAnimalProduces();
             default:
                 return getInvalidCommand();
         }
+    }
+
+    private Response getAnimalProduces() {
+        return controller.animalProduces();
+    }
+
+    private Response getForagingTreeInfo(String input) {
+        Request request = new Request(input);
+        request.body.put("treeName", GameViewCommands.ForagingTreeInfo.getGroup(input, "treeName"));
+        return controller.foragingTreeInfo(request);
+    }
+
+    private Response getTreeInfo(String input) {
+        Request request = new Request(input);
+        request.body.put("treeName", GameViewCommands.TreeInfo.getGroup(input, "treeName"));
+        return controller.treeInfo(request);
     }
 
     private Response getRsponsedMarrige(String input) {

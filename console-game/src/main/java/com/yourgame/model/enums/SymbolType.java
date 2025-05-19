@@ -20,6 +20,7 @@ public enum SymbolType {
     Crop('c', ANSI.BRIGHT_GREEN, "Crop"),
     GRASS('.', ANSI.GREEN, "Grass"),
     Tree('T', ANSI.BRIGHT_GREEN, "Tree"),
+    BurnedTree('T', ANSI.RED, "BurnedTree"),
     Cottage('C', ANSI.YELLOW, "Default for Cottage"),
     BUILDING('B', ANSI.YELLOW, "Default for Buildings"),
     BrokenGreenHouse('G', ANSI.YELLOW, "Broken GreenHouse"),
