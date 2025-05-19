@@ -82,14 +82,14 @@ public class RelationWithNPC {
         if (this.npcFriendshipLevel == NPCFriendshipLevel.LevelZero) {
 
             this.npcFriendshipLevel = NPCFriendshipLevel.LevelOne;
-            this.isSecondQuestLocked = false;
             this.numericalFriendShipLevel += 200;
+            this.isSecondQuestLocked = false;
             this.numericalFriendShipLevel = Math.min(this.numericalFriendShipLevel, this.type.getMaxFriendShipLevel());
 
         } else if (this.npcFriendshipLevel == NPCFriendshipLevel.LevelOne) {
 
-            this.npcFriendshipLevel = NPCFriendshipLevel.LevelTwo;
             this.numericalFriendShipLevel += 200;
+            this.npcFriendshipLevel = NPCFriendshipLevel.LevelTwo;
             this.numericalFriendShipLevel = Math.min(this.numericalFriendShipLevel, this.type.getMaxFriendShipLevel());
 
         } else if (this.npcFriendshipLevel == NPCFriendshipLevel.LevelTwo) {
@@ -114,12 +114,12 @@ public class RelationWithNPC {
     private void checkUnlockingThirdQuest() {
         if (this.type.equals(NPCType.Abigail)) {
             if (this.numOfDaysAfterUnlockingSecondQuest >= 100) {this.isThirdQuestLocked = false;}
-        } else if (this.type.equals(NPCType.Sebastian)) {
-            if (this.numOfDaysAfterUnlockingSecondQuest >= 110) {this.isThirdQuestLocked = false;}
         } else if (this.type.equals(NPCType.Harvey)) {
             if (this.numOfDaysAfterUnlockingSecondQuest >= 120) {this.isThirdQuestLocked = false;}
         } else if (this.type.equals(NPCType.Leah)) {
             if (this.numOfDaysAfterUnlockingSecondQuest >= 130) {this.isThirdQuestLocked = false;}
+        } else if (this.type.equals(NPCType.Sebastian)) {
+            if (this.numOfDaysAfterUnlockingSecondQuest >= 110) {this.isThirdQuestLocked = false;}
         } else if (this.type.equals(NPCType.Robin)) {
             if (this.numOfDaysAfterUnlockingSecondQuest >= 140) {this.isThirdQuestLocked = false;}
         }
@@ -128,8 +128,8 @@ public class RelationWithNPC {
 
     public void checkEveryNight(Player player) {
 
-        isFirstTimeToSpeakWithNPC = true;
         isFirstTimeGiftToNPC = true;
+        isFirstTimeToSpeakWithNPC = true;
         increaseNumOfDaysAfterUnlockingSecondQuest();
         checkUnlockingThirdQuest();
 
