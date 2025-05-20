@@ -20,7 +20,12 @@ public class PreGameMenu implements AppMenu {
 
     @Override
     public Response handleMenu(String input, Scanner scanner) {
+        
         PreGameMenuCommands command = PreGameMenuCommands.parse(input);
+        if (command == null){
+            return getInvalidCommand();
+        }
+        
         switch (command) {
             case New_GAME:
                 return getNewGame(input, scanner);
@@ -46,6 +51,7 @@ public class PreGameMenu implements AppMenu {
     }
 
 private Response getNewGame(String input, Scanner scanner) {
+
     // Split input assuming format: "New_GAM user1 user2 user3"
     String stringUsers= PreGameMenuCommands.New_GAME.getGroup(input, "usernames");
     String[] tokens = stringUsers.trim().split("\\s+");
