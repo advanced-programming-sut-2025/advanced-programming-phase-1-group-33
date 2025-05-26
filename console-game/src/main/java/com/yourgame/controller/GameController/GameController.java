@@ -28,13 +28,13 @@ import com.yourgame.model.Stores.Blacksmith;
 import com.yourgame.model.Stores.CarpenterShop;
 import com.yourgame.model.Stores.MarnieRanch;
 import com.yourgame.model.Stores.Sellable;
-import com.yourgame.model.UserInfo.BetweenPlayersGift;
+import com.yourgame.model.UserInfo.GiftBetweenPlayers;
 import com.yourgame.model.UserInfo.Coin;
-import com.yourgame.model.UserInfo.DialoguesBetweenPlayers;
+import com.yourgame.model.UserInfo.PlayersDialogues;
 import com.yourgame.model.UserInfo.FriendshipLevelsWithPlayers;
 import com.yourgame.model.UserInfo.Player;
 import com.yourgame.model.UserInfo.RelationNetwork;
-import com.yourgame.model.UserInfo.RelationWithPlayers;
+import com.yourgame.model.UserInfo.PlayersRelation;
 import com.yourgame.model.UserInfo.User;
 import com.yourgame.model.IO.Request;
 import com.yourgame.model.IO.Response;
@@ -1887,7 +1887,7 @@ public class GameController {
         lookUpKey.add(receiver);
         lookUpKey.add(App.getGameState().getCurrentPlayer());
 
-        RelationWithPlayers tempRelation = tempNetwork.relationNetwork.get(lookUpKey);
+        PlayersRelation tempRelation = tempNetwork.relationNetwork.get(lookUpKey);
         if (!tempRelation.HaveTalkedToday()) {
             tempRelation.changeXp(20);
             tempRelation.setHaveTalkedToday(true);
@@ -1898,7 +1898,7 @@ public class GameController {
             receiver.addEnergy(50);
         }
 
-        tempRelation.addDialogue(new DialoguesBetweenPlayers(App.getGameState().getCurrentPlayer(), receiver, message));
+        tempRelation.addDialogue(new PlayersDialogues(App.getGameState().getCurrentPlayer(), receiver, message));
         tempNetwork.relationNetwork.put(lookUpKey, tempRelation);
         receiver.addNotification(new Notification(message, App.getGameState().getCurrentPlayer()));
 
@@ -1927,7 +1927,7 @@ public class GameController {
         Set<Player> lookUpKey = new HashSet<>();
         lookUpKey.add(temp);
         lookUpKey.add(App.getGameState().getCurrentPlayer());
-        RelationWithPlayers tempRelation = tempNetwork.relationNetwork.get(lookUpKey);
+        PlayersRelation tempRelation = tempNetwork.relationNetwork.get(lookUpKey);
 
         String message = "Talking History:\n";
         message += tempRelation.getTalkHistory() + "\n";
@@ -1972,7 +1972,7 @@ public class GameController {
         lookUpKey.add(App.getGameState().getCurrentPlayer());
         lookUpKey.add(receiver);
 
-        RelationWithPlayers tempRelation = tempNetwork.relationNetwork.get(lookUpKey);
+        PlayersRelation tempRelation = tempNetwork.relationNetwork.get(lookUpKey);
 
         if (tempRelation.getFriendshipLevel().equals(FriendshipLevelsWithPlayers.LevelZero)) {
             return new Response(false, "you can't gift this player at this friendship level");
@@ -1992,7 +1992,7 @@ public class GameController {
         }
 
         App.getGameState().addGiftsIndex();
-        BetweenPlayersGift tempGift = new BetweenPlayersGift(Sellable.getSellableByName(item),
+        GiftBetweenPlayers tempGift = new GiftBetweenPlayers(Sellable.getSellableByName(item),
                 App.getGameState().getCurrentPlayer(), receiver, App.getGameState().getGiftIndex());
         App.getGameState().addToGifts(tempGift);
 
@@ -2015,7 +2015,7 @@ public class GameController {
 
         StringBuilder message = new StringBuilder("GiftList:");
 
-        for (BetweenPlayersGift gift : App.getGameState().getGifts()) {
+        for (GiftBetweenPlayers gift : App.getGameState().getGifts()) {
             if (gift.getReceiver().equals(App.getGameState().getCurrentPlayer())) {
                 message.append("\n");
                 message.append(gift);
@@ -2028,13 +2028,13 @@ public class GameController {
     public Response getGiftRate(Request request) {
         int rate = Integer.parseInt(request.body.get("rate"));
         int id = Integer.parseInt(request.body.get("giftNumber"));
-        BetweenPlayersGift tempGift = null;
+        GiftBetweenPlayers tempGift = null;
 
         if (rate <= 0 || id >= 6) {
             return new Response(false, "Invalid gift rate");
         }
 
-        for (BetweenPlayersGift gift : App.getGameState().getGifts()) {
+        for (GiftBetweenPlayers gift : App.getGameState().getGifts()) {
             if (gift.getId() == id) {
                 tempGift = gift;
                 break;
@@ -2061,7 +2061,7 @@ public class GameController {
         lookUpKey.add(tempGift.getReceiver());
         lookUpKey.add(tempGift.getSender());
 
-        RelationWithPlayers tempRelation = tempNetwork.relationNetwork.get(lookUpKey);
+        PlayersRelation tempRelation = tempNetwork.relationNetwork.get(lookUpKey);
         if (!tempRelation.HaveGaveGiftToday()) {
             tempRelation.changeXp((rate - 3) * 30 + 15);
         }
@@ -2095,7 +2095,7 @@ public class GameController {
 
         StringBuilder message = new StringBuilder("GiftHistory:");
 
-        for (BetweenPlayersGift gift : App.getGameState().getGifts()) {
+        for (GiftBetweenPlayers gift : App.getGameState().getGifts()) {
             if (gift.getReceiver().equals(App.getGameState().getCurrentPlayer()) && gift.getSender().equals(temp)
                     || gift.getSender().equals(App.getGameState().getCurrentPlayer())
                             && gift.getReceiver().equals(temp)) {
@@ -2145,7 +2145,7 @@ public class GameController {
         lookUpKey.add(App.getGameState().getCurrentPlayer());
         lookUpKey.add(temp);
 
-        RelationWithPlayers tempRelation = tempNetwork.relationNetwork.get(lookUpKey);
+        PlayersRelation tempRelation = tempNetwork.relationNetwork.get(lookUpKey);
 
         if (tempRelation.canHug()) {
             if (!tempRelation.HaveHuggedToday()) {
@@ -2208,7 +2208,7 @@ public class GameController {
         lookUpKey.add(App.getGameState().getCurrentPlayer());
         lookUpKey.add(temp);
 
-        RelationWithPlayers tempRelation = tempNetwork.relationNetwork.get(lookUpKey);
+        PlayersRelation tempRelation = tempNetwork.relationNetwork.get(lookUpKey);
 
         if (tempRelation.canGiveFlower()) {
             tempRelation.setGaveFlower();
@@ -2270,7 +2270,7 @@ public class GameController {
         lookUpKey.add(App.getGameState().getCurrentPlayer());
         lookUpKey.add(temp);
 
-        RelationWithPlayers tempRelation = tempNetwork.relationNetwork.get(lookUpKey);
+        PlayersRelation tempRelation = tempNetwork.relationNetwork.get(lookUpKey);
         if (!tempRelation.canRequestMarriage()) {
             return new Response(false, "you can't request marriage in this friendship level");
         }
@@ -2309,7 +2309,7 @@ public class GameController {
         lookUpKey.add(App.getGameState().getCurrentPlayer());
         lookUpKey.add(temp.getSender());
 
-        RelationWithPlayers tempRelation = tempNetwork.relationNetwork.get(lookUpKey);
+        PlayersRelation tempRelation = tempNetwork.relationNetwork.get(lookUpKey);
 
         if (state.equals("accept")) {
 

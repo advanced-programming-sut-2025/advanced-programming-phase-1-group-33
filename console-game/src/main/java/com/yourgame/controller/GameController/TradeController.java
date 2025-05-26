@@ -12,7 +12,7 @@ import com.yourgame.model.Stores.Sellable;
 import com.yourgame.model.UserInfo.Coin;
 import com.yourgame.model.UserInfo.Player;
 import com.yourgame.model.UserInfo.RelationNetwork;
-import com.yourgame.model.UserInfo.RelationWithPlayers;
+import com.yourgame.model.UserInfo.PlayersRelation;
 import com.yourgame.model.enums.Commands.MenuTypes;
 
 public class TradeController {
@@ -93,7 +93,7 @@ public class TradeController {
         lookUpKey.add(App.getGameState().getCurrentPlayer());
         lookUpKey.add(tempTrade.getSeller());
 
-        RelationWithPlayers tempRelation = tempNetwork.relationNetwork.get(lookUpKey);
+        PlayersRelation tempRelation = tempNetwork.relationNetwork.get(lookUpKey);
 
         if (matcher.group("state").equals("reject")) {
 

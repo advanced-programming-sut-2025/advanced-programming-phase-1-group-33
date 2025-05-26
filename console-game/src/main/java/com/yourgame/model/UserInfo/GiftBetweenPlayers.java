@@ -2,20 +2,20 @@ package com.yourgame.model.UserInfo;
 
 import com.yourgame.model.Stores.Sellable;
 
-public class BetweenPlayersGift {
-    private final Sellable product;
-    private final Player sender;
-    private final Player receiver;
-    private final int id;
+public class GiftBetweenPlayers {
     private int rate = 3;
+    private final Sellable product;
+    private final Player receiver;
+    private final Player sender;
+    private final int id;
     private boolean isRated;
 
-    public BetweenPlayersGift(Sellable sellable, Player sender, Player receiver, int id) {
+    public GiftBetweenPlayers(Sellable sellable, Player sender, Player receiver, int id) {
+        this.receiver = receiver;
         this.product = sellable;
         this.sender = sender;
-        this.receiver = receiver;
-        this.id = id;
         this.isRated = false;
+        this.id = id;
     }
 
     public Sellable getProduct() {

@@ -1,14 +1,14 @@
 package com.yourgame.model.UserInfo;
 
-public class DialoguesBetweenPlayers {
+public class PlayersDialogues {
     private final Player sender;
 
-    private final Player receiver;
     private final String dialogue;
+    private final Player receiver;
 
-    public DialoguesBetweenPlayers(Player sender, Player receiver, String dialogue) {
-        this.sender = sender;
+    public PlayersDialogues(Player sender, Player receiver, String dialogue) {
         this.receiver = receiver;
+        this.sender = sender;
         this.dialogue = dialogue;
     }
 

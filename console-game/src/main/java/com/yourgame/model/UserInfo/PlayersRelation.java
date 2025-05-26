@@ -2,18 +2,18 @@ package com.yourgame.model.UserInfo;
 
 import java.util.ArrayList;
 
-public class RelationWithPlayers {
+public class PlayersRelation {
 
     private int xp = 0;
     private FriendshipLevelsWithPlayers friendshipLevel = FriendshipLevelsWithPlayers.LevelZero;
     private boolean gaveFlower = false;
-    private boolean marriage = false;
     private boolean haveTalkedToday = false;
-    private boolean haveTradedToday = false;
+    private boolean marriage = false;
     private boolean haveGaveGiftToday = false;
-    private boolean haveHuggedToday = false;
+    private boolean haveTradedToday = false;
     private boolean haveGaveFlowerToday = false;
-    private final ArrayList<DialoguesBetweenPlayers> dialogues = new ArrayList<>();
+    private boolean haveHuggedToday = false;
+    private final ArrayList<PlayersDialogues> dialogues = new ArrayList<>();
 
     public boolean HaveTradedToday() {
         return haveTradedToday;
@@ -175,7 +175,7 @@ public class RelationWithPlayers {
     }
 
 
-    public void addDialogue(DialoguesBetweenPlayers dialogue) {
+    public void addDialogue(PlayersDialogues dialogue) {
         this.dialogues.add(dialogue);
     }
 
@@ -192,7 +192,7 @@ public class RelationWithPlayers {
     public String getTalkHistory() {
 
         StringBuilder talkHistory = new StringBuilder();
-        for (DialoguesBetweenPlayers dialogue: dialogues) {
+        for (PlayersDialogues dialogue: dialogues) {
             talkHistory.append(dialogue.toString());
         }
         return talkHistory.toString();

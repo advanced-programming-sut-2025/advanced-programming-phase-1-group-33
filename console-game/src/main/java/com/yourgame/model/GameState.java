@@ -19,10 +19,10 @@ import com.yourgame.model.Map.GreenHouse;
 import com.yourgame.model.Map.Map;
 import com.yourgame.model.Map.ShippingBin;
 import com.yourgame.model.Map.Tile;
-import com.yourgame.model.UserInfo.BetweenPlayersGift;
+import com.yourgame.model.UserInfo.GiftBetweenPlayers;
 import com.yourgame.model.UserInfo.Player;
 import com.yourgame.model.UserInfo.RelationNetwork;
-import com.yourgame.model.UserInfo.RelationWithPlayers;
+import com.yourgame.model.UserInfo.PlayersRelation;
 import com.yourgame.model.UserInfo.User;
 import com.yourgame.model.WeatherAndTime.TimeSystem;
 import com.yourgame.model.enums.SymbolType;
@@ -37,7 +37,7 @@ public class GameState {
     private Player currentPlayer;
     private RelationNetwork relationsBetweenPlayers;
 
-    private final ArrayList<BetweenPlayersGift> gifts = new ArrayList<>();
+    private final ArrayList<GiftBetweenPlayers> gifts = new ArrayList<>();
     private int giftIndex = 0;
 
     private int tradeIndex = 0;
@@ -123,7 +123,7 @@ public class GameState {
         for (int i = 0; i < players.size(); i++) {
             for (int j = i + 1; j < players.size(); j++) {
                 Set<Player> key = new HashSet<>(Arrays.asList(players.get(i), players.get(j)));
-                relationsBetweenPlayers.relationNetwork.put(key, new RelationWithPlayers());
+                relationsBetweenPlayers.relationNetwork.put(key, new PlayersRelation());
             }
         }
     }
@@ -132,11 +132,11 @@ public class GameState {
         giftIndex++;
     }
 
-    public ArrayList<BetweenPlayersGift> getGifts() {
+    public ArrayList<GiftBetweenPlayers> getGifts() {
         return gifts;
     }
 
-    public void addToGifts(BetweenPlayersGift gift) {
+    public void addToGifts(GiftBetweenPlayers gift) {
         gifts.add(gift);
     }
 
@@ -265,7 +265,7 @@ public class GameState {
             bin.checkEveryNight();
         }
 
-        for (RelationWithPlayers relation : App.getGameState().relationsBetweenPlayers.relationNetwork.values()) {
+        for (PlayersRelation relation : App.getGameState().relationsBetweenPlayers.relationNetwork.values()) {
             relation.checkEveryNight();
         }
 
