@@ -1,6 +1,6 @@
 package com.yourgame.model.UserInfo;
 
-public enum FriendshipLevelsWithPlayers {
+public enum PlayersFriendshipLevel {
     LevelZero(),
     LevelOne(),
     LevelTwo(),

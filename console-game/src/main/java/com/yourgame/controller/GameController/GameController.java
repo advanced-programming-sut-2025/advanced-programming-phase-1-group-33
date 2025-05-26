@@ -31,7 +31,7 @@ import com.yourgame.model.Stores.Sellable;
 import com.yourgame.model.UserInfo.GiftBetweenPlayers;
 import com.yourgame.model.UserInfo.Coin;
 import com.yourgame.model.UserInfo.PlayersDialogues;
-import com.yourgame.model.UserInfo.FriendshipLevelsWithPlayers;
+import com.yourgame.model.UserInfo.PlayersFriendshipLevel;
 import com.yourgame.model.UserInfo.Player;
 import com.yourgame.model.UserInfo.RelationNetwork;
 import com.yourgame.model.UserInfo.PlayersRelation;
@@ -1974,7 +1974,7 @@ public class GameController {
 
         PlayersRelation tempRelation = tempNetwork.relationNetwork.get(lookUpKey);
 
-        if (tempRelation.getFriendshipLevel().equals(FriendshipLevelsWithPlayers.LevelZero)) {
+        if (tempRelation.getFriendshipLevel().equals(PlayersFriendshipLevel.LevelZero)) {
             return new Response(false, "you can't gift this player at this friendship level");
         }
 
@@ -2317,13 +2317,13 @@ public class GameController {
             temp.getSender().setMarried(true);
 
             tempRelation.setMarriage();
-            tempRelation.setFriendshipLevel(FriendshipLevelsWithPlayers.LevelFour);
+            tempRelation.setFriendshipLevel(PlayersFriendshipLevel.LevelFour);
 
             return new Response(true, "You accepted the marriage request");
 
         } else {
 
-            tempRelation.setFriendshipLevel(FriendshipLevelsWithPlayers.LevelZero);
+            tempRelation.setFriendshipLevel(PlayersFriendshipLevel.LevelZero);
 
             temp.getSender().setRemainingDaysAfterMarigDenied(7);
             return new Response(true, "You rejected the marriage request");

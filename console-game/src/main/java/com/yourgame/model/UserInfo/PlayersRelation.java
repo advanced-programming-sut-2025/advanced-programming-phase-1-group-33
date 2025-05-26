@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class PlayersRelation {
 
     private int xp = 0;
-    private FriendshipLevelsWithPlayers friendshipLevel = FriendshipLevelsWithPlayers.LevelZero;
+    private PlayersFriendshipLevel friendshipLevel = PlayersFriendshipLevel.LevelZero;
     private boolean gaveFlower = false;
     private boolean haveTalkedToday = false;
     private boolean marriage = false;
@@ -61,7 +61,7 @@ public class PlayersRelation {
             case LevelZero: {
                 xp = Math.min(xp, 100);
                 if (xp == 100) {
-                    friendshipLevel = FriendshipLevelsWithPlayers.LevelOne;
+                    friendshipLevel = PlayersFriendshipLevel.LevelOne;
                     xp = 0;
                 }
             }
@@ -70,9 +70,9 @@ public class PlayersRelation {
             case LevelOne: {
                 xp = Math.min(xp, 200);
                 if (xp == 0) {
-                    friendshipLevel = FriendshipLevelsWithPlayers.LevelZero;
+                    friendshipLevel = PlayersFriendshipLevel.LevelZero;
                 }else if (xp == 200) {
-                    friendshipLevel = FriendshipLevelsWithPlayers.LevelTwo;
+                    friendshipLevel = PlayersFriendshipLevel.LevelTwo;
                     xp = 0;
                 }
             }
@@ -81,9 +81,9 @@ public class PlayersRelation {
             case LevelTwo: {
                 xp = Math.min(xp, 300);
                 if (xp == 0) {
-                    friendshipLevel = FriendshipLevelsWithPlayers.LevelOne;
+                    friendshipLevel = PlayersFriendshipLevel.LevelOne;
                 }else if (xp == 300 && gaveFlower) {
-                    friendshipLevel = FriendshipLevelsWithPlayers.LevelThree;
+                    friendshipLevel = PlayersFriendshipLevel.LevelThree;
                     xp = 0;
                 }
             }
@@ -91,7 +91,7 @@ public class PlayersRelation {
 
             case LevelThree: {
                 if (xp == 0) {
-                    friendshipLevel = FriendshipLevelsWithPlayers.LevelTwo;
+                    friendshipLevel = PlayersFriendshipLevel.LevelTwo;
                 }
                 xp = Math.min(xp, 400);
             }
@@ -99,11 +99,11 @@ public class PlayersRelation {
         }
     }
 
-    public FriendshipLevelsWithPlayers getFriendshipLevel() {
+    public PlayersFriendshipLevel getFriendshipLevel() {
         return friendshipLevel;
     }
 
-    public void setFriendshipLevel(FriendshipLevelsWithPlayers friendshipLevel) {
+    public void setFriendshipLevel(PlayersFriendshipLevel friendshipLevel) {
         this.xp = 0;
         this.friendshipLevel = friendshipLevel;
     }
@@ -117,16 +117,16 @@ public class PlayersRelation {
     }
 
     public void setMarriage() {
-        this.friendshipLevel = FriendshipLevelsWithPlayers.LevelFour;
+        this.friendshipLevel = PlayersFriendshipLevel.LevelFour;
         this.marriage = true;
     }
 
     public boolean canGiveFlower() {
-        return this.friendshipLevel.equals(FriendshipLevelsWithPlayers.LevelTwo) && xp == 300;
+        return this.friendshipLevel.equals(PlayersFriendshipLevel.LevelTwo) && xp == 300;
     }
 
     public boolean canRequestMarriage() {
-        return this.friendshipLevel.equals(FriendshipLevelsWithPlayers.LevelThree) && xp == 400;
+        return this.friendshipLevel.equals(PlayersFriendshipLevel.LevelThree) && xp == 400;
     }
 
     public void checkEveryNight() {
@@ -141,19 +141,19 @@ public class PlayersRelation {
             } else {
                 switch (friendshipLevel) {
                     case LevelOne: {
-                        friendshipLevel = FriendshipLevelsWithPlayers.LevelZero;
+                        friendshipLevel = PlayersFriendshipLevel.LevelZero;
                         xp = 90;
                     }
                     break;
 
                     case LevelTwo: {
-                        friendshipLevel = FriendshipLevelsWithPlayers.LevelOne;
+                        friendshipLevel = PlayersFriendshipLevel.LevelOne;
                         xp = 190;
                     }
                     break;
 
                     case LevelThree: {
-                        friendshipLevel = FriendshipLevelsWithPlayers.LevelTwo;
+                        friendshipLevel = PlayersFriendshipLevel.LevelTwo;
                         xp = 290;
                     }
                     break;
@@ -180,13 +180,13 @@ public class PlayersRelation {
     }
 
     public boolean canHug() {
-        if (this.friendshipLevel.equals(FriendshipLevelsWithPlayers.LevelTwo)) {
+        if (this.friendshipLevel.equals(PlayersFriendshipLevel.LevelTwo)) {
             return true;
         }
-        if (this.friendshipLevel.equals(FriendshipLevelsWithPlayers.LevelThree)) {
+        if (this.friendshipLevel.equals(PlayersFriendshipLevel.LevelThree)) {
             return true;
         }
-        return this.friendshipLevel.equals(FriendshipLevelsWithPlayers.LevelFour);
+        return this.friendshipLevel.equals(PlayersFriendshipLevel.LevelFour);
     }
 
     public String getTalkHistory() {
