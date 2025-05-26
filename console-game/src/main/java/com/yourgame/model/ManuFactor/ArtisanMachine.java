@@ -44,7 +44,7 @@ public abstract class ArtisanMachine {
         int todayHour = App.getGameState().getGameTime().getHour();
         if (App.getGameState().getGameTime().getSeason() != timeOfRequest.getSeason()) {
             todayDate += 28;
-            if(timeOfRequest.getDay() + processingTimes.get(producingGood).getDays() < todayDate ||
+            if (timeOfRequest.getDay() + processingTimes.get(producingGood).getDays() < todayDate ||
                     timeOfRequest.getDay() + processingTimes.get(producingGood).getDays() == todayDate &&
                             timeOfRequest.getHour() + processingTimes.get(producingGood).getHours() <= todayHour)
                 return new Response(true, "Your product is Ready.");
@@ -56,17 +56,17 @@ public abstract class ArtisanMachine {
         if (recipe == null)
             return null;
         return switch (recipe) {
-            case CharcoalKiln -> new CharcoalKiln();
             case Furnace -> new Furnace();
-            case BeeHouse -> new BeeHouse();
+            case CharcoalKiln -> new CharcoalKiln();
             case CheesePress -> new CheesePress();
-            case Keg -> new Keg();
+            case BeeHouse -> new BeeHouse();
             case Loom -> new Loom();
-            case MayonnaiseMachine -> new MayonnaiseMachine();
+            case Keg -> new Keg();
             case OilMaker -> new OilMaker();
-            case PreservesJar -> new PreservesJar();
+            case MayonnaiseMachine -> new MayonnaiseMachine();
             case Dehydrator -> new Dehydrator();
             case FishSmoker -> new FishSmoker();
+            case PreservesJar -> new PreservesJar();
             default -> null;
         };
     }
