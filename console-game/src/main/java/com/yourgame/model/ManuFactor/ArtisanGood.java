@@ -16,8 +16,8 @@ public class ArtisanGood implements Ingredient, Sellable {
     }
 
     public ArtisanGood(ArtisanGoodType type, int energy, int sellPrice) {
-        this.type = type;
         this.energy = energy;
+        this.type = type;
         this.sellPrice = sellPrice;
     }
 

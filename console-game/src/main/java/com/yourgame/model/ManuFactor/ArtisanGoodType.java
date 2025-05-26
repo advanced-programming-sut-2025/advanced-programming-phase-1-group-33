@@ -1,6 +1,7 @@
 package com.yourgame.model.ManuFactor;
 
 public enum ArtisanGoodType implements Ingredient {
+    GoldBar(0, 450),
     Honey(75, 350),
     CheeseByMilk(100, 230),
     CheeseByLargeMilk(100, 345),
@@ -28,24 +29,22 @@ public enum ArtisanGoodType implements Ingredient {
     Wine(10, 120),
     IronBar(0, 200),
     IridiumBar(0, 540),
-    CopperBar(0, 295),
-    GoldBar(0, 450);
+    CopperBar(0, 295);
 
-
-    private int energy;
     private int sellPrice;
+    private int energy;
 
     ArtisanGoodType(int energy, int sellPrice) {
-        this.energy = energy;
         this.sellPrice = sellPrice;
+        this.energy = energy;
     }
 
-    public int getEnergy() {
-        return energy;
-    }
-
+    
     public int getSellPrice() {
         return sellPrice;
+    }
+    public int getEnergy() {
+        return energy;
     }
 
     /**
