@@ -16,7 +16,7 @@ plugins {
 apply plugin: 'io.github.fourlastor.construo'
 
 
-import io.github.fourlastor.construo.Target
+//import io.github.fourlastor.construo.Target
 
 sourceSets.main.resources.srcDirs += [ rootProject.file('assets').path ]
 mainClassName = 'com.sepimoti.sample.lwjgl3.Lwjgl3Launcher'
