@@ -1,8 +1,16 @@
 [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
 eclipse.project.name = appName + '-core'
+java {
+    sourceCompatibility = 21
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+}
 
 dependencies {
   api "com.badlogicgames.gdx:gdx:$gdxVersion"
+    // ...existing code...
+    implementation 'org.xerial:sqlite-jdbc:3.45.3.0'
 
   // Adding Gson
   implementation 'com.google.code.gson:gson:2.10.1'

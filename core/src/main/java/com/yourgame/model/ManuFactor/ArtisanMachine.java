@@ -60,17 +60,17 @@ public abstract class ArtisanMachine {
             return null;
         }
         return switch (recipe) {
-            case com.yourgame.model.ManuFactor.Furnace -> new Furnace();
-            case com.yourgame.model.ManuFactor.CharcoalKiln -> new CharcoalKiln();
-            case com.yourgame.model.ManuFactor.CheesePress -> new CheesePress();
-            case com.yourgame.model.ManuFactor.BeeHouse -> new BeeHouse();
-            case com.yourgame.model.ManuFactor.Loom -> new Loom();
-            case com.yourgame.model.ManuFactor.Keg -> new Keg();
-            case com.yourgame.model.ManuFactor.OilMaker -> new OilMaker();
-            case com.yourgame.model.ManuFactor.MayonnaiseMachine -> new MayonnaiseMachine();
-            case com.yourgame.model.ManuFactor.Dehydrator -> new Dehydrator();
-            case com.yourgame.model.ManuFactor.FishSmoker -> new FishSmoker();
-            case com.yourgame.model.ManuFactor.PreservesJar -> new PreservesJar();
+            case Furnace -> new Furnace();
+            case CharcoalKiln -> new CharcoalKiln();
+            case CheesePress -> new CheesePress();
+            case BeeHouse -> new BeeHouse();
+            case Loom -> new Loom();
+            case Keg -> new Keg();
+            case OilMaker -> new OilMaker();
+            case MayonnaiseMachine -> new MayonnaiseMachine();
+            case Dehydrator -> new Dehydrator();
+            case FishSmoker -> new FishSmoker();
+            case PreservesJar -> new PreservesJar();
             default -> null;
         };
     }

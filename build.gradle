@@ -30,7 +30,7 @@ allprojects {
 configure(subprojects) {
   apply plugin: 'java-library'
   sourceCompatibility = 21
-
+  targetCompatibility = 21
   // From https://lyze.dev/2021/04/29/libGDX-Internal-Assets-List/
   // The article can be helpful when using assets.txt in your project.
   tasks.register('generateAssetList') {
@@ -71,3 +71,5 @@ subprojects {
 }
 
 eclipse.project.name = 'Sample' + '-parent'
+
+
