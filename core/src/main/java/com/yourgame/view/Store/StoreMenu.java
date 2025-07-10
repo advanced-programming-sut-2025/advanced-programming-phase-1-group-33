@@ -23,9 +23,9 @@ public class StoreMenu implements AppMenu {
         switch (command) {
             case ShowAllProducts:
                 return controller.showAllProducts();
-            case Exit:
-                controller.exit();
-                return new Response(true, "Going Back to the GameMenu");
+//            case Exit:
+//                controller.exit();
+//                return new Response(true, "Going Back to the GameMenu");
             case ShowAvailableProducts:
                 return controller.showAllProducts();
             case PurchaseProduct:

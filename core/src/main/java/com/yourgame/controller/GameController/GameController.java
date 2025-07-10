@@ -1746,56 +1746,56 @@ public class GameController {
         return Response;
     }
 
-    public Response goToStoreMenu() {
-        Map gameMap = App.getGameState().getMap();
-        if (gameMap.isAroundPlaceable(App.getGameState().getCurrentPlayer(), gameMap.getNpcVillage().getBlacksmith())) {
-
-            App.setCurrentMenu(MenuTypes.BlackSmithMenu);
-            return new Response(true, "Now you are in the blacksmith");
-
-        } else if (gameMap.isAroundPlaceable(App.getGameState().getCurrentPlayer(),
-                gameMap.getNpcVillage().getCarpenterShop())) {
-
-            App.setCurrentMenu(MenuTypes.CarpenterShopMenu);
-            return new Response(true, "Now you are in the carpenterShop");
-
-        } else if (gameMap.isAroundPlaceable(App.getGameState().getCurrentPlayer(),
-                gameMap.getNpcVillage().getMarnieRanch())) {
-
-            App.setCurrentMenu(MenuTypes.MarnieRanchMenu);
-            return new Response(true, "Now you are in the Marnie's Ranch");
-
-        } else if (gameMap.isAroundPlaceable(App.getGameState().getCurrentPlayer(),
-                gameMap.getNpcVillage().getJojaMart())) {
-
-            App.setCurrentMenu(MenuTypes.JojaMartMenu);
-            return new Response(true, "Now you are in the Joja Mart");
-
-        } else if (gameMap.isAroundPlaceable(App.getGameState().getCurrentPlayer(),
-                gameMap.getNpcVillage().getPierreGeneralStore())) {
-
-            App.setCurrentMenu(MenuTypes.PierreGeneralStoreMenu);
-            return new Response(true, "Now you are in the Pierre General Store");
-
-        } else if (gameMap.isAroundPlaceable(App.getGameState().getCurrentPlayer(),
-                gameMap.getNpcVillage().getFishShop())) {
-
-            App.setCurrentMenu(MenuTypes.FishShopMenu);
-            return new Response(true, "Now you are in the Fish Shop");
-
-        } else if (gameMap.isAroundPlaceable(App.getGameState().getCurrentPlayer(),
-                gameMap.getNpcVillage().getStardopSaloon())) {
-
-            App.setCurrentMenu(MenuTypes.StardopSaloonMenu);
-            return new Response(true, "Now you are in the Stardop Saloon");
-
-        } else {
-
-            return new Response(false, "you must be near a store");
-
-        }
-
-    }
+//    public Response goToStoreMenu() {
+//        Map gameMap = App.getGameState().getMap();
+//        if (gameMap.isAroundPlaceable(App.getGameState().getCurrentPlayer(), gameMap.getNpcVillage().getBlacksmith())) {
+//
+//            App.setCurrentMenu(MenuTypes.BlackSmithMenu);
+//            return new Response(true, "Now you are in the blacksmith");
+//
+//        } else if (gameMap.isAroundPlaceable(App.getGameState().getCurrentPlayer(),
+//                gameMap.getNpcVillage().getCarpenterShop())) {
+//
+//            App.setCurrentMenu(MenuTypes.CarpenterShopMenu);
+//            return new Response(true, "Now you are in the carpenterShop");
+//
+//        } else if (gameMap.isAroundPlaceable(App.getGameState().getCurrentPlayer(),
+//                gameMap.getNpcVillage().getMarnieRanch())) {
+//
+//            App.setCurrentMenu(MenuTypes.MarnieRanchMenu);
+//            return new Response(true, "Now you are in the Marnie's Ranch");
+//
+//        } else if (gameMap.isAroundPlaceable(App.getGameState().getCurrentPlayer(),
+//                gameMap.getNpcVillage().getJojaMart())) {
+//
+//            App.setCurrentMenu(MenuTypes.JojaMartMenu);
+//            return new Response(true, "Now you are in the Joja Mart");
+//
+//        } else if (gameMap.isAroundPlaceable(App.getGameState().getCurrentPlayer(),
+//                gameMap.getNpcVillage().getPierreGeneralStore())) {
+//
+//            App.setCurrentMenu(MenuTypes.PierreGeneralStoreMenu);
+//            return new Response(true, "Now you are in the Pierre General Store");
+//
+//        } else if (gameMap.isAroundPlaceable(App.getGameState().getCurrentPlayer(),
+//                gameMap.getNpcVillage().getFishShop())) {
+//
+//            App.setCurrentMenu(MenuTypes.FishShopMenu);
+//            return new Response(true, "Now you are in the Fish Shop");
+//
+//        } else if (gameMap.isAroundPlaceable(App.getGameState().getCurrentPlayer(),
+//                gameMap.getNpcVillage().getStardopSaloon())) {
+//
+//            App.setCurrentMenu(MenuTypes.StardopSaloonMenu);
+//            return new Response(true, "Now you are in the Stardop Saloon");
+//
+//        } else {
+//
+//            return new Response(false, "you must be near a store");
+//
+//        }
+//
+//    }
 
     public Response getSellProduct(Request request) {
         int amount = Integer.parseInt(request.body.get("count"));

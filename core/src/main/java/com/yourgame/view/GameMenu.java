@@ -81,12 +81,12 @@ public class GameMenu implements AppMenu {
             case Go_Back:
                 App.setCurrentMenu(MenuTypes.MainMenu);
                 return new Response(true, "Going Back to MainMenu");
-            case EXIT_MENU:
-                return getExitMenu(input);
-            case ENTER_MENU:
-                return getEnterMenu(input);
-            case SHOW_MENU:
-                return getShowMenu(input);
+//            case EXIT_MENU:
+//                return getExitMenu(input);
+//            case ENTER_MENU:
+//                return getEnterMenu(input);
+//            case SHOW_MENU:
+//                return getShowMenu(input);
             case INVENTORY_SHOW:
                 return getShowInventoryResponse(input);
             case INVENTORY_TRASH:
@@ -151,8 +151,8 @@ public class GameMenu implements AppMenu {
                 return getArtistanUse(input);
             case ARTISAN_GET:
                 return getArtistanGet(input);
-            case StoreMenu:
-                return getGoToStoreMenu(input);
+//            case StoreMenu:
+//                return getGoToStoreMenu(input);
             case SELL_PRODUCT:
                 return getSellProduct(input);
             case FRIENDSHIPS:
@@ -291,9 +291,9 @@ public class GameMenu implements AppMenu {
         return controller.getSellProduct(request);
     }
 
-    private Response getGoToStoreMenu(String input) {
-        return controller.goToStoreMenu();
-    }
+//    private Response getGoToStoreMenu(String input) {
+//        return controller.goToStoreMenu();
+//    }
 
     private Response getArtistanGet(String input) {
         Request request = new Request(input);
@@ -648,7 +648,7 @@ public class GameMenu implements AppMenu {
     }
 
     private Response getExitFromGame(String input, Scanner scanner) {
-        App.setCurrentMenu(MenuTypes.ExitMenu);
+        //App.setCurrentMenu(MenuTypes.ExitMenu);
         return new Response(true, "Exit from the Game Until We make some menu for it");
         // TODO Auto-generated method stub
         // throw new UnsupportedOperationException("Unimplemented method
@@ -669,24 +669,24 @@ public class GameMenu implements AppMenu {
         return controller.getEnergy();
     }
 
-    private static Response getExitMenu(String input) {
-        Request request = new Request(input);
-        Response response = LoginMenuController.handleExitMenu(request);
-        return response;
-    }
-
-    private static Response getEnterMenu(String input) {
-        Request request = new Request(input);
-        request.body.put("menuName", LoginMenuCommands.ENTER_MENU.getGroup(input, "menuName"));
-        Response response = LoginMenuController.handleEnterMenu(request);
-        return response;
-    }
-
-    private static Response getShowMenu(String input) {
-        Request request = new Request(input);
-        Response response = LoginMenuController.handleShowMenu(request);
-        return response;
-    }
+//    private static Response getExitMenu(String input) {
+//        Request request = new Request(input);
+//        Response response = LoginMenuController.handleExitMenu(request);
+//        return response;
+//    }
+//
+//    private static Response getEnterMenu(String input) {
+//        Request request = new Request(input);
+//        request.body.put("menuName", LoginMenuCommands.ENTER_MENU.getGroup(input, "menuName"));
+//        Response response = LoginMenuController.handleEnterMenu(request);
+//        return response;
+//    }
+//
+//    private static Response getShowMenu(String input) {
+//        Request request = new Request(input);
+//        Response response = LoginMenuController.handleShowMenu(request);
+//        return response;
+//    }
 
     public void doNights() {
         System.out.println(controller.walkPlayersToHome());

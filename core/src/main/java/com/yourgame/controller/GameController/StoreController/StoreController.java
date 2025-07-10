@@ -25,8 +25,8 @@ public abstract class StoreController {
     }
     public abstract Response PurchaseProduct(int value, String productName);
 
-    public void exit() {
-        App.setCurrentMenu(MenuTypes.GameMenu);
-    }
+//    public void exit() {
+//        App.setCurrentMenu(MenuTypes.GameMenu);
+//    }
 
 }

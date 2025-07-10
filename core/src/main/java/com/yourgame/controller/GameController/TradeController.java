@@ -162,8 +162,8 @@ public class TradeController {
         return new Response(true, message.toString());
     }
 
-    public Response exit() {
-        App.setCurrentMenu(MenuTypes.GameMenu);
-        return new Response(true, "you are in game menu now");
-    }
+//    public Response exit() {
+//        App.setCurrentMenu(MenuTypes.GameMenu);
+//        return new Response(true, "you are in game menu now");
+//    }
 }

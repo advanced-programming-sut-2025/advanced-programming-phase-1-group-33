@@ -4,6 +4,7 @@ import com.yourgame.model.UserInfo.User;
 import com.yourgame.model.enums.Commands.MenuTypes;
 import com.yourgame.persistence.UserDAO;
 
+import java.awt.*;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +16,7 @@ public class App {
     private static List<User> users;
     private static UserDAO userDAO;
     private static GameState gameState;
+    private static boolean isMusicMuted = false;
 
     static {
         securityQuestions.add(new SecurityQuestion("what is your favorite color?", "default"));
@@ -74,5 +76,13 @@ public class App {
 
     public static void setUsers(List<User> users) {
         App.users = users;
+    }
+
+    public static boolean isIsMusicMuted() {
+        return isMusicMuted;
+    }
+
+    public static void setIsMusicMuted(boolean isMusicMuted) {
+        App.isMusicMuted = isMusicMuted;
     }
 }
