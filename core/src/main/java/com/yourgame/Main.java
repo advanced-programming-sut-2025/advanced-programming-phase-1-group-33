@@ -3,6 +3,7 @@ package com.yourgame;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.yourgame.view.AppViews.AppView;
+import com.yourgame.view.AppViews.GameScreen;
 import com.yourgame.view.AppViews.MainMenuView;
 import com.yourgame.view.AppViews.SignupMenuView;
 
@@ -25,7 +26,7 @@ public class Main extends Game {
         System.out.println("hi");
         main = this;
         batch = new SpriteBatch();
-        main.setScreen(new MainMenuView());
+        main.setScreen(new GameScreen());
     }
 
     @Override
