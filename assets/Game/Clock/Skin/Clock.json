@@ -1,0 +1,60 @@
+{
+  "com.badlogic.gdx.scenes.scene2d.ui.ImageButton$ImageButtonStyle": {
+    "FallButton": {
+      "up": "Fall",
+      "over": "Fall"
+    },
+    "FestivalButton": {
+      "up": "Festival",
+      "over": "Festival"
+    },
+    "MainClockButton": {
+      "up": "main_clock",
+      "over": "main_clock"
+    },
+    "PointerButton": {
+      "up": "Pointer",
+      "over": "Pointer"
+    },
+    "RainnyButton": {
+      "up": "Rainny",
+      "over": "Rainny"
+    },
+    "SnowyButton": {
+      "up": "Snowy",
+      "over": "Snowy"
+    },
+    "SpringButton": {
+      "up": "Spring",
+      "over": "Spring"
+    },
+    "StormyButton": {
+      "up": "Stormy",
+      "over": "Stormy"
+    },
+    "SummerButton": {
+      "up": "Summer",
+      "over": "Summer"
+    },
+    "SunnyButton": {
+      "up": "Sunny",
+      "over": "Sunny"
+    },
+    "WeddingdayButton": {
+      "up": "Weddingday",
+      "over": "Weddingday"
+    },
+    "WindFallButton": {
+      "up": "Wind_Fall",
+      "over": "Wind_Fall"
+    },
+    "WindSpringButton": {
+      "up": "Wind_Spring",
+      "over": "Wind_Spring"
+    },
+    "WinterButton": {
+      "up": "Winter",
+      "over": "Winter"
+    }
+  }
+}
