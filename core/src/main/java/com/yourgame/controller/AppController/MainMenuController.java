@@ -1,14 +1,13 @@
 package com.yourgame.controller.AppController;
 
+import com.badlogic.gdx.Gdx;
 import com.yourgame.Main;
 import com.yourgame.model.App;
 import com.yourgame.model.IO.Request;
 import com.yourgame.model.IO.Response;
 import com.yourgame.model.enums.Commands.MenuTypes;
 import com.yourgame.model.enums.Commands.MainMenuCommands;
-import com.yourgame.view.AppViews.LoginMenuView;
-import com.yourgame.view.AppViews.PreGameMenuView;
-import com.yourgame.view.AppViews.SignupMenuView;
+import com.yourgame.view.AppViews.*;
 
 public class MainMenuController {
     public void handleGoingToSignupMenu(){
@@ -27,5 +26,22 @@ public class MainMenuController {
         App.setCurrentMenu(MenuTypes.PreGameMenu);
         Main.getMain().getScreen().dispose();
         Main.getMain().setScreen(new PreGameMenuView());
+    }
+
+    public void handleGoingToProfileMenu(){
+        App.setCurrentMenu(MenuTypes.ProfileMenu);
+        Main.getMain().getScreen().dispose();
+        Main.getMain().setScreen(new ProfileMenuView());
+    }
+
+    public void handleLogout(){
+        App.setCurrentUser(null);
+        Main.getMain().getScreen().dispose();
+        Main.getMain().setScreen(new MainMenuView());
+    }
+
+    public void handleExit(){
+        Main.getMain().dispose();
+        Gdx.app.exit();
     }
 }

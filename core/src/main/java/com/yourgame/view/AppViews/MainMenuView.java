@@ -2,13 +2,24 @@ package com.yourgame.view.AppViews;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.yourgame.Graphics.MenuAssetManager;
 import com.yourgame.controller.AppController.MainMenuController;
 import com.yourgame.model.App;
 
 public class MainMenuView extends MenuBaseScreen {
+
     private Image redLine;
+    private ImageButton signupButton = MenuAssetManager.getInstance().getButtons("signup");
+    private ImageButton exitButton = MenuAssetManager.getInstance().getButtons("exit");
+    private ImageButton loginButton = MenuAssetManager.getInstance().getButtons("login");
+    private ImageButton logoutButton = MenuAssetManager.getInstance().getButtons("logout");
+    private ImageButton profileButton = MenuAssetManager.getInstance().getButtons("profile");
+    private ImageButton playButton = MenuAssetManager.getInstance().getButtons("play");
     private final MainMenuController controller;
 
     public MainMenuView(){
@@ -17,12 +28,10 @@ public class MainMenuView extends MenuBaseScreen {
 
     @Override
     public void show() {
-        //super.show();
-        Image buttons = new Image(MenuAssetManager.getInstance().getButtons(App.getCurrentMenu()));
-        buttons.setPosition(450,100);
-        stage.addActor(buttons);
+        Table table = createTable();
+        stage.addActor(table);
 
-        redLine = new Image(MenuAssetManager.getInstance().getRedLine());
+        redLine = MenuAssetManager.getInstance().getRedLine();
         redLine.setScale(0.1f);
         redLine.setPosition(20,730);
         redLine.setVisible(false);
@@ -48,21 +57,73 @@ public class MainMenuView extends MenuBaseScreen {
                     redLine.setVisible(false);
                 }
             }
-            // going to signup menu
-            if(Gdx.input.getX() >= 474 && Gdx.input.getX() <= 584 && Gdx.input.getY() >= 590 && Gdx.input.getY() <= 690)
-                controller.handleGoingToSignupMenu();
-            //going to login menu
-            if(Gdx.input.getX() >= 607 && Gdx.input.getX() <= 715 && Gdx.input.getY() >= 590 && Gdx.input.getY() <= 690)
-                controller.handleGoingToLoginMenu();
-            //going to pregame menu
-            if(Gdx.input.getX() >= 739 && Gdx.input.getX() <= 848 && Gdx.input.getY() >= 590 && Gdx.input.getY() <= 690)
-                controller.handleGoingToPreGameMenu();
         }
     }
 
-    @Override
-    public void dispose() {
-        stage.dispose();
+    private Table createTable(){
+        Table table = new Table();
+        if(App.getCurrentUser() == null){
+            table.setFillParent(true);
+            table.padTop(400);
+
+            exitButton.addListener(new ChangeListener() {
+                @Override
+                public void changed(ChangeEvent changeEvent, Actor actor) {
+                    controller.handleExit();
+                }
+            });
+            loginButton.addListener(new ChangeListener() {
+                @Override
+                public void changed(ChangeEvent changeEvent, Actor actor) {
+                    controller.handleGoingToLoginMenu();
+                }
+            });
+            signupButton.addListener(new ChangeListener() {
+                @Override
+                public void changed(ChangeEvent changeEvent, Actor actor) {
+                    controller.handleGoingToSignupMenu();
+                }
+            });
+
+            table.add(exitButton).padRight(30);
+            table.add(loginButton).padRight(30);
+            table.add(signupButton).padRight(30);
+        }
+        else{
+            table.setFillParent(true);
+            table.padTop(400);
+
+            exitButton.addListener(new ChangeListener() {
+                @Override
+                public void changed(ChangeEvent changeEvent, Actor actor) {
+                    controller.handleExit();
+                }
+            });
+            logoutButton.addListener(new ChangeListener() {
+                @Override
+                public void changed(ChangeEvent changeEvent, Actor actor) {
+                    controller.handleLogout();
+                }
+            });
+            profileButton.addListener(new ChangeListener() {
+                @Override
+                public void changed(ChangeEvent changeEvent, Actor actor) {
+                    controller.handleGoingToProfileMenu();
+                }
+            });
+            playButton.addListener(new ChangeListener() {
+                @Override
+                public void changed(ChangeEvent changeEvent, Actor actor) {
+                    controller.handleGoingToPreGameMenu();
+                }
+            });
+
+            table.add(exitButton).padRight(30);
+            table.add(logoutButton).padRight(30);
+            table.add(profileButton).padRight(30);
+            table.add(playButton).padRight(30);
+        }
+        return table;
     }
 }
 
