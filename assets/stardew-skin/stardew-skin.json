@@ -1,0 +1,168 @@
+{
+"BitmapFont": {
+	"default": {
+		"file": "Stardew_Valley(3).fnt",
+		"scaledSize": -1,
+		"markupEnabled": false,
+		"flip": false
+	},
+	"loading": {
+		"file": "Stardew_Valley(4).fnt",
+		"scaledSize": -1,
+		"markupEnabled": false,
+		"flip": false
+	},
+	"title": {
+		"file": "Stardew_Valley(2).fnt",
+		"scaledSize": -1,
+		"markupEnabled": false,
+		"flip": false
+	}
+},
+"Color": {
+	"brown": {
+		"hex": "b14e05ff"
+	},
+	"dark-brown": {
+		"hex": "5b2b2aff"
+	},
+	"light-orange": {
+		"hex": "f3b46cff"
+	},
+	"moderate-red": {
+		"hex": "ce5252ff"
+	},
+	"moderate-red-over": {
+		"hex": "e77373ff"
+	},
+	"shadow": {
+		"hex": "dd9454ff"
+	},
+	"text-title": {
+		"hex": "56160cff"
+	},
+	"text-default": {
+		"hex": "221122ff"
+	}
+},
+"ButtonStyle": {
+	"default": {
+		"up": "ok-button",
+		"disabled": "ok-button-disabled"
+	}
+},
+"CheckBoxStyle": {
+	"default": {
+		"checkboxOn": "checkbox-on",
+		"checkboxOff": "checkbox-off",
+		"font": "default"
+	}
+},
+"ImageButtonStyle": {
+	"default": {
+		"up": "button",
+		"over": "button-over"
+	},
+	"pause-menu-button": {
+		"up": "image-button"
+	}
+},
+"LabelStyle": {
+	"default": {
+		"font": "default"
+	},
+	"loading": {
+		"font": "loading"
+	},
+	"title": {
+		"font": "title"
+	}
+},
+"ListStyle": {
+	"default": {
+		"font": "default",
+		"fontColorSelected": "moderate-red",
+		"fontColorUnselected": "text-default",
+		"selection": "box-light",
+		"down": "box-dark",
+		"over": "box-lighter"
+	}
+},
+"ProgressBarStyle": {
+	"default-horizontal": {
+		"background": "box-light",
+		"disabledBackground": "box-dark",
+		"knob": "progress-knob",
+		"knobBefore": "progress-knob"
+	},
+	"default-vertical": {
+		"background": "box-light-vertical",
+		"knob": "progress-knob-vertical",
+		"knobBefore": "progress-knob-vertical"
+	}
+},
+"ScrollPaneStyle": {
+	"default": {
+		"background": "box-light"
+	}
+},
+"SelectBoxStyle": {
+	"default": {
+		"font": "default",
+		"fontColor": "text-default",
+		"overFontColor": "text-title",
+		"background": "box-light",
+		"scrollStyle": "default",
+		"listStyle": "default",
+		"backgroundOpen": "box-dark",
+		"backgroundDisabled": "box-dark"
+	}
+},
+"SliderStyle": {
+	"default-horizontal": {
+		"background": "slider-horizontal",
+		"knob": "knob"
+	},
+	"default-vertical": {
+		"background": "slider-vertical",
+		"knob": "knob-vertical"
+	}
+},
+"TextButtonStyle": {
+	"default": {
+		"font": "default",
+		"overFontColor": "moderate-red-over",
+		"up": "button",
+		"over": "button-over"
+	},
+	"loading": {
+		"font": "loading",
+		"overFontColor": "moderate-red-over",
+		"up": "button-big",
+		"over": "button-big-over"
+	}
+},
+"TextFieldStyle": {
+	"default": {
+		"font": "default",
+		"fontColor": "text-default",
+		"background": "box-light",
+		"focusedBackground": "box-lighter",
+		"disabledBackground": "box-dark",
+		"messageFont": "default",
+		"messageFontColor": "shadow"
+	}
+},
+"TextTooltipStyle": {
+	"default": {
+		"label": "default"
+	}
+},
+"WindowStyle": {
+	"default": {
+		"titleFont": "title",
+		"titleFontColor": "text-title",
+		"stageBackground": "window"
+	}
+}
+}
