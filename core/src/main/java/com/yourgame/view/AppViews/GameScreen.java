@@ -24,7 +24,7 @@ import com.yourgame.Graphics.MenuAssetManager;
 public class GameScreen implements Screen {
     private Main game;
     private GameAssetManager assetManager;
-    private Stage stage;
+    private Stage HUDStage;
     private ClockGraphicalAssests clockUI;
 
     private ImageButton clockImg;
@@ -40,12 +40,12 @@ public class GameScreen implements Screen {
         this.assetManager = new GameAssetManager();
         this.clockUI = assetManager.getClockManager();
 
-        this.stage = new Stage(new ScreenViewport());
-        Gdx.input.setInputProcessor(stage);
+        this.HUDStage = new Stage(new ScreenViewport());
+        Gdx.input.setInputProcessor(HUDStage);
 
         cursor = MenuAssetManager.getInstance().getCursor();
         cursor.setSize(32,45);
-        stage.addActor(cursor);
+        HUDStage.addActor(cursor);
         cursor.setTouchable(com.badlogic.gdx.scenes.scene2d.Touchable.disabled);
         cursor.toFront();
         Gdx.graphics.setSystemCursor(Cursor.SystemCursor.None);
@@ -71,7 +71,7 @@ public class GameScreen implements Screen {
         Skin clockSkin = clockUI.getClockWeatherSkin();
         clockImg = new ImageButton(clockSkin, "MainClockButton");
         table.add(clockImg).center();
-        stage.addActor(table);
+        HUDStage.addActor(table);
 
         System.out.println("loaded");
     }
@@ -79,20 +79,20 @@ public class GameScreen implements Screen {
     @Override
     public void render(float delta) {
         ScreenUtils.clear(0, 0, 0, 1);
-        stage.act(Math.min(delta, 1 / 30f));
+        HUDStage.act(Math.min(delta, 1 / 30f));
 
         float mouseX = Gdx.input.getX();
         float mouseY = Gdx.graphics.getHeight() - Gdx.input.getY();
         cursor.setPosition(mouseX - cursor.getWidth() / 2f, mouseY - cursor.getHeight() / 2f);
         cursor.toFront();
 
-        stage.draw();
+        HUDStage.draw();
         System.out.println("rendering");
     }
 
     @Override
     public void resize(int width, int height) {
-        stage.getViewport().update(width, height, true);
+        HUDStage.getViewport().update(width, height, true);
     }
 
     @Override
@@ -119,7 +119,7 @@ public class GameScreen implements Screen {
 
     @Override
     public void dispose() {
-        stage.dispose();
+        HUDStage.dispose();
         assetManager.dispose();
         backgroundMusic.dispose(); // Dispose the music
         if (clickSound != null) { // Dispose SFX if loaded
