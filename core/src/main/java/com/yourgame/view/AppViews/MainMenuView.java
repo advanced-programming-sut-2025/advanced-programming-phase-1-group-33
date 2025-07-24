@@ -3,39 +3,38 @@ package com.yourgame.view.AppViews;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.yourgame.Graphics.MenuAssetManager;
 import com.yourgame.controller.AppController.MainMenuController;
 import com.yourgame.model.App;
 
 public class MainMenuView extends MenuBaseScreen {
-
+    //TODO : fix music button listener
     private Image redLine;
-    private ImageButton signupButton = MenuAssetManager.getInstance().getButtons("signup");
-    private ImageButton exitButton = MenuAssetManager.getInstance().getButtons("exit");
-    private ImageButton loginButton = MenuAssetManager.getInstance().getButtons("login");
-    private ImageButton logoutButton = MenuAssetManager.getInstance().getButtons("logout");
-    private ImageButton profileButton = MenuAssetManager.getInstance().getButtons("profile");
-    private ImageButton playButton = MenuAssetManager.getInstance().getButtons("play");
+    private final TextButton signupButton = MenuAssetManager.getInstance().getButtons("signup");
+    private final TextButton exitButton = MenuAssetManager.getInstance().getButtons("exit");
+    private final TextButton loginButton = MenuAssetManager.getInstance().getButtons("login");
+    private final TextButton logoutButton = MenuAssetManager.getInstance().getButtons("logout");
+    private final TextButton profileButton = MenuAssetManager.getInstance().getButtons("profile");
+    private final TextButton playButton = MenuAssetManager.getInstance().getButtons("play");
     private final MainMenuController controller;
 
     public MainMenuView(){
         this.controller = new MainMenuController();
+        this.controller.setView(this);
     }
 
     @Override
     public void show() {
-        Table table = createTable();
-        stage.addActor(table);
-
         redLine = MenuAssetManager.getInstance().getRedLine();
         redLine.setScale(0.1f);
         redLine.setPosition(20,730);
         redLine.setVisible(false);
         stage.addActor(redLine);
+
+        Table table = createTable();
+        stage.addActor(table);
 
         Gdx.input.setInputProcessor(stage);
     }
@@ -43,7 +42,6 @@ public class MainMenuView extends MenuBaseScreen {
     @Override
     public void render(float delta) {
         super.render(delta);
-
         if(Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)){
             // make music enable/disable
             if(Gdx.input.getX() >= 28 && Gdx.input.getX() <= 66 && Gdx.input.getY() >= 37 && Gdx.input.getY() <= 72){
@@ -61,6 +59,9 @@ public class MainMenuView extends MenuBaseScreen {
     }
 
     private Table createTable(){
+        if(App.isIsMusicMuted())
+            redLine.setVisible(true);
+
         Table table = new Table();
         if(App.getCurrentUser() == null){
             table.setFillParent(true);
@@ -85,9 +86,9 @@ public class MainMenuView extends MenuBaseScreen {
                 }
             });
 
-            table.add(exitButton).padRight(30);
-            table.add(loginButton).padRight(30);
-            table.add(signupButton).padRight(30);
+            table.add(exitButton).padRight(20).padLeft(5);
+            table.add(loginButton).padRight(20);
+            table.add(signupButton);
         }
         else{
             table.setFillParent(true);
@@ -118,10 +119,10 @@ public class MainMenuView extends MenuBaseScreen {
                 }
             });
 
-            table.add(exitButton).padRight(30);
-            table.add(logoutButton).padRight(30);
-            table.add(profileButton).padRight(30);
-            table.add(playButton).padRight(30);
+            table.add(exitButton).padRight(20);
+            table.add(logoutButton).padRight(20);
+            table.add(profileButton).padRight(20);
+            table.add(playButton).padRight(20);
         }
         return table;
     }

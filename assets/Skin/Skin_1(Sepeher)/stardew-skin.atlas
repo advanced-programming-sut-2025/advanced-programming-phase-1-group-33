@@ -1,0 +1,167 @@
+
+stardew-skin.png
+size: 1024, 1024
+format: RGBA8888
+filter: Linear, Linear
+repeat: none
+Stardew_Valley(2)
+  rotate: false
+  xy: 1, 343
+  size: 506, 93
+  orig: 506, 93
+  offset: 0, 0
+  index: -1
+Stardew_Valley(3)
+  rotate: false
+  xy: 1, 260
+  size: 503, 81
+  orig: 503, 81
+  offset: 0, 0
+  index: -1
+Stardew_Valley(4)
+  rotate: false
+  xy: 1, 29
+  size: 502, 229
+  orig: 502, 229
+  offset: 0, 0
+  index: -1
+box-dark
+  rotate: false
+  xy: 509, 300
+  size: 354, 44
+  orig: 354, 44
+  offset: 0, 0
+  index: -1
+box-light
+  rotate: false
+  xy: 509, 392
+  size: 394, 44
+  orig: 394, 44
+  offset: 0, 0
+  index: -1
+box-light-vertical
+  rotate: false
+  xy: 917, 427
+  size: 44, 394
+  orig: 44, 394
+  offset: 0, 0
+  index: -1
+box-lighter
+  rotate: false
+  xy: 509, 346
+  size: 394, 44
+  orig: 394, 44
+  offset: 0, 0
+  index: -1
+button
+  rotate: false
+  xy: 851, 823
+  size: 100, 95
+  orig: 100, 95
+  offset: 0, 0
+  index: -1
+button-big
+  rotate: false
+  xy: 747, 125
+  size: 221, 173
+  orig: 221, 173
+  offset: 0, 0
+  index: -1
+button-big-over
+  rotate: false
+  xy: 506, 111
+  size: 239, 187
+  orig: 239, 187
+  offset: 0, 0
+  index: -1
+button-over
+  rotate: false
+  xy: 851, 920
+  size: 110, 101
+  orig: 110, 101
+  offset: 0, 0
+  index: -1
+checkbox-off
+  rotate: false
+  xy: 851, 586
+  size: 35, 36
+  orig: 35, 36
+  offset: 0, 0
+  index: -1
+checkbox-on
+  rotate: false
+  xy: 963, 985
+  size: 36, 36
+  orig: 36, 36
+  offset: 0, 0
+  index: -1
+image-button
+  rotate: false
+  xy: 851, 624
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+knob
+  rotate: false
+  xy: 865, 322
+  size: 38, 22
+  orig: 38, 22
+  offset: 0, 0
+  index: -1
+knob-vertical
+  rotate: false
+  xy: 1001, 983
+  size: 22, 38
+  orig: 22, 38
+  offset: 0, 0
+  index: -1
+ok-button
+  rotate: false
+  xy: 851, 757
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+ok-button-disabled
+  rotate: false
+  xy: 851, 690
+  size: 64, 65
+  orig: 64, 65
+  offset: 0, 0
+  index: -1
+progress-knob
+  rotate: false
+  xy: 506, 305
+  size: 1, 36
+  orig: 1, 36
+  offset: 0, 0
+  index: -1
+progress-knob-vertical
+  rotate: false
+  xy: 747, 122
+  size: 36, 1
+  orig: 36, 1
+  offset: 0, 0
+  index: -1
+slider-horizontal
+  rotate: false
+  xy: 1, 5
+  size: 191, 22
+  orig: 191, 22
+  offset: 0, 0
+  index: -1
+slider-vertical
+  rotate: false
+  xy: 963, 792
+  size: 22, 191
+  orig: 22, 191
+  offset: 0, 0
+  index: -1
+window
+  rotate: false
+  xy: 1, 438
+  size: 848, 583
+  orig: 848, 583
+  offset: 0, 0
+  index: -1
