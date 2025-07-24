@@ -1,5 +1,5 @@
 
-stardew-skin.png
+skin.png
 size: 1024, 1024
 format: RGBA8888
 filter: Linear, Linear
@@ -97,7 +97,7 @@ checkbox-on
   index: -1
 image-button
   rotate: false
-  xy: 851, 624
+  xy: 851, 757
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
@@ -118,14 +118,14 @@ knob-vertical
   index: -1
 ok-button
   rotate: false
-  xy: 851, 757
+  xy: 851, 691
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 ok-button-disabled
   rotate: false
-  xy: 851, 690
+  xy: 851, 624
   size: 64, 65
   orig: 64, 65
   offset: 0, 0
