@@ -16,7 +16,7 @@ import com.yourgame.model.WeatherAndTime.Weather;
 
 public class GameAssetManager extends AssetManager {
 
-    public final String Default_FONT_PATH = "assets/Fonts/default-12.fnt"; 
+    public final String Default_FONT_PATH = "Fonts/default-12.fnt"; 
 
     public final String WEATHER_CLOCK_SKIN_PATH = "Game/Clock/Skin/Clock.json"; 
     public final String CLOCK_ATLAS_PATH = "Game/Clock/Skin/Clock.atlas"; 
