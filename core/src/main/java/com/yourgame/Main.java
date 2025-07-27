@@ -23,7 +23,6 @@ public class Main extends Game {
             throw new RuntimeException(e);
         }
         */
-        System.out.println("hi");
         main = this;
         batch = new SpriteBatch();
         main.setScreen(new GameScreen());
