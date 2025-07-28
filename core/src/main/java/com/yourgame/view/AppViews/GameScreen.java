@@ -149,7 +149,7 @@ public class GameScreen implements Screen {
 
         // infoBarTable.add(clockAndIndicatorsStack).size(196, 196).pad(10).top().right();
 
-        hudManager.createInfoBar(currentWeather, currentSeason);
+        hudManager.createInfoBar("Sunny", "Spring");
 
         // Load Tiled map
         map = new TmxMapLoader().load("Game/Map/standard-farm.tmx");

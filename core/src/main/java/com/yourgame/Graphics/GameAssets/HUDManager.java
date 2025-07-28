@@ -77,6 +77,23 @@ public class HUDManager {
         hudStage.addActor(infoBarTable);
     }
 
+
+    public enum weatherType{
+        Sunny, 
+        Rainny,
+        Snowy, 
+        Stormy
+        ;
+    }
+    public enum seasonType{
+        // TODO: need to be implemented in future. 
+        Sunny, 
+        Rainny,
+        Snowy, 
+        Stormy
+        ;
+    }
+    
     // You can add more methods here to manage other HUD elements
     // public void createInventoryPanel(...) { ... }
     // public void updateClock(float time) { ... }
