@@ -92,9 +92,6 @@ public class GameScreen implements Screen {
         Gdx.graphics.setSystemCursor(Cursor.SystemCursor.None);
 
         // Load background music and SFX directly here or through AssetManager
-        // If MenuAssetManager has a getMusic() for general game music, use that.
-        // Otherwise, load it specifically for GameScreen.
-        // For demonstration, assuming you might have a dedicated game music asset or load from MenuAssetManager.
         backgroundMusic = MenuAssetManager.getInstance().getMusic(); // Or Gdx.audio.newMusic(Gdx.files.internal("path/to/your/game_music.mp3"));
         clickSound = MenuAssetManager.getInstance().getSounds("click"); // Example SFX
 
@@ -108,11 +105,25 @@ public class GameScreen implements Screen {
     public void show() {
         assetManager.loadAllAssets();
 
+        // Create a Table to hold the clock UI element.
         Table table = new Table();
+        // Make the table fill the entire stage, so its alignment methods work relative to the screen size.
+        // This line was moved here to ensure the table's size is set before adding elements.
+        table.setFillParent(true);
+        // Align the content of the table to the top-right corner.
+        table.top().right();
+
         Skin clockSkin = clockUI.getClockWeatherSkin();
         clockImg = new ImageButton(clockSkin, "MainClockButton");
-        table.add(clockImg).center();
+        // Add the clock image to the table.
+        // .pad(10) adds 10 pixels of padding around the button.
+        // .top().right() ensures the button is aligned to the top-right within its table cell.
+        table.add(clockImg).size(196).pad(10).top().right();
+        // Add the table to the HUDStage.
         HUDStage.addActor(table);
+
+
+        
 
         // Load Tiled map
         map = new TmxMapLoader().load("Game/Map/standard-farm.tmx");
