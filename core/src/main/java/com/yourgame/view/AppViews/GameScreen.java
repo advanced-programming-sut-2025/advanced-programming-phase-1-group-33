@@ -111,44 +111,6 @@ public class GameScreen implements Screen {
     public void show() {
         assetManager.loadAllAssets();
 
-        // // Create a Table to hold the clock UI element.
-        // Table infoBarTable = new Table();
-
-        // infoBarTable.setFillParent(true);
-        // infoBarTable.top().right();
-        // Skin clockSkin = clockUI.getClockWeatherSkin();
-        // clockImg = new ImageButton(clockSkin, "MainClockButton");
-
-        // // You'll need to choose the appropriate style names from your JSON for current
-        // // day/season
-        // ImageButton weatherTypeButton = new ImageButton(clockSkin, "SunnyButton"); // Example: Sunny
-        // ImageButton seasonButton = new ImageButton(clockSkin, "SpringButton"); // Example: Spring
-
-
-        // // Create a Stack to overlay the day/season buttons on the main clock
-        // Stack clockAndIndicatorsStack = new Stack();
-
-        
-        // clockAndIndicatorsStack.add(clockImg);
-        // Table overlayButtonsTable = new Table();
-        // overlayButtonsTable.setFillParent(true); // Make the table fill the stack's area
-
-        // overlayButtonsTable.add(weatherTypeButton)
-        //                    .padBottom(60).padLeft(80) // Example: 10px padding from top and left
-        //                    .align(Align.topLeft).expandX().size(35);
-
-        // overlayButtonsTable.add(seasonButton)
-        //                    .padBottom(60).padLeft(15) // Example: 10px padding from top and left
-        //                    .align(Align.topLeft).expandX().size(35);
-
-
-        // overlayButtonsTable.row();
-        // overlayButtonsTable.debug(); 
-
-        // clockAndIndicatorsStack.add(overlayButtonsTable);
-
-        // infoBarTable.add(clockAndIndicatorsStack).size(196, 196).pad(10).top().right();
-
         hudManager.createInfoBar("Sunny", "Spring");
 
         // Load Tiled map
