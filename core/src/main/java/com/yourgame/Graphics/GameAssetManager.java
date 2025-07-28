@@ -11,7 +11,7 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFont
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGeneratorLoader;
 import com.badlogic.gdx.graphics.g2d.freetype.FreetypeFontLoader;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.yourgame.Graphics.GameAssets.ClockGraphicalAssests;
+import com.yourgame.Graphics.GameAssets.clockUIAssetManager;
 import com.yourgame.model.WeatherAndTime.Weather;
 
 public class GameAssetManager extends AssetManager {
@@ -20,18 +20,18 @@ public class GameAssetManager extends AssetManager {
 
     public final String WEATHER_CLOCK_SKIN_PATH = "Game/Clock/Skin/Clock.json"; 
     public final String CLOCK_ATLAS_PATH = "Game/Clock/Skin/Clock.atlas"; 
-    private ClockGraphicalAssests clockManager; 
+    private clockUIAssetManager clockManager; 
 
     
     public GameAssetManager() {
-        this.clockManager = new ClockGraphicalAssests(WEATHER_CLOCK_SKIN_PATH, CLOCK_ATLAS_PATH, Default_FONT_PATH); 
+        this.clockManager = new clockUIAssetManager(WEATHER_CLOCK_SKIN_PATH, CLOCK_ATLAS_PATH, Default_FONT_PATH); 
     }
 
-    public ClockGraphicalAssests getClockManager() {
+    public clockUIAssetManager getClockManager() {
         return clockManager;
     }
 
-    public void setClockManager(ClockGraphicalAssests clockManager) {
+    public void setClockManager(clockUIAssetManager clockManager) {
         this.clockManager = clockManager;
     }
 

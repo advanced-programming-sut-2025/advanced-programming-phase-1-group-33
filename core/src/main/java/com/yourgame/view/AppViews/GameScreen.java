@@ -32,12 +32,15 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.yourgame.Main;
-import com.yourgame.Graphics.GameAssets.ClockGraphicalAssests;
+import com.yourgame.Graphics.GameAssets.HUDManager;
+import com.yourgame.Graphics.GameAssets.clockUIAssetManager;
 import com.yourgame.model.App;
 import com.yourgame.Graphics.GameAssetManager;
 import com.yourgame.Graphics.MenuAssetManager;
@@ -50,7 +53,7 @@ public class GameScreen implements Screen {
 
     // ==HUD==
     private Stage HUDStage;
-    private ClockGraphicalAssests clockUI;
+    private clockUIAssetManager clockUI;
     private ImageButton clockImg;
     private Image cursor;
 
@@ -75,6 +78,7 @@ public class GameScreen implements Screen {
     // ==MUSIC==
     private Music backgroundMusic;
     private Sound clickSound; // Example SFX, if you want it in game screen
+    private HUDManager hudManager;
     private static boolean isMusicInitialized = false; // Replicated from MenuBaseScreen
 
     public GameScreen() {
@@ -83,19 +87,21 @@ public class GameScreen implements Screen {
         this.clockUI = assetManager.getClockManager();
         this.HUDStage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(HUDStage);
+        this.hudManager = new HUDManager(HUDStage, clockUI, assetManager); 
 
         cursor = MenuAssetManager.getInstance().getCursor();
-        cursor.setSize(32,45);
+        cursor.setSize(32, 45);
         HUDStage.addActor(cursor);
         cursor.setTouchable(com.badlogic.gdx.scenes.scene2d.Touchable.disabled);
         cursor.toFront();
         Gdx.graphics.setSystemCursor(Cursor.SystemCursor.None);
 
         // Load background music and SFX directly here or through AssetManager
-        backgroundMusic = MenuAssetManager.getInstance().getMusic(); // Or Gdx.audio.newMusic(Gdx.files.internal("path/to/your/game_music.mp3"));
+        backgroundMusic = MenuAssetManager.getInstance().getMusic(); // Or
+                                                                     // Gdx.audio.newMusic(Gdx.files.internal("path/to/your/game_music.mp3"));
         clickSound = MenuAssetManager.getInstance().getSounds("click"); // Example SFX
 
-        if(!isMusicInitialized) {
+        if (!isMusicInitialized) {
             playBackgroundMusic();
             isMusicInitialized = true;
         }
@@ -105,25 +111,45 @@ public class GameScreen implements Screen {
     public void show() {
         assetManager.loadAllAssets();
 
-        // Create a Table to hold the clock UI element.
-        Table table = new Table();
-        // Make the table fill the entire stage, so its alignment methods work relative to the screen size.
-        // This line was moved here to ensure the table's size is set before adding elements.
-        table.setFillParent(true);
-        // Align the content of the table to the top-right corner.
-        table.top().right();
+        // // Create a Table to hold the clock UI element.
+        // Table infoBarTable = new Table();
 
-        Skin clockSkin = clockUI.getClockWeatherSkin();
-        clockImg = new ImageButton(clockSkin, "MainClockButton");
-        // Add the clock image to the table.
-        // .pad(10) adds 10 pixels of padding around the button.
-        // .top().right() ensures the button is aligned to the top-right within its table cell.
-        table.add(clockImg).size(196).pad(10).top().right();
-        // Add the table to the HUDStage.
-        HUDStage.addActor(table);
+        // infoBarTable.setFillParent(true);
+        // infoBarTable.top().right();
+        // Skin clockSkin = clockUI.getClockWeatherSkin();
+        // clockImg = new ImageButton(clockSkin, "MainClockButton");
 
+        // // You'll need to choose the appropriate style names from your JSON for current
+        // // day/season
+        // ImageButton weatherTypeButton = new ImageButton(clockSkin, "SunnyButton"); // Example: Sunny
+        // ImageButton seasonButton = new ImageButton(clockSkin, "SpringButton"); // Example: Spring
+
+
+        // // Create a Stack to overlay the day/season buttons on the main clock
+        // Stack clockAndIndicatorsStack = new Stack();
 
         
+        // clockAndIndicatorsStack.add(clockImg);
+        // Table overlayButtonsTable = new Table();
+        // overlayButtonsTable.setFillParent(true); // Make the table fill the stack's area
+
+        // overlayButtonsTable.add(weatherTypeButton)
+        //                    .padBottom(60).padLeft(80) // Example: 10px padding from top and left
+        //                    .align(Align.topLeft).expandX().size(35);
+
+        // overlayButtonsTable.add(seasonButton)
+        //                    .padBottom(60).padLeft(15) // Example: 10px padding from top and left
+        //                    .align(Align.topLeft).expandX().size(35);
+
+
+        // overlayButtonsTable.row();
+        // overlayButtonsTable.debug(); 
+
+        // clockAndIndicatorsStack.add(overlayButtonsTable);
+
+        // infoBarTable.add(clockAndIndicatorsStack).size(196, 196).pad(10).top().right();
+
+        hudManager.createInfoBar(currentWeather, currentSeason);
 
         // Load Tiled map
         map = new TmxMapLoader().load("Game/Map/standard-farm.tmx");
@@ -233,7 +259,7 @@ public class GameScreen implements Screen {
 
     // Methods for music control, similar to MenuBaseScreen
     public void playBackgroundMusic() {
-        if(App.isIsMusicMuted()) {
+        if (App.isIsMusicMuted()) {
             return;
         }
 
@@ -246,7 +272,7 @@ public class GameScreen implements Screen {
     }
 
     // Optional: if you want SFX in GameScreen
-    public void playGameSFX(String string){
+    public void playGameSFX(String string) {
         switch (string) {
             case "click" -> clickSound.play();
             // Add other game SFX cases here
@@ -257,7 +283,8 @@ public class GameScreen implements Screen {
         playerVelocity.setZero();
 
         float speed = SPEED;
-        if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)) speed *= 1.5f;
+        if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT))
+            speed *= 1.5f;
 
         if (Gdx.input.isKeyPressed(Input.Keys.A)) {
             playerVelocity.x = -speed;
@@ -296,7 +323,8 @@ public class GameScreen implements Screen {
                 shape = ((RectangleMapObject) object).getRectangle();
             } else if (object instanceof PolygonMapObject) {
                 Polygon poly = ((PolygonMapObject) object).getPolygon();
-                if (poly.contains(x, y)) return true;
+                if (poly.contains(x, y))
+                    return true;
                 continue;
             } else {
                 continue;
@@ -313,7 +341,6 @@ public class GameScreen implements Screen {
 
         return false;
     }
-
 
     private void clampCameraToMap() {
         float tileWidth = map.getProperties().get("tilewidth", Integer.class);

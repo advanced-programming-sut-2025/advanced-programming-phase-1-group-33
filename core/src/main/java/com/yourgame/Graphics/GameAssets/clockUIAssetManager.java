@@ -12,10 +12,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Align; // For alignment within the table
 
-public class ClockGraphicalAssests {
+public class clockUIAssetManager {
     private Skin ClockWeatherSkin;
 
-    public ClockGraphicalAssests(String wEATHER_CLOCK_SKIN_PATH, String cLOCK_ATLAS_PATH, String default_FONT_PATH) {
+    public clockUIAssetManager(String wEATHER_CLOCK_SKIN_PATH, String cLOCK_ATLAS_PATH, String default_FONT_PATH) {
         this.ClockWeatherSkin = loadClockWeatherSkin(wEATHER_CLOCK_SKIN_PATH, cLOCK_ATLAS_PATH, default_FONT_PATH);
     }
 
@@ -30,14 +30,6 @@ public class ClockGraphicalAssests {
         parameter.size = 24; // اندازه فونت (بر حسب پیکسل)
         parameter.color = Color.WHITE; // رنگ فونت
         // parameter.borderWidth = 1; // ضخامت حاشیه
-        // parameter.borderColor = Color.BLACK; // رنگ حاشیه
-        // parameter.shadowOffsetX = 2; // آفست سایه در X
-        // parameter.shadowOffsetY = 2; // آفست سایه در Y
-        // parameter.shadowColor = new Color(0, 0, 0, 0.75f); // رنگ سایه (شفافیت 75%)
-        // parameter.characters = "abcdefg..."; // کاراکترهای خاصی که می‌خواهید لود شوند
-        // (برای کاهش مصرف حافظه)
-
-        // تولید BitmapFont از FreeTypeFontGenerator
         BitmapFont font = generator.generateFont(parameter);
         skin.add("default-24", font); // "default-24" یک نام دلخواه است
         generator.dispose();
