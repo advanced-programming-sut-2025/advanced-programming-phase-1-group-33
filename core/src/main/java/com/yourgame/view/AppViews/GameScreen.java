@@ -56,7 +56,10 @@ public class GameScreen implements Screen {
     private clockUIAssetManager clockUI;
     private ImageButton clockImg;
     private Image cursor;
-
+    private HUDManager hudManager;
+    private int currentEnergyPhase; 
+    private HUDManager.weatherTypeButton currentWeather; // New variable for dynamic weather
+    private HUDManager.seasonTypeButton currentSeason; 
     // ==GAME==
     private TiledMap map;
     private OrthogonalTiledMapRenderer mapRenderer;
@@ -78,7 +81,6 @@ public class GameScreen implements Screen {
     // ==MUSIC==
     private Music backgroundMusic;
     private Sound clickSound; // Example SFX, if you want it in game screen
-    private HUDManager hudManager;
     private static boolean isMusicInitialized = false; // Replicated from MenuBaseScreen
 
     public GameScreen() {
@@ -87,7 +89,11 @@ public class GameScreen implements Screen {
         this.clockUI = assetManager.getClockManager();
         this.HUDStage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(HUDStage);
-        this.hudManager = new HUDManager(HUDStage, clockUI, assetManager); 
+        this.hudManager = new HUDManager(HUDStage, clockUI, assetManager);
+        this.currentEnergyPhase = 4; 
+        this.currentWeather = HUDManager.weatherTypeButton.Sunny; // Initial weather
+        this.currentSeason = HUDManager.seasonTypeButton.Spring; 
+
 
         cursor = MenuAssetManager.getInstance().getCursor();
         cursor.setSize(32, 45);
@@ -111,7 +117,8 @@ public class GameScreen implements Screen {
     public void show() {
         assetManager.loadAllAssets();
 
-        hudManager.createInfoBar("Sunny", "Spring");
+        // Initialize HUD with initial states
+        hudManager.createHUD(currentWeather, currentSeason, currentEnergyPhase);
 
         // Load Tiled map
         map = new TmxMapLoader().load("Game/Map/standard-farm.tmx");
@@ -144,6 +151,8 @@ public class GameScreen implements Screen {
     @Override
     public void render(float delta) {
         handleInput(delta);
+        handleHudUpdates(); 
+
 
         // Clear screen
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -166,7 +175,6 @@ public class GameScreen implements Screen {
         batch.draw(currentFrame, playerPosition.x, playerPosition.y);
         batch.end();
 
-        // Render HUD
         HUDStage.act(Math.min(delta, 1 / 30f));
 
         float mouseX = Gdx.input.getX();
@@ -336,4 +344,36 @@ public class GameScreen implements Screen {
 
         return new Vector2(250, 250);
     }
+
+        /**
+     * Handles updates to the HUD elements based on game state or input.
+     * This is a good practice to separate HUD logic from main rendering.
+     */
+    private void handleHudUpdates() {
+        // Example: Update energy bar
+        if (Gdx.input.isKeyJustPressed(Input.Keys.E)) {
+            currentEnergyPhase--;
+            if (currentEnergyPhase < 0) {
+                currentEnergyPhase = 4;
+            }
+            hudManager.updateEnergyBar(currentEnergyPhase);
+        }
+
+        // Example: Update weather (cycle through enums with 'W' key)
+        if (Gdx.input.isKeyJustPressed(Input.Keys.Q)) {
+            HUDManager.weatherTypeButton[] weathers = HUDManager.weatherTypeButton.values();
+            int nextIndex = (currentWeather.ordinal() + 1) % weathers.length;
+            currentWeather = weathers[nextIndex];
+            hudManager.updateWeather(currentWeather);
+        }
+
+        // Example: Update season (cycle through enums with 'R' key)
+        if (Gdx.input.isKeyJustPressed(Input.Keys.R)) {
+            HUDManager.seasonTypeButton[] seasons = HUDManager.seasonTypeButton.values();
+            int nextIndex = (currentSeason.ordinal() + 1) % seasons.length;
+            currentSeason = seasons[nextIndex];
+            hudManager.updateSeason(currentSeason);
+        }
+    }
+
 }
