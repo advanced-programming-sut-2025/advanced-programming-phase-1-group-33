@@ -249,6 +249,25 @@ public class GameScreen implements Screen {
         }
     }
 
+        /**
+     * New method to handle key presses for selecting an inventory slot.
+     */
+    private void handleInventoryInput() {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_1)) hudManager.selectSlot(0);
+        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_2)) hudManager.selectSlot(1);
+        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_3)) hudManager.selectSlot(2);
+        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_4)) hudManager.selectSlot(3);
+        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_5)) hudManager.selectSlot(4);
+        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_6)) hudManager.selectSlot(5);
+        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_7)) hudManager.selectSlot(6);
+        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_8)) hudManager.selectSlot(7);
+        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_9)) hudManager.selectSlot(8);
+        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_0)) hudManager.selectSlot(9);
+        if (Gdx.input.isKeyJustPressed(Input.Keys.MINUS)) hudManager.selectSlot(10);
+        if (Gdx.input.isKeyJustPressed(Input.Keys.EQUALS)) hudManager.selectSlot(11);
+    }
+
+
     private void handleInput(float delta) {
         playerVelocity.setZero();
 
@@ -281,6 +300,9 @@ public class GameScreen implements Screen {
         if (!isTileBlocked(newPos.x, newPos.y)) {
             playerPosition.set(newPos);
         }
+
+        // --- Inventory Selection Input ---
+        handleInventoryInput();
     }
 
     boolean isTileBlocked(float x, float y) {

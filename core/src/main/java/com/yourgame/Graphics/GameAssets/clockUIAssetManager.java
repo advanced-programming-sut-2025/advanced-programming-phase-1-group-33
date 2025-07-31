@@ -32,7 +32,7 @@ public class clockUIAssetManager {
                 this.energyBarMode[i] = new Texture(Gdx.files.internal(EnergyBarPath + "energy_" + i + ".png"));
             }
 
-            this.InventoryTexture = new Texture(Gdx.files.internal(InventoryBarDirectoryPath + "Inventory.pn"));
+            this.InventoryTexture = new Texture(Gdx.files.internal(InventoryBarDirectoryPath + "Inventory.png"));
 
         } catch (Exception e) {
             Gdx.app.error("clockUIAssetManager", "Error loading individual PNGs: " + e.getMessage(), e);

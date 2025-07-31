@@ -21,7 +21,7 @@ public class GameAssetManager extends AssetManager {
     public final String WEATHER_CLOCK_SKIN_PATH = "Game/Clock/Skin/Clock.json";
     public final String CLOCK_ATLAS_PATH = "Game/Clock/Skin/Clock.atlas";
     public final String EnergyBarPath = "Game/Clock/Energy_Bar/";
-    public final String InventoryBarDirectoryPath = "Game/Clock/Inventroy/";
+    public final String InventoryBarDirectoryPath = "Game/Clock/Inventory/";
     private clockUIAssetManager clockManager;
 
     public GameAssetManager() {
