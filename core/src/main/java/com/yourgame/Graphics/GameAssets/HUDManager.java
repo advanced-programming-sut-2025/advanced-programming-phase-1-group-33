@@ -20,6 +20,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport; // Recommended for HUD Stage
 
@@ -30,21 +31,22 @@ public class HUDManager {
     private clockUIAssetManager clockUI;
     private AssetManager assetManager;
     private Texture[] energy_bar_textures;
-    private Image energyBarImage; 
-    private Texture energy_bar_phase; 
+    private Image energyBarImage;
+    private Texture energy_bar_phase;
     private ImageButton weatherTypeButton; // Reference to the weather button
-    private ImageButton seasonButton;     // Reference to the season button
-
+    private ImageButton seasonButton; // Reference to the season button
+    private Texture InventoryTexture;
 
     public HUDManager(Stage stage, clockUIAssetManager clockUI, AssetManager assetManager) {
         this.hudStage = stage;
         this.clockUI = clockUI;
         this.assetManager = assetManager;
-        this.energy_bar_textures = clockUI.getEnergyBarMode(); 
+        this.energy_bar_textures = clockUI.getEnergyBarMode();
+        this.InventoryTexture = clockUI.getInventoryTexture();
     }
 
-
-        // Method to create and add the info bar (clock, weather, season) and energy bar to the HUD stage
+    // Method to create and add the info bar (clock, weather, season) and energy bar
+    // to the HUD stage
     public void createHUD(weatherTypeButton initialWeather, seasonTypeButton initialSeason, int initialEnergyPhase) {
         // Create the clock/info bar table
         Table clockBarTable = createClockBarTable(initialWeather, initialSeason);
@@ -53,16 +55,12 @@ public class HUDManager {
         // Create and add the energy bar table
         Table energyBarTable = createEnergyBarTable(initialEnergyPhase);
         hudStage.addActor(energyBarTable);
+
+        Table InventoryBarTable  = createInventoryBarTable();
+        hudStage.addActor(InventoryBarTable);
+
     }
 
-        /**
-     * Creates the clock and weather/season display table.
-     * This method is called once during HUD initialization.
-     *
-     * @param weatherType The enum representing the current weather type.
-     * @param seasonType The enum representing the current season type.
-     * @return The Table containing the clock, weather, and season buttons.
-     */
     public Table createClockBarTable(weatherTypeButton weatherType, seasonTypeButton seasonType) {
         Table clockBarTable = new Table();
         clockBarTable.setFillParent(true);
@@ -94,7 +92,18 @@ public class HUDManager {
         clockBarTable.add(clockAndIndicatorsStack).size(196, 196).pad(10).top().right();
         return clockBarTable;
     }
-        // Creates the energy bar table and initializes the energyBarImage
+
+    public Table createInventoryBarTable() {
+        Table inventoryBarTable = new Table();
+        inventoryBarTable.setFillParent(true);
+        inventoryBarTable.bottom().center().padBottom(10);
+        
+        ImageButton clockImg = new ImageButton(this.InventoryTexture);
+
+        return inventoryBarTable;
+    }
+
+    // Creates the energy bar table and initializes the energyBarImage
     public Table createEnergyBarTable(int initialPhase) {
         Table energy_barTable = new Table();
         energy_barTable.setFillParent(true);
@@ -113,11 +122,6 @@ public class HUDManager {
         return energy_barTable;
     }
 
-
-    /**
-     * Updates the energy bar's visual representation based on the given phase.
-     * @param newPhase The new phase of the energy bar (0-4).
-     */
     public void updateEnergyBar(int newPhase) {
         if (energyBarImage == null) {
             Gdx.app.log("HUDManager", "Energy bar Image not initialized. Cannot update.");
@@ -128,12 +132,14 @@ public class HUDManager {
             // Set the new texture to the existing Image actor
             energyBarImage.setDrawable(new Image(this.energy_bar_textures[newPhase]).getDrawable());
         } else {
-            Gdx.app.log("Energy_bar", "Invalid energy bar phase: " + newPhase + ". Must be between 0 and " + (energy_bar_textures.length - 1));
+            Gdx.app.log("Energy_bar", "Invalid energy bar phase: " + newPhase + ". Must be between 0 and "
+                    + (energy_bar_textures.length - 1));
         }
     }
 
     /**
      * Updates the weather icon on the HUD.
+     * 
      * @param newWeather The new weather type enum.
      */
     public void updateWeather(weatherTypeButton newWeather) {
@@ -145,6 +151,7 @@ public class HUDManager {
 
     /**
      * Updates the season icon on the HUD.
+     * 
      * @param newSeason The new season type enum.
      */
     public void updateSeason(seasonTypeButton newSeason) {
@@ -154,27 +161,22 @@ public class HUDManager {
         }
     }
 
-
-
-
-    public Table get_energyTable(int Phase){
+    public Table get_energyTable(int Phase) {
         Table energy_barTable = new Table();
         energy_barTable.setFillParent(true);
         energy_barTable.bottom().right().padRight(10).padBottom(10);
 
-        if(0<=Phase && Phase <= 4){
-            this.energy_bar_phase = this.energy_bar_textures[Phase]; 
-            Image eBarImage = new Image(this.energy_bar_phase); 
-    
-            energy_barTable.add(eBarImage); 
+        if (0 <= Phase && Phase <= 4) {
+            this.energy_bar_phase = this.energy_bar_textures[Phase];
+            Image eBarImage = new Image(this.energy_bar_phase);
+
+            energy_barTable.add(eBarImage);
+        } else {
+            Gdx.app.log("Energy_bar", "this energy bar is not real");
         }
-        else{
-            Gdx.app.log("Energy_bar", "this energy bar is not real"); 
-        }
-        return energy_barTable; 
+        return energy_barTable;
     }
-    
-    
+
     public enum weatherTypeButton {
         Sunny("SunnyButton"),
         Rainny("RainnyButton"),
@@ -183,38 +185,32 @@ public class HUDManager {
         Stormy("StormyButton");
 
         private final String pathToButton;
-        
 
         weatherTypeButton(String pathToButton) {
-            this.pathToButton = pathToButton; 
+            this.pathToButton = pathToButton;
         }
 
-
-        public String getButtonPath(){
-            return pathToButton; 
+        public String getButtonPath() {
+            return pathToButton;
         }
     }
 
-        public enum seasonTypeButton {
+    public enum seasonTypeButton {
 
-        Spring("SpringButton"), 
+        Spring("SpringButton"),
         Summer("SummerButton"),
-        Fall("FallButton"), 
+        Fall("FallButton"),
         Winter("WinterButton");
 
         private final String pathToButton;
-        
 
         seasonTypeButton(String pathToButton) {
-            this.pathToButton = pathToButton; 
+            this.pathToButton = pathToButton;
         }
 
-
-        public String getButtonPath(){
-            return pathToButton; 
+        public String getButtonPath() {
+            return pathToButton;
         }
     }
-
-
 
 }

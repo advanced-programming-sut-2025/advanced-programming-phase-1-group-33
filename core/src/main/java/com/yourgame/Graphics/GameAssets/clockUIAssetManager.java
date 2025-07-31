@@ -16,11 +16,13 @@ import com.badlogic.gdx.utils.Align; // For alignment within the table
 public class clockUIAssetManager {
     private Skin ClockWeatherSkin;
     private Texture[] energyBarMode;
+    private Texture InventoryTexture;
 
     public clockUIAssetManager(String wEATHER_CLOCK_SKIN_PATH,
             String cLOCK_ATLAS_PATH,
             String default_FONT_PATH,
-            String EnergyBarPath) {
+            String EnergyBarPath,
+            String InventoryBarDirectoryPath) {
 
         this.ClockWeatherSkin = loadClockWeatherSkin(wEATHER_CLOCK_SKIN_PATH, cLOCK_ATLAS_PATH, default_FONT_PATH);
         this.energyBarMode = new Texture[5];
@@ -29,6 +31,8 @@ public class clockUIAssetManager {
             for (int i = 0; i < 5; i++) {
                 this.energyBarMode[i] = new Texture(Gdx.files.internal(EnergyBarPath + "energy_" + i + ".png"));
             }
+
+            this.InventoryTexture = new Texture(Gdx.files.internal(InventoryBarDirectoryPath + "Inventory.pn"));
 
         } catch (Exception e) {
             Gdx.app.error("clockUIAssetManager", "Error loading individual PNGs: " + e.getMessage(), e);
@@ -72,6 +76,14 @@ public class clockUIAssetManager {
 
     public void setEnergyBarMode(Texture[] energyBarMode) {
         this.energyBarMode = energyBarMode;
+    }
+
+    public Texture getInventoryTexture() {
+        return InventoryTexture;
+    }
+
+    public void setInventoryTexture(Texture inventoryTexture) {
+        this.InventoryTexture = inventoryTexture;
     }
 
 }
