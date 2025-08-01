@@ -1,7 +1,7 @@
 package com.yourgame.model.enums;
 
 public enum SecurityQuestion {
-    Email("What is your email?"),
+    Location("Where is your home located in?"),
     BirthDate("What is your birth date?"),
     PhoneNumber("What is your phone number?"),
     BornCity("What city were you born in?"),

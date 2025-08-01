@@ -7,9 +7,11 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Cursor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.yourgame.Graphics.MenuAssetManager;
 import com.yourgame.model.App;
@@ -107,5 +109,17 @@ public abstract class MenuBaseScreen implements Screen {
             case "click" -> clickSound.play();
             case "popUp" -> popUpSound.play();
         }
+    }
+
+    protected void showMessage(String message, Skin skin, float x, float y) {
+        playMenuSFX("popUp");
+        Dialog dialog = new Dialog("", skin);
+        dialog.text(message);
+        dialog.show(stage);
+        dialog.setPosition((stage.getWidth()-dialog.getWidth())/2f + x, y);
+        Timer.schedule(new Timer.Task() {
+            @Override
+            public void run() {dialog.hide();}
+        }, 2);
     }
 }

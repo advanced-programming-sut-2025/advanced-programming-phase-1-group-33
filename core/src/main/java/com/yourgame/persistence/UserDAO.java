@@ -1,6 +1,8 @@
 package com.yourgame.persistence;
 
 import com.yourgame.model.UserInfo.User;
+import com.yourgame.model.enums.Gender;
+import com.yourgame.model.enums.SecurityQuestion;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -22,7 +24,9 @@ public class UserDAO {
                 password TEXT NOT NULL,
                 email TEXT NOT NULL,
                 nickname TEXT NOT NULL,
-                gender TEXT NOT NULL
+                gender TEXT NOT NULL,
+                securityQuestion TEXT NOT NULL,
+                answer TEXT NOT NULL
             )
         """;
         try (Statement stmt = connection.createStatement()) {
@@ -39,15 +43,16 @@ public class UserDAO {
         }
     }
 
-
     public void saveUser(User user) throws SQLException {
-        String sql = "INSERT INTO users(username, password, email, nickname, gender) VALUES (?,?,?,?,?)";
+        String sql = "INSERT INTO users(username, password, email, nickname, gender, securityQuestion, answer) VALUES (?,?,?,?,?,?,?)";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, user.getUsername());
             stmt.setString(2, user.getPassword()); // ensure the password is already hashed
             stmt.setString(3, user.getEmail());
             stmt.setString(4, user.getNickname());
-            stmt.setString(5, user.getGender().toString());
+            stmt.setString(5, user.getGender());
+            stmt.setString(6,user.getSecurityQuestion().getQuestion());
+            stmt.setString(7,user.getAnswer());
             stmt.executeUpdate();
         }
     }
@@ -63,7 +68,9 @@ public class UserDAO {
                         rs.getString("password"),
                         rs.getString("email"),
                         rs.getString("nickname"),
-                        rs.getString("gender"));
+                        Gender.valueOf(rs.getString("gender")),
+                        SecurityQuestion.getQuestion(rs.getString("securityQuestion")),
+                        rs.getString("answer"));
             }
         }
         return null;
@@ -80,7 +87,9 @@ public class UserDAO {
                         rs.getString("password"),
                         rs.getString("email"),
                         rs.getString("nickname"),
-                        rs.getString("gender")));
+                        Gender.valueOf(rs.getString("gender")),
+                        SecurityQuestion.valueOf(rs.getString("security question")),
+                        rs.getString("answer")));
             }
         }
         return users;
@@ -97,7 +106,9 @@ public class UserDAO {
                         rs.getString("password"),
                         rs.getString("email"),
                         rs.getString("nickname"),
-                        rs.getString("gender"));
+                        Gender.valueOf(rs.getString("gender")),
+                        SecurityQuestion.valueOf(rs.getString("security question")),
+                        rs.getString("answer"));
             }
         }
         return null;
@@ -109,7 +120,7 @@ public class UserDAO {
             stmt.setString(1, updatedUser.getPassword());
             stmt.setString(2, updatedUser.getEmail());
             stmt.setString(3, updatedUser.getNickname());
-            stmt.setString(4, updatedUser.getGender().toString());
+            stmt.setString(4, updatedUser.getGender());
             stmt.setString(5, username);
             stmt.executeUpdate();
         }
