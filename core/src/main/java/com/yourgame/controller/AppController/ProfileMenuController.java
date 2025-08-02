@@ -1,97 +1,105 @@
 package com.yourgame.controller.AppController;
 
+import com.yourgame.Main;
+import com.yourgame.model.App;
+import com.yourgame.model.Result;
+import com.yourgame.model.UserInfo.UserInfoChecking;
+import com.yourgame.model.enums.Commands.MenuTypes;
+import com.yourgame.persistence.UserDAO;
+import com.yourgame.view.AppViews.AvatarMenuView;
+import com.yourgame.view.AppViews.MainMenuView;
+
 import java.sql.SQLException;
 
-import com.yourgame.model.IO.*;
-import com.yourgame.model.App;
-import com.yourgame.model.UserInfo.User;
-
 public class ProfileMenuController {
-    public static Response showUserInfo() {
-        User currentUser = App.getCurrentUser();
-        if (currentUser == null) {
-            return new Response(false, "No user logged in!");
-        }
-        return new Response(true, currentUser.toString());
-    }
+    private final static UserDAO userDAO = App.getUserDAO();
 
-    public static Response changeUsername(String newUsername) {
-        User currentUser = App.getCurrentUser();
-        if (currentUser == null) {
-            return new Response(false, "No user logged in!");
+    public Result handleChangeUsername(String newUsername){
+        if(newUsername.isEmpty()){
+            return new Result(false, "Username field cannot be empty!");
         }
-        if (newUsername == null || newUsername.trim().isEmpty()) {
-            return new Response(false, "Invalid username provided!");
+        else if(!UserInfoChecking.ValidName.matcher(newUsername)){
+            return new Result(false, "Username is not a valid username!");
         }
-        String oldUsername = currentUser.getUsername();
-        try {
-            // using a dedicated update for username
-            App.getUserDAO().updateUsername(oldUsername, newUsername);
-            currentUser.setUsername(newUsername);
-            return new Response(true, "Username updated successfully!");
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return new Response(false, "Error updating username.");
-        }
-    }
-
-    public static Response changeNickname(String newNickname) {
-        User currentUser = App.getCurrentUser();
-        if (currentUser == null) {
-            return new Response(false, "No user logged in!");
-        }
-        if (newNickname == null || newNickname.trim().isEmpty()) {
-            return new Response(false, "Invalid nickname provided!");
+        else if(newUsername.equals(App.getCurrentUser().getUsername())){
+            return new Result(false, "The new username must be different!");
         }
         try {
-            currentUser.setNickname(newNickname);
-            // update the user record using the generic update method
-            App.getUserDAO().updateUserById(currentUser.getUsername(), currentUser);
-            return new Response(true, "Nickname updated successfully!");
+            userDAO.updateUsername(App.getCurrentUser().getUsername(),newUsername);
         } catch (SQLException e) {
-            e.printStackTrace();
-            return new Response(false, "Error updating nickname.");
+            throw new RuntimeException(e);
         }
+        App.getCurrentUser().setUsername(newUsername);
+        return new Result(true, "Username has been changed!");
     }
 
-    public static Response changeEmail(String newEmail) {
-        User currentUser = App.getCurrentUser();
-        if (currentUser == null) {
-            return new Response(false, "No user logged in!");
+    public Result handleChangePassword(String newPassword,String oldPassword){
+        if(newPassword.isEmpty()){
+            return new Result(false, "New password field cannot be empty!");
         }
-        if (newEmail == null || newEmail.trim().isEmpty()) {
-            return new Response(false, "Invalid email provided!");
+        else if(oldPassword.isEmpty()){
+            return new Result(false, "Old password field cannot be empty!");
         }
-        try {
-            currentUser.setEmail(newEmail);
-            App.getUserDAO().updateUserById(currentUser.getUsername(), currentUser);
-            return new Response(true, "Email updated successfully!");
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return new Response(false, "Error updating email.");
+        else if(!oldPassword.equals(App.getCurrentUser().getPassword())){
+            return new Result(false, "Old password does not match!");
         }
+        else if(!UserInfoChecking.StrongPassword.matcher(newPassword)){
+            return new Result(false, "Password is not a strong password!");
+        }
+        else if(newPassword.equals(App.getCurrentUser().getPassword())){
+            return new Result(false, "The new password must be different!");
+        }
+        App.getCurrentUser().setPassword(newPassword);
+        return new Result(true, "Password has been changed!");
     }
 
-    public static Response changePassword(String newPassword, String oldPassword) {
-        User currentUser = App.getCurrentUser();
-        if (currentUser == null) {
-            return new Response(false, "No user logged in!");
+    public Result handleChangeEmail(String newEmail){
+        if(newEmail.isEmpty()){
+            return new Result(false, "Email field cannot be empty!");
         }
-        if (newPassword == null || newPassword.trim().isEmpty() ||
-            oldPassword == null || oldPassword.trim().isEmpty()) {
-            return new Response(false, "Invalid password provided!");
+        else if(!UserInfoChecking.ValidEmail.matcher(newEmail)){
+            return new Result(false, "Email is not a valid email!");
         }
-        // check if old password matches
-        if (!currentUser.getPassword().equals(LoginMenuController.hashPassword(oldPassword))) {
-            return new Response(false, "Old password is incorrect!");
+        else if(newEmail.equals(App.getCurrentUser().getEmail())){
+            return new Result(false, "The new email must be different!");
         }
+        App.getCurrentUser().setEmail(newEmail);
+        return new Result(true, "Email has been changed!");
+    }
+
+    public Result handleChangeNickname(String newNickname){
+        if(newNickname.isEmpty()){
+            return new Result(false, "Nickname field cannot be empty!");
+        }
+        else if(newNickname.equals(App.getCurrentUser().getNickname())){
+            return new Result(false, "The new nickname must be different!");
+        }
+        App.getCurrentUser().setNickname(newNickname);
+        return new Result(true, "Nickname has been changed!");
+    }
+
+    public void handleSubmitButton(){
+        UserDAO userDAO = App.getUserDAO();
         try {
-            currentUser.setPassword(LoginMenuController.hashPassword(newPassword));
-            App.getUserDAO().updateUserById(currentUser.getUsername(), currentUser);
-            return new Response(true, "Password updated successfully!");
+            userDAO.updateUserById(App.getCurrentUser().getUsername(),App.getCurrentUser());
         } catch (SQLException e) {
-            e.printStackTrace();
-            return new Response(false, "Error updating password.");
+            throw new RuntimeException(e);
         }
+
+        App.setCurrentMenu(MenuTypes.MainMenu);
+        Main.getMain().getScreen().dispose();
+        Main.getMain().setScreen(new MainMenuView());
+    }
+
+    public void handleBackButton(){
+        App.setCurrentMenu(MenuTypes.MainMenu);
+        Main.getMain().getScreen().dispose();
+        Main.getMain().setScreen(new MainMenuView());
+    }
+
+    public void handleAvatarButton(){
+        App.setCurrentMenu(MenuTypes.AvatarMenu);
+        Main.getMain().getScreen().dispose();
+        Main.getMain().setScreen(new AvatarMenuView());
     }
 }

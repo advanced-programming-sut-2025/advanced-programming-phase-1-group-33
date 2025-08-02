@@ -35,17 +35,28 @@ public class MenuAssetManager {
 
     private final TextButton signupButton;
     private final TextButton loginButton;
+    private final TextButton login2Button;
     private final TextButton exitButton;
     private final TextButton playButton;
     private final TextButton profileButton;
     private final TextButton logoutButton;
     private final TextButton backButton;
     private final TextButton submitButton;
+    private final TextButton findButton;
+    private final TextButton randomPasswordButton;
+    private final TextButton forgetPasswordButton;
+    private final TextButton changeUsernameButton;
+    private final TextButton changeNicknameButton;
+    private final TextButton changePasswordButton;
+    private final TextButton changeEmailButton;
+    private final TextButton changeAvatarButton;
 
     private MenuAssetManager() {
         backgrounds = new Image[]{
             new Image(new Texture(Gdx.files.internal("Backgrounds/Background1.jpg"))),
             new Image(new Texture(Gdx.files.internal("Backgrounds/Background2.png"))),
+            new Image(new Texture(Gdx.files.internal("Backgrounds/Background5.jpg"))),
+            new Image(new Texture(Gdx.files.internal("Backgrounds/Background4.jpg"))),
         };
 
         sounds = new Sound[]{
@@ -74,20 +85,31 @@ public class MenuAssetManager {
 
         TextButton.TextButtonStyle earthButtonStyle = skin_3_Nz.get("Earth", TextButton.TextButtonStyle.class);
         earthButtonStyle.font = skin_1_Sepehr.getFont("loading");
-        logoutButton = new TextButton("Login", earthButtonStyle);
+        logoutButton = new TextButton("Logout", earthButtonStyle);
 
         TextButton.TextButtonStyle defaultButtonStyle = skin_3_Nz.get("default", TextButton.TextButtonStyle.class);
         defaultButtonStyle.font = skin_1_Sepehr.getFont("loading");
         backButton = new TextButton("Back", defaultButtonStyle);
-        backButton.setScale(0.5f);
         submitButton = new TextButton("Submit", defaultButtonStyle);
-        submitButton.setScale(0.5f);
+        login2Button = new TextButton("Login", defaultButtonStyle);
+        changeAvatarButton = new TextButton("Avatar", defaultButtonStyle);
+
+        TextButton.TextButtonStyle smallButtonStyle = skin_1_Sepehr.get("default", TextButton.TextButtonStyle.class);
+        randomPasswordButton = new TextButton("  Generate  \n  Password  ", smallButtonStyle);
+        forgetPasswordButton = new TextButton("  Forget  \n  Password  ", smallButtonStyle);
+        findButton = new TextButton(" Find ", smallButtonStyle);
+        changeUsernameButton = new TextButton("  Change  ", smallButtonStyle);
+        changeNicknameButton = new TextButton("  Change  ", smallButtonStyle);
+        changePasswordButton = new TextButton("  Change  ", smallButtonStyle);
+        changeEmailButton = new TextButton("  Change  ", smallButtonStyle);
     }
 
     public Image getBackgroundImage(MenuTypes type) {
         switch (type) {
             case MainMenu -> {return backgrounds[0];}
             case SignupMenu,LoginMenu -> {return backgrounds[1];}
+            case ProfileMenu -> {return backgrounds[2];}
+            case AvatarMenu -> {return backgrounds[3];}
             default -> {return null;}
         }
     }
@@ -96,12 +118,21 @@ public class MenuAssetManager {
             switch (name) {
                 case "signup" -> {return signupButton;}
                 case "login" -> {return loginButton;}
+                case "login2" -> {return login2Button;}
                 case "logout" -> {return logoutButton;}
                 case "exit" -> {return exitButton;}
                 case "play" -> {return playButton;}
                 case "profile" -> {return profileButton;}
                 case "back" -> {return backButton;}
                 case "submit" -> {return submitButton;}
+                case "find" -> {return findButton;}
+                case "random" -> {return randomPasswordButton;}
+                case "forget" -> {return forgetPasswordButton;}
+                case "changeUsername" -> {return changeUsernameButton;}
+                case "changeNickname" -> {return changeNicknameButton;}
+                case "changePassword" -> {return changePasswordButton;}
+                case "changeEmail" -> {return changeEmailButton;}
+                case "avatar" -> {return changeAvatarButton;}
                 default -> {return null;}
             }
     }

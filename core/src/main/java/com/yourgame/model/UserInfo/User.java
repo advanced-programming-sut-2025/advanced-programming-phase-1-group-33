@@ -1,20 +1,25 @@
 package com.yourgame.model.UserInfo;
 
+import com.yourgame.model.enums.Gender;
+import com.yourgame.model.enums.SecurityQuestion;
+
 public class User {
     private String Username;
     private String Password;
     private String Email;
     private String Nickname;
-    private String Gender;
+    private Gender Gender;
     private SecurityQuestion question;
     private String answer;
 
-    public User(String Username, String Password, String Email, String Nickname, String Gender) {
+    public User(String Username, String Password, String Email, String Nickname, Gender Gender, SecurityQuestion question, String answer) {
         this.Username = Username;
         this.Password = Password;
         this.Email = Email;
         this.Nickname = Nickname;
         this.Gender = Gender;
+        this.question = question;
+        this.answer = answer;
     }
 
     @Override
@@ -50,7 +55,7 @@ public class User {
     }
 
     public String getGender() {
-        return Gender;
+        return Gender.getGenderString();
     }
 
     public void setUsername(String username) {
@@ -69,12 +74,8 @@ public class User {
         this.Nickname = nickname;
     }
 
-    public void setGender(String gender) {
+    public void setGender(Gender gender) {
         this.Gender = gender;
-    }
-
-    public SecurityQuestion getQuestion() {
-        return question;
     }
 
     public void setQuestion(SecurityQuestion question) {
