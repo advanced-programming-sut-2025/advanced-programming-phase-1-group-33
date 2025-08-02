@@ -11,7 +11,7 @@ import java.util.List;
 
 public class App {
     private static MenuTypes currentMenuTypes = MenuTypes.MainMenu;
-    private static User currentUser = new User("","","","", Gender.Male,SecurityQuestion.BirthDate,"");
+    private static User currentUser =  null ; //new User("","","","", Gender.Male,SecurityQuestion.BirthDate,"");
     public static ArrayList<SecurityQuestion> securityQuestions = new ArrayList<>();
     private static List<User> users;
     private static UserDAO userDAO;

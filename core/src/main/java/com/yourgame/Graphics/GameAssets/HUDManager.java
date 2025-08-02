@@ -97,6 +97,7 @@ public class HUDManager {
         Table clockBarTable = new Table();
         clockBarTable.setFillParent(true);
         clockBarTable.top().right();
+        
 
         Skin clockSkin = clockUI.getClockWeatherSkin();
         ImageButton clockImg = new ImageButton(clockSkin, "MainClockButton");

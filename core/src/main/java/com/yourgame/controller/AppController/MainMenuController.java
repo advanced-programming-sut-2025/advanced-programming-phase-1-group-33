@@ -28,7 +28,7 @@ public class MainMenuController {
     public void handleGoingToPreGameMenu(){
         App.setCurrentMenu(MenuTypes.PreGameMenu);
         Main.getMain().getScreen().dispose();
-        Main.getMain().setScreen(new PreGameMenuView());
+        Main.getMain().setScreen(new GameScreen());
     }
 
     public void handleGoingToProfileMenu(){

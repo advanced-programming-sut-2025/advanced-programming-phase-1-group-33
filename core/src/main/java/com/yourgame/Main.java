@@ -25,7 +25,7 @@ public class Main extends Game {
         */
         main = this;
         batch = new SpriteBatch();
-        main.setScreen(new GameScreen());
+        main.setScreen(new MainMenuView());
     }
 
     @Override
