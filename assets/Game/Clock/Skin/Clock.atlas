@@ -1,0 +1,34 @@
+Clock.png
+size: 126, 213
+format: RGBA8888
+filter: Linear, Linear
+repeat: none
+pma: false
+Fall
+  bounds: 0, 90, 48, 32
+Festival
+  bounds: 7, 0, 42, 30
+main_clock
+  bounds: 0, 154, 72, 59
+Pointer
+  bounds: 0, 0, 7, 19
+Rainny
+  bounds: 49, 0, 42, 30
+Snowy
+  bounds: 0, 30, 42, 30
+Spring
+  bounds: 48, 90, 48, 32
+Stormy
+  bounds: 42, 30, 42, 30
+Summer
+  bounds: 0, 122, 48, 32
+Sunny
+  bounds: 84, 30, 42, 30
+Weddingday
+  bounds: 0, 60, 42, 30
+Wind_Fall
+  bounds: 42, 60, 42, 30
+Wind_Spring
+  bounds: 84, 60, 42, 30
+Winter
+  bounds: 48, 122, 48, 32

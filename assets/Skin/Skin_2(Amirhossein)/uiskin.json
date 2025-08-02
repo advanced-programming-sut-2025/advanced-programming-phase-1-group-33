@@ -1,0 +1,28 @@
+{
+  "com.badlogic.gdx.scenes.scene2d.ui.ImageButton$ImageButtonStyle": {
+    "ExitButton": {
+      "up": "Exit",
+      "over": "Exit(hover)"
+    },
+    "LoginButton": {
+      "up": "Login",
+      "over": "Login(hover)"
+    },
+    "LogoutButton": {
+      "up": "Logout",
+      "over": "Logout(hover)"
+    },
+    "PlayButton": {
+      "up": "Play",
+      "over": "Play(hover)"
+    },
+    "ProfileButton": {
+      "up": "Profile",
+      "over": "Profile(hover)"
+    },
+    "SignupButton": {
+      "up": "Signup",
+      "over": "Signup(hover)"
+    }
+  }
+}

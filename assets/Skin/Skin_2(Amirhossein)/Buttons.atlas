@@ -1,0 +1,30 @@
+Buttons.png
+size: 171, 1476
+format: RGBA8888
+filter: Linear, Linear
+repeat: none
+pma: false
+Exit(hover)
+  bounds: 0, 0, 171, 123
+Exit
+  bounds: 0, 123, 171, 123
+Login(hover)
+  bounds: 0, 246, 171, 123
+Login
+  bounds: 0, 369, 171, 123
+Logout(hover)
+  bounds: 0, 492, 171, 123
+Logout
+  bounds: 0, 615, 171, 123
+Play(hover)
+  bounds: 0, 738, 171, 123
+Play
+  bounds: 0, 861, 171, 123
+Profile(hover)
+  bounds: 0, 984, 171, 123
+Profile
+  bounds: 0, 1107, 171, 123
+Signup(hover)
+  bounds: 0, 1230, 171, 123
+Signup
+  bounds: 0, 1353, 171, 123
