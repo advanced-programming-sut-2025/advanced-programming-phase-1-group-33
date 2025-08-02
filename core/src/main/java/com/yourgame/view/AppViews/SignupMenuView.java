@@ -78,7 +78,7 @@ public class SignupMenuView extends MenuBaseScreen {
         stage.addActor(firstTable);
 
         Table secondTable = new Table();
-        secondTable.setPosition(480,175);
+        secondTable.setPosition(800,275);
         secondTable.add(securityQuestionLabel).padRight(20);
         secondTable.add(securityQuestionSelectBox).width(600);
         secondTable.row();
@@ -87,11 +87,14 @@ public class SignupMenuView extends MenuBaseScreen {
         secondTable.setVisible(false);
         stage.addActor(secondTable);
 
-        backButton.setPosition(1015,20);
+        backButton.setPosition(1265,170);
+        backButton.setHeight(90);
         stage.addActor(backButton);
-        submitButton.setPosition(1000,140);
+        submitButton.setPosition(1250,260);
+        submitButton.setHeight(90);
         stage.addActor(submitButton);
-        randomPasswordButton.setPosition(890,480);
+        randomPasswordButton.setPosition(1210,580);
+        randomPasswordButton.setHeight(90);
         stage.addActor(randomPasswordButton);
 
         backButton.addListener(new ChangeListener() {
@@ -142,7 +145,7 @@ public class SignupMenuView extends MenuBaseScreen {
                 String generatedPassword = controller.generateRandomPassword();
                 passwordField.setText(generatedPassword);
                 confirmPasswordField.setText(generatedPassword);
-                showMessage("Your password is : " + passwordField.getText() , skin_Nz, -70, 5);
+                showMessage("Your password is : " + passwordField.getText() , skin_Nz, -70, 50);
             }
         });
 

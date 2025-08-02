@@ -50,24 +50,27 @@ public class LoginMenuView extends MenuBaseScreen{
         table.add(passwordField).width(600).padBottom(20);
         table.row();
         stage.addActor(table);
-        backButton.setPosition(1000,20);
+        backButton.setPosition(1250,170);
+        backButton.setHeight(90);
         stage.addActor(backButton);
-        loginButton.setPosition(1000,140);
-        stage.addActor(loginButton);
-        forgetButton.setPosition(900,330);
+        loginButton.setPosition(1250,270);
+        loginButton.setHeight(90);
+        stage.addActor(loginButton );
+
+        forgetButton.setPosition(1210,470);
         stage.addActor(forgetButton);
 
         securityAnswerField.setVisible(false);
         securityAnswerField.setWidth(600);
-        securityAnswerField.setPosition(270,350);
+        securityAnswerField.setPosition(570,450);
         stage.addActor(securityAnswerField);
 
         securityAnswerLabel.setVisible(false);
-        securityAnswerLabel.setPosition(110,360);
+        securityAnswerLabel.setPosition(410,460);
         stage.addActor(securityAnswerLabel);
 
         findButton.setVisible(false);
-        findButton.setPosition(940,340);
+        findButton.setPosition(1240,440);
         stage.addActor(findButton);
 
         backButton.addListener(new ChangeListener() {
@@ -82,7 +85,7 @@ public class LoginMenuView extends MenuBaseScreen{
             public void changed(ChangeEvent event, Actor actor){
                 Result result = controller.handleLoginButton();
                 playMenuSFX("popUp");
-                showMessage(result.message(), skin_Nz, -70, 20);
+                showMessage(result.message(), skin_Nz, -70, 50);
             }
         });
 
@@ -93,7 +96,7 @@ public class LoginMenuView extends MenuBaseScreen{
                 if(!isForgetPasswordButtonClicked) {
                     playMenuSFX("popUp");
                     if (!result.success()) {
-                        showMessage(result.message(), skin_Nz, -70, 20);
+                        showMessage(result.message(), skin_Nz, -70, 50);
                     }
                     else {
                         isForgetPasswordButtonClicked = true;

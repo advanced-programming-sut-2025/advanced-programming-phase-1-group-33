@@ -6,6 +6,7 @@ import com.yourgame.model.Result;
 import com.yourgame.model.UserInfo.UserInfoChecking;
 import com.yourgame.model.enums.Commands.MenuTypes;
 import com.yourgame.persistence.UserDAO;
+import com.yourgame.view.AppViews.AvatarMenuView;
 import com.yourgame.view.AppViews.MainMenuView;
 
 import java.sql.SQLException;
@@ -94,5 +95,11 @@ public class ProfileMenuController {
         App.setCurrentMenu(MenuTypes.MainMenu);
         Main.getMain().getScreen().dispose();
         Main.getMain().setScreen(new MainMenuView());
+    }
+
+    public void handleAvatarButton(){
+        App.setCurrentMenu(MenuTypes.AvatarMenu);
+        Main.getMain().getScreen().dispose();
+        Main.getMain().setScreen(new AvatarMenuView());
     }
 }

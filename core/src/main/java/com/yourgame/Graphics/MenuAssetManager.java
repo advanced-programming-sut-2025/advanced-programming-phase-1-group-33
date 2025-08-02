@@ -49,13 +49,14 @@ public class MenuAssetManager {
     private final TextButton changeNicknameButton;
     private final TextButton changePasswordButton;
     private final TextButton changeEmailButton;
-
+    private final TextButton changeAvatarButton;
 
     private MenuAssetManager() {
         backgrounds = new Image[]{
             new Image(new Texture(Gdx.files.internal("Backgrounds/Background1.jpg"))),
             new Image(new Texture(Gdx.files.internal("Backgrounds/Background2.png"))),
             new Image(new Texture(Gdx.files.internal("Backgrounds/Background5.jpg"))),
+            new Image(new Texture(Gdx.files.internal("Backgrounds/Background4.jpg"))),
         };
 
         sounds = new Sound[]{
@@ -91,6 +92,7 @@ public class MenuAssetManager {
         backButton = new TextButton("Back", defaultButtonStyle);
         submitButton = new TextButton("Submit", defaultButtonStyle);
         login2Button = new TextButton("Login", defaultButtonStyle);
+        changeAvatarButton = new TextButton("Avatar", defaultButtonStyle);
 
         TextButton.TextButtonStyle smallButtonStyle = skin_1_Sepehr.get("default", TextButton.TextButtonStyle.class);
         randomPasswordButton = new TextButton("  Generate  \n  Password  ", smallButtonStyle);
@@ -107,6 +109,7 @@ public class MenuAssetManager {
             case MainMenu -> {return backgrounds[0];}
             case SignupMenu,LoginMenu -> {return backgrounds[1];}
             case ProfileMenu -> {return backgrounds[2];}
+            case AvatarMenu -> {return backgrounds[3];}
             default -> {return null;}
         }
     }
@@ -129,6 +132,7 @@ public class MenuAssetManager {
                 case "changeNickname" -> {return changeNicknameButton;}
                 case "changePassword" -> {return changePasswordButton;}
                 case "changeEmail" -> {return changeEmailButton;}
+                case "avatar" -> {return changeAvatarButton;}
                 default -> {return null;}
             }
     }

@@ -1,6 +1,7 @@
 package com.yourgame.model;
 import com.yourgame.model.UserInfo.User;
 import com.yourgame.model.enums.Commands.MenuTypes;
+import com.yourgame.model.enums.Gender;
 import com.yourgame.model.enums.SecurityQuestion;
 import com.yourgame.persistence.UserDAO;
 
@@ -10,7 +11,7 @@ import java.util.List;
 
 public class App {
     private static MenuTypes currentMenuTypes = MenuTypes.MainMenu;
-    private static User currentUser ;//= new User("","","","","");
+    private static User currentUser = new User("","","","", Gender.Male,SecurityQuestion.BirthDate,"");
     public static ArrayList<SecurityQuestion> securityQuestions = new ArrayList<>();
     private static List<User> users;
     private static UserDAO userDAO;
