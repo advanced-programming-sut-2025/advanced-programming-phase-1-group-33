@@ -45,11 +45,17 @@ public class MenuAssetManager {
     private final TextButton findButton;
     private final TextButton randomPasswordButton;
     private final TextButton forgetPasswordButton;
+    private final TextButton changeUsernameButton;
+    private final TextButton changeNicknameButton;
+    private final TextButton changePasswordButton;
+    private final TextButton changeEmailButton;
+
 
     private MenuAssetManager() {
         backgrounds = new Image[]{
             new Image(new Texture(Gdx.files.internal("Backgrounds/Background1.jpg"))),
             new Image(new Texture(Gdx.files.internal("Backgrounds/Background2.png"))),
+            new Image(new Texture(Gdx.files.internal("Backgrounds/Background5.jpg"))),
         };
 
         sounds = new Sound[]{
@@ -90,12 +96,17 @@ public class MenuAssetManager {
         randomPasswordButton = new TextButton("  Generate  \n  Password  ", smallButtonStyle);
         forgetPasswordButton = new TextButton("  Forget  \n  Password  ", smallButtonStyle);
         findButton = new TextButton(" Find ", smallButtonStyle);
+        changeUsernameButton = new TextButton("  Change  ", smallButtonStyle);
+        changeNicknameButton = new TextButton("  Change  ", smallButtonStyle);
+        changePasswordButton = new TextButton("  Change  ", smallButtonStyle);
+        changeEmailButton = new TextButton("  Change  ", smallButtonStyle);
     }
 
     public Image getBackgroundImage(MenuTypes type) {
         switch (type) {
             case MainMenu -> {return backgrounds[0];}
             case SignupMenu,LoginMenu -> {return backgrounds[1];}
+            case ProfileMenu -> {return backgrounds[2];}
             default -> {return null;}
         }
     }
@@ -114,6 +125,10 @@ public class MenuAssetManager {
                 case "find" -> {return findButton;}
                 case "random" -> {return randomPasswordButton;}
                 case "forget" -> {return forgetPasswordButton;}
+                case "changeUsername" -> {return changeUsernameButton;}
+                case "changeNickname" -> {return changeNicknameButton;}
+                case "changePassword" -> {return changePasswordButton;}
+                case "changeEmail" -> {return changeEmailButton;}
                 default -> {return null;}
             }
     }

@@ -115,13 +115,19 @@ public class UserDAO {
     }
 
     public void updateUserById(String username, User updatedUser) throws SQLException {
-        String sql = "UPDATE users SET password = ?, email = ?, nickname = ?, gender = ? WHERE username = ?";
+        String sql = """
+        UPDATE users
+        SET password = ?, email = ?, nickname = ?, gender = ?, securityQuestion = ?, answer = ?
+        WHERE username = ?
+    """;
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, updatedUser.getPassword());
             stmt.setString(2, updatedUser.getEmail());
             stmt.setString(3, updatedUser.getNickname());
             stmt.setString(4, updatedUser.getGender());
-            stmt.setString(5, username);
+            stmt.setString(5, updatedUser.getSecurityQuestion().getQuestion());
+            stmt.setString(6, updatedUser.getAnswer());
+            stmt.setString(7, username);
             stmt.executeUpdate();
         }
     }

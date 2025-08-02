@@ -10,8 +10,6 @@ import com.yourgame.model.Result;
 import com.yourgame.model.enums.Gender;
 import com.yourgame.model.enums.SecurityQuestion;
 
-import javax.accessibility.AccessibleContext;
-
 public class SignupMenuView extends MenuBaseScreen {
 
     private final SignUpMenuController controller;
