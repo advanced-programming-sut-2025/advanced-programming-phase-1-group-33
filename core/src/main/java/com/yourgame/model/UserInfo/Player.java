@@ -24,11 +24,10 @@ import com.yourgame.model.enums.Gender;
 import com.yourgame.model.notification.Notification;
 
 public class Player {
+
     private String username;
-    private String hashedPassword;
     private String nickname;
 
-    private String email;
     private Gender gender;
     private int energy;
     private Tool currentTool;

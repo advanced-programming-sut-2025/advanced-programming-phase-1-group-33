@@ -41,7 +41,10 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.yourgame.Main;
 import com.yourgame.Graphics.GameAssets.HUDManager;
 import com.yourgame.Graphics.GameAssets.clockUIAssetManager;
+import com.yourgame.controller.PlayerController;
 import com.yourgame.model.App;
+import com.yourgame.model.GameState;
+import com.yourgame.model.Player;
 import com.yourgame.Graphics.GameAssetManager;
 import com.yourgame.Graphics.MenuAssetManager;
 
@@ -51,15 +54,19 @@ public class GameScreen implements Screen {
     private Main game;
     private GameAssetManager assetManager;
 
+    private GameState gameState;
+    private Player player;
+    private PlayerController playerController;
+
     // ==HUD==
     private Stage HUDStage;
     private clockUIAssetManager clockUI;
     private ImageButton clockImg;
     private Image cursor;
     private HUDManager hudManager;
-    private int currentEnergyPhase; 
+    private int currentEnergyPhase;
     private HUDManager.weatherTypeButton currentWeather; // New variable for dynamic weather
-    private HUDManager.seasonTypeButton currentSeason; 
+    private HUDManager.seasonTypeButton currentSeason;
     // ==GAME==
     private TiledMap map;
     private OrthogonalTiledMapRenderer mapRenderer;
@@ -90,10 +97,9 @@ public class GameScreen implements Screen {
         this.HUDStage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(HUDStage);
         this.hudManager = new HUDManager(HUDStage, clockUI, assetManager);
-        this.currentEnergyPhase = 4; 
+        this.currentEnergyPhase = 4;
         this.currentWeather = HUDManager.weatherTypeButton.Sunny; // Initial weather
-        this.currentSeason = HUDManager.seasonTypeButton.Spring; 
-
+        this.currentSeason = HUDManager.seasonTypeButton.Spring;
 
         cursor = MenuAssetManager.getInstance().getCursor();
         cursor.setSize(32, 45);
@@ -124,65 +130,56 @@ public class GameScreen implements Screen {
         map = new TmxMapLoader().load("Game/Map/standard-farm.tmx");
         mapRenderer = new OrthogonalTiledMapRenderer(map);
 
-        // Set up camera
-        camera = new OrthographicCamera();
-        camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        camera.zoom = 0.4f;
+        // 1. Create the Player model first, giving it a spawn position
+        Vector2 spawnPoint = getSpawnPoint("spawn-right");
+        player = new Player("YourUsername", "YourNickname", spawnPoint);
 
-        // Load player sprite sheet
-        playerSheet = new Texture("Game/Player/player.png");
-        TextureRegion[][] frames = TextureRegion.split(playerSheet, PLAYER_WIDTH, PLAYER_HEIGHT);
+        // 2. Create the GameState, passing it the player and map
+        this.gameState = new GameState(player, map);
 
-        walkAnimations = new Animation[4]; // down, left, right, up
+        // 3. Create the PlayerController, passing it the player model
+        playerController = new PlayerController(player);
 
-        walkAnimations[0] = new Animation<>(0.2f, frames[0]); // Down
-        walkAnimations[1] = new Animation<>(0.2f, frames[1]); // Right
-        walkAnimations[2] = new Animation<>(0.2f, frames[2]); // Up
-        walkAnimations[3] = new Animation<>(0.2f, frames[3]); // Left
-
-        stateTime = 0f;
-        playerPosition = getSpawnPoint("spawn-right");
-        playerVelocity = new Vector2(0, 0);
-        direction = 0;
-
-        batch = new SpriteBatch();
+        // ... rest of your show() method (camera setup, etc.)
+        // Make sure the camera starts by looking at the player's position
+        camera.position.set(player.getPosition().x, player.getPosition().y, 0);
     }
 
     @Override
     public void render(float delta) {
-        handleInput(delta);
-        handleHudUpdates(); 
+        // --- LOGIC UPDATES ---
+        // 1. Update the player controller (handles input, movement, collision)
+        MapObjects collisionObjects = map.getLayers().get("Collisions").getObjects();
+        playerController.update(delta, collisionObjects);
 
+        // 2. Update the game state (handles time, day cycle)
+        boolean newDay = gameState.getGameTime().update(delta);
+        if (newDay) {
+            gameState.prepareForNextDay();
+            // You can add a fade-out/fade-in effect here for the new day transition
+        }
 
-        // Clear screen
+        // --- RENDERING ---
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        camera.position.set(playerPosition.x, playerPosition.y, 0);
+        // Update camera to follow the player
+        camera.position.set(player.getPosition().x, player.getPosition().y, 0);
         clampCameraToMap();
         camera.update();
 
-        // Update animation timer
-        stateTime += delta;
-
-        // Render map
+        // Render the map
         mapRenderer.setView(camera);
         mapRenderer.render();
 
-        // Render player
+        // Render the player on top of the map
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
-        TextureRegion currentFrame = walkAnimations[direction].getKeyFrame(stateTime, true);
-        batch.draw(currentFrame, playerPosition.x, playerPosition.y);
+        playerController.render(batch);
         batch.end();
 
-        HUDStage.act(Math.min(delta, 1 / 30f));
-
-        float mouseX = Gdx.input.getX();
-        float mouseY = Gdx.graphics.getHeight() - Gdx.input.getY();
-        cursor.setPosition(mouseX - cursor.getWidth() / 2f, mouseY - cursor.getHeight() / 2f);
-        cursor.toFront();
-
-        HUDStage.draw();
+        // Render the HUD on top of everything
+        // ... (your existing HUDStage.act() and HUDStage.draw() calls)
+        handleHudUpdates(); // You can now get data from gameState to update the HUD
     }
 
     @Override
@@ -249,24 +246,35 @@ public class GameScreen implements Screen {
         }
     }
 
-        /**
+    /**
      * New method to handle key presses for selecting an inventory slot.
      */
     private void handleInventoryInput() {
-        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_1)) hudManager.selectSlot(0);
-        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_2)) hudManager.selectSlot(1);
-        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_3)) hudManager.selectSlot(2);
-        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_4)) hudManager.selectSlot(3);
-        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_5)) hudManager.selectSlot(4);
-        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_6)) hudManager.selectSlot(5);
-        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_7)) hudManager.selectSlot(6);
-        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_8)) hudManager.selectSlot(7);
-        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_9)) hudManager.selectSlot(8);
-        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_0)) hudManager.selectSlot(9);
-        if (Gdx.input.isKeyJustPressed(Input.Keys.MINUS)) hudManager.selectSlot(10);
-        if (Gdx.input.isKeyJustPressed(Input.Keys.EQUALS)) hudManager.selectSlot(11);
+        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_1))
+            hudManager.selectSlot(0);
+        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_2))
+            hudManager.selectSlot(1);
+        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_3))
+            hudManager.selectSlot(2);
+        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_4))
+            hudManager.selectSlot(3);
+        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_5))
+            hudManager.selectSlot(4);
+        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_6))
+            hudManager.selectSlot(5);
+        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_7))
+            hudManager.selectSlot(6);
+        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_8))
+            hudManager.selectSlot(7);
+        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_9))
+            hudManager.selectSlot(8);
+        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_0))
+            hudManager.selectSlot(9);
+        if (Gdx.input.isKeyJustPressed(Input.Keys.MINUS))
+            hudManager.selectSlot(10);
+        if (Gdx.input.isKeyJustPressed(Input.Keys.EQUALS))
+            hudManager.selectSlot(11);
     }
-
 
     private void handleInput(float delta) {
         playerVelocity.setZero();
@@ -367,7 +375,7 @@ public class GameScreen implements Screen {
         return new Vector2(250, 250);
     }
 
-        /**
+    /**
      * Handles updates to the HUD elements based on game state or input.
      * This is a good practice to separate HUD logic from main rendering.
      */
