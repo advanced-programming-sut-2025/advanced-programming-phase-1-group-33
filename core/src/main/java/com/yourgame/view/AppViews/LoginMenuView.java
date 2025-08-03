@@ -31,7 +31,7 @@ public class LoginMenuView extends MenuBaseScreen{
     public void show() {
         Table table = new Table();
         table.setFillParent(true);
-        table.setPosition(-170,20);
+        table.center();
 
         usernameField.setMessageText(" Please enter your username...");
         passwordField.setMessageText(" Please enter your password...");
@@ -47,31 +47,25 @@ public class LoginMenuView extends MenuBaseScreen{
         table.add(usernameField).width(600).padBottom(20);
         table.row();
         table.add(passwordLabel).padRight(20).padBottom(20);
-        table.add(passwordField).width(600).padBottom(20);
+        table.add(passwordField).width(600).padRight(20).padBottom(20);
+        table.add(forgetButton).padBottom(20);
         table.row();
-        stage.addActor(table);
-        backButton.setPosition(1250,170);
-        backButton.setHeight(90);
-        stage.addActor(backButton);
-        loginButton.setPosition(1250,270);
-        loginButton.setHeight(90);
-        stage.addActor(loginButton );
-
-        forgetButton.setPosition(1210,470);
-        stage.addActor(forgetButton);
-
+        table.add(securityAnswerLabel).padRight(20).padBottom(20);
         securityAnswerField.setVisible(false);
-        securityAnswerField.setWidth(600);
-        securityAnswerField.setPosition(570,450);
-        stage.addActor(securityAnswerField);
-
+        table.add(securityAnswerField).width(600).padBottom(20);
         securityAnswerLabel.setVisible(false);
-        securityAnswerLabel.setPosition(410,460);
-        stage.addActor(securityAnswerLabel);
-
+        table.add(findButton).padBottom(20);
         findButton.setVisible(false);
-        findButton.setPosition(1240,440);
-        stage.addActor(findButton);
+        stage.addActor(table);
+
+        Table buttonTable = new Table();
+        buttonTable.setFillParent(true);
+        buttonTable.bottom().right();
+        buttonTable.add(loginButton).padRight(20).padBottom(5).width(200).height(90);
+        buttonTable.row();
+        buttonTable.add(backButton).padRight(20).padBottom(20).width(200).height(90);
+        stage.addActor(buttonTable);
+
 
         backButton.addListener(new ChangeListener() {
             @Override
@@ -85,7 +79,7 @@ public class LoginMenuView extends MenuBaseScreen{
             public void changed(ChangeEvent event, Actor actor){
                 Result result = controller.handleLoginButton();
                 playMenuSFX("popUp");
-                showMessage(result.message(), skin_Nz, -70, 50);
+                showMessage(result.message(), skin_Nz, 0, 20);
             }
         });
 
@@ -96,7 +90,7 @@ public class LoginMenuView extends MenuBaseScreen{
                 if(!isForgetPasswordButtonClicked) {
                     playMenuSFX("popUp");
                     if (!result.success()) {
-                        showMessage(result.message(), skin_Nz, -70, 50);
+                        showMessage(result.message(), skin_Nz, 0, 20);
                     }
                     else {
                         isForgetPasswordButtonClicked = true;
@@ -104,8 +98,6 @@ public class LoginMenuView extends MenuBaseScreen{
                         securityAnswerField.setVisible(true);
                         securityAnswerLabel.setVisible(true);
                         findButton.setVisible(true);
-                        table.setPosition(table.getX(), table.getY() + 150);
-                        forgetButton.setPosition(forgetButton.getX(), forgetButton.getY() + 150);
                         securityAnswerField.setMessageText(result.message());
                     }
                 }
@@ -118,10 +110,10 @@ public class LoginMenuView extends MenuBaseScreen{
                 playMenuSFX("popUP");
                 Result result = controller.handleFindButton(securityAnswerField.getText());
                 if(!result.success()){
-                    showMessage(result.message(), skin_Nz, -70, 20);
+                    showMessage(result.message(), skin_Nz, 0, 20);
                 }
                 else{
-                    showMessage("Your Password is : " + result.message(), skin_Nz, -70, 20);
+                    showMessage("Your Password is : " + result.message(), skin_Nz, 0, 20);
                     passwordField.setText(result.message());
                 }
             }

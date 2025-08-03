@@ -57,12 +57,13 @@ public class SignupMenuView extends MenuBaseScreen {
         Gdx.input.setInputProcessor(stage);
         Table firstTable = new Table();
         firstTable.setFillParent(true);
-        firstTable.setPosition(-170,20);
+        firstTable.center();
         firstTable.add(usernameLabel).padRight(20).padBottom(10);
         firstTable.add(usernameField).width(600).padBottom(10);
         firstTable.row();
         firstTable.add(passwordLabel).padRight(20).padBottom(10);
         firstTable.add(passwordField).width(600).padBottom(10);
+        firstTable.add(randomPasswordButton).padLeft(20);
         firstTable.row();
         firstTable.add(passwordConfirmLabel).padRight(20).padBottom(10);
         firstTable.add(confirmPasswordField).width(600).padBottom(10);
@@ -78,7 +79,8 @@ public class SignupMenuView extends MenuBaseScreen {
         stage.addActor(firstTable);
 
         Table secondTable = new Table();
-        secondTable.setPosition(800,275);
+        secondTable.setFillParent(true);
+        secondTable.center().padTop(500).padRight(170);
         secondTable.add(securityQuestionLabel).padRight(20);
         secondTable.add(securityQuestionSelectBox).width(600);
         secondTable.row();
@@ -87,15 +89,14 @@ public class SignupMenuView extends MenuBaseScreen {
         secondTable.setVisible(false);
         stage.addActor(secondTable);
 
-        backButton.setPosition(1265,170);
-        backButton.setHeight(90);
-        stage.addActor(backButton);
-        submitButton.setPosition(1250,260);
-        submitButton.setHeight(90);
-        stage.addActor(submitButton);
-        randomPasswordButton.setPosition(1210,580);
-        randomPasswordButton.setHeight(90);
-        stage.addActor(randomPasswordButton);
+        Table buttonTable = new Table();
+        buttonTable.setFillParent(true);
+        buttonTable.bottom().right();
+        buttonTable.add(submitButton).padRight(20).padBottom(5).width(250).height(90);
+        buttonTable.row();
+        buttonTable.add(backButton).padRight(20).padBottom(20).width(200).height(90);
+        stage.addActor(buttonTable);
+
 
         backButton.addListener(new ChangeListener() {
             @Override
@@ -115,7 +116,7 @@ public class SignupMenuView extends MenuBaseScreen {
                             showMessageWithButton(result.message(),result.message().substring(54,result.message().length()));
                         }
                         else {
-                            showMessage(result.message(), skin_Nz, -70, 5);
+                            showMessage(result.message(), skin_Nz, 0, 5);
                         }
                     }
                     else {
@@ -125,14 +126,13 @@ public class SignupMenuView extends MenuBaseScreen {
                         emailField.setDisabled(true);
                         nicknameField.setDisabled(true);
                         firstTable.setPosition(firstTable.getX(),firstTable.getY() + 100);
-                        randomPasswordButton.setPosition(randomPasswordButton.getX(),randomPasswordButton.getY() + 100);
                         secondTable.setVisible(true);
                     }
                 }
                 else{
                     result = controller.handleSecurityAnswer();
                     if(!result.success()){
-                        showMessage(result.message(), skin_Nz, -70, 5);
+                        showMessage(result.message(), skin_Nz, 0, 5);
                     }
                 }
             }
@@ -145,7 +145,7 @@ public class SignupMenuView extends MenuBaseScreen {
                 String generatedPassword = controller.generateRandomPassword();
                 passwordField.setText(generatedPassword);
                 confirmPasswordField.setText(generatedPassword);
-                showMessage("Your password is : " + passwordField.getText() , skin_Nz, -70, 50);
+                showMessage("Your password is : " + passwordField.getText() , skin_Nz, 0, 50);
             }
         });
 
@@ -195,6 +195,6 @@ public class SignupMenuView extends MenuBaseScreen {
         dialog.button("Accept", true);
         dialog.button("Reject", false);
         dialog.show(stage);
-        dialog.setPosition((stage.getWidth()-dialog.getWidth())/2f + 20, 80);
+        dialog.setPosition((stage.getWidth()-dialog.getWidth())/2f , 20);
     }
 }

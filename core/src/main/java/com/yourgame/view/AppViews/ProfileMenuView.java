@@ -53,8 +53,7 @@ public class ProfileMenuView extends MenuBaseScreen {
 
         Table table = new Table();
         table.setFillParent(true);
-        table.center();
-        table.setPosition(table.getX() - 70 , table.getY() + 160);
+        table.center().padBottom(200);
         table.add(changeUsernameLabel).padBottom(5);
         table.add(usernameField).width(600).padBottom(5);
         table.add(changeUsernameButton).height(80).padBottom(5).padLeft(20);
@@ -73,25 +72,28 @@ public class ProfileMenuView extends MenuBaseScreen {
         table.add(changeNicknameLabel).padBottom(5);
         table.add(nicknameField).width(600).padBottom(5);
         table.add(changeNicknameButton).height(80).padBottom(5).padLeft(20);
+        table.row();
         stage.addActor(table);
 
         Table detailTable = new Table();
-        detailTable.setPosition(600,270);
+        detailTable.setFillParent(true);
+        detailTable.center().padTop(450).padRight(100);
         detailTable.add(currentUsernameLabel).left().padBottom(5).row();
         detailTable.add(currentEmailLabel).left().padBottom(5).row();
         detailTable.add(currentNicknameLabel).left().padBottom(5).row();
         detailTable.add(genderLabel).left().padBottom(5).row();
         stage.addActor(detailTable);
 
-        backButton.setPosition(1235,170);
-        backButton.setHeight(90);
-        stage.addActor(backButton);
-        submitButton.setPosition(1220,260);
-        submitButton.setHeight(90);
-        stage.addActor(submitButton);
-        avatarButton.setPosition(1215,350);
-        avatarButton.setHeight(90);
-        stage.addActor(avatarButton);
+        Table buttonTable = new Table();
+        buttonTable.setFillParent(true);
+        buttonTable.bottom().right();
+        buttonTable.add(avatarButton).padRight(20).padBottom(5).width(250).height(90);
+        buttonTable.row();
+        buttonTable.add(submitButton).padRight(20).padBottom(5).width(250).height(90);
+        buttonTable.row();
+        buttonTable.add(backButton).padRight(20).padBottom(20).width(200).height(90);
+        stage.addActor(buttonTable);
+
 
         changeUsernameButton.addListener(new ChangeListener() {
             @Override
@@ -101,7 +103,7 @@ public class ProfileMenuView extends MenuBaseScreen {
                     currentUsernameLabel.setText("- Your current username : " + App.getCurrentUser().getUsername());
                     usernameField.setText("");
                 }
-                showMessage(result.message(),skin_Nz,-70,50);
+                showMessage(result.message(),skin_Nz,0,20);
             }
         });
 
@@ -113,7 +115,7 @@ public class ProfileMenuView extends MenuBaseScreen {
                     newPasswordField.setText("");
                     oldPasswordField.setText("");
                 }
-                showMessage(result.message(),skin_Nz,-70,50);
+                showMessage(result.message(),skin_Nz,0,20);
             }
         });
 
@@ -125,7 +127,7 @@ public class ProfileMenuView extends MenuBaseScreen {
                     currentEmailLabel.setText("- Your current email : " + App.getCurrentUser().getEmail());
                     emailField.setText("");
                 }
-                showMessage(result.message(),skin_Nz,-70,50);
+                showMessage(result.message(),skin_Nz,0,20);
 
             }
         });
@@ -138,7 +140,7 @@ public class ProfileMenuView extends MenuBaseScreen {
                     currentNicknameLabel.setText("- Your current nickname : " + App.getCurrentUser().getNickname());
                     nicknameField.setText("");
                 }
-                showMessage(result.message(),skin_Nz,-70,50);
+                showMessage(result.message(),skin_Nz,0,20);
             }
         });
 
