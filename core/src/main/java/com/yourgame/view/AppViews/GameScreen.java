@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.MapObjects;
@@ -15,17 +16,21 @@ import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-import com.badlogic.gdx.math.Polygon;
-import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Shape2D;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.yourgame.Graphics.MenuAssetManager;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.yourgame.Graphics.Map.MapData;
+import com.yourgame.Graphics.Map.MapManager;
 import com.yourgame.Main;
 import com.yourgame.Graphics.GameAssets.HUDManager;
 import com.yourgame.Graphics.GameAssets.clockUIAssetManager;
 import com.yourgame.Graphics.GameAssetManager;
 import com.yourgame.model.App;
+import com.yourgame.Graphics.MenuAssetManager;
+import com.yourgame.model.UserInfo.Player;
+
+import java.util.List;
 
 public class GameScreen extends GameBaseScreen {
     private final Main game;
@@ -40,7 +45,10 @@ public class GameScreen extends GameBaseScreen {
     private HUDManager.seasonTypeButton currentSeason;
 
     // ==GAME==
-    private TiledMap map;
+    private MapManager mapManager;
+    private Player player;
+    private MapData currentMap;
+
     private OrthogonalTiledMapRenderer mapRenderer;
     private OrthographicCamera camera;
 
@@ -59,7 +67,12 @@ public class GameScreen extends GameBaseScreen {
         this.hudManager = new HUDManager(HUDStage, clockUI, assetManager);
         this.currentEnergyPhase = 4;
         this.currentWeather = HUDManager.weatherTypeButton.Sunny; // Initial weather
-        this.currentSeason = HUDManager.seasonTypeButton.Spring;
+        this.currentSeason = HUDManager.seasonTypeButton.Spring; 
+
+        // Load background music and SFX directly here or through AssetManager
+        backgroundMusic = MenuAssetManager.getInstance().getMusic(); // Or
+                                                                     // Gdx.audio.newMusic(Gdx.files.internal("path/to/your/game_music.mp3"));
+        clickSound = MenuAssetManager.getInstance().getSounds("click"); // Example SFX
 
     }
 
@@ -70,10 +83,6 @@ public class GameScreen extends GameBaseScreen {
         // Initialize HUD with initial states
         hudManager.createHUD(currentWeather, currentSeason, currentEnergyPhase);
 
-        // Load Tiled map
-        map = new TmxMapLoader().load("Game/Map/standard-farm.tmx");
-        mapRenderer = new OrthogonalTiledMapRenderer(map);
-
         // Set up camera
         camera = new OrthographicCamera();
         camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -83,15 +92,19 @@ public class GameScreen extends GameBaseScreen {
         walkAnimations = MenuAssetManager.getInstance().getWalkAnimation(App.getCurrentUser().getAvatar());
 
         stateTime = 0f;
-        playerPosition = getSpawnPoint("spawn-right");
-        playerVelocity = new Vector2(0, 0);
+        playerPosition = currentMap.getSpawnPoint();
+        playerVelocity = new Vector2();
         direction = 0;
     }
 
     @Override
     public void render(float delta) {
         handleInput(delta);
+        checkForTeleport();
         handleHudUpdates();
+
+        // Clear screen
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         camera.position.set(playerPosition.x, playerPosition.y, 0);
         clampCameraToMap();
@@ -124,7 +137,6 @@ public class GameScreen extends GameBaseScreen {
     @Override
     public void dispose() {
         assetManager.dispose();
-        map.dispose();
         mapRenderer.dispose();
         batch.dispose();
     }
@@ -170,54 +182,89 @@ public class GameScreen extends GameBaseScreen {
             direction = 0;
         }
 
-        // If idle, pause animation
         if (playerVelocity.isZero()) {
-            stateTime = 0f;
-        }
+            stateTime = 0f; // Pause animation when idle
+        } else {
+            // Store original position
+            Vector2 oldPos = new Vector2(playerPosition);
 
-        Vector2 newPos = new Vector2(playerPosition).add(playerVelocity.x * delta, playerVelocity.y * delta);
-        if (!isTileBlocked(newPos.x, newPos.y)) {
-            playerPosition.set(newPos);
+            // Move on X axis and check for collisions
+            playerPosition.x += playerVelocity.x * delta;
+            if (isBlocked(playerPosition.x, oldPos.y)) {
+                playerPosition.x = oldPos.x; // Revert if collision
+            }
+
+            // Move on Y axis and check for collisions
+            playerPosition.y += playerVelocity.y * delta;
+            if (isBlocked(playerPosition.x, playerPosition.y)) {
+                playerPosition.y = oldPos.y; // Revert if collision
+            }
         }
 
         // --- Inventory Selection Input ---
         handleInventoryInput();
     }
 
-    boolean isTileBlocked(float x, float y) {
-        MapObjects objects = map.getLayers().get("Collisions").getObjects();
+    private boolean isBlocked(float x, float y) {
+        // Define a smaller collision box at the player's feet for better feel
+        float boxX = x + 2; // small horizontal offset
+        float boxY = y;
+        float boxWidth = MenuAssetManager.PLAYER_WIDTH - 4;
+        float boxHeight = MenuAssetManager.PLAYER_HEIGHT / 2f; // Check only the lower half of the player
 
-        for (MapObject object : objects) {
-            Shape2D shape;
-
-            if (object instanceof RectangleMapObject) {
-                shape = ((RectangleMapObject) object).getRectangle();
-            } else if (object instanceof PolygonMapObject) {
-                Polygon poly = ((PolygonMapObject) object).getPolygon();
-                if (poly.contains(x, y))
-                    return true;
-                continue;
-            } else {
-                continue;
-            }
-
-            if (shape instanceof Rectangle) {
-                Rectangle rect = (Rectangle) shape;
-                Rectangle playerBounds = new Rectangle(x, y, MenuAssetManager.PLAYER_WIDTH, MenuAssetManager.PLAYER_HEIGHT);
-                if (playerBounds.overlaps(rect)) {
-                    return true;
-                }
-            }
-        }
+        // Check the four corners of the player's collision box
+        if (currentMap.isTileBlocked(boxX, boxY)) return true;
+        if (currentMap.isTileBlocked(boxX + boxWidth, boxY)) return true;
+        if (currentMap.isTileBlocked(boxX, boxY + boxHeight)) return true;
+        if (currentMap.isTileBlocked(boxX + boxWidth, boxY + boxHeight)) return true;
 
         return false;
     }
 
+    private void changeMap(MapData newMap) {
+        if (newMap == null) return;
+
+        this.currentMap = newMap;
+        this.mapRenderer.setMap(currentMap.getTiledMap());
+        this.playerPosition.set(currentMap.getSpawnPoint());
+        // Reset camera to new position immediately
+        camera.position.set(playerPosition.x, playerPosition.y, 0);
+        clampCameraToMap();
+        camera.update();
+    }
+
+    private void checkForTeleport() {
+        // Check the tile at the center of the player's feet
+        float checkX = playerPosition.x + (MenuAssetManager.PLAYER_WIDTH / 2f);
+        float checkY = playerPosition.y + 4; // A bit above the bottom edge
+
+        String destination = currentMap.getTeleportDestination(checkX, checkY);
+
+        if (destination != null) {
+            MapData newMap;
+            // Find the correct map from the MapManager based on the destination string
+            if (destination.equalsIgnoreCase("town")) {
+                newMap = mapManager.getTown();
+            } else if (destination.contains("farm")) {
+                newMap = mapManager.getFarm(player);
+            } else if (destination.contains("house")) {
+                newMap = mapManager.getHouse(player);
+            } else {
+                // If it's not a special map, assume it's a building
+                newMap = mapManager.getBuilding(destination);
+            }
+
+            if (newMap != null) {
+                changeMap(newMap);
+            }
+        }
+    }
+
     private void clampCameraToMap() {
-        float tileWidth = map.getProperties().get("tilewidth", Integer.class);
-        float tileHeight = map.getProperties().get("tileheight", Integer.class);
-        float mapWidth = map.getProperties().get("width", Integer.class) * tileWidth;
-        float mapHeight = map.getProperties().get("height", Integer.class) * tileHeight;
+        float tileWidth = currentMap.getTiledMap().getProperties().get("tilewidth", Integer.class);
+        float tileHeight = currentMap.getTiledMap().getProperties().get("tileheight", Integer.class);
+        float mapWidth = currentMap.getTiledMap().getProperties().get("width", Integer.class) * tileWidth;
+        float mapHeight = currentMap.getTiledMap().getProperties().get("height", Integer.class) * tileHeight;
 
         float cameraHalfWidth = camera.viewportWidth * camera.zoom * 0.5f;
         float cameraHalfHeight = camera.viewportHeight * camera.zoom * 0.5f;
@@ -231,22 +278,7 @@ public class GameScreen extends GameBaseScreen {
         camera.position.y = Math.min(mapHeight - cameraHalfHeight, camera.position.y);
     }
 
-    private Vector2 getSpawnPoint(String spawnName) {
-        MapObject object = map.getLayers().get("SpawnPoints").getObjects().get(spawnName);
-
-        if (object instanceof PointMapObject) {
-            return ((PointMapObject) object).getPoint();
-        }
-
-        if (object instanceof RectangleMapObject) {
-            Rectangle rect = ((RectangleMapObject) object).getRectangle();
-            return new Vector2(rect.x, rect.y);
-        }
-
-        return new Vector2(250, 250);
-    }
-
-        /**
+     /**
      * Handles updates to the HUD elements based on game state or input.
      * This is a good practice to separate HUD logic from main rendering.
      */
