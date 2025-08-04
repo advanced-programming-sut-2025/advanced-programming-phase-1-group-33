@@ -27,7 +27,7 @@ public class UserDAO {
                 gender TEXT NOT NULL,
                 securityQuestion TEXT NOT NULL,
                 answer TEXT NOT NULL
-            )
+                )
         """;
         try (Statement stmt = connection.createStatement()) {
             stmt.execute(sql);

@@ -50,6 +50,7 @@ public class MenuAssetManager {
     private final TextButton changePasswordButton;
     private final TextButton changeEmailButton;
     private final TextButton changeAvatarButton;
+    private final TextButton stayLoggedInButton;
 
     private MenuAssetManager() {
         backgrounds = new Image[]{
@@ -102,6 +103,7 @@ public class MenuAssetManager {
         changeNicknameButton = new TextButton("  Change  ", smallButtonStyle);
         changePasswordButton = new TextButton("  Change  ", smallButtonStyle);
         changeEmailButton = new TextButton("  Change  ", smallButtonStyle);
+        stayLoggedInButton = new TextButton("  Disabled  ", smallButtonStyle);
     }
 
     public Image getBackgroundImage(MenuTypes type) {
@@ -133,6 +135,7 @@ public class MenuAssetManager {
                 case "changePassword" -> {return changePasswordButton;}
                 case "changeEmail" -> {return changeEmailButton;}
                 case "avatar" -> {return changeAvatarButton;}
+                case "stayLoggedIn" -> {return stayLoggedInButton;}
                 default -> {return null;}
             }
     }

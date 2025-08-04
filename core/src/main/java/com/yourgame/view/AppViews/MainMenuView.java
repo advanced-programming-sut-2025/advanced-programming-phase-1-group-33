@@ -62,6 +62,8 @@ public class MainMenuView extends MenuBaseScreen {
         if(App.isIsMusicMuted())
             redLine.setVisible(true);
 
+        controller.handleIsThereALoggedInUser();
+
         Table table = new Table();
         if(App.getCurrentUser() == null){
             table.setFillParent(true);

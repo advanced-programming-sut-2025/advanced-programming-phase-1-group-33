@@ -21,6 +21,7 @@ public class LoginMenuView extends MenuBaseScreen{
     final TextButton findButton = MenuAssetManager.getInstance().getButtons("find");
 
     boolean isForgetPasswordButtonClicked = false;
+    boolean isStayLoggedInActive = false;
 
     public LoginMenuView() {
         controller = new LoginMenuController();
@@ -38,10 +39,13 @@ public class LoginMenuView extends MenuBaseScreen{
 
         final Label usernameLabel = new Label("Username ", skin_Nz, "Bold");
         final Label passwordLabel = new Label("Password ", skin_Nz, "Bold");
+        final Label stayLoggedInLabel = new Label("StayLoggedIn? ",skin_Nz, "Bold");
 
         final TextButton backButton = MenuAssetManager.getInstance().getButtons("back");
         final TextButton loginButton = MenuAssetManager.getInstance().getButtons("login2");
         final TextButton forgetButton = MenuAssetManager.getInstance().getButtons("forget");
+        final TextButton stayLoggedInButton = MenuAssetManager.getInstance().getButtons("stayLoggedIn");
+
 
         table.add(usernameLabel).padRight(20).padBottom(20);
         table.add(usernameField).width(600).padBottom(20);
@@ -49,6 +53,9 @@ public class LoginMenuView extends MenuBaseScreen{
         table.add(passwordLabel).padRight(20).padBottom(20);
         table.add(passwordField).width(600).padRight(20).padBottom(20);
         table.add(forgetButton).padBottom(20);
+        table.row();
+        table.add(stayLoggedInLabel).padRight(20).padBottom(20);
+        table.add(stayLoggedInButton).width(200).padBottom(20);
         table.row();
         table.add(securityAnswerLabel).padRight(20).padBottom(20);
         securityAnswerField.setVisible(false);
@@ -77,7 +84,7 @@ public class LoginMenuView extends MenuBaseScreen{
         loginButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor){
-                Result result = controller.handleLoginButton();
+                Result result = controller.handleLoginButton(isStayLoggedInActive);
                 playMenuSFX("popUp");
                 showMessage(result.message(), skin_Nz, 0, 20);
             }
@@ -116,6 +123,17 @@ public class LoginMenuView extends MenuBaseScreen{
                     showMessage("Your Password is : " + result.message(), skin_Nz, 0, 20);
                     passwordField.setText(result.message());
                 }
+            }
+        });
+
+        stayLoggedInButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor){
+                if(isStayLoggedInActive) {
+                    stayLoggedInButton.setText("Disabled");}
+                else {
+                    stayLoggedInButton.setText("Enabled");}
+                isStayLoggedInActive = !isStayLoggedInActive;
             }
         });
 

@@ -3,12 +3,14 @@ package com.yourgame.controller.AppController;
 import com.yourgame.Main;
 import com.yourgame.model.App;
 import com.yourgame.model.Result;
+import com.yourgame.model.UserInfo.HandleStayedLoggedIn;
 import com.yourgame.model.UserInfo.User;
 import com.yourgame.model.enums.Commands.MenuTypes;
 import com.yourgame.persistence.UserDAO;
 import com.yourgame.view.AppViews.LoginMenuView;
 import com.yourgame.view.AppViews.MainMenuView;
 
+import java.io.IOException;
 import java.sql.SQLException;
 
 public class LoginMenuController extends Controller {
@@ -25,7 +27,7 @@ public class LoginMenuController extends Controller {
         Main.getMain().setScreen(new MainMenuView());
     }
 
-    public Result handleLoginButton(){
+    public Result handleLoginButton(boolean isStayLoggedInActive){
         String username = view.getUserInfo("username");
         String password = view.getUserInfo("password");
 
@@ -39,6 +41,13 @@ public class LoginMenuController extends Controller {
             if(user == null)
                 return new Result(false, "User not found!");
             else{
+                if(isStayLoggedInActive) {
+                    try {
+                        HandleStayedLoggedIn.getInstance().addUser(user);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
                 App.setCurrentUser(user);
                 App.setCurrentMenu(MenuTypes.MainMenu);
                 Main.getMain().getScreen().dispose();

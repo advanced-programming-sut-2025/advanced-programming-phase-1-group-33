@@ -31,7 +31,11 @@ java {
 dependencies {
   implementation "com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion"
   implementation "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
-      implementation "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-desktop"
+  implementation "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-desktop"
+
+  implementation 'com.fasterxml.jackson.core:jackson-databind:2.17.0'
+  implementation 'com.fasterxml.jackson.core:jackson-core:2.17.0'
+  implementation 'com.fasterxml.jackson.core:jackson-annotations:2.17.0'
 
   implementation project(':core')
 
