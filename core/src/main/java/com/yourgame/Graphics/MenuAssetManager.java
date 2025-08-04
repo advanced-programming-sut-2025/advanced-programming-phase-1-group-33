@@ -34,6 +34,7 @@ public class MenuAssetManager {
     private final Music music;
     private final Image cursor;
     private final Image redLine;
+    private final Image redArrow;
 
     private final TextButton signupButton;
     private final TextButton loginButton;
@@ -75,6 +76,12 @@ public class MenuAssetManager {
             new Image(new Texture(Gdx.files.internal("Textures/Avatars/SamPortrait.png"))),
         };
 
+        avatarMenuAvatars[0].setScale(3f);
+        avatarMenuAvatars[1].setScale(3.2f);
+        for(int i=2; i<=9; i++){
+            avatarMenuAvatars[i].setScale(3f);
+        }
+
         sounds = new Sound[]{
             Gdx.audio.newSound(Gdx.files.internal("Sounds/UI Click 36.wav")),
             Gdx.audio.newSound(Gdx.files.internal("Sounds/Pop (3).wav"))
@@ -84,6 +91,7 @@ public class MenuAssetManager {
 
         cursor = new Image(new Texture(Gdx.files.internal("Textures/Cursor.png")));
         redLine = new Image(new Texture(Gdx.files.internal("Textures/RedLine.png")));
+        redArrow = new Image(new Texture(Gdx.files.internal("Textures/RedArrow.png")));
 
         TextButton.TextButtonStyle strawberryButtonStyle = skin_3_Nz.get("Strawberry", TextButton.TextButtonStyle.class);
         strawberryButtonStyle.font = skin_1_Sepehr.getFont("loading");
@@ -196,4 +204,5 @@ public class MenuAssetManager {
 
     public Image getCursor() {return cursor;}
     public Image getRedLine() {return redLine;}
+    public Image getRedArrow() {return redArrow;}
 }

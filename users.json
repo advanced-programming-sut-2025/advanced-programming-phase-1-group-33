@@ -1,9 +1,9 @@
 [ {
   "answer" : "pizza",
+  "username" : "Amirhos",
+  "password" : "@Nik1001Am!",
+  "nickname" : "Amir0___o",
   "email" : "amirhmoll84@gmail.com",
   "gender" : "Male",
-  "nickname" : "Amir0___o",
-  "password" : "@Nik1001Am!",
-  "username" : "Amirhos",
   "securityQuestion" : "FavoriteFood"
 } ]
