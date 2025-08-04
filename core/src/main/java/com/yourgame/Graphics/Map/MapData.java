@@ -105,11 +105,13 @@ public class MapData {
                 int endY   = (int)((rect.y + rect.height) / TileData.TILE_SIZE);
 
                 String destination = object.getProperties().get("dest", String.class);
+                String spawnName = object.getProperties().get("spawnName", String.class);
+                Teleport teleport = new Teleport(destination, spawnName);
 
                 for (int x = startX; x <= endX; x++) {
                     for (int y = startY; y <= endY; y++) {
                         if (inBounds(x, y, mapWidth, mapHeight)) {
-                            tileStates[x][y].setTeleportDestination(destination);
+                            tileStates[x][y].setTeleport(teleport);
                         }
                     }
                 }
@@ -129,14 +131,18 @@ public class MapData {
         return tileStates[x][y];
     }
 
-    public Vector2 getSpawnPoint() {
-        MapObject object = spawnPoints.get("spawn");
+    public Vector2 getSpawnPoint(String spawnName) {
+        MapObject object = spawnPoints.get(spawnName);
 
         if (object instanceof PointMapObject) {
             return ((PointMapObject) object).getPoint();
         }
 
         return new Vector2();
+    }
+
+    public Vector2 getSpawnPoint() {
+        return getSpawnPoint("spawn");
     }
 
     public boolean isTileBlocked(float worldX, float worldY) {
@@ -149,13 +155,13 @@ public class MapData {
         return tileStates[tileX][tileY].blocked();
     }
 
-    public String getTeleportDestination(float worldX, float worldY) {
+    public Teleport getTeleport(float worldX, float worldY) {
         int tileX = (int)(worldX / TileData.TILE_SIZE);
         int tileY = (int)(worldY / TileData.TILE_SIZE);
 
         if (tileX < 0 || tileY < 0 || tileX >= tileStates.length || tileY >= tileStates[0].length)
             return null;
 
-        return tileStates[tileX][tileY].getTeleportDestination();
+        return tileStates[tileX][tileY].getTeleport();
     }
 }

@@ -43,7 +43,8 @@
  <objectgroup id="4" name="Teleporters">
   <object id="11" name="teleport" x="64" y="288" width="32" height="16">
    <properties>
-    <property name="dest" value="town"/>
+    <property name="dest" value="farm"/>
+    <property name="spawnName" value="house-spawn"/>
    </properties>
   </object>
  </objectgroup>

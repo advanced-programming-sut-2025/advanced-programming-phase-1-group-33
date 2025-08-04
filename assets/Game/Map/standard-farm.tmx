@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="100" height="90" tilewidth="16" tileheight="16" infinite="0" nextlayerid="8" nextobjectid="38">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="100" height="90" tilewidth="16" tileheight="16" infinite="0" nextlayerid="8" nextobjectid="41">
  <tileset firstgid="1" source="outdoors-spring.tsx"/>
  <tileset firstgid="4265" source="farm-buildings.tsx"/>
  <tileset firstgid="5690" source="pet-bowls.tsx"/>
@@ -198,27 +198,39 @@
   <object id="35" name="teleport-right" x="1594.33" y="559.667" width="13.3333" height="145">
    <properties>
     <property name="dest" value="town"/>
+    <property name="spawnName" value="spawn"/>
    </properties>
   </object>
   <object id="36" name="teleport-down" x="752.666" y="1434.66" width="95.3333" height="12.3334">
    <properties>
     <property name="dest" value="town"/>
+    <property name="spawnName" value="spawn"/>
    </properties>
   </object>
   <object id="37" name="teleport-up" x="768.333" y="-7" width="79.3333" height="12.6666">
    <properties>
     <property name="dest" value="town"/>
+    <property name="spawnName" value="spawn"/>
+   </properties>
+  </object>
+  <object id="40" name="house" x="1280" y="496" width="48" height="48">
+   <properties>
+    <property name="dest" value="house"/>
+    <property name="spawnName" value="spawn"/>
    </properties>
   </object>
  </objectgroup>
  <objectgroup id="5" name="SpawnPoints">
-  <object id="8" name="spawn" x="1538.33" y="671">
+  <object id="8" name="spawn" x="1553" y="671.667">
    <point/>
   </object>
   <object id="10" name="spawn-up" x="806.667" y="59.6667">
    <point/>
   </object>
   <object id="11" name="spawn-bottom" x="800.333" y="1392.33">
+   <point/>
+  </object>
+  <object id="38" name="house-spawn" x="1304.33" y="574.667">
    <point/>
   </object>
  </objectgroup>
@@ -233,9 +245,6 @@
   <object id="21" name="fence-8" x="848" y="0" width="16" height="304"/>
   <object id="22" name="fence-9" x="752" y="0" width="16" height="192"/>
   <object id="23" name="fence-10" x="706.667" y="160" width="45.3333" height="24.6667"/>
-  <object id="24" name="house" x="1361" y="560.231">
-   <polygon points="0,0 -15.6078,1.0191 -15.6078,-15.2865 -47.8304,-15.2865 -47.8304,-20.6367 -62.9348,-20.8915 -63.9417,-15.2865 -112.276,-15.2865 -144.498,-15.2865 -144.247,-88.9162 -98.1783,-89.6806 -98.1783,-94.776 -95.4091,-95.0308 -62.683,-128.661 -63.9417,-145.731 -47.8304,-145.731 -47.8304,-129.425 -27.6913,-129.935 -27.4396,-105.222 -15.8596,-94.2665 -14.0974,-95.2856 -14.3491,-84.8398 0.251739,-84.3303"/>
-  </object>
   <object id="25" name="small-lake" x="1374.27" y="829.873">
    <polygon points="0,0 3.1506,-0.261546 3.6757,-5.49247 10.2395,-10.9849 16.0156,-13.6004 52.7726,-14.1235 58.2861,-10.9849 63.2746,-6.01556 64.0622,-1.04618 68.0005,-0.523092 68.0005,2.61546 75.3519,4.96938 77.9774,8.89257 81.128,13.6004 83.2284,16.739 84.8037,20.1391 91.3675,20.9237 94.7806,25.37 97.9312,30.0778 98.7189,35.0472 95.8308,38.1857 95.8308,47.6014 98.9814,51.0015 96.3559,53.8785 96.6185,63.5557 97.6687,64.3404 97.9312,68.7866 95.5683,69.8328 84.5412,83.4332 80.3404,83.4332 67.738,99.126 63.5371,100.434 51.1973,115.865 43.5833,111.68 33.3439,116.127 25.4674,111.68 17.0658,115.603 -30.4558,68.2636 -31.7686,30.3394 -24.6797,22.493 -17.0658,16.739 -8.13906,6.8002"/>
   </object>
@@ -251,6 +260,9 @@
    <polygon points="0,0 -496,1.33333 -496,-30.6667 -528,-30.6667 -528,1.33333 -576,1.33333 -581,12.3333 -623.333,53.3333 -624,326 -576.667,326.667 -576,593.333 -624.333,626.667 -624,1030.33 -513,1031.33 -512,1108 -417,1108.67 -415,1121.33 -414.667,1158 46.6667,1158.67 48,1265.33 -704,1265.33 -704,-174.667 48,-174.667 48,-14.6667 0,-14.6667"/>
   </object>
   <object id="31" name="green-house" x="416" y="296.75" width="112" height="99.5"/>
-  <object id="32" name="shipping-bin" x="1392.5" y="532.25" width="32.5" height="28"/>
+  <object id="32" name="shipping-bin" x="1393.5" y="530.583" width="28.8333" height="28"/>
+  <object id="39" name="house" x="1360" y="560">
+   <polygon points="0,0 0,-96 -16,-96 -16,-128 -48,-128 -48,-144 -64,-144 -64,-128 -96,-96 -144,-96 -144,-16 -64,-16 -64,-64 -48,-64 -48,-16 -16,-16 -16,0"/>
+  </object>
  </objectgroup>
 </map>

@@ -61,6 +61,7 @@
   <object id="21" name="teleport" x="192" y="448" width="48" height="16">
    <properties>
     <property name="dest" value="town"/>
+    <property name="spawnName" value="joja-spawn"/>
    </properties>
   </object>
  </objectgroup>

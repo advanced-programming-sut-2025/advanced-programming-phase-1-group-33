@@ -22,6 +22,7 @@ import com.yourgame.Graphics.MenuAssetManager;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.yourgame.Graphics.Map.MapData;
 import com.yourgame.Graphics.Map.MapManager;
+import com.yourgame.Graphics.Map.Teleport;
 import com.yourgame.Main;
 import com.yourgame.Graphics.GameAssets.HUDManager;
 import com.yourgame.Graphics.GameAssets.clockUIAssetManager;
@@ -221,12 +222,12 @@ public class GameScreen extends GameBaseScreen {
         return false;
     }
 
-    private void changeMap(MapData newMap) {
+    private void changeMap(MapData newMap, String spawnName) {
         if (newMap == null) return;
 
         this.currentMap = newMap;
         this.mapRenderer.setMap(currentMap.getTiledMap());
-        this.playerPosition.set(currentMap.getSpawnPoint());
+        this.playerPosition.set(currentMap.getSpawnPoint(spawnName));
         // Reset camera to new position immediately
         camera.position.set(playerPosition.x, playerPosition.y, 0);
         clampCameraToMap();
@@ -238,25 +239,24 @@ public class GameScreen extends GameBaseScreen {
         float checkX = playerPosition.x + (MenuAssetManager.PLAYER_WIDTH / 2f);
         float checkY = playerPosition.y + 4; // A bit above the bottom edge
 
-        String destination = currentMap.getTeleportDestination(checkX, checkY);
+        Teleport teleport = currentMap.getTeleport(checkX, checkY);
+        if (teleport == null) return;
 
-        if (destination != null) {
-            MapData newMap;
-            // Find the correct map from the MapManager based on the destination string
-            if (destination.equalsIgnoreCase("town")) {
-                newMap = mapManager.getTown();
-            } else if (destination.contains("farm")) {
-                newMap = mapManager.getFarm(player);
-            } else if (destination.contains("house")) {
-                newMap = mapManager.getHouse(player);
-            } else {
-                // If it's not a special map, assume it's a building
-                newMap = mapManager.getBuilding(destination);
-            }
+        // Find the correct map from the MapManager based on the destination string
+        MapData newMap;
+        if (teleport.dest().equalsIgnoreCase("town")) {
+            newMap = mapManager.getTown();
+        } else if (teleport.dest().contains("farm")) {
+            newMap = mapManager.getFarm(player);
+        } else if (teleport.dest().contains("house")) {
+            newMap = mapManager.getHouse(player);
+        } else {
+            // If it's not a special map, assume it's a building
+            newMap = mapManager.getBuilding(teleport.dest());
+        }
 
-            if (newMap != null) {
-                changeMap(newMap);
-            }
+        if (newMap != null) {
+            changeMap(newMap, teleport.spawnName());
         }
     }
 

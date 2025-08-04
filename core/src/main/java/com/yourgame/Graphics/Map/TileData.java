@@ -4,11 +4,11 @@ public class TileData {
     public static final int TILE_SIZE = 16;
 
     private boolean blocked;
-    private String teleportDestination; // Null for non-teleportable tiles
+    private Teleport teleport; // Null for non-teleportable tiles
 
     public TileData() {
         blocked = false;
-        teleportDestination = null;
+        teleport = null;
     }
 
     public void setBlocked(boolean blocked) {
@@ -19,11 +19,11 @@ public class TileData {
         return blocked;
     }
 
-    public void setTeleportDestination(String destination) {
-        teleportDestination = destination;
+    public void setTeleport(Teleport teleport) {
+        this.teleport = teleport;
     }
 
-    public String getTeleportDestination() {
-        return teleportDestination;
+    public Teleport getTeleport() {
+        return teleport;
     }
 }

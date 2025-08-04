@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="22" height="18" tilewidth="16" tileheight="16" infinite="0" nextlayerid="5" nextobjectid="17">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="22" height="18" tilewidth="16" tileheight="16" infinite="0" nextlayerid="5" nextobjectid="24">
  <tileset firstgid="1" source="pierre-general-store.tsx"/>
  <layer id="1" name="Base" width="22" height="18">
   <data encoding="csv">
@@ -24,35 +24,28 @@
 </data>
  </layer>
  <objectgroup id="2" name="Collisions">
-  <object id="1" name="shelf-1" x="151.25" y="66.75" width="95.25" height="37"/>
-  <object id="2" name="shelf-2" x="152.25" y="115.25" width="94.25" height="37.5"/>
-  <object id="3" name="shelf-3" x="152" y="165" width="30.75" height="98.75"/>
-  <object id="4" name="shelf-4" x="215" y="166" width="31.25" height="97.75"/>
-  <object id="5" name="box" x="278.5" y="219.25" width="31.75" height="28.75"/>
-  <object id="6" name="left-stuffs" x="6.75" y="57.75" width="16.5" height="142.25"/>
-  <object id="7" name="vegetables" x="40.25" y="118.75" width="31.75" height="34.25"/>
-  <object id="8" name="bottom-stuffs" x="7.5" y="201" width="65" height="24"/>
-  <object id="10" name="walls" x="107.25" y="258.5">
-   <polygon points="0,0 0.25,-30 26,-30.25 25.25,17.75 231.75,16 239.75,9.25 235,-11.75 219.25,-26.25 160,-26 160,-186.25 140,-202.25 137.75,-208 -85.25,-205.75 -103.5,-189.5 -102,-37.75 -94.25,-30.5 -25.5,-30 -25.25,-0.25 -2.75,0.25 -3.25,29.75 -107.25,29.5 -107.25,-258.5 244.75,-258.5 244.75,29.5 -2.5,29.5 -2.25,0.25"/>
+  <object id="16" name="walls" x="80" y="256">
+   <polygon points="0,0 0,-32 -16,-32 -16,-48 -48,-48 -48,-112 -16,-112 -16,-144 -64,-144 -64,-176 -64,-192 -64,-208 176,-208 176,-192 192,-192 192,-80 192,-16 208,-16 240,-16 240,0 224,16 48,16 48,-32 32,-32 32,0 32,32 272,32 272,-256 -80,-256 -80,32 0,32"/>
   </object>
-  <object id="11" name="pots" x="342.25" y="244.75">
-   <polygon points="0,0 -7.5,-9 -14,-6.25 -14,8.25 -29.75,14.75 -30.25,27.5 -6.5,28 0.5,22.75"/>
-  </object>
-  <object id="13" name="pierre-desk" x="39.25" y="68.25">
-   <polygon points="0,0 81.5,-0.5 81,-28.25 95,-28.5 95.25,19.25 0,19"/>
-  </object>
- </objectgroup>
- <objectgroup id="3" name="SpawnPoints">
-  <object id="15" name="spawn" x="95.5227" y="215.364">
-   <point/>
+  <object id="17" name="shelf-1" x="160" y="176" width="16" height="80"/>
+  <object id="18" name="shelf-2" x="224" y="176" width="16" height="80"/>
+  <object id="19" name="shelf-3" x="160" y="112" width="80" height="32"/>
+  <object id="20" name="shelf-4" x="160" y="64" width="80" height="32"/>
+  <object id="21" name="desk" x="128" y="48">
+   <polygon points="0,0 0,32 -80,32 -80,16 -16,16 -16,0"/>
   </object>
  </objectgroup>
  <objectgroup id="4" name="Teleporters">
-  <object id="16" name="teleport" x="80" y="240" width="32" height="16">
+  <object id="23" name="teleport" x="80" y="256" width="32" height="16">
    <properties>
     <property name="dest" value="town"/>
     <property name="spawnName" value="pierre-spawn"/>
    </properties>
+  </object>
+ </objectgroup>
+ <objectgroup id="3" name="SpawnPoints">
+  <object id="15" name="spawn" x="94.5" y="224.5">
+   <point/>
   </object>
  </objectgroup>
 </map>
