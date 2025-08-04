@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.yourgame.model.enums.Avatar;
 import com.yourgame.model.enums.Commands.MenuTypes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,6 +29,7 @@ public class MenuAssetManager {
     Skin skin_3_Nz = new Skin(Gdx.files.internal("Skin/Skin_3(Nz)/NzSkin.json"), new TextureAtlas(Gdx.files.internal("Skin/Skin_3(Nz)/NzSkin.atlas")));
 
     private final Image[] backgrounds;
+    private final Image[] avatarMenuAvatars;
     private final Sound[] sounds;
     private final Music music;
     private final Image cursor;
@@ -58,6 +60,19 @@ public class MenuAssetManager {
             new Image(new Texture(Gdx.files.internal("Backgrounds/Background2.png"))),
             new Image(new Texture(Gdx.files.internal("Backgrounds/Background5.jpg"))),
             new Image(new Texture(Gdx.files.internal("Backgrounds/Background4.jpg"))),
+        };
+
+        avatarMenuAvatars = new Image[]{
+            new Image(new Texture(Gdx.files.internal("Textures/Avatars/AbigailCharacter.png"))),
+            new Image(new Texture(Gdx.files.internal("Textures/Avatars/AbigailPortrait.png"))),
+            new Image(new Texture(Gdx.files.internal("Textures/Avatars/HarveyCharacter.png"))),
+            new Image(new Texture(Gdx.files.internal("Textures/Avatars/HarveyPortrait.png"))),
+            new Image(new Texture(Gdx.files.internal("Textures/Avatars/PierreCharacter.png"))),
+            new Image(new Texture(Gdx.files.internal("Textures/Avatars/PierrePortrait.png"))),
+            new Image(new Texture(Gdx.files.internal("Textures/Avatars/RobinCharacter.png"))),
+            new Image(new Texture(Gdx.files.internal("Textures/Avatars/RobinPortrait.png"))),
+            new Image(new Texture(Gdx.files.internal("Textures/Avatars/SamCharacter.png"))),
+            new Image(new Texture(Gdx.files.internal("Textures/Avatars/SamPortrait.png"))),
         };
 
         sounds = new Sound[]{
@@ -112,6 +127,26 @@ public class MenuAssetManager {
             case SignupMenu,LoginMenu -> {return backgrounds[1];}
             case ProfileMenu -> {return backgrounds[2];}
             case AvatarMenu -> {return backgrounds[3];}
+            default -> {return null;}
+        }
+    }
+    public Image getAvatarPortrait(Avatar avatar) {
+        switch (avatar){
+            case Abigail -> {return avatarMenuAvatars[1];}
+            case Harvey -> {return avatarMenuAvatars[3];}
+            case Pierre -> {return avatarMenuAvatars[5];}
+            case Robin -> {return avatarMenuAvatars[7];}
+            case Sam -> {return avatarMenuAvatars[9];}
+            default -> {return null;}
+        }
+    }
+    public Image getAvatarCharacter(Avatar avatar) {
+        switch (avatar){
+            case Abigail -> {return avatarMenuAvatars[0];}
+            case Harvey -> {return avatarMenuAvatars[2];}
+            case Pierre -> {return avatarMenuAvatars[4];}
+            case Robin -> {return avatarMenuAvatars[6];}
+            case Sam -> {return avatarMenuAvatars[8];}
             default -> {return null;}
         }
     }
