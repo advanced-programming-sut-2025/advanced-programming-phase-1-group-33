@@ -1,15 +1,18 @@
 package com.yourgame.view.AppViews;
 
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.yourgame.Graphics.MenuAssetManager;
 import com.yourgame.controller.AppController.AvatarMenuController;
+import com.yourgame.model.App;
 import com.yourgame.model.enums.Avatar;
 
 public class AvatarMenuView extends MenuBaseScreen{
     private final AvatarMenuController controller;
 
     Skin skin_Nz = MenuAssetManager.getInstance().getSkin(3);
-    final Image redArrow = MenuAssetManager.getInstance().getRedArrow();
+    private SelectBox<String> avatarChooseSelectBox;
 
     public AvatarMenuView(){
         controller = new AvatarMenuController();
@@ -19,7 +22,6 @@ public class AvatarMenuView extends MenuBaseScreen{
     public void show(){
 
         final TextButton backButton = MenuAssetManager.getInstance().getButtons("back");
-        final TextButton submitButton = MenuAssetManager.getInstance().getButtons("submit");
 
         final Image SamCharacter = MenuAssetManager.getInstance().getAvatarCharacter(Avatar.Sam);
         final Image HarveyCharacter = MenuAssetManager.getInstance().getAvatarCharacter(Avatar.Harvey);
@@ -39,6 +41,10 @@ public class AvatarMenuView extends MenuBaseScreen{
         final Label PierreLabel = new Label("Pierre", skin_Nz, "Bold");
         final Label AbigailLabel = new Label("Abigail", skin_Nz, "Bold");
 
+        avatarChooseSelectBox = new SelectBox<>(skin_Nz);
+        avatarChooseSelectBox.setItems("Sam", "Harvey", "Robin", "Pierre", "Abigail");
+        avatarChooseSelectBox.setSelected(App.getCurrentUser().getAvatar().getName());
+        final Label currentAvatar = new Label("Current Avatar : ", skin_Nz, "Bold");
 
         Table table = new Table();
         table.setFillParent(true);
@@ -63,13 +69,33 @@ public class AvatarMenuView extends MenuBaseScreen{
         table.row();
         stage.addActor(table);
 
+        Table chooseTable = new Table();
+        chooseTable.setFillParent(true);
+        chooseTable.center().padTop(600);
+        chooseTable.add(currentAvatar).padRight(100);
+        chooseTable.add(avatarChooseSelectBox);
+        stage.addActor(chooseTable);
+
         Table buttonTable = new Table();
         buttonTable.setFillParent(true);
         buttonTable.bottom().right();
-        buttonTable.add(submitButton).padRight(20).padBottom(5).width(250).height(90);
-        buttonTable.row();
         buttonTable.add(backButton).padRight(20).padBottom(20).width(200).height(90);
         stage.addActor(buttonTable);
+
+        avatarChooseSelectBox.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                playMenuSFX("avatarChoose");
+                controller.handleAvatarChoose(avatarChooseSelectBox.getSelected());
+            }
+        });
+
+        backButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                controller.handleBackButton();
+            }
+        });
     }
 
     @Override

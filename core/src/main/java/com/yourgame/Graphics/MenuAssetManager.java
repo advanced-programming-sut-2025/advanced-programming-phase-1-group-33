@@ -34,7 +34,6 @@ public class MenuAssetManager {
     private final Music music;
     private final Image cursor;
     private final Image redLine;
-    private final Image redArrow;
 
     private final TextButton signupButton;
     private final TextButton loginButton;
@@ -84,14 +83,14 @@ public class MenuAssetManager {
 
         sounds = new Sound[]{
             Gdx.audio.newSound(Gdx.files.internal("Sounds/UI Click 36.wav")),
-            Gdx.audio.newSound(Gdx.files.internal("Sounds/Pop (3).wav"))
+            Gdx.audio.newSound(Gdx.files.internal("Sounds/Pop (3).wav")),
+            Gdx.audio.newSound(Gdx.files.internal("sounds/AvatarChoose.mp3"))
         };
 
         music = Gdx.audio.newMusic(Gdx.files.internal("Musics/01. Stardew Valley Overture.mp3"));
 
         cursor = new Image(new Texture(Gdx.files.internal("Textures/Cursor.png")));
         redLine = new Image(new Texture(Gdx.files.internal("Textures/RedLine.png")));
-        redArrow = new Image(new Texture(Gdx.files.internal("Textures/RedArrow.png")));
 
         TextButton.TextButtonStyle strawberryButtonStyle = skin_3_Nz.get("Strawberry", TextButton.TextButtonStyle.class);
         strawberryButtonStyle.font = skin_1_Sepehr.getFont("loading");
@@ -189,6 +188,7 @@ public class MenuAssetManager {
         switch(name) {
             case "click" -> {return sounds[0];}
             case "popUp" -> {return sounds[1];}
+            case "avatarChoose" -> {return sounds[2];}
             default -> {return null;}
         }
     }
@@ -204,5 +204,4 @@ public class MenuAssetManager {
 
     public Image getCursor() {return cursor;}
     public Image getRedLine() {return redLine;}
-    public Image getRedArrow() {return redArrow;}
 }

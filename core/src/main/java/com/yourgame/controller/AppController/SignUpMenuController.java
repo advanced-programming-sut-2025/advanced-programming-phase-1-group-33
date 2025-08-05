@@ -5,6 +5,7 @@ import com.yourgame.model.App;
 import com.yourgame.model.Result;
 import com.yourgame.model.UserInfo.User;
 import com.yourgame.model.UserInfo.UserInfoChecking;
+import com.yourgame.model.enums.Avatar;
 import com.yourgame.model.enums.Commands.MenuTypes;
 import com.yourgame.model.enums.Gender;
 import com.yourgame.model.enums.SecurityQuestion;
@@ -106,7 +107,7 @@ public class SignUpMenuController {
             return new Result(false, "Security answer field is empty!");}
 
         UserDAO userDAO = App.getUserDAO();
-        User newUser = new User(username,password,email,nickname,gender,question,answer);
+        User newUser = new User(username,password,email,nickname,gender,question,answer, Avatar.Abigail);
 
         // Save to database
         try {
