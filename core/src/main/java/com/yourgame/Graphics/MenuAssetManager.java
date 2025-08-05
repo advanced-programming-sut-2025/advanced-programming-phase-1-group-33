@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.yourgame.model.enums.Avatar;
 import com.yourgame.model.enums.Commands.MenuTypes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,6 +29,7 @@ public class MenuAssetManager {
     Skin skin_3_Nz = new Skin(Gdx.files.internal("Skin/Skin_3(Nz)/NzSkin.json"), new TextureAtlas(Gdx.files.internal("Skin/Skin_3(Nz)/NzSkin.atlas")));
 
     private final Image[] backgrounds;
+    private final Image[] avatarMenuAvatars;
     private final Sound[] sounds;
     private final Music music;
     private final Image cursor;
@@ -59,6 +61,25 @@ public class MenuAssetManager {
             new Image(new Texture(Gdx.files.internal("Backgrounds/Background5.jpg"))),
             new Image(new Texture(Gdx.files.internal("Backgrounds/Background4.jpg"))),
         };
+
+        avatarMenuAvatars = new Image[]{
+            new Image(new Texture(Gdx.files.internal("Textures/Avatars/AbigailCharacter.png"))),
+            new Image(new Texture(Gdx.files.internal("Textures/Avatars/AbigailPortrait.png"))),
+            new Image(new Texture(Gdx.files.internal("Textures/Avatars/HarveyCharacter.png"))),
+            new Image(new Texture(Gdx.files.internal("Textures/Avatars/HarveyPortrait.png"))),
+            new Image(new Texture(Gdx.files.internal("Textures/Avatars/PierreCharacter.png"))),
+            new Image(new Texture(Gdx.files.internal("Textures/Avatars/PierrePortrait.png"))),
+            new Image(new Texture(Gdx.files.internal("Textures/Avatars/RobinCharacter.png"))),
+            new Image(new Texture(Gdx.files.internal("Textures/Avatars/RobinPortrait.png"))),
+            new Image(new Texture(Gdx.files.internal("Textures/Avatars/SamCharacter.png"))),
+            new Image(new Texture(Gdx.files.internal("Textures/Avatars/SamPortrait.png"))),
+        };
+
+        avatarMenuAvatars[0].setScale(3f);
+        avatarMenuAvatars[1].setScale(3.2f);
+        for(int i=2; i<=9; i++){
+            avatarMenuAvatars[i].setScale(3f);
+        }
 
         sounds = new Sound[]{
             Gdx.audio.newSound(Gdx.files.internal("Sounds/UI Click 36.wav")),
@@ -116,29 +137,49 @@ public class MenuAssetManager {
             default -> {return null;}
         }
     }
+    public Image getAvatarPortrait(Avatar avatar) {
+        switch (avatar){
+            case Abigail -> {return avatarMenuAvatars[1];}
+            case Harvey -> {return avatarMenuAvatars[3];}
+            case Pierre -> {return avatarMenuAvatars[5];}
+            case Robin -> {return avatarMenuAvatars[7];}
+            case Sam -> {return avatarMenuAvatars[9];}
+            default -> {return null;}
+        }
+    }
+    public Image getAvatarCharacter(Avatar avatar) {
+        switch (avatar){
+            case Abigail -> {return avatarMenuAvatars[0];}
+            case Harvey -> {return avatarMenuAvatars[2];}
+            case Pierre -> {return avatarMenuAvatars[4];}
+            case Robin -> {return avatarMenuAvatars[6];}
+            case Sam -> {return avatarMenuAvatars[8];}
+            default -> {return null;}
+        }
+    }
 
     public TextButton getButtons(String name) {
-            switch (name) {
-                case "signup" -> {return signupButton;}
-                case "login" -> {return loginButton;}
-                case "login2" -> {return login2Button;}
-                case "logout" -> {return logoutButton;}
-                case "exit" -> {return exitButton;}
-                case "play" -> {return playButton;}
-                case "profile" -> {return profileButton;}
-                case "back" -> {return backButton;}
-                case "submit" -> {return submitButton;}
-                case "find" -> {return findButton;}
-                case "random" -> {return randomPasswordButton;}
-                case "forget" -> {return forgetPasswordButton;}
-                case "changeUsername" -> {return changeUsernameButton;}
-                case "changeNickname" -> {return changeNicknameButton;}
-                case "changePassword" -> {return changePasswordButton;}
-                case "changeEmail" -> {return changeEmailButton;}
-                case "avatar" -> {return changeAvatarButton;}
-                case "stayLoggedIn" -> {return stayLoggedInButton;}
-                default -> {return null;}
-            }
+        switch (name) {
+            case "signup" -> {return signupButton;}
+            case "login" -> {return loginButton;}
+            case "login2" -> {return login2Button;}
+            case "logout" -> {return logoutButton;}
+            case "exit" -> {return exitButton;}
+            case "play" -> {return playButton;}
+            case "profile" -> {return profileButton;}
+            case "back" -> {return backButton;}
+            case "submit" -> {return submitButton;}
+            case "find" -> {return findButton;}
+            case "random" -> {return randomPasswordButton;}
+            case "forget" -> {return forgetPasswordButton;}
+            case "changeUsername" -> {return changeUsernameButton;}
+            case "changeNickname" -> {return changeNicknameButton;}
+            case "changePassword" -> {return changePasswordButton;}
+            case "changeEmail" -> {return changeEmailButton;}
+            case "avatar" -> {return changeAvatarButton;}
+            case "stayLoggedIn" -> {return stayLoggedInButton;}
+            default -> {return null;}
+        }
     }
 
     public Music getMusic() {return music;}

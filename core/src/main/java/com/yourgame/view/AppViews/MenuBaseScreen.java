@@ -23,6 +23,7 @@ public abstract class MenuBaseScreen implements Screen {
     //protected Skin skin;
     protected Sound clickSound;
     protected Sound popUpSound;
+    protected Sound avatarChooseSound;
     protected Music backgroundMusic;
     protected static boolean isMusicInitialized = false;
 
@@ -45,7 +46,7 @@ public abstract class MenuBaseScreen implements Screen {
         //setting up the common SFXs for menus
         clickSound = MenuAssetManager.getInstance().getSounds("click");
         popUpSound = MenuAssetManager.getInstance().getSounds("popUp");
-        //avatarChoose = Gdx.audio.newSound(Gdx.files.internal("sounds/AvatarChoose.mp3"));
+        avatarChooseSound = MenuAssetManager.getInstance().getSounds("avatarChoose");
 
         //Setting custom cursor for the game
         cursor = MenuAssetManager.getInstance().getCursor();
@@ -108,6 +109,7 @@ public abstract class MenuBaseScreen implements Screen {
         switch (string) {
             case "click" -> clickSound.play();
             case "popUp" -> popUpSound.play();
+            case "avatarChoose" -> avatarChooseSound.play();
         }
     }
 

@@ -5,6 +5,7 @@ import com.yourgame.model.App;
 import com.yourgame.model.Result;
 import com.yourgame.model.UserInfo.User;
 import com.yourgame.model.UserInfo.UserInfoChecking;
+import com.yourgame.model.enums.Avatar;
 import com.yourgame.model.enums.Commands.MenuTypes;
 import com.yourgame.model.enums.Gender;
 import com.yourgame.model.enums.SecurityQuestion;
@@ -83,7 +84,7 @@ public class SignUpMenuController {
                     username = username + NUMBERS.charAt(random.nextInt(NUMBERS.length()));
                     if(userDAO.loadUser(username) == null)
                         return new Result(false, "There exists a user with that username!\n"
-                        + "you can use : " + username);
+                            + "you can use : " + username);
                 }
             } catch (SQLException e){
                 throw new RuntimeException(e);
@@ -106,7 +107,7 @@ public class SignUpMenuController {
             return new Result(false, "Security answer field is empty!");}
 
         UserDAO userDAO = App.getUserDAO();
-        User newUser = new User(username,password,email,nickname,gender,question,answer);
+        User newUser = new User(username,password,email,nickname,gender,question,answer, Avatar.Abigail);
 
         // Save to database
         try {

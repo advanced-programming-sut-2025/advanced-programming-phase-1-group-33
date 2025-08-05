@@ -54,8 +54,8 @@ public class UserDAO {
             stmt.setString(4, user.getNickname());
             stmt.setString(5, user.getGender());
             stmt.setString(6,user.getSecurityQuestion().getQuestion());
-            stmt.setString(7,user.getAvatar().getName());
-            stmt.setString(8,user.getAnswer());
+            stmt.setString(7,user.getAnswer());
+            stmt.setString(8,user.getAvatar().getName());
             stmt.executeUpdate();
         }
     }
@@ -67,14 +67,14 @@ public class UserDAO {
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
                 return new User(
-                        rs.getString("username"),
-                        rs.getString("password"),
-                        rs.getString("email"),
-                        rs.getString("nickname"),
-                        Gender.valueOf(rs.getString("gender")),
-                        SecurityQuestion.getQuestion(rs.getString("securityQuestion")),
-                        rs.getString("answer"),
-                        Avatar.fromString(rs.getString("avatar")));
+                    rs.getString("username"),
+                    rs.getString("password"),
+                    rs.getString("email"),
+                    rs.getString("nickname"),
+                    Gender.valueOf(rs.getString("gender")),
+                    SecurityQuestion.getQuestion(rs.getString("securityQuestion")),
+                    rs.getString("answer"),
+                    Avatar.fromString(rs.getString("avatar")));
             }
         }
         return null;
@@ -84,17 +84,17 @@ public class UserDAO {
         List<User> users = new ArrayList<>();
         String sql = "SELECT * FROM users";
         try (Statement stmt = connection.createStatement();
-                ResultSet rs = stmt.executeQuery(sql)) {
+             ResultSet rs = stmt.executeQuery(sql)) {
             while (rs.next()) {
                 users.add(new User(
-                        rs.getString("username"),
-                        rs.getString("password"),
-                        rs.getString("email"),
-                        rs.getString("nickname"),
-                        Gender.valueOf(rs.getString("gender")),
-                        SecurityQuestion.valueOf(rs.getString("security question")),
-                        rs.getString("answer"),
-                        Avatar.fromString(rs.getString("avatar"))));
+                    rs.getString("username"),
+                    rs.getString("password"),
+                    rs.getString("email"),
+                    rs.getString("nickname"),
+                    Gender.valueOf(rs.getString("gender")),
+                    SecurityQuestion.valueOf(rs.getString("security question")),
+                    rs.getString("answer"),
+                    Avatar.fromString(rs.getString("avatar"))));
             }
         }
         return users;
@@ -107,14 +107,14 @@ public class UserDAO {
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
                 return new User(
-                        rs.getString("username"),
-                        rs.getString("password"),
-                        rs.getString("email"),
-                        rs.getString("nickname"),
-                        Gender.valueOf(rs.getString("gender")),
-                        SecurityQuestion.valueOf(rs.getString("security question")),
-                        rs.getString("answer"),
-                        Avatar.fromString(rs.getString("avatar")));
+                    rs.getString("username"),
+                    rs.getString("password"),
+                    rs.getString("email"),
+                    rs.getString("nickname"),
+                    Gender.valueOf(rs.getString("gender")),
+                    SecurityQuestion.valueOf(rs.getString("security question")),
+                    rs.getString("answer"),
+                    Avatar.fromString(rs.getString("avatar")));
             }
         }
         return null;
@@ -123,7 +123,7 @@ public class UserDAO {
     public void updateUserById(String username, User updatedUser) throws SQLException {
         String sql = """
         UPDATE users
-        SET password = ?, email = ?, nickname = ?, gender = ?, securityQuestion = ?, answer = ?
+        SET password = ?, email = ?, nickname = ?, gender = ?, securityQuestion = ?, answer = ?, avatar = ?
         WHERE username = ?
     """;
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
@@ -133,7 +133,8 @@ public class UserDAO {
             stmt.setString(4, updatedUser.getGender());
             stmt.setString(5, updatedUser.getSecurityQuestion().getQuestion());
             stmt.setString(6, updatedUser.getAnswer());
-            stmt.setString(7, username);
+            stmt.setString(7, updatedUser.getAvatar().getName());
+            stmt.setString(8, username);
             stmt.executeUpdate();
         }
     }
