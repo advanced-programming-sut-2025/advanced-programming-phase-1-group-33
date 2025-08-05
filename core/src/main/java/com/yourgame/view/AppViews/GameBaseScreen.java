@@ -56,7 +56,6 @@ public abstract class GameBaseScreen implements Screen {
     @Override
     public void render(float delta) {
         // Clear screen
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         HUDStage.act(Math.min(delta, 1 / 30f));
 
         float mouseX = Gdx.input.getX();

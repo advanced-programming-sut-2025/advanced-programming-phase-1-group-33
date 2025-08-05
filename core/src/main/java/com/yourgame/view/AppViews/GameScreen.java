@@ -2,6 +2,7 @@ package com.yourgame.view.AppViews;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -89,7 +90,6 @@ public class GameScreen extends GameBaseScreen {
 
     @Override
     public void render(float delta) {
-        super.render(delta);
         handleInput(delta);
         handleHudUpdates();
 
@@ -101,6 +101,7 @@ public class GameScreen extends GameBaseScreen {
         stateTime += delta;
 
         // Render map
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         mapRenderer.setView(camera);
         mapRenderer.render();
 
@@ -110,6 +111,8 @@ public class GameScreen extends GameBaseScreen {
         TextureRegion currentFrame = walkAnimations[direction].getKeyFrame(stateTime, true);
         batch.draw(currentFrame, playerPosition.x, playerPosition.y);
         batch.end();
+
+        super.render(delta);
     }
 
     @Override
@@ -143,7 +146,6 @@ public class GameScreen extends GameBaseScreen {
         if (Gdx.input.isKeyJustPressed(Input.Keys.MINUS)) hudManager.selectSlot(10);
         if (Gdx.input.isKeyJustPressed(Input.Keys.EQUALS)) hudManager.selectSlot(11);
     }
-
 
     private void handleInput(float delta) {
         playerVelocity.setZero();
