@@ -19,10 +19,12 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Shape2D;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.yourgame.Graphics.MenuAssetManager;
 import com.yourgame.Main;
 import com.yourgame.Graphics.GameAssets.HUDManager;
 import com.yourgame.Graphics.GameAssets.clockUIAssetManager;
 import com.yourgame.Graphics.GameAssetManager;
+import com.yourgame.model.App;
 
 public class GameScreen extends GameBaseScreen {
     private final Main game;
@@ -41,15 +43,12 @@ public class GameScreen extends GameBaseScreen {
     private OrthogonalTiledMapRenderer mapRenderer;
     private OrthographicCamera camera;
 
-    private Texture playerSheet;
     private Animation<TextureRegion>[] walkAnimations;
     private float stateTime;
     private Vector2 playerPosition;
     private Vector2 playerVelocity;
     private int direction; // 0=Down, 1=Right, 2=Up, 3=Left
 
-    private static final int PLAYER_WIDTH = 16;
-    private static final int PLAYER_HEIGHT = 32;
     private static final float SPEED = 150f;
 
     public GameScreen() {
@@ -80,15 +79,7 @@ public class GameScreen extends GameBaseScreen {
         camera.zoom = 0.4f;
 
         // Load player sprite sheet
-        playerSheet = new Texture("Game/Player/player.png");
-        TextureRegion[][] frames = TextureRegion.split(playerSheet, PLAYER_WIDTH, PLAYER_HEIGHT);
-
-        walkAnimations = new Animation[4]; // down, left, right, up
-
-        walkAnimations[0] = new Animation<>(0.2f, frames[0]); // Down
-        walkAnimations[1] = new Animation<>(0.2f, frames[1]); // Right
-        walkAnimations[2] = new Animation<>(0.2f, frames[2]); // Up
-        walkAnimations[3] = new Animation<>(0.2f, frames[3]); // Left
+        walkAnimations = MenuAssetManager.getInstance().getWalkAnimation(App.getCurrentUser().getAvatar());
 
         stateTime = 0f;
         playerPosition = getSpawnPoint("spawn-right");
@@ -98,6 +89,7 @@ public class GameScreen extends GameBaseScreen {
 
     @Override
     public void render(float delta) {
+        super.render(delta);
         handleInput(delta);
         handleHudUpdates();
 
@@ -131,7 +123,6 @@ public class GameScreen extends GameBaseScreen {
         assetManager.dispose();
         map.dispose();
         mapRenderer.dispose();
-        playerSheet.dispose();
         batch.dispose();
     }
 
@@ -210,7 +201,7 @@ public class GameScreen extends GameBaseScreen {
 
             if (shape instanceof Rectangle) {
                 Rectangle rect = (Rectangle) shape;
-                Rectangle playerBounds = new Rectangle(x, y, PLAYER_WIDTH, PLAYER_HEIGHT);
+                Rectangle playerBounds = new Rectangle(x, y, MenuAssetManager.PLAYER_WIDTH, MenuAssetManager.PLAYER_HEIGHT);
                 if (playerBounds.overlaps(rect)) {
                     return true;
                 }

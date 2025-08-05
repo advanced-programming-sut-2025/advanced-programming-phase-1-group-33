@@ -4,7 +4,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -30,10 +32,17 @@ public class MenuAssetManager {
 
     private final Image[] backgrounds;
     private final Image[] avatarMenuAvatars;
+    private final Texture[] avatarSpriteSheets;
+    private final TextureRegion[][][] frames;
+    private final Animation[][] walkAnimations;
+
     private final Sound[] sounds;
     private final Music music;
     private final Image cursor;
     private final Image redLine;
+
+    public static final int PLAYER_WIDTH = 16;
+    public static final int PLAYER_HEIGHT = 32;
 
     private final TextButton signupButton;
     private final TextButton loginButton;
@@ -72,7 +81,7 @@ public class MenuAssetManager {
             new Image(new Texture(Gdx.files.internal("Textures/Avatars/RobinCharacter.png"))),
             new Image(new Texture(Gdx.files.internal("Textures/Avatars/RobinPortrait.png"))),
             new Image(new Texture(Gdx.files.internal("Textures/Avatars/SamCharacter.png"))),
-            new Image(new Texture(Gdx.files.internal("Textures/Avatars/SamPortrait.png"))),
+            new Image(new Texture(Gdx.files.internal("Textures/Avatars/SamPortrait.png")))
         };
 
         avatarMenuAvatars[0].setScale(3f);
@@ -80,6 +89,60 @@ public class MenuAssetManager {
         for(int i=2; i<=9; i++){
             avatarMenuAvatars[i].setScale(3f);
         }
+
+        avatarSpriteSheets = new Texture[]{
+            new Texture(Gdx.files.internal("Textures/Avatars/AbigailSpriteSheet.png")),
+            new Texture(Gdx.files.internal("Textures/Avatars/HarveySpriteSheet.png")),
+            new Texture(Gdx.files.internal("Textures/Avatars/PierreSpriteSheet.png")),
+            new Texture(Gdx.files.internal("Textures/Avatars/RobinSpriteSheet.png")),
+            new Texture(Gdx.files.internal("Textures/Avatars/SamSpriteSheet.png"))
+        };
+
+        frames = new TextureRegion[][][]{
+            TextureRegion.split(avatarSpriteSheets[0], PLAYER_WIDTH, PLAYER_HEIGHT),
+            TextureRegion.split(avatarSpriteSheets[1], PLAYER_WIDTH, PLAYER_HEIGHT),
+            TextureRegion.split(avatarSpriteSheets[2], PLAYER_WIDTH, PLAYER_HEIGHT),
+            TextureRegion.split(avatarSpriteSheets[3], PLAYER_WIDTH, PLAYER_HEIGHT),
+            TextureRegion.split(avatarSpriteSheets[4], PLAYER_WIDTH, PLAYER_HEIGHT),
+        };
+
+        walkAnimations = new Animation[][]{
+            new Animation[] { //Abigail
+                new Animation<>(0.2f, frames[0][0]), // Down
+                new Animation<>(0.2f, frames[0][1]), // Right
+                new Animation<>(0.2f, frames[0][2]), // Up
+                new Animation<>(0.2f, frames[0][3]) // Left
+            },
+
+            new Animation[] { //Harvey
+                new Animation<>(0.2f, frames[1][0]), // Down
+                new Animation<>(0.2f, frames[1][1]), // Right
+                new Animation<>(0.2f, frames[1][2]), // Up
+                new Animation<>(0.2f, frames[1][3]) // Left
+            },
+
+            new Animation[] { //Pierre
+                new Animation<>(0.2f, frames[2][0]), // Down
+                new Animation<>(0.2f, frames[2][1]), // Right
+                new Animation<>(0.2f, frames[2][2]), // Up
+                new Animation<>(0.2f, frames[2][3]) // Left
+            },
+
+            new Animation[] { // Robin
+                new Animation<>(0.2f, frames[3][0]), // Down
+                new Animation<>(0.2f, frames[3][1]), // Right
+                new Animation<>(0.2f, frames[3][2]), // Up
+                new Animation<>(0.2f, frames[3][3])  // Left
+            },
+
+            new Animation[] { // Sam
+                new Animation<>(0.2f, frames[4][0]), // Down
+                new Animation<>(0.2f, frames[4][1]), // Right
+                new Animation<>(0.2f, frames[4][2]), // Up
+                new Animation<>(0.2f, frames[4][3])  // Left
+            }
+        };
+
 
         sounds = new Sound[]{
             Gdx.audio.newSound(Gdx.files.internal("Sounds/UI Click 36.wav")),
@@ -156,6 +219,16 @@ public class MenuAssetManager {
             case Sam -> {return avatarMenuAvatars[8];}
             default -> {return null;}
         }
+    }
+
+    public Animation[] getWalkAnimation(Avatar avatar) {
+        return switch (avatar) {
+            case Abigail -> walkAnimations[0];
+            case Harvey -> walkAnimations[1];
+            case Pierre -> walkAnimations[2];
+            case Robin -> walkAnimations[3];
+            case Sam -> walkAnimations[4];
+        };
     }
 
     public TextButton getButtons(String name) {

@@ -31,7 +31,8 @@ public class MainMenuController {
     }
 
     public void handleGoingToPreGameMenu(){
-        App.setCurrentMenu(MenuTypes.PreGameMenu);
+        //App.setCurrentMenu(MenuTypes.PreGameMenu);
+        view.stopBackgroundMusic();
         Main.getMain().getScreen().dispose();
         Main.getMain().setScreen(new GameScreen());
     }
