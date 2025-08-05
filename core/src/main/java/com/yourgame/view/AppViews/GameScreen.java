@@ -2,64 +2,40 @@ package com.yourgame.view.AppViews;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.graphics.Cursor;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.maps.objects.PointMapObject;
 import com.badlogic.gdx.maps.objects.PolygonMapObject;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.TiledMapTile;
-import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Shape2D;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Stack;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.utils.Align;
-import com.badlogic.gdx.utils.GdxRuntimeException;
-import com.badlogic.gdx.utils.ScreenUtils;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.yourgame.Main;
 import com.yourgame.Graphics.GameAssets.HUDManager;
 import com.yourgame.Graphics.GameAssets.clockUIAssetManager;
-import com.yourgame.model.App;
 import com.yourgame.Graphics.GameAssetManager;
-import com.yourgame.Graphics.MenuAssetManager;
 
-import java.awt.*;
-
-public class GameScreen implements Screen {
-    private Main game;
-    private GameAssetManager assetManager;
+public class GameScreen extends GameBaseScreen {
+    private final Main game;
+    private final GameAssetManager assetManager;
 
     // ==HUD==
-    private Stage HUDStage;
     private clockUIAssetManager clockUI;
     private ImageButton clockImg;
-    private Image cursor;
     private HUDManager hudManager;
-    private int currentEnergyPhase; 
+    private int currentEnergyPhase;
     private HUDManager.weatherTypeButton currentWeather; // New variable for dynamic weather
-    private HUDManager.seasonTypeButton currentSeason; 
+    private HUDManager.seasonTypeButton currentSeason;
+
     // ==GAME==
     private TiledMap map;
     private OrthogonalTiledMapRenderer mapRenderer;
@@ -76,41 +52,15 @@ public class GameScreen implements Screen {
     private static final int PLAYER_HEIGHT = 32;
     private static final float SPEED = 150f;
 
-    private SpriteBatch batch;
-
-    // ==MUSIC==
-    private Music backgroundMusic;
-    private Sound clickSound; // Example SFX, if you want it in game screen
-    private static boolean isMusicInitialized = false; // Replicated from MenuBaseScreen
-
     public GameScreen() {
         this.game = Main.getMain();
-        this.assetManager = new GameAssetManager();
+        this.assetManager = GameAssetManager.getInstance();
         this.clockUI = assetManager.getClockManager();
-        this.HUDStage = new Stage(new ScreenViewport());
-        Gdx.input.setInputProcessor(HUDStage);
         this.hudManager = new HUDManager(HUDStage, clockUI, assetManager);
-        this.currentEnergyPhase = 4; 
+        this.currentEnergyPhase = 4;
         this.currentWeather = HUDManager.weatherTypeButton.Sunny; // Initial weather
-        this.currentSeason = HUDManager.seasonTypeButton.Spring; 
+        this.currentSeason = HUDManager.seasonTypeButton.Spring;
 
-
-        cursor = MenuAssetManager.getInstance().getCursor();
-        cursor.setSize(32, 45);
-        HUDStage.addActor(cursor);
-        cursor.setTouchable(com.badlogic.gdx.scenes.scene2d.Touchable.disabled);
-        cursor.toFront();
-        Gdx.graphics.setSystemCursor(Cursor.SystemCursor.None);
-
-        // Load background music and SFX directly here or through AssetManager
-        backgroundMusic = MenuAssetManager.getInstance().getMusic(); // Or
-                                                                     // Gdx.audio.newMusic(Gdx.files.internal("path/to/your/game_music.mp3"));
-        clickSound = MenuAssetManager.getInstance().getSounds("click"); // Example SFX
-
-        if (!isMusicInitialized) {
-            playBackgroundMusic();
-            isMusicInitialized = true;
-        }
     }
 
     @Override
@@ -144,18 +94,12 @@ public class GameScreen implements Screen {
         playerPosition = getSpawnPoint("spawn-right");
         playerVelocity = new Vector2(0, 0);
         direction = 0;
-
-        batch = new SpriteBatch();
     }
 
     @Override
     public void render(float delta) {
         handleInput(delta);
-        handleHudUpdates(); 
-
-
-        // Clear screen
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        handleHudUpdates();
 
         camera.position.set(playerPosition.x, playerPosition.y, 0);
         clampCameraToMap();
@@ -174,15 +118,6 @@ public class GameScreen implements Screen {
         TextureRegion currentFrame = walkAnimations[direction].getKeyFrame(stateTime, true);
         batch.draw(currentFrame, playerPosition.x, playerPosition.y);
         batch.end();
-
-        HUDStage.act(Math.min(delta, 1 / 30f));
-
-        float mouseX = Gdx.input.getX();
-        float mouseY = Gdx.graphics.getHeight() - Gdx.input.getY();
-        cursor.setPosition(mouseX - cursor.getWidth() / 2f, mouseY - cursor.getHeight() / 2f);
-        cursor.toFront();
-
-        HUDStage.draw();
     }
 
     @Override
@@ -192,61 +127,12 @@ public class GameScreen implements Screen {
     }
 
     @Override
-    public void pause() {
-        // Pause music if the game is paused
-        if (backgroundMusic.isPlaying()) {
-            backgroundMusic.pause();
-        }
-    }
-
-    @Override
-    public void resume() {
-        // Resume music if the game resumes and it was playing before
-        if (!App.isIsMusicMuted() && !backgroundMusic.isPlaying()) {
-            backgroundMusic.play();
-        }
-    }
-
-    @Override
-    public void hide() {
-        // Stop music when the screen is hidden
-        stopBackgroundMusic();
-    }
-
-    @Override
     public void dispose() {
-        HUDStage.dispose();
         assetManager.dispose();
-        backgroundMusic.dispose(); // Dispose the music
-        if (clickSound != null) { // Dispose SFX if loaded
-            clickSound.dispose();
-        }
         map.dispose();
         mapRenderer.dispose();
         playerSheet.dispose();
         batch.dispose();
-    }
-
-    // Methods for music control, similar to MenuBaseScreen
-    public void playBackgroundMusic() {
-        if (App.isIsMusicMuted()) {
-            return;
-        }
-
-        backgroundMusic.setLooping(true);
-        backgroundMusic.play();
-    }
-
-    public void stopBackgroundMusic() {
-        backgroundMusic.stop();
-    }
-
-    // Optional: if you want SFX in GameScreen
-    public void playGameSFX(String string) {
-        switch (string) {
-            case "click" -> clickSound.play();
-            // Add other game SFX cases here
-        }
     }
 
         /**

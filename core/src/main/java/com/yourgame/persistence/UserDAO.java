@@ -1,7 +1,6 @@
 package com.yourgame.persistence;
 
 import com.yourgame.model.UserInfo.User;
-import com.yourgame.model.enums.Avatar;
 import com.yourgame.model.enums.Gender;
 import com.yourgame.model.enums.SecurityQuestion;
 
@@ -27,8 +26,7 @@ public class UserDAO {
                 nickname TEXT NOT NULL,
                 gender TEXT NOT NULL,
                 securityQuestion TEXT NOT NULL,
-                answer TEXT NOT NULL,
-                avatar TEXT NOT NULL
+                answer TEXT NOT NULL
                 )
         """;
         try (Statement stmt = connection.createStatement()) {
@@ -46,7 +44,7 @@ public class UserDAO {
     }
 
     public void saveUser(User user) throws SQLException {
-        String sql = "INSERT INTO users(username, password, email, nickname, gender, securityQuestion, answer, avatar) VALUES (?,?,?,?,?,?,?,?)";
+        String sql = "INSERT INTO users(username, password, email, nickname, gender, securityQuestion, answer) VALUES (?,?,?,?,?,?,?)";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, user.getUsername());
             stmt.setString(2, user.getPassword()); // ensure the password is already hashed
@@ -55,7 +53,6 @@ public class UserDAO {
             stmt.setString(5, user.getGender());
             stmt.setString(6,user.getSecurityQuestion().getQuestion());
             stmt.setString(7,user.getAnswer());
-            stmt.setString(8,user.getAvatar().getName());
             stmt.executeUpdate();
         }
     }
@@ -73,8 +70,7 @@ public class UserDAO {
                         rs.getString("nickname"),
                         Gender.valueOf(rs.getString("gender")),
                         SecurityQuestion.getQuestion(rs.getString("securityQuestion")),
-                        rs.getString("answer"),
-                        Avatar.fromString(rs.getString("avatar")));
+                        rs.getString("answer"));
             }
         }
         return null;
@@ -93,8 +89,7 @@ public class UserDAO {
                         rs.getString("nickname"),
                         Gender.valueOf(rs.getString("gender")),
                         SecurityQuestion.valueOf(rs.getString("security question")),
-                        rs.getString("answer"),
-                        Avatar.fromString(rs.getString("avatar"))));
+                        rs.getString("answer")));
             }
         }
         return users;
@@ -113,8 +108,7 @@ public class UserDAO {
                         rs.getString("nickname"),
                         Gender.valueOf(rs.getString("gender")),
                         SecurityQuestion.valueOf(rs.getString("security question")),
-                        rs.getString("answer"),
-                        Avatar.fromString(rs.getString("avatar")));
+                        rs.getString("answer"));
             }
         }
         return null;
@@ -123,7 +117,7 @@ public class UserDAO {
     public void updateUserById(String username, User updatedUser) throws SQLException {
         String sql = """
         UPDATE users
-        SET password = ?, email = ?, nickname = ?, gender = ?, securityQuestion = ?, answer = ?, avatar = ?
+        SET password = ?, email = ?, nickname = ?, gender = ?, securityQuestion = ?, answer = ?
         WHERE username = ?
     """;
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
@@ -133,8 +127,7 @@ public class UserDAO {
             stmt.setString(4, updatedUser.getGender());
             stmt.setString(5, updatedUser.getSecurityQuestion().getQuestion());
             stmt.setString(6, updatedUser.getAnswer());
-            stmt.setString(7, updatedUser.getAvatar().getName());
-            stmt.setString(8, username);
+            stmt.setString(7, username);
             stmt.executeUpdate();
         }
     }

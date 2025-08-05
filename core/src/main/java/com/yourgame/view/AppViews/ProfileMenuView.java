@@ -48,6 +48,7 @@ public class ProfileMenuView extends MenuBaseScreen {
         final TextButton changeEmailButton = MenuAssetManager.getInstance().getButtons("changeEmail");
         final TextButton changeNicknameButton = MenuAssetManager.getInstance().getButtons("changeNickname");
         final TextButton backButton = MenuAssetManager.getInstance().getButtons("back");
+        final TextButton submitButton = MenuAssetManager.getInstance().getButtons("submit");
         final TextButton avatarButton = MenuAssetManager.getInstance().getButtons("avatar");
 
         Table table = new Table();
@@ -87,6 +88,8 @@ public class ProfileMenuView extends MenuBaseScreen {
         buttonTable.setFillParent(true);
         buttonTable.bottom().right();
         buttonTable.add(avatarButton).padRight(20).padBottom(5).width(250).height(90);
+        buttonTable.row();
+        buttonTable.add(submitButton).padRight(20).padBottom(5).width(250).height(90);
         buttonTable.row();
         buttonTable.add(backButton).padRight(20).padBottom(20).width(200).height(90);
         stage.addActor(buttonTable);
@@ -138,6 +141,13 @@ public class ProfileMenuView extends MenuBaseScreen {
                     nicknameField.setText("");
                 }
                 showMessage(result.message(),skin_Nz,0,20);
+            }
+        });
+
+        submitButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent changeEvent, Actor actor) {
+                controller.handleSubmitButton();
             }
         });
 

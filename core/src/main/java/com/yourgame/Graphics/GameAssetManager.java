@@ -3,6 +3,7 @@ package com.yourgame.Graphics;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.SkinLoader.SkinParameter;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -16,17 +17,29 @@ import com.yourgame.model.WeatherAndTime.Weather;
 
 public class GameAssetManager extends AssetManager {
 
-    public final String Default_FONT_PATH = "Fonts/default-12.fnt";
+    private static GameAssetManager instance;
+    public static GameAssetManager getInstance() {
+        if (instance == null) {
+            instance = new GameAssetManager();
+        }
+        return instance;
+    }
 
+    public final String Default_FONT_PATH = "Fonts/default-12.fnt";
     public final String WEATHER_CLOCK_SKIN_PATH = "Game/Clock/Skin/Clock.json";
     public final String CLOCK_ATLAS_PATH = "Game/Clock/Skin/Clock.atlas";
     public final String EnergyBarPath = "Game/Clock/Energy_Bar/";
     public final String InventoryBarDirectoryPath = "Game/Clock/Inventory/";
+
     private clockUIAssetManager clockManager;
+
+    private Music backgroundMusic;
 
     public GameAssetManager() {
         this.clockManager = new clockUIAssetManager(WEATHER_CLOCK_SKIN_PATH, CLOCK_ATLAS_PATH, Default_FONT_PATH,
                 EnergyBarPath, InventoryBarDirectoryPath);
+
+        backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("Musics/02. Cloud Country.mp3"));
     }
 
     public clockUIAssetManager getClockManager() {
@@ -44,4 +57,7 @@ public class GameAssetManager extends AssetManager {
         return get(WEATHER_CLOCK_SKIN_PATH, Skin.class);
     }
 
+    public Music getBackgroundMusic() {
+        return backgroundMusic;
+    }
 }

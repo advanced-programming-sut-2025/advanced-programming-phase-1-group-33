@@ -20,7 +20,7 @@ public class App {
 
     static {
         try {
-            userDAO = new UserDAO("jdbc:sqlite:StardewValley.db");
+            userDAO = new UserDAO("jdbc:sqlite:stardewValley.db");
         } catch (SQLException e) {
             e.printStackTrace();
             throw new RuntimeException("Failed to initialize UserDAO", e);

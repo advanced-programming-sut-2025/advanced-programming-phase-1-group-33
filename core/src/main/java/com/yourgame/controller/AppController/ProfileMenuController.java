@@ -3,14 +3,12 @@ package com.yourgame.controller.AppController;
 import com.yourgame.Main;
 import com.yourgame.model.App;
 import com.yourgame.model.Result;
-import com.yourgame.model.UserInfo.HandleStayedLoggedIn;
 import com.yourgame.model.UserInfo.UserInfoChecking;
 import com.yourgame.model.enums.Commands.MenuTypes;
 import com.yourgame.persistence.UserDAO;
 import com.yourgame.view.AppViews.AvatarMenuView;
 import com.yourgame.view.AppViews.MainMenuView;
 
-import java.io.IOException;
 import java.sql.SQLException;
 
 public class ProfileMenuController {
@@ -80,14 +78,20 @@ public class ProfileMenuController {
         return new Result(true, "Nickname has been changed!");
     }
 
-    public void handleBackButton(){
+    public void handleSubmitButton(){
+        UserDAO userDAO = App.getUserDAO();
         try {
             userDAO.updateUserById(App.getCurrentUser().getUsername(),App.getCurrentUser());
-            HandleStayedLoggedIn.getInstance().updateUser(App.getCurrentUser().getUsername(),App.getCurrentUser());
-        } catch (SQLException | IOException e) {
+        } catch (SQLException e) {
             throw new RuntimeException(e);
         }
 
+        App.setCurrentMenu(MenuTypes.MainMenu);
+        Main.getMain().getScreen().dispose();
+        Main.getMain().setScreen(new MainMenuView());
+    }
+
+    public void handleBackButton(){
         App.setCurrentMenu(MenuTypes.MainMenu);
         Main.getMain().getScreen().dispose();
         Main.getMain().setScreen(new MainMenuView());

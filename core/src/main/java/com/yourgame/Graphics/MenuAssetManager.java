@@ -8,7 +8,6 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.yourgame.model.enums.Avatar;
 import com.yourgame.model.enums.Commands.MenuTypes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,7 +28,6 @@ public class MenuAssetManager {
     Skin skin_3_Nz = new Skin(Gdx.files.internal("Skin/Skin_3(Nz)/NzSkin.json"), new TextureAtlas(Gdx.files.internal("Skin/Skin_3(Nz)/NzSkin.atlas")));
 
     private final Image[] backgrounds;
-    private final Image[] avatarMenuAvatars;
     private final Sound[] sounds;
     private final Music music;
     private final Image cursor;
@@ -62,29 +60,9 @@ public class MenuAssetManager {
             new Image(new Texture(Gdx.files.internal("Backgrounds/Background4.jpg"))),
         };
 
-        avatarMenuAvatars = new Image[]{
-            new Image(new Texture(Gdx.files.internal("Textures/Avatars/AbigailCharacter.png"))),
-            new Image(new Texture(Gdx.files.internal("Textures/Avatars/AbigailPortrait.png"))),
-            new Image(new Texture(Gdx.files.internal("Textures/Avatars/HarveyCharacter.png"))),
-            new Image(new Texture(Gdx.files.internal("Textures/Avatars/HarveyPortrait.png"))),
-            new Image(new Texture(Gdx.files.internal("Textures/Avatars/PierreCharacter.png"))),
-            new Image(new Texture(Gdx.files.internal("Textures/Avatars/PierrePortrait.png"))),
-            new Image(new Texture(Gdx.files.internal("Textures/Avatars/RobinCharacter.png"))),
-            new Image(new Texture(Gdx.files.internal("Textures/Avatars/RobinPortrait.png"))),
-            new Image(new Texture(Gdx.files.internal("Textures/Avatars/SamCharacter.png"))),
-            new Image(new Texture(Gdx.files.internal("Textures/Avatars/SamPortrait.png"))),
-        };
-
-        avatarMenuAvatars[0].setScale(3f);
-        avatarMenuAvatars[1].setScale(3.2f);
-        for(int i=2; i<=9; i++){
-            avatarMenuAvatars[i].setScale(3f);
-        }
-
         sounds = new Sound[]{
             Gdx.audio.newSound(Gdx.files.internal("Sounds/UI Click 36.wav")),
-            Gdx.audio.newSound(Gdx.files.internal("Sounds/Pop (3).wav")),
-            Gdx.audio.newSound(Gdx.files.internal("sounds/AvatarChoose.mp3"))
+            Gdx.audio.newSound(Gdx.files.internal("Sounds/Pop (3).wav"))
         };
 
         music = Gdx.audio.newMusic(Gdx.files.internal("Musics/01. Stardew Valley Overture.mp3"));
@@ -137,26 +115,6 @@ public class MenuAssetManager {
             default -> {return null;}
         }
     }
-    public Image getAvatarPortrait(Avatar avatar) {
-        switch (avatar){
-            case Abigail -> {return avatarMenuAvatars[1];}
-            case Harvey -> {return avatarMenuAvatars[3];}
-            case Pierre -> {return avatarMenuAvatars[5];}
-            case Robin -> {return avatarMenuAvatars[7];}
-            case Sam -> {return avatarMenuAvatars[9];}
-            default -> {return null;}
-        }
-    }
-    public Image getAvatarCharacter(Avatar avatar) {
-        switch (avatar){
-            case Abigail -> {return avatarMenuAvatars[0];}
-            case Harvey -> {return avatarMenuAvatars[2];}
-            case Pierre -> {return avatarMenuAvatars[4];}
-            case Robin -> {return avatarMenuAvatars[6];}
-            case Sam -> {return avatarMenuAvatars[8];}
-            default -> {return null;}
-        }
-    }
 
     public TextButton getButtons(String name) {
             switch (name) {
@@ -188,7 +146,6 @@ public class MenuAssetManager {
         switch(name) {
             case "click" -> {return sounds[0];}
             case "popUp" -> {return sounds[1];}
-            case "avatarChoose" -> {return sounds[2];}
             default -> {return null;}
         }
     }
