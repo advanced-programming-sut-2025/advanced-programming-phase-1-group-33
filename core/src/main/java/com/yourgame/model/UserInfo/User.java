@@ -1,6 +1,7 @@
 package com.yourgame.model.UserInfo;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.yourgame.model.enums.Avatar;
 import com.yourgame.model.enums.Gender;
 import com.yourgame.model.enums.SecurityQuestion;
 
@@ -10,6 +11,7 @@ public class User {
     private String Email;
     private String Nickname;
     private Gender Gender;
+    private Avatar Avatar;
 
     @JsonProperty("securityQuestion")
     private SecurityQuestion question;
@@ -18,7 +20,7 @@ public class User {
 
     public User(){}
 
-    public User(String Username, String Password, String Email, String Nickname, Gender Gender, SecurityQuestion question, String answer) {
+    public User(String Username, String Password, String Email, String Nickname, Gender Gender, SecurityQuestion question, String answer, Avatar Avatar) {
         this.Username = Username;
         this.Password = Password;
         this.Email = Email;
@@ -26,6 +28,7 @@ public class User {
         this.Gender = Gender;
         this.question = question;
         this.answer = answer;
+        this.Avatar = Avatar;
     }
 
     @Override
@@ -96,5 +99,13 @@ public class User {
 
     public void setAnswer(String answer) {
         this.answer = answer;
+    }
+
+    public Avatar getAvatar() {
+        return Avatar;
+    }
+
+    public void setAvatar(Avatar avatar) {
+        Avatar = avatar;
     }
 }
