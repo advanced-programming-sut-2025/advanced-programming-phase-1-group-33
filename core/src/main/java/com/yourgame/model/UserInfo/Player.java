@@ -20,6 +20,7 @@ import com.yourgame.model.Map.Position;
 import com.yourgame.model.Npc.NPCType;
 import com.yourgame.model.Npc.RelationWithNPC;
 import com.yourgame.model.Skill.Ability;
+import com.yourgame.model.enums.Avatar;
 import com.yourgame.model.enums.Gender;
 import com.yourgame.model.enums.SecurityQuestion;
 import com.yourgame.model.notification.Notification;
@@ -62,10 +63,8 @@ public class Player {
 
     public static Player guest() {
         return new Player(
-            new User(
-                "guest", "passwd", "email", "guest",
-                Gender.Male, SecurityQuestion.BornCity, "nowhere"
-            )
+            new User("Aeen", "Aeen", "Aeen", "aeen", Gender.Male, SecurityQuestion.BirthDate, "Iran", Avatar.Sam)
+
         );
     }
 
