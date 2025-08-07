@@ -52,4 +52,9 @@ public class Hoe extends Tool {
     public PoleType getPoleType() {
         return null;
     }
+
+    @Override
+    public String getName(){
+        return "Hoe";
+    }
 }

@@ -82,4 +82,9 @@ public class WateringCan extends Tool {
     public void makeFull() {
         waterCapacity = capacity;
     }
+
+    @Override
+    public String getName(){
+        return "Watering Can";
+    }
 }

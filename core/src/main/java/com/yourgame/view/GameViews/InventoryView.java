@@ -1,5 +1,6 @@
 package com.yourgame.view.GameViews;
 
+import com.badlogic.gdx.graphics.Texture;
 import com.yourgame.controller.GameController.InventoryController;
 import com.yourgame.model.UserInfo.Player;
 import com.yourgame.view.AppViews.GameBaseScreen;
@@ -7,6 +8,8 @@ import com.yourgame.view.AppViews.GameBaseScreen;
 public class InventoryView extends GameBaseScreen {
     private final InventoryController inventoryController;
     private final Player player;
+
+    private Texture[] miniBarItems;
 
     public InventoryView(Player player) {
         this.inventoryController = new InventoryController();
@@ -17,7 +20,7 @@ public class InventoryView extends GameBaseScreen {
 
     @Override
     public void show(){
-
+        miniBarItems = inventoryController.handleMiniBarItems();
     }
 
     @Override

@@ -28,4 +28,8 @@ public class Shear extends Tool {
         return null;
     }
 
+    @Override
+    public String getName(){
+        return "Shears";
+    }
 }

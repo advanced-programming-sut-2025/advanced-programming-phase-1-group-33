@@ -1,6 +1,8 @@
 package com.yourgame.model.Inventory;
 
 
+import com.yourgame.model.Inventory.Tools.Tool;
+
 public class TrashCan {
     enum Type {
         Primary(0 , 1000),
@@ -14,6 +16,10 @@ public class TrashCan {
         Type(int returnValuePercentage , int priceForUpgrade) {
             this.returnValuePercentage = returnValuePercentage;
             this.priceForUpgrade = priceForUpgrade;
+        }
+
+        public String getName(){
+            return "TrashCan";
         }
     }
 

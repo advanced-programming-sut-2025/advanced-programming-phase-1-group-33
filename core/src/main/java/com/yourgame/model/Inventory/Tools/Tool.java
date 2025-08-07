@@ -31,4 +31,6 @@ public abstract class Tool {
             default -> null;
         };
     }
+
+    public abstract String getName();
 }

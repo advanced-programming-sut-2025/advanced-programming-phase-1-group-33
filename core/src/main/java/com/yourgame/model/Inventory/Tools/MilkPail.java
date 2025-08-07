@@ -31,4 +31,9 @@ public class MilkPail extends Tool {
     public PoleType getPoleType() {
         return null;
     }
+
+    @Override
+    public String getName(){
+        return "MilkPail";
+    }
 }

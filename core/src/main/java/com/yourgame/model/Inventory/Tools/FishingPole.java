@@ -77,4 +77,9 @@ public class FishingPole extends Tool {
     public ToolType getToolType() {
         return null;
     }
+
+    @Override
+    public String getName(){
+        return "Rod";
+    }
 }

@@ -71,4 +71,8 @@ public class Axe extends Tool {
         return null;
     }
 
+    @Override
+    public String getName(){
+        return "Axe";
+    }
 }

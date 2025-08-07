@@ -16,9 +16,4 @@ public enum ToolType {
     public int getPriceForUpgrade() {
         return priceForUpgrade;
     }
-
-    @Override
-    public String toString() {
-        return String.format("%s (Upgrade Cost: %d)", this.name(), this.priceForUpgrade);
-    }
 }

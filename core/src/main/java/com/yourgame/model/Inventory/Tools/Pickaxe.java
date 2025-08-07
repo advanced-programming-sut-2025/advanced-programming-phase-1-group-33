@@ -68,4 +68,9 @@ public class Pickaxe extends Tool {
     public PoleType getPoleType() {
         return null;
     }
+
+    @Override
+    public String getName(){
+        return "Pickaxe";
+    }
 }

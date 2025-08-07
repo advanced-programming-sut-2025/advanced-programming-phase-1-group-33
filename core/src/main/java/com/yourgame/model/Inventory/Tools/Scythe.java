@@ -28,5 +28,8 @@ public class Scythe extends Tool {
         return null;
     }
 
-
+    @Override
+    public String getName(){
+        return "Scythe";
+    }
 }
