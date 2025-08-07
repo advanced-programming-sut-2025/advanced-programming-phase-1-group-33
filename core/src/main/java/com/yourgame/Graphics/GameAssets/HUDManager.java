@@ -27,6 +27,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport; // Recommended for HUD Stage
 import com.yourgame.model.Tool;
+import com.yourgame.model.WeatherAndTime.TimeSystem;
+import com.yourgame.observers.TimeObserver;
 
 // --- New HUDManager Class (Conceptual - you'll implement this) ---
 // This class will encapsulate the creation and management of HUD elements.
@@ -52,8 +54,10 @@ public class HUDManager {
     private InventorySlot[] inventorySlots;
     private int selectedSlotIndex = 0;
     private Drawable selectionDrawable;
-
-
+    
+    // Testing the Time 
+    private TimeObserver timeObserver; 
+    private TimeSystem timeSystem; 
     public HUDManager(Stage stage, clockUIAssetManager clockUI, AssetManager assetManager) {
         this.hudStage = stage;
         this.clockUI = clockUI;
@@ -61,7 +65,17 @@ public class HUDManager {
         this.energy_bar_textures = clockUI.getEnergyBarMode();
         this.inventoryTexture = clockUI.getInventoryTexture(); // Assumes this texture is loaded
         this.inventorySlots = new InventorySlot[12];
+        this.timeSystem = new TimeSystem(); // Initialize the TimeSystem
+        this.timeObserver = new TimeObserver() {
+            @Override
+            public void onTimeChanged(TimeSystem timeSystem) {
+                // Handle time changes here, e.g., update UI elements
+                Gdx.app.log("HUDManager", "Time changed: " + timeSystem.getHour() + ":" + timeSystem.getDay() + " " + timeSystem.getSeason());
+            }
+        };  
+        
         createSelectionHighlight();
+
     }
 
 
