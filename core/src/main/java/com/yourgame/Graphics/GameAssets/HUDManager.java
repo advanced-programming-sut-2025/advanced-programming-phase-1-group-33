@@ -56,8 +56,18 @@ public class HUDManager {
     private Drawable selectionDrawable;
     
     // Testing the Time 
-    private TimeObserver timeObserver; 
+    private TimeObserver timeObserver;
+     
+    public TimeObserver getTimeObserver() {
+        return timeObserver;
+    }
+
     private TimeSystem timeSystem; 
+    public TimeSystem getTimeSystem() {
+        return timeSystem;
+    }
+
+    public float timeAccumulator = 0f; // Used to track time for updates` 
     public HUDManager(Stage stage, clockUIAssetManager clockUI, AssetManager assetManager) {
         this.hudStage = stage;
         this.clockUI = clockUI;

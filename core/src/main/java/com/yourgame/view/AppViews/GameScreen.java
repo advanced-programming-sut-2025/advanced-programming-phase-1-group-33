@@ -31,6 +31,7 @@ import com.yourgame.model.App;
 import com.yourgame.Graphics.MenuAssetManager;
 import com.yourgame.model.UserInfo.Player;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class GameScreen extends GameBaseScreen {
@@ -48,6 +49,7 @@ public class GameScreen extends GameBaseScreen {
     // ==GAME==
     private MapManager mapManager;
     private Player player;
+    private List<Player> players =  new ArrayList<>(); 
     private MapData currentMap;
 
     private OrthogonalTiledMapRenderer mapRenderer;
@@ -68,8 +70,13 @@ public class GameScreen extends GameBaseScreen {
         this.hudManager = new HUDManager(HUDStage, clockUI, assetManager);
         this.currentEnergyPhase = 4;
         this.currentWeather = HUDManager.weatherTypeButton.Sunny; // Initial weather
-        this.currentSeason = HUDManager.seasonTypeButton.Spring; 
+        this.currentSeason = HUDManager.seasonTypeButton.Spring;
+        this.player = Player.guest(); 
+        players.add(this.player); 
+        this.currentMap = mapManager.getPlayersCurrentMap(player);
+        this.mapManager = new MapManager(players); 
 
+        this.mapRenderer = new OrthogonalTiledMapRenderer(this.currentMap)
         // Load background music and SFX directly here or through AssetManager
         backgroundMusic = MenuAssetManager.getInstance().getMusic(); // Or
                                                                      // Gdx.audio.newMusic(Gdx.files.internal("path/to/your/game_music.mp3"));
@@ -102,7 +109,7 @@ public class GameScreen extends GameBaseScreen {
     public void render(float delta) {
         handleInput(delta);
         checkForTeleport();
-        handleHudUpdates();
+        handleHudUpdates(delta);
 
         // Clear screen
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -142,22 +149,34 @@ public class GameScreen extends GameBaseScreen {
         batch.dispose();
     }
 
-        /**
+    /**
      * New method to handle key presses for selecting an inventory slot.
      */
     private void handleInventoryInput() {
-        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_1)) hudManager.selectSlot(0);
-        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_2)) hudManager.selectSlot(1);
-        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_3)) hudManager.selectSlot(2);
-        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_4)) hudManager.selectSlot(3);
-        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_5)) hudManager.selectSlot(4);
-        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_6)) hudManager.selectSlot(5);
-        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_7)) hudManager.selectSlot(6);
-        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_8)) hudManager.selectSlot(7);
-        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_9)) hudManager.selectSlot(8);
-        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_0)) hudManager.selectSlot(9);
-        if (Gdx.input.isKeyJustPressed(Input.Keys.MINUS)) hudManager.selectSlot(10);
-        if (Gdx.input.isKeyJustPressed(Input.Keys.EQUALS)) hudManager.selectSlot(11);
+        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_1))
+            hudManager.selectSlot(0);
+        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_2))
+            hudManager.selectSlot(1);
+        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_3))
+            hudManager.selectSlot(2);
+        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_4))
+            hudManager.selectSlot(3);
+        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_5))
+            hudManager.selectSlot(4);
+        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_6))
+            hudManager.selectSlot(5);
+        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_7))
+            hudManager.selectSlot(6);
+        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_8))
+            hudManager.selectSlot(7);
+        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_9))
+            hudManager.selectSlot(8);
+        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_0))
+            hudManager.selectSlot(9);
+        if (Gdx.input.isKeyJustPressed(Input.Keys.MINUS))
+            hudManager.selectSlot(10);
+        if (Gdx.input.isKeyJustPressed(Input.Keys.EQUALS))
+            hudManager.selectSlot(11);
     }
 
     private void handleInput(float delta) {
@@ -214,16 +233,21 @@ public class GameScreen extends GameBaseScreen {
         float boxHeight = MenuAssetManager.PLAYER_HEIGHT / 2f; // Check only the lower half of the player
 
         // Check the four corners of the player's collision box
-        if (currentMap.isTileBlocked(boxX, boxY)) return true;
-        if (currentMap.isTileBlocked(boxX + boxWidth, boxY)) return true;
-        if (currentMap.isTileBlocked(boxX, boxY + boxHeight)) return true;
-        if (currentMap.isTileBlocked(boxX + boxWidth, boxY + boxHeight)) return true;
+        if (currentMap.isTileBlocked(boxX, boxY))
+            return true;
+        if (currentMap.isTileBlocked(boxX + boxWidth, boxY))
+            return true;
+        if (currentMap.isTileBlocked(boxX, boxY + boxHeight))
+            return true;
+        if (currentMap.isTileBlocked(boxX + boxWidth, boxY + boxHeight))
+            return true;
 
         return false;
     }
 
     private void changeMap(MapData newMap, String spawnName) {
-        if (newMap == null) return;
+        if (newMap == null)
+            return;
 
         this.currentMap = newMap;
         this.mapRenderer.setMap(currentMap.getTiledMap());
@@ -240,7 +264,8 @@ public class GameScreen extends GameBaseScreen {
         float checkY = playerPosition.y + 4; // A bit above the bottom edge
 
         Teleport teleport = currentMap.getTeleport(checkX, checkY);
-        if (teleport == null) return;
+        if (teleport == null)
+            return;
 
         // Find the correct map from the MapManager based on the destination string
         MapData newMap;
@@ -278,12 +303,17 @@ public class GameScreen extends GameBaseScreen {
         camera.position.y = Math.min(mapHeight - cameraHalfHeight, camera.position.y);
     }
 
-     /**
+    /**
      * Handles updates to the HUD elements based on game state or input.
      * This is a good practice to separate HUD logic from main rendering.
      */
-    private void handleHudUpdates() {
+    private void handleHudUpdates(float delta) {
         // Example: Update energy bar
+
+        if (hudManager.timeAccumulator >= 7f) { // every 7 seconds = 10 minutes
+            hudManager.getTimeSystem().advanceMinutes(10);
+            hudManager.timeAccumulator = 0f;
+        }
         if (Gdx.input.isKeyJustPressed(Input.Keys.E)) {
             currentEnergyPhase--;
             if (currentEnergyPhase < 0) {
