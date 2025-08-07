@@ -30,6 +30,7 @@ import com.yourgame.Graphics.GameAssetManager;
 import com.yourgame.model.App;
 import com.yourgame.Graphics.MenuAssetManager;
 import com.yourgame.model.UserInfo.Player;
+import com.yourgame.model.enums.Avatar;
 
 import java.util.List;
 
@@ -54,6 +55,9 @@ public class GameScreen extends GameBaseScreen {
     private OrthographicCamera camera;
 
     private Animation<TextureRegion>[] walkAnimations;
+    boolean isFainting = false;
+
+    private Animation<TextureRegion> faintAnimations;
     private float stateTime;
     private Vector2 playerPosition;
     private Vector2 playerVelocity;
@@ -79,6 +83,9 @@ public class GameScreen extends GameBaseScreen {
         mapManager = new MapManager(List.of(player));
         mapRenderer = new OrthogonalTiledMapRenderer(mapManager.getPlayersCurrentMap(player).getTiledMap());
         currentMap = mapManager.getPlayersCurrentMap(player);
+
+        walkAnimations = MenuAssetManager.getInstance().getWalkAnimation(App.getCurrentUser().getAvatar());
+        faintAnimations = MenuAssetManager.getInstance().getFaintAnimation(Avatar.Abigail);
     }
 
     @Override
@@ -92,9 +99,6 @@ public class GameScreen extends GameBaseScreen {
         camera = new OrthographicCamera();
         camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         camera.zoom = 0.4f;
-
-        // Load player sprite sheet
-        walkAnimations = MenuAssetManager.getInstance().getWalkAnimation(App.getCurrentUser().getAvatar());
 
         stateTime = 0f;
         playerPosition = currentMap.getSpawnPoint();
@@ -124,11 +128,23 @@ public class GameScreen extends GameBaseScreen {
         mapRenderer.render();
 
         // Render player
-        batch.setProjectionMatrix(camera.combined);
         batch.begin();
-        TextureRegion currentFrame = walkAnimations[direction].getKeyFrame(stateTime, true);
+        batch.setProjectionMatrix(camera.combined);
+        TextureRegion currentFrame;
+        if(!isFainting) {
+            currentFrame = walkAnimations[direction].getKeyFrame(stateTime,true);
+        }
+        else {
+            currentFrame = faintAnimations.getKeyFrame(stateTime, false);
+            if (faintAnimations.isAnimationFinished(stateTime)) {
+                isFainting = false;
+                stateTime = 0f;
+                changeMap(mapManager.getHouse(player),"spawn");
+            }
+        }
         batch.draw(currentFrame, playerPosition.x, playerPosition.y);
         batch.end();
+
 
         super.render(delta);
     }
@@ -162,6 +178,12 @@ public class GameScreen extends GameBaseScreen {
         if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_0)) hudManager.selectSlot(9);
         if (Gdx.input.isKeyJustPressed(Input.Keys.MINUS)) hudManager.selectSlot(10);
         if (Gdx.input.isKeyJustPressed(Input.Keys.EQUALS)) hudManager.selectSlot(11);
+        if (Gdx.input.isKeyJustPressed(Input.Keys.F)) {
+            isFainting = true;
+            respawnTriggered = false;
+            stateTime = 0f;
+        }
+
     }
 
     private void handleInput(float delta) {
@@ -187,7 +209,7 @@ public class GameScreen extends GameBaseScreen {
             direction = 0;
         }
 
-        if (playerVelocity.isZero()) {
+        if (playerVelocity.isZero() && !isFainting) {
             stateTime = 0f; // Pause animation when idle
         } else {
             // Store original position
