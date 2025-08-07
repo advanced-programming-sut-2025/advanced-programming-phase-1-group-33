@@ -74,19 +74,7 @@ public class GameState {
             checkedPlayers++;
         }
 
-        if (checkedPlayers == size) {
-            time.advancedDay(1);
-            // return new Response(true, "All players have been fainted! Next day is
-            // started!\n";
 
-        }
-
-        if (currentPlayer.equals(players.get(0))) {
-            time.advancedHour(1);
-            // return new Response(true, "An hour passed!\n");
-            // "Current player: " + players.getFirst().getUsername() + "\n\n" +
-            // players.getFirst().UncheckedNotifications());
-        }
     }
 
     public Map getMap() {
