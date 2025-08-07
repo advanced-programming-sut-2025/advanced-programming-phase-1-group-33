@@ -39,6 +39,12 @@ public class GameState {
     private int tradeIndex = 0;
     private final ArrayList<Trade> trades = new ArrayList<>();
 
+    public GameState(ArrayList<Player> players) {
+        this.players.addAll(players);
+        relationInitializer(players);
+    }
+
+
     public GameState(ArrayList<Player> players, ArrayList<Farm> farms, User u, Map x) {
         this.farms.addAll(farms);
         this.players.addAll(players);

@@ -29,6 +29,7 @@ import com.yourgame.Graphics.GameAssets.HUDManager;
 import com.yourgame.Graphics.GameAssets.clockUIAssetManager;
 import com.yourgame.Graphics.GameAssetManager;
 import com.yourgame.model.App;
+import com.yourgame.model.GameState;
 import com.yourgame.Graphics.MenuAssetManager;
 import com.yourgame.model.UserInfo.Player;
 import com.yourgame.model.WeatherAndTime.Season;
@@ -53,6 +54,7 @@ public class GameScreen extends GameBaseScreen {
     private Player player;
     private List<Player> players =  new ArrayList<>(); 
     private MapData currentMap;
+    private GameState gameState; 
 
     private OrthogonalTiledMapRenderer mapRenderer;
     private OrthographicCamera camera;
@@ -82,6 +84,8 @@ public class GameScreen extends GameBaseScreen {
         mapManager = new MapManager(List.of(player));
         mapRenderer = new OrthogonalTiledMapRenderer(mapManager.getPlayersCurrentMap(player).getTiledMap());
         currentMap = mapManager.getPlayersCurrentMap(player);
+
+        this.gameState = new ; 
     }
 
     @Override
