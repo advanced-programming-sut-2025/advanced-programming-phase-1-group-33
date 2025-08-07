@@ -68,13 +68,17 @@ public class GameScreen extends GameBaseScreen {
         this.hudManager = new HUDManager(HUDStage, clockUI, assetManager);
         this.currentEnergyPhase = 4;
         this.currentWeather = HUDManager.weatherTypeButton.Sunny; // Initial weather
-        this.currentSeason = HUDManager.seasonTypeButton.Spring; 
+        this.currentSeason = HUDManager.seasonTypeButton.Spring;
 
         // Load background music and SFX directly here or through AssetManager
         backgroundMusic = MenuAssetManager.getInstance().getMusic(); // Or
                                                                      // Gdx.audio.newMusic(Gdx.files.internal("path/to/your/game_music.mp3"));
         clickSound = MenuAssetManager.getInstance().getSounds("click"); // Example SFX
 
+        player = Player.guest();
+        mapManager = new MapManager(List.of(player));
+        mapRenderer = new OrthogonalTiledMapRenderer(mapManager.getPlayersCurrentMap(player).getTiledMap());
+        currentMap = mapManager.getPlayersCurrentMap(player);
     }
 
     @Override
