@@ -30,7 +30,7 @@ public class MapManager {
         playersCurrentMap = new HashMap<>();
         for (Player player : players) {
             MapData farm = new MapData(player.getUsername() + "-farm", "Game/Map/standard-farm.tmx");
-            farm.spawnRandomElements(Season.Winter);
+            farm.spawnRandomElements(Season.Spring);
             farms.put(player, farm);
             houses.put(
                 player,

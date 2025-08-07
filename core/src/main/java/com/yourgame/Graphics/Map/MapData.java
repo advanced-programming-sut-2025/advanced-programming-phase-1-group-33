@@ -271,6 +271,7 @@ public class MapData {
 
     public void spawnRandomElements(Season season) {
         spawnRandomTrees();
+        spawnRandomWoods();
         spawnRandomRocks();
         spawnRandomForagingCrops(season);
     }
@@ -293,6 +294,14 @@ public class MapData {
 
         int pineNumber = 10 + rand.nextInt(10);
         spawnObject(pinePrototype, pineNumber);
+    }
+
+    public void spawnRandomWoods() {
+        int stumpNumber = 10 + rand.nextInt(10);
+        spawnObject(new WoodElement(true, 0, 0), stumpNumber);
+
+        int trunkNumber = 5 + rand.nextInt(5);
+        spawnObject(new WoodElement(false, 0, 0), trunkNumber);
     }
 
     public void spawnRandomRocks() {
