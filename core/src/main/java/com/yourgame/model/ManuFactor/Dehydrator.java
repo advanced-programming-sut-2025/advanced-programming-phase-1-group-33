@@ -36,9 +36,9 @@ public class Dehydrator extends ArtisanMachine {
             case "Dried_Mushroom", "dried_mushroom" -> {
                 for (Ingredient ingredient : player.getBackpack().getIngredientQuantity().keySet()) {
 
-                    if (ingredient.equals(ForagingCrop.CommonMushroom) ||
-                            ingredient.equals(ForagingCrop.RedMushroom) ||
-                            ingredient.equals(ForagingCrop.PurpleMushroom)) {
+                    if (ingredient.equals(ForagingCrop.Common_Mushroom) ||
+                            ingredient.equals(ForagingCrop.Red_Mushroom) ||
+                            ingredient.equals(ForagingCrop.Purple_Mushroom)) {
 
                         if (player.getBackpack().getIngredientQuantity().getOrDefault(ingredient, 0) >= 5) {
 

@@ -1,6 +1,7 @@
 package com.yourgame.Graphics.Map;
 
 import com.yourgame.model.UserInfo.Player;
+import com.yourgame.model.WeatherAndTime.Season;
 
 import java.util.HashMap;
 import java.util.List;
@@ -29,8 +30,7 @@ public class MapManager {
         playersCurrentMap = new HashMap<>();
         for (Player player : players) {
             MapData farm = new MapData(player.getUsername() + "-farm", "Game/Map/standard-farm.tmx");
-            farm.spawnRandomTrees();
-            farm.spawnRandomRocks();
+            farm.spawnRandomElements(Season.Winter);
             farms.put(player, farm);
             houses.put(
                 player,

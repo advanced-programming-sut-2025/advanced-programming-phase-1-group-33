@@ -11,8 +11,11 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.yourgame.model.Item.ForagingCrop;
+import com.yourgame.model.Item.ForagingCropElement;
 import com.yourgame.model.Item.Tree;
 import com.yourgame.model.Item.TreeType;
+import com.yourgame.model.WeatherAndTime.Season;
 import com.yourgame.model.WeatherAndTime.TimeSystem;
 
 import java.util.ArrayList;
@@ -266,6 +269,12 @@ public class MapData {
         }
     }
 
+    public void spawnRandomElements(Season season) {
+        spawnRandomTrees();
+        spawnRandomRocks();
+        spawnRandomForagingCrops(season);
+    }
+
     public void spawnObject(MapElement prototype, int count) {
         for (int i = 0; i < count; i++) {
             int x = rand.nextInt(mapWidth);
@@ -290,7 +299,17 @@ public class MapData {
         int smallNumber = 15 + rand.nextInt(10);
         spawnObject(new Rock(true, 0, 0), smallNumber);
 
-        int bigNumber = 5 + rand.nextInt(5);
-        spawnObject(new Rock(false, 1, 0), bigNumber);
+        int bigNumber = 20 + rand.nextInt(5);
+        spawnObject(new Rock(false, 0, 0), bigNumber);
+    }
+
+    public void spawnRandomForagingCrops(Season season) {
+        List<ForagingCrop> foragingCrops = ForagingCrop.getCropsBySeason(season);
+        int number = 5 + rand.nextInt(3);
+        for (int i = 0; i < number; i++) {
+            int index = rand.nextInt(foragingCrops.size());
+            ForagingCropElement foraging = new ForagingCropElement(foragingCrops.get(index), 0, 0);
+            spawnObject(foraging, 1);
+        }
     }
 }

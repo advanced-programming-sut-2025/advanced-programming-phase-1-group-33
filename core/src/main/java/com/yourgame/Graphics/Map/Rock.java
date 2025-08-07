@@ -9,8 +9,8 @@ import java.awt.*;
 public class Rock extends MapElement {
     private final boolean isSmall;
 
-    public Rock(boolean small, int x, int y) {
-        super(ElementType.ROCK, new Rectangle(x, y, small ? 16 : 32, small ? 16 : 32), 5);
+    public Rock(boolean small, int worldX, int worldY) {
+        super(ElementType.ROCK, new Rectangle(worldX, worldY, small ? 16 : 32, small ? 16 : 32), 5);
         isSmall = small;
     }
 
