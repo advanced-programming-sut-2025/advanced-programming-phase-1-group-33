@@ -73,7 +73,9 @@ public class GameScreen extends GameBaseScreen {
     public GameScreen() {
         this.game = Main.getMain();
         this.assetManager = GameAssetManager.getInstance();
-        inventoryView = new InventoryView();
+
+        inventoryView = new InventoryView(player);
+
         this.clockUI = assetManager.getClockManager();
         this.hudManager = new HUDManager(HUDStage, clockUI, assetManager);
         this.currentEnergyPhase = 4;
