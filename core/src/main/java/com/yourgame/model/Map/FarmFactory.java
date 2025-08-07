@@ -25,21 +25,21 @@ public class FarmFactory {
         markUsedArea(50 + x , 65 + y , 5 , 7);
 
         return new Farm(
-                new Cottage(10 + x, 10 + y, 4, 4),
-                new GreenHouse(20 + x, 60 + y, 6, 6),
-                new ArrayList<>(Arrays.asList(
-                        new Lake(60 + x, 15 + y, 3, 12),
-                        new Lake(60 + x, 45 + y, 3, 14)
-                )),
-                new ArrayList<>(Arrays.asList(
-                        new Quarry(50 + x, 65 + y, 5, 7)
-                )),
+            new Cottage(10 + x, 10 + y, 4, 4),
+            new GreenHouse(20 + x, 60 + y, 6, 6),
+            new ArrayList<>(Arrays.asList(
+                new Lake(60 + x, 15 + y, 3, 12),
+                new Lake(60 + x, 45 + y, 3, 14)
+            )),
+            new ArrayList<>(Arrays.asList(
+                new Quarry(50 + x, 65 + y, 5, 7)
+            )),
 
-                generateRandomTree( x, y ), // درخت‌ها اگه خاص باشن اینجا اضافه کن
-                generateRandomStone(x , y),
-                generateRandomCrop(x , y),// سنگ‌ها
-                new Rectangle(x, y, 100, 75),
-                1
+            generateRandomTree( x, y ), // درخت‌ها اگه خاص باشن اینجا اضافه کن
+            generateRandomStone(x , y),
+            generateRandomCrop(x , y),// سنگ‌ها
+            new Rectangle(x, y, 100, 75),
+            1
         );
     }
 
@@ -60,15 +60,15 @@ public class FarmFactory {
         quarries.add(q1);
         markUsedArea(50 + x, 30 +y , 5, 7);
         return new Farm(
-                cottage,
-                greenHouse,
-                lakes,
-                quarries,
-                generateRandomTree(x , y ),
-                generateRandomStone(x , y),
-                generateRandomCrop(x , y),
-                new Rectangle( x , y , 100, 75),
-                2
+            cottage,
+            greenHouse,
+            lakes,
+            quarries,
+            generateRandomTree(x , y ),
+            generateRandomStone(x , y),
+            generateRandomCrop(x , y),
+            new Rectangle( x , y , 100, 75),
+            2
         );
     }
 
@@ -93,15 +93,15 @@ public class FarmFactory {
         markUsedArea(65 +x , 15 +y , 5, 7);
 
         return new Farm(
-                c,
-                g,
-                lakes,
-                quarries,
-                generateRandomTree(x , y ),
-                generateRandomStone(x , y),
-                generateRandomCrop(x , y),
-                new Rectangle(x, y, 100, 75),
-                3
+            c,
+            g,
+            lakes,
+            quarries,
+            generateRandomTree(x , y ),
+            generateRandomStone(x , y),
+            generateRandomCrop(x , y),
+            new Rectangle(x, y, 100, 75),
+            3
         );
     }
 
@@ -120,15 +120,15 @@ public class FarmFactory {
         markUsedArea(50 + x, 5 + y, 6, 6);
 
         return new Farm(
-                cottage,
-                greenHouse,
-                lakes,
-                quarries,
-                generateRandomTree(x , y),
-                generateRandomStone(x , y),
-                generateRandomCrop(x , y),
-                new Rectangle(x, y, 100, 75),
-                4
+            cottage,
+            greenHouse,
+            lakes,
+            quarries,
+            generateRandomTree(x , y),
+            generateRandomStone(x , y),
+            generateRandomCrop(x , y),
+            new Rectangle(x, y, 100, 75),
+            4
         );
     }
     public static ArrayList<Tree> generateRandomTree(int x, int y) {
@@ -143,8 +143,8 @@ public class FarmFactory {
             if (usedPositions.contains(p)) continue;
 
             usedPositions.add(p);
-            Tree t = new Tree(getRandomTreeType(), new TimeSystem(), null, randomX, randomY, 1, 1);
-            trees.add(t);
+            //Tree t = new Tree(getRandomTreeType(), new TimeSystem(), null, randomX, randomY, 1, 1);
+            //trees.add(t);
         }
         return trees;
     }

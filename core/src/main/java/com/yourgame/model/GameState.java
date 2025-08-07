@@ -179,7 +179,7 @@ public class GameState {
                 if (!tree.canBeAlive(time)) {
                     treeIterator.remove();
                     player.getFarm().getPlaceables().remove(tree);
-                    Tile tile = map.findTile(tree.getBounds().x, tree.getBounds().y);
+                    Tile tile = map.findTile(tree.getPixelBounds().x, tree.getPixelBounds().y);
                     tile.setWalkable(true);
                     tile.setPlaceable(null);
                     tile.setSymbol(SymbolType.DefaultFloor);
