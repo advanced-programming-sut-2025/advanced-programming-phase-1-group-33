@@ -29,6 +29,7 @@ public class MapManager {
         playersCurrentMap = new HashMap<>();
         for (Player player : players) {
             MapData farm = new MapData(player.getUsername() + "-farm", "Game/Map/standard-farm.tmx");
+            farm.spawnRandomTrees();
             farms.put(player, farm);
             houses.put(
                 player,

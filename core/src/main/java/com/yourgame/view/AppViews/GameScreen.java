@@ -18,6 +18,7 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.yourgame.Graphics.Map.MapElement;
 import com.yourgame.Graphics.MenuAssetManager;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.yourgame.Graphics.Map.MapData;
@@ -30,6 +31,7 @@ import com.yourgame.Graphics.GameAssetManager;
 import com.yourgame.model.App;
 import com.yourgame.Graphics.MenuAssetManager;
 import com.yourgame.model.UserInfo.Player;
+import com.yourgame.model.WeatherAndTime.Season;
 
 import java.util.List;
 
@@ -123,9 +125,19 @@ public class GameScreen extends GameBaseScreen {
         mapRenderer.setView(camera);
         mapRenderer.render();
 
-        // Render player
+        // Render player and Map Elements
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
+
+        Season gameSeason = Season.Spring;
+        for (MapElement element : currentMap.getMapElements()) {
+            TextureRegion texture = element.getTexture(assetManager, gameSeason);
+            if (texture != null) {
+                java.awt.Rectangle bounds = element.getPixelBounds();
+                batch.draw(texture, bounds.x, bounds.y, bounds.width, bounds.height);
+            }
+        }
+
         TextureRegion currentFrame = walkAnimations[direction].getKeyFrame(stateTime, true);
         batch.draw(currentFrame, playerPosition.x, playerPosition.y);
         batch.end();

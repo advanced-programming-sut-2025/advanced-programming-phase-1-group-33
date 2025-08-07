@@ -26,7 +26,7 @@ public class Farm {
     private Door door;
 
     public Farm(Cottage cottage, GreenHouse greenHouse, ArrayList<Lake> lakes, ArrayList<Quarry> quarries,
-            ArrayList<Tree> trees, ArrayList<Stone> stones, ArrayList<Crop> crops, Rectangle rectangle, int type) {
+                ArrayList<Tree> trees, ArrayList<Stone> stones, ArrayList<Crop> crops, Rectangle rectangle, int type) {
 
         this.cottage = cottage;
         placeables.add(cottage);
@@ -37,7 +37,7 @@ public class Farm {
         this.quarries = quarries;
         placeables.addAll(quarries);
         this.trees = trees;
-        placeables.addAll(trees);
+        //placeables.addAll(trees);
         this.stones = stones;
         placeables.addAll(stones);
         this.type = type;

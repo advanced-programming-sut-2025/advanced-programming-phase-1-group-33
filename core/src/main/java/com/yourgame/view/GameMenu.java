@@ -105,8 +105,8 @@ public class GameMenu implements AppMenu {
                 return getAddDollars(input);
             case CRAFT_INFO:
                 return showCraftInfo(input);
-            case Plant:
-                return getPlant(input);
+//            case Plant:
+//                return getPlant(input);
             case CRAFTING_SHOW_RECIPES:
                 return craftShowRecipes(input);
             case CRAFTING_CRAFT:
@@ -399,12 +399,12 @@ public class GameMenu implements AppMenu {
         return response;
     }
 
-    private Response getPlant(String input) {
-        Request request = new Request(input);
-        request.body.put("seed", GameViewCommands.Plant.getGroup(input, "seed"));
-        request.body.put("direction", GameViewCommands.Plant.getGroup(input, "direction"));
-        return controller.Plant(request);
-    }
+//    private Response getPlant(String input) {
+//        Request request = new Request(input);
+//        request.body.put("seed", GameViewCommands.Plant.getGroup(input, "seed"));
+//        request.body.put("direction", GameViewCommands.Plant.getGroup(input, "direction"));
+//        return controller.Plant(request);
+//    }
 
     private Response getWalkFromHereAndShowMap(String input) {
         Request request = new Request(input);
