@@ -47,33 +47,8 @@ public class GameState {
         relationInitializer(players);
     }
 
-    /**
-     * Advances the game turn:
-     * <ul>
-     * <li>If all players are fainted, it skips the day and resets players for the
-     * new day.</li>
-     * <li>Otherwise, it selects the next active (non-fainted) player.</li>
-     * <li>If a full round is completed (wraps around), it advances the game clock
-     * by one hour.</li>
-     * </ul>
-     */
+
     public void nextPlayerTurn() {
-        int size = players.size();
-        int currentIndex = players.indexOf(currentPlayer);
-        int checkedPlayers = 0;
-
-        while (checkedPlayers < size) {
-            currentIndex = (currentIndex + 1) % size;
-            Player nextPlayer = players.get(currentIndex);
-
-            if (!nextPlayer.isFaintedToday()) {
-                setCurrentPlayer(nextPlayer);
-
-                break;
-            }
-            checkedPlayers++;
-        }
-
 
     }
 
