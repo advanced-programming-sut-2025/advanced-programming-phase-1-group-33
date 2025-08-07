@@ -28,17 +28,20 @@ import com.yourgame.Main;
 import com.yourgame.Graphics.GameAssets.HUDManager;
 import com.yourgame.Graphics.GameAssets.clockUIAssetManager;
 import com.yourgame.Graphics.GameAssetManager;
+import com.yourgame.controller.GameController.InventoryController;
 import com.yourgame.model.App;
 import com.yourgame.Graphics.MenuAssetManager;
 import com.yourgame.model.UserInfo.Player;
 import com.yourgame.model.WeatherAndTime.Season;
 import com.yourgame.model.enums.Avatar;
+import com.yourgame.view.GameViews.InventoryView;
 
 import java.util.List;
 
 public class GameScreen extends GameBaseScreen {
     private final Main game;
     private final GameAssetManager assetManager;
+    private final InventoryView inventoryView;
 
     // ==HUD==
     private clockUIAssetManager clockUI;
@@ -70,6 +73,7 @@ public class GameScreen extends GameBaseScreen {
     public GameScreen() {
         this.game = Main.getMain();
         this.assetManager = GameAssetManager.getInstance();
+        inventoryView = new InventoryView();
         this.clockUI = assetManager.getClockManager();
         this.hudManager = new HUDManager(HUDStage, clockUI, assetManager);
         this.currentEnergyPhase = 4;
@@ -113,6 +117,7 @@ public class GameScreen extends GameBaseScreen {
         handleInput(delta);
         checkForTeleport();
         handleHudUpdates();
+        inventoryView.render(delta);
 
         // Clear screen
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
