@@ -285,4 +285,12 @@ public class MapData {
         int pineNumber = 10 + rand.nextInt(10);
         spawnObject(pinePrototype, pineNumber);
     }
+
+    public void spawnRandomRocks() {
+        int smallNumber = 15 + rand.nextInt(10);
+        spawnObject(new Rock(true, 0, 0), smallNumber);
+
+        int bigNumber = 5 + rand.nextInt(5);
+        spawnObject(new Rock(false, 1, 0), bigNumber);
+    }
 }

@@ -30,6 +30,7 @@ public class MapManager {
         for (Player player : players) {
             MapData farm = new MapData(player.getUsername() + "-farm", "Game/Map/standard-farm.tmx");
             farm.spawnRandomTrees();
+            farm.spawnRandomRocks();
             farms.put(player, farm);
             houses.put(
                 player,

@@ -8,7 +8,7 @@ import java.awt.*;
 
 public abstract class MapElement {
     public enum ElementType {
-        TREE, STONE, WOOD, FORAGING, CROP, CRAFTING, ANIMAL_PRODUCT
+        TREE, ROCK, WOOD, FORAGING, CROP, CRAFTING, ANIMAL_PRODUCT
     }
 
     protected final ElementType type;
