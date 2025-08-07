@@ -139,12 +139,14 @@ public class GameScreen extends GameBaseScreen {
             if (faintAnimations.isAnimationFinished(stateTime)) {
                 isFainting = false;
                 stateTime = 0f;
-                changeMap(mapManager.getHouse(player),"spawn");
+                changeMap(mapManager.getHouse(player),"spawn-bed");
             }
         }
         batch.draw(currentFrame, playerPosition.x, playerPosition.y);
         batch.end();
 
+        //check for fainting
+        checkFainting();
 
         super.render(delta);
     }
@@ -178,12 +180,6 @@ public class GameScreen extends GameBaseScreen {
         if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_0)) hudManager.selectSlot(9);
         if (Gdx.input.isKeyJustPressed(Input.Keys.MINUS)) hudManager.selectSlot(10);
         if (Gdx.input.isKeyJustPressed(Input.Keys.EQUALS)) hudManager.selectSlot(11);
-        if (Gdx.input.isKeyJustPressed(Input.Keys.F)) {
-            isFainting = true;
-            respawnTriggered = false;
-            stateTime = 0f;
-        }
-
     }
 
     private void handleInput(float delta) {
@@ -335,4 +331,10 @@ public class GameScreen extends GameBaseScreen {
         }
     }
 
+    private void checkFainting(){
+        if(player.getEnergy() <= 0){
+            isFainting = true;
+            stateTime = 0f;
+        }
+    }
 }

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="17" height="19" tilewidth="16" tileheight="16" infinite="0" nextlayerid="5" nextobjectid="12">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="17" height="19" tilewidth="16" tileheight="16" infinite="0" nextlayerid="5" nextobjectid="15">
  <tileset firstgid="1" source="farm-house-simple.tsx"/>
  <layer id="1" name="Base" width="17" height="19">
   <data encoding="csv">
@@ -28,8 +28,6 @@
   <object id="1" name="table" x="116.545" y="91.0909" width="51.8182" height="62.7273"/>
   <object id="2" name="furnace" x="192.545" y="0.181818" width="52.1818" height="125.273"/>
   <object id="4" name="pot" x="14.3636" y="229.636" width="24" height="38.9091"/>
-  <object id="5" name="bed-top" x="219.273" y="191.091" width="48.9091" height="24"/>
-  <object id="7" name="bed-bottom" x="218.727" y="244.182" width="52" height="24.3636"/>
   <object id="8" name="TV" x="16.1818" y="80" width="47.6364" height="70.7273"/>
   <object id="9" name="walls" x="91.8182" y="304.182">
    <polygon points="0,0 -0.181818,-35.8182 167.636,-34.9091 176.545,-44 178.545,-44.7273 178.182,-207.091 152.545,-207.091 -79.0909,-207.455 -79.0909,-45.8182 -67.0909,-34.5455 -27.6364,-34.9091 -27.2727,-0.909091 -91.8182,-0.545455 -91.6364,-303.455 179.818,-303.818 180.182,-0.181818"/>
@@ -37,6 +35,9 @@
  </objectgroup>
  <objectgroup id="3" name="SpawnPoints">
   <object id="10" name="spawn" x="78.3333" y="257.346">
+   <point/>
+  </object>
+  <object id="12" name="spawn-bed" x="244.334" y="238.519">
    <point/>
   </object>
  </objectgroup>
