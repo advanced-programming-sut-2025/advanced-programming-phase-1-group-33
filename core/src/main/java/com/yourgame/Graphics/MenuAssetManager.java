@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.utils.Array;
 import com.yourgame.model.enums.Avatar;
 import com.yourgame.model.enums.Commands.MenuTypes;
 import org.slf4j.Logger;
@@ -35,6 +36,7 @@ public class MenuAssetManager {
     private final Texture[] avatarSpriteSheets;
     private final TextureRegion[][][] frames;
     private final Animation[][] walkAnimations;
+    private final Animation[] faintAnimations;
 
     private final Sound[] sounds;
     private final Music music;
@@ -106,9 +108,19 @@ public class MenuAssetManager {
             TextureRegion.split(avatarSpriteSheets[4], PLAYER_WIDTH, PLAYER_HEIGHT),
         };
 
+        faintAnimations = new Animation[] {
+            new Animation<>(0.4f, new Array<>(new TextureRegion[] {
+                frames[0][0][0],
+                frames[0][6][0],
+                frames[0][6][1],
+                frames[0][13][1]
+            })) //Abigail
+        };
+
+
         walkAnimations = new Animation[][]{
             new Animation[] { //Abigail
-                new Animation<>(0.2f, frames[0][0]), // Down
+                new Animation<>(0.2f,frames[0][0]), // Down
                 new Animation<>(0.2f, frames[0][1]), // Right
                 new Animation<>(0.2f, frames[0][2]), // Up
                 new Animation<>(0.2f, frames[0][3]) // Left
@@ -228,6 +240,15 @@ public class MenuAssetManager {
             case Pierre -> walkAnimations[2];
             case Robin -> walkAnimations[3];
             case Sam -> walkAnimations[4];
+        };
+    }
+    public Animation getFaintAnimation(Avatar avatar) {
+        return switch (avatar) {
+            case Abigail -> faintAnimations[0];
+            case Harvey -> faintAnimations[0];
+            case Pierre -> faintAnimations[0];
+            case Robin -> faintAnimations[0];
+            case Sam -> faintAnimations[0];
         };
     }
 

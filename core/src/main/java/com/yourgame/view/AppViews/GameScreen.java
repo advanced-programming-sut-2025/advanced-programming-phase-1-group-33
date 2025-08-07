@@ -32,6 +32,7 @@ import com.yourgame.model.App;
 import com.yourgame.Graphics.MenuAssetManager;
 import com.yourgame.model.UserInfo.Player;
 import com.yourgame.model.WeatherAndTime.Season;
+import com.yourgame.model.enums.Avatar;
 
 import java.util.List;
 
@@ -56,6 +57,9 @@ public class GameScreen extends GameBaseScreen {
     private OrthographicCamera camera;
 
     private Animation<TextureRegion>[] walkAnimations;
+    boolean isFainting = false;
+
+    private Animation<TextureRegion> faintAnimations;
     private float stateTime;
     private Vector2 playerPosition;
     private Vector2 playerVelocity;
@@ -81,6 +85,9 @@ public class GameScreen extends GameBaseScreen {
         mapManager = new MapManager(List.of(player));
         mapRenderer = new OrthogonalTiledMapRenderer(mapManager.getPlayersCurrentMap(player).getTiledMap());
         currentMap = mapManager.getPlayersCurrentMap(player);
+
+        walkAnimations = MenuAssetManager.getInstance().getWalkAnimation(App.getCurrentUser().getAvatar());
+        faintAnimations = MenuAssetManager.getInstance().getFaintAnimation(Avatar.Abigail);
     }
 
     @Override
@@ -94,9 +101,6 @@ public class GameScreen extends GameBaseScreen {
         camera = new OrthographicCamera();
         camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         camera.zoom = 0.4f;
-
-        // Load player sprite sheet
-        walkAnimations = MenuAssetManager.getInstance().getWalkAnimation(App.getCurrentUser().getAvatar());
 
         stateTime = 0f;
         playerPosition = currentMap.getSpawnPoint();
@@ -125,22 +129,26 @@ public class GameScreen extends GameBaseScreen {
         mapRenderer.setView(camera);
         mapRenderer.render();
 
-        // Render player and Map Elements
-        batch.setProjectionMatrix(camera.combined);
+        // Render player
         batch.begin();
-
-        Season gameSeason = Season.Spring;
-        for (MapElement element : currentMap.getMapElements()) {
-            TextureRegion texture = element.getTexture(assetManager, gameSeason);
-            if (texture != null) {
-                java.awt.Rectangle bounds = element.getPixelBounds();
-                batch.draw(texture, bounds.x, bounds.y, bounds.width, bounds.height);
+        batch.setProjectionMatrix(camera.combined);
+        TextureRegion currentFrame;
+        if(!isFainting) {
+            currentFrame = walkAnimations[direction].getKeyFrame(stateTime,true);
+        }
+        else {
+            currentFrame = faintAnimations.getKeyFrame(stateTime, false);
+            if (faintAnimations.isAnimationFinished(stateTime)) {
+                isFainting = false;
+                stateTime = 0f;
+                changeMap(mapManager.getHouse(player),"spawn-bed");
             }
         }
-
-        TextureRegion currentFrame = walkAnimations[direction].getKeyFrame(stateTime, true);
         batch.draw(currentFrame, playerPosition.x, playerPosition.y);
         batch.end();
+
+        //check for fainting
+        checkFainting();
 
         super.render(delta);
     }
@@ -199,7 +207,7 @@ public class GameScreen extends GameBaseScreen {
             direction = 0;
         }
 
-        if (playerVelocity.isZero()) {
+        if (playerVelocity.isZero() && !isFainting) {
             stateTime = 0f; // Pause animation when idle
         } else {
             // Store original position
@@ -325,4 +333,10 @@ public class GameScreen extends GameBaseScreen {
         }
     }
 
+    private void checkFainting(){
+        if(player.getEnergy() <= 0){
+            isFainting = true;
+            stateTime = 0f;
+        }
+    }
 }
