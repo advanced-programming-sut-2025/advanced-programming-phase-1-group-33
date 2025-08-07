@@ -14,11 +14,16 @@ public class TimeSystem {
     private Season season;
     private DaysOfTheWeek dayOfWeek;
     private int day;
+    private int minutes = 0 ; 
+
+
     private int hour;
     private Weather weather;
     private Weather nextDayWeather;
 
+
     public TimeSystem() {
+        this.minutes = 0; 
         this.hour = 6; // Stardew Valley starts at 6:00 AM
         this.dayOfWeek = DaysOfTheWeek.Saturday;
         this.season = Season.Spring;
@@ -42,8 +47,12 @@ public class TimeSystem {
     }
 
         public void advanceMinutes(int gameMinutes) {
-        int advanceHours = gameMinutes / 60;
-        this.hour += advanceHours;
+
+            this.minutes += gameMinutes;
+            if( this.minutes >= 60){
+                this.hour += this.minutes / 60; 
+
+            }
         
         while (this.hour >= 26) { // 2:00 AM is 26th hour from 6:00 AM
             this.hour = 6; // Reset to morning
@@ -103,6 +112,9 @@ public class TimeSystem {
 
     public int getHour() {
         return hour;
+    }
+    public int getMinutes() {
+        return minutes;
     }
 
     public void setHour(int hour) {

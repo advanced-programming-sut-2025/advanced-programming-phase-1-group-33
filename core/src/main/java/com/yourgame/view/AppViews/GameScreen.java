@@ -309,7 +309,11 @@ public class GameScreen extends GameBaseScreen {
     private void handleHudUpdates(float delta) {
         // Example: Update energy bar
 
+        hudManager.timeAccumulator += delta;
+
         if (hudManager.timeAccumulator >= 7f) { // every 7 seconds = 10 minutes
+            
+            Gdx.app.log("time", hudManager.getTimeSystem().getMinutes() + "Minuts");
             hudManager.getTimeSystem().advanceMinutes(10);
             hudManager.timeAccumulator = 0f;
         }
