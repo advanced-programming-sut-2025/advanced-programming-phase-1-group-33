@@ -12,7 +12,7 @@ public enum ForagingCrop implements Ingredient {
     Dandelion(Season.Spring, 40, 25),
     Leek(Season.Spring, 60, 40),
     Morel(Season.Spring, 150, 20),
-    Salmon_Berry(Season.Spring, 5, 25),
+    Salmonberry(Season.Spring, 5, 25),
     Spring_Onion(Season.Spring, 8, 13),
     Wild_Horseradish(Season.Spring, 50, 13),
     Fiddlehead_Fern(Season.Summer, 90, 25),
