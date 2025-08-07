@@ -56,9 +56,9 @@ public class WateringCan extends Tool {
         }
         waterCapacity--;
 
-        Response energyConsumptionResponse = App.getGameState().getCurrentPlayer().consumeEnergy(consumedEnergy);
-        if (!energyConsumptionResponse.getSuccessful())
-            return energyConsumptionResponse;
+        // Response energyConsumptionResponse = App.getGameState().getCurrentPlayer().consumeEnergy(consumedEnergy);
+        // if (!energyConsumptionResponse.getSuccessful())
+        //     return energyConsumptionResponse;
 
         return new Response(true, "");
     }

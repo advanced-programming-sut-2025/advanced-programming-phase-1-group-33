@@ -27,7 +27,8 @@ import com.yourgame.model.enums.SymbolType;
 public class GameState {
     private final ArrayList<Player> players = new ArrayList<>();
     private final ArrayList<Farm> farms = new ArrayList<>();
-    private TimeSystem time;
+    private TimeSystem timeSystem;
+    
     private Map map;
 
     private Player currentPlayer;
@@ -41,14 +42,15 @@ public class GameState {
 
     public GameState(ArrayList<Player> players) {
         this.players.addAll(players);
-        relationInitializer(players);
+        this.timeSystem = new TimeSystem();
+
     }
 
 
     public GameState(ArrayList<Player> players, ArrayList<Farm> farms, User u, Map x) {
         this.farms.addAll(farms);
         this.players.addAll(players);
-        this.time = new TimeSystem();
+        this.timeSystem = new TimeSystem();
         this.map = x;
         relationInitializer(players);
     }
@@ -79,7 +81,7 @@ public class GameState {
     }
 
     public TimeSystem getGameTime() {
-        return time;
+        return timeSystem;
     }
 
     private void relationInitializer(ArrayList<Player> players) {
@@ -138,118 +140,7 @@ public class GameState {
     }
 
     public void MakeGameReadyForNextDay() {
-        // To do
-        // if (App.getCurrentMenu() != null && App.getCurrentMenu().getMenu() instanceof
-        // GameMenu) {
-        // ((GameMenu) App.getCurrentMenu().getMenu()).doNights();
-        // }
-
-        for (Player player : players) {
-            player.setConsumedEnergyInThisTurn(0);
-            int ratio = 1;
-            if (player.getRemainingDaysAfterMarigDenied() > 0) {
-                ratio = 2;
-                player.setRemainingDaysAfterMarigDenied(
-                        player.getRemainingDaysAfterMarigDenied() - 1);
-            }
-            if (player.isFaintedToday()) {
-                player.setEnergy(150 / ratio);
-            } else {
-                player.setEnergy(200 / ratio);
-            }
-            player.setFaintedToday(false);
-            Iterator<Tree> treeIterator = player.getFarm().getTrees().iterator();
-            Iterator<Crop> cropIterator = player.getFarm().getCrops().iterator();
-            GreenHouse gh = player.getFarm().getGreenHouse();
-            Iterator<Growable> greenHouseCrops = gh.getGrowables().iterator();
-
-
-            while (cropIterator.hasNext()) {
-                Crop crop = cropIterator.next();
-                crop.grow(time);
-                if (!crop.canBeAlive(time)) {
-                    cropIterator.remove();
-
-                    player.getFarm().getPlaceables().removeIf(p -> p == crop);
-                    Tile tile = map.findTile(crop.getBounds().x, crop.getBounds().y);
-                    tile.setWalkable(true);
-                    tile.setPlaceable(null);
-                    tile.setSymbol(SymbolType.DefaultFloor);
-                    tile.setFertilizer(null);
-                    tile.setPlowed(false);
-                }
-            }
-            while (treeIterator.hasNext()) {
-                Tree tree = treeIterator.next();
-                tree.grow(time);
-                if (!tree.canBeAlive(time)) {
-                    treeIterator.remove();
-                    player.getFarm().getPlaceables().remove(tree);
-                    Tile tile = map.findTile(tree.getPixelBounds().x, tree.getPixelBounds().y);
-                    tile.setWalkable(true);
-                    tile.setPlaceable(null);
-                    tile.setSymbol(SymbolType.DefaultFloor);
-                    tile.setFertilizer(null);
-                    tile.setPlowed(false);
-                }
-            }
-
-            if (!gh.isBroken()) {
-                while (greenHouseCrops.hasNext()) {
-                    Growable growable = greenHouseCrops.next();
-                    growable.grow(time);
-                    if (!growable.canBeAlive(time)) {
-                        greenHouseCrops.remove();
-                        if (growable instanceof Crop) {
-                            player.getFarm().getPlaceables().removeIf(p -> p == growable);
-
-                        } else if (growable instanceof Tree tree) {
-                            player.getFarm().getPlaceables().remove(tree);
-                        }
-                    }
-                }
-            }
-            map.generateRandomForagingCrop(player.getFarm());
-            map.generateRandomStoneFarm(player.getFarm());
-
-            for (Animal animal : player.getBackpack().getAllAnimals()) {
-                if (animal.isOutOfHabitat()) {
-                    animal.decrementFriendShip(20);
-                }
-                if (!animal.hasFedYesterday()) {
-                    animal.decrementFriendShip(20);
-                }
-                if (!animal.hasPettedYesterday()) {
-                    animal.decrementFriendShip((animal.getFriendShip() / 200) + 10);
-                }
-            }
-        }
-        map.GotThunderByStormyWeather();
-        map.randomForagingMineralGenerator();
-        for (ShippingBin bin : this.map.getShippingBins()) {
-            bin.checkEveryNight();
-        }
-
-        for (PlayersRelation relation : App.getGameState().relationsBetweenPlayers.relationNetwork.values()) {
-            relation.checkEveryNight();
-        }
-
-        for (Player player : players) {
-            player.getRelationWithAbigail().checkEveryNight(player);
-            player.getRelationWithHarvey().checkEveryNight(player);
-            player.getRelationWithLeah().checkEveryNight(player);
-            player.getRelationWithRobin().checkEveryNight(player);
-            player.getRelationWithSebastian().checkEveryNight(player);
-        }
-
-        this.getMap().getNpcVillage().getBlacksmith().ResetQuantityEveryNight();
-        this.getMap().getNpcVillage().getPierreGeneralStore().ResetQuantityEveryNight();
-        this.getMap().getNpcVillage().getMarnieRanch().ResetQuantityEveryNight();
-        this.getMap().getNpcVillage().getFishShop().ResetQuantityEveryNight();
-        this.getMap().getNpcVillage().getJojaMart().ResetQuantityEveryNight();
-        this.getMap().getNpcVillage().getStardopSaloon().ResetQuantityEveryNight();
-        this.getMap().getNpcVillage().getCarpenterShop().ResetQuantityEveryNight();
-
+        // TODO: need to Clear this one 
     }
 
     public RelationNetwork getRelationsBetweenPlayers() {

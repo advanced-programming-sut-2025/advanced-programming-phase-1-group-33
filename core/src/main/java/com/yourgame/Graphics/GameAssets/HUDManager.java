@@ -27,6 +27,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport; // Recommended for HUD Stage
 import com.yourgame.model.Tool;
+import com.yourgame.model.UserInfo.Player;
 import com.yourgame.model.WeatherAndTime.TimeSystem;
 import com.yourgame.observers.TimeObserver;
 
@@ -36,6 +37,8 @@ public class HUDManager {
     private Stage hudStage;
     private clockUIAssetManager clockUI;
     private AssetManager assetManager;
+
+    private Player localPlayer;
 
     // Energy Bar 
     private Texture[] energy_bar_textures;
@@ -49,7 +52,7 @@ public class HUDManager {
 
     private Texture InventoryTexture;
 
-        // Inventory Bar
+    // Inventory Bar
     private final Texture inventoryTexture;
     private InventorySlot[] inventorySlots;
     private int selectedSlotIndex = 0;
@@ -58,31 +61,20 @@ public class HUDManager {
     // Testing the Time 
     private TimeObserver timeObserver;
      
-    public TimeObserver getTimeObserver() {
-        return timeObserver;
-    }
 
-    private TimeSystem timeSystem; 
-    public TimeSystem getTimeSystem() {
-        return timeSystem;
-    }
 
     public float timeAccumulator = 0f; // Used to track time for updates` 
-    public HUDManager(Stage stage, clockUIAssetManager clockUI, AssetManager assetManager) {
+    public HUDManager(Stage stage, clockUIAssetManager clockUI, AssetManager assetManager, Player localPlayer) {
         this.hudStage = stage;
         this.clockUI = clockUI;
         this.assetManager = assetManager;
+
+        this.localPlayer = localPlayer; 
+
+
         this.energy_bar_textures = clockUI.getEnergyBarMode();
         this.inventoryTexture = clockUI.getInventoryTexture(); // Assumes this texture is loaded
         this.inventorySlots = new InventorySlot[12];
-        this.timeSystem = new TimeSystem(); // Initialize the TimeSystem
-        this.timeObserver = new TimeObserver() {
-            @Override
-            public void onTimeChanged(TimeSystem timeSystem) {
-                // Handle time changes here, e.g., update UI elements
-                Gdx.app.log("HUDManager", "Time changed: " + timeSystem.getHour() + ":" + timeSystem.getDay() + " " + timeSystem.getSeason());
-            }
-        };  
         
         createSelectionHighlight();
 
@@ -103,13 +95,13 @@ public class HUDManager {
 
     // Method to create and add the info bar (clock, weather, season) and energy bar
     // to the HUD stage
-    public void createHUD(weatherTypeButton initialWeather, seasonTypeButton initialSeason, int initialEnergyPhase) {
+    public void createHUD(weatherTypeButton initialWeather, seasonTypeButton initialSeason) {
         // Create the clock/info bar table
         Table clockBarTable = createClockBarTable(initialWeather, initialSeason);
         hudStage.addActor(clockBarTable);
 
         // Create and add the energy bar table
-        Table energyBarTable = createEnergyBarTable(initialEnergyPhase);
+        Table energyBarTable = createEnergyBarTable();
         hudStage.addActor(energyBarTable);
 
         Table InventoryBarTable  = createInventoryBarTable();
@@ -232,29 +224,28 @@ public class HUDManager {
         return (tool != null) ? tool.getName() : "Empty";
     }
 
-    // Energy Bar HAndler 
-    public Table createEnergyBarTable(int initialPhase) {
-        Table energy_barTable = new Table();
-        energy_barTable.setFillParent(true);
-        energy_barTable.bottom().right().padRight(10).padBottom(10);
+    public Table createEnergyBarTable() {
+        Table energyBarTable = new Table();
+        energyBarTable.setFillParent(true);
+        energyBarTable.bottom().right().padRight(10).padBottom(10);
 
-        if (initialPhase >= 0 && initialPhase < energy_bar_textures.length) {
-            this.energyBarImage = new Image(this.energy_bar_textures[initialPhase]);
-        } else {
-            Gdx.app.log("HUDManager", "Initial energy phase " + initialPhase + " is out of bounds. Using phase 0.");
-            this.energyBarImage = new Image(this.energy_bar_textures[0]);
-        }
-
-        energy_barTable.add(energyBarImage);
-        return energy_barTable;
+        int initialPhase = localPlayer.getEnergyPhase(); // Get phase from the player
+        this.energyBarImage = new Image(this.energy_bar_textures[initialPhase]);
+        
+        energyBarTable.add(energyBarImage);
+        return energyBarTable;
     }
 
-    public void updateEnergyBar(int newPhase) {
+    public void updateEnergyBar() {
+        
         if (energyBarImage == null) {
             Gdx.app.log("HUDManager", "Energy bar Image not initialized. Cannot update.");
             return;
         }
+        
+        int newPhase = this.localPlayer.getEnergyPhase();
         if (newPhase >= 0 && newPhase < energy_bar_textures.length) {
+            Gdx.app.log("HUDManager", "updating Energy Bar.");
             energyBarImage.setDrawable(new Image(this.energy_bar_textures[newPhase]).getDrawable());
         } else {
             Gdx.app.log("Energy_bar", "Invalid energy bar phase: " + newPhase);

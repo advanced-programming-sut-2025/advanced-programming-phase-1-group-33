@@ -54,13 +54,13 @@ public class Axe extends Tool {
                 default -> 0;
             };
         }
-        Response energyConsumptionResult = App.getGameState().getCurrentPlayer().consumeEnergy(consumedEnergy);
-        if (!energyConsumptionResult.getSuccessful()){
-            return energyConsumptionResult;
-        }
+        // // Response energyConsumptionResult = App.getGameState().getCurrentPlayer().consumeEnergy(consumedEnergy);
+        // if (!energyConsumptionResult.getSuccessful()){
+        //     return energyConsumptionResult;
+        // }
 
-        return energyConsumptionResult;
-
+        // return energyConsumptionResult;
+        return new Response(false, "hi"); 
 
 
     }

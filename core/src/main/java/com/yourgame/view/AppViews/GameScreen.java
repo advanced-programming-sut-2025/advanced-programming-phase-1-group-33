@@ -45,14 +45,13 @@ public class GameScreen extends GameBaseScreen {
     private clockUIAssetManager clockUI;
     private ImageButton clockImg;
     private HUDManager hudManager;
-    private int currentEnergyPhase;
     private HUDManager.weatherTypeButton currentWeather; // New variable for dynamic weather
     private HUDManager.seasonTypeButton currentSeason;
 
     // ==GAME==
     private MapManager mapManager;
     private Player player;
-    private List<Player> players =  new ArrayList<>(); 
+    private ArrayList<Player> players =  new ArrayList<>(); 
     private MapData currentMap;
     private GameState gameState; 
 
@@ -71,21 +70,24 @@ public class GameScreen extends GameBaseScreen {
         this.game = Main.getMain();
         this.assetManager = GameAssetManager.getInstance();
         this.clockUI = assetManager.getClockManager();
-        this.hudManager = new HUDManager(HUDStage, clockUI, assetManager);
-        this.currentEnergyPhase = 4;
+        
+        this.gameState = new GameState(players); 
+        App.setGameState(gameState);
+
+
         this.currentWeather = HUDManager.weatherTypeButton.Sunny; // Initial weather
         this.currentSeason = HUDManager.seasonTypeButton.Spring;
-
+        
         backgroundMusic = MenuAssetManager.getInstance().getMusic(); // Or
-                                                                     // Gdx.audio.newMusic(Gdx.files.internal("path/to/your/game_music.mp3"));
+        // Gdx.audio.newMusic(Gdx.files.internal("path/to/your/game_music.mp3"));
         clickSound = MenuAssetManager.getInstance().getSounds("click"); // Example SFX
-
-        player = Player.guest();
+        this.player = Player.guest();
+        System.out.println(player);
+        this.hudManager = new HUDManager(HUDStage, clockUI, assetManager, this.player);
         mapManager = new MapManager(List.of(player));
         mapRenderer = new OrthogonalTiledMapRenderer(mapManager.getPlayersCurrentMap(player).getTiledMap());
         currentMap = mapManager.getPlayersCurrentMap(player);
 
-        this.gameState = new ; 
     }
 
     @Override
@@ -93,7 +95,7 @@ public class GameScreen extends GameBaseScreen {
         assetManager.loadAllAssets();
 
         // Initialize HUD with initial states
-        hudManager.createHUD(currentWeather, currentSeason, currentEnergyPhase);
+        hudManager.createHUD(currentWeather, currentSeason);
 
         // Set up camera
         camera = new OrthographicCamera();
@@ -326,18 +328,13 @@ public class GameScreen extends GameBaseScreen {
 
         hudManager.timeAccumulator += delta;
 
-        if (hudManager.timeAccumulator >= 7f) { // every 7 seconds = 10 minutes
-            
-            Gdx.app.log("time", hudManager.getTimeSystem().getMinutes() + "Minuts");
-            hudManager.getTimeSystem().advanceMinutes(10);
-            hudManager.timeAccumulator = 0f;
+        if (hudManager.timeAccumulator >= 7f) { // every 7 seconds = 10 minutes            
+            // Gdx.app.log("time", hudManager.getTimeSystem().getMinutes() + "Minuts");
+            // hudManager.getTimeSystem().advanceMinutes(10);
+            // hudManager.timeAccumulator = 0f;
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.E)) {
-            currentEnergyPhase--;
-            if (currentEnergyPhase < 0) {
-                currentEnergyPhase = 4;
-            }
-            hudManager.updateEnergyBar(currentEnergyPhase);
+            player.consumeEnergy(10);
         }
 
         // Example: Update weather (cycle through enums with 'W' key)
@@ -355,6 +352,7 @@ public class GameScreen extends GameBaseScreen {
             currentSeason = seasons[nextIndex];
             hudManager.updateSeason(currentSeason);
         }
+        hudManager.updateEnergyBar();
     }
 
 }

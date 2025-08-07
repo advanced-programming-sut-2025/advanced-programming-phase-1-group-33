@@ -41,9 +41,9 @@ public class Pickaxe extends Tool {
             };
         }
 
-        Response energyConsumptionResponse = App.getGameState().getCurrentPlayer().consumeEnergy(consumedEnergy);
-        if (!energyConsumptionResponse.getSuccessful())
-            return energyConsumptionResponse;
+        // Response energyConsumptionResponse = App.getGameState().getCurrentPlayer().consumeEnergy(consumedEnergy);
+        // if (!energyConsumptionResponse.getSuccessful())
+        //     return energyConsumptionResponse;
 
         return new Response(true, "");
 

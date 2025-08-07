@@ -12,9 +12,9 @@ public class MilkPail extends Tool {
     @Override
     public Response useTool() {
 
-        Response energyConsumptionResponse = App.getGameState().getCurrentPlayer().consumeEnergy(4);
-        if (!energyConsumptionResponse.getSuccessful())
-            return energyConsumptionResponse;
+        // Response energyConsumptionResponse = App.getGameState().getCurrentPlayer().consumeEnergy(4);
+        // if (!energyConsumptionResponse.getSuccessful())
+        //     return energyConsumptionResponse;
 
         return new Response(true, "");
 
