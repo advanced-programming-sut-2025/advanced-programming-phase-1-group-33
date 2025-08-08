@@ -70,7 +70,7 @@ public class JojaMart extends Store {
         inventory.add(new JojaMartSeasonsStock("Powdermelon Seeds", Seeds.PowdermelonSeeds, Season.Winter, 20, 10));
 
         //Permanent stock
-        inventory.add(new JojaMartSeasonsStock("Ancient Seed", Seeds.AncientSeeds, Season.Special, 500, 1));
+        // inventory.add(new JojaMartSeasonsStock("Ancient Seed", Seeds.AncientSeeds, Season.Special, 500, 1));
         inventory.add(new ShopItem("Joja cola", 75, Integer.MAX_VALUE));
 
     }
@@ -131,10 +131,10 @@ public class JojaMart extends Store {
 
         if (item instanceof JojaMartSeasonsStock) {
 
-            if ((!App.getGameState().getGameTime().getSeason().equals(((JojaMartSeasonsStock) item).getSeason())) &&
-                    (!((JojaMartSeasonsStock) item).getSeason().equals(Season.Special))) {
-                return new Response(false, "you can't buy this item in this season");
-            }
+            // if ((!App.getGameState().getGameTime().getSeason().equals(((JojaMartSeasonsStock) item).getSeason())) &&
+            //         (!((JojaMartSeasonsStock) item).getSeason().equals(Season.Special))) {
+            //     return new Response(false, "you can't buy this item in this season");
+            // }
 
             App.getGameState().getCurrentPlayer().getBackpack().addIngredients(((JojaMartSeasonsStock) item).getSeedType(), value);
             App.getGameState().getCurrentPlayer().getBackpack().addIngredients(new Coin(), (-1) * totalPrice);

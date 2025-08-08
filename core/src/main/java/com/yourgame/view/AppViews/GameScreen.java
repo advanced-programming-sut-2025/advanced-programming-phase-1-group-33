@@ -45,8 +45,6 @@ public class GameScreen extends GameBaseScreen {
     private clockUIAssetManager clockUI;
     private ImageButton clockImg;
     private HUDManager hudManager;
-    private HUDManager.weatherTypeButton currentWeather; // New variable for dynamic weather
-    private HUDManager.seasonTypeButton currentSeason;
 
     // ==GAME==
     private MapManager mapManager;
@@ -75,8 +73,6 @@ public class GameScreen extends GameBaseScreen {
         App.setGameState(gameState);
 
 
-        this.currentWeather = HUDManager.weatherTypeButton.Sunny; // Initial weather
-        this.currentSeason = HUDManager.seasonTypeButton.Spring;
         
         backgroundMusic = MenuAssetManager.getInstance().getMusic(); // Or
         // Gdx.audio.newMusic(Gdx.files.internal("path/to/your/game_music.mp3"));
@@ -95,7 +91,7 @@ public class GameScreen extends GameBaseScreen {
         assetManager.loadAllAssets();
 
         // Initialize HUD with initial states
-        hudManager.createHUD(currentWeather, currentSeason);
+        hudManager.createHUD();
 
         // Set up camera
         camera = new OrthographicCamera();
@@ -326,32 +322,32 @@ public class GameScreen extends GameBaseScreen {
     private void handleHudUpdates(float delta) {
         // Example: Update energy bar
 
-        hudManager.timeAccumulator += delta;
 
-        if (hudManager.timeAccumulator >= 7f) { // every 7 seconds = 10 minutes            
-            // Gdx.app.log("time", hudManager.getTimeSystem().getMinutes() + "Minuts");
-            // hudManager.getTimeSystem().advanceMinutes(10);
-            // hudManager.timeAccumulator = 0f;
-        }
         if (Gdx.input.isKeyJustPressed(Input.Keys.E)) {
             player.consumeEnergy(10);
         }
 
         // Example: Update weather (cycle through enums with 'W' key)
         if (Gdx.input.isKeyJustPressed(Input.Keys.Q)) {
-            HUDManager.weatherTypeButton[] weathers = HUDManager.weatherTypeButton.values();
-            int nextIndex = (currentWeather.ordinal() + 1) % weathers.length;
-            currentWeather = weathers[nextIndex];
-            hudManager.updateWeather(currentWeather);
+            // TODO: Need the CheetCode Be Implemented 
+            // HUDManager.weatherTypeButton[] weathers = HUDManager.weatherTypeButton.values();
+            // int nextIndex = (currentWeather.ordinal() + 1) % weathers.length;
+            // currentWeather = weathers[nextIndex];
+            // hudManager.updateWeather(currentWeather);
         }
 
         // Example: Update season (cycle through enums with 'R' key)
         if (Gdx.input.isKeyJustPressed(Input.Keys.R)) {
-            HUDManager.seasonTypeButton[] seasons = HUDManager.seasonTypeButton.values();
-            int nextIndex = (currentSeason.ordinal() + 1) % seasons.length;
-            currentSeason = seasons[nextIndex];
-            hudManager.updateSeason(currentSeason);
+            // TODO: need the cheat Code Be implemented 
+            // HUDManager.seasonTypeButton[] seasons = HUDManager.seasonTypeButton.values();
+            // int nextIndex = (currentSeason.ordinal() + 1) % seasons.length;
+            // currentSeason = seasons[nextIndex];
+            // hudManager.updateSeason(currentSeason);
         }
+
+        hudManager.updateTime(delta); 
+        hudManager.updateWeather();
+        hudManager.updateSeason();
         hudManager.updateEnergyBar();
     }
 

@@ -7,7 +7,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public enum ForagingCrop implements Ingredient {
-    CommonMushroom(Season.Special, 40, 38),
+    // CommonMushroom(Season.Special, 40, 38),
+    CommonMushroom(Season.Spring, 40, 38),
     Daffodil(Season.Spring, 30, 0),
     Dandelion(Season.Spring, 40, 25),
     Leek(Season.Spring, 60, 40),
@@ -71,9 +72,9 @@ public enum ForagingCrop implements Ingredient {
                 crops.add(crop);
             }
         }
-        if (season != Season.Special) {
-            crops.add(ForagingCrop.CommonMushroom);
-        }
+        // if (season != Season.Special) {
+        //     crops.add(ForagingCrop.CommonMushroom);
+        // }
         return crops;
     }
 

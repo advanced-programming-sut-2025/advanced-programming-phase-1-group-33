@@ -24,17 +24,17 @@ public enum TreeType {
     PomegranateTree(TreeSource.PomegranateSapling, new ArrayList<>(Arrays.asList(7, 7, 7, 7)), 28,
             Fruit.Pomegranate, 1, 140, true, 38, Season.Fall),
     OakTree(TreeSource.Acorns, new ArrayList<>(Arrays.asList(7, 7, 7, 7)), 28,
-            Fruit.OakResin, 7, 150, false, 0, Season.Special),
+            Fruit.OakResin, 7, 150, false, 0, Season.Winter),
     MapleTree(TreeSource.MapleSeeds, new ArrayList<>(Arrays.asList(7, 7, 7, 7)), 28,
-            Fruit.MapleSyrup, 9, 200, false, 0, Season.Special),
+            Fruit.MapleSyrup, 9, 200, false, 0, Season.Winter),
     PineTree(TreeSource.PineCones, new ArrayList<>(Arrays.asList(7, 7, 7, 7)), 28,
-            Fruit.PineTar, 5, 100, false, 0, Season.Special),
+            Fruit.PineTar, 5, 100, false, 0, Season.Winter),
     MahoganyTree(TreeSource.MahoganySeeds, new ArrayList<>(Arrays.asList(7, 7, 7, 7)), 28,
-            Fruit.Sap, 1, 2, true, -2, Season.Special),
+            Fruit.Sap, 1, 2, true, -2, Season.Winter),
     MushroomTree(TreeSource.MushroomTreeSeeds, new ArrayList<>(Arrays.asList(7, 7, 7, 7)), 28,
-            Fruit.CommonMushroom, 1, 40, true, 38, Season.Special),
+            Fruit.CommonMushroom, 1, 40, true, 38, Season.Winter),
     MysticTree(TreeSource.MysticTreeSeeds, new ArrayList<>(Arrays.asList(7, 7, 7, 7)), 28,
-            Fruit.MysticSyrup, 7, 1000, true, 500, Season.Special),;
+            Fruit.MysticSyrup, 7, 1000, true, 500, Season.Winter),;
 
     private final TreeSource source;
     private final ArrayList<Integer> stages;

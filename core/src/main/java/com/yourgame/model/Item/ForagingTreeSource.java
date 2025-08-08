@@ -6,11 +6,16 @@ import com.yourgame.model.WeatherAndTime.Season;
 import java.util.HashMap;
 
 public enum ForagingTreeSource {
-    Acorns(Season.Special),
-    MapleSeeds(Season.Special),
-    PineCones(Season.Special),
-    MahoganySeeds(Season.Special),
-    MushroomTreeSeeds(Season.Special),;
+    // Acorns(Season.Special),
+    // MapleSeeds(Season.Special),
+    // PineCones(Season.Special),
+    // MahoganySeeds(Season.Special),
+    // MushroomTreeSeeds(Season.Special),;
+    Acorns(Season.Fall),
+    MapleSeeds(Season.Fall),
+    PineCones(Season.Fall),
+    MahoganySeeds(Season.Fall),
+    MushroomTreeSeeds(Season.Fall),;
 
     private final Season season;
     private final static HashMap<String, ForagingTreeSource> stringToForagingTreeSource = new HashMap<>();

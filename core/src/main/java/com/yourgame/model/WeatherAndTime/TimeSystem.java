@@ -51,7 +51,7 @@ public class TimeSystem {
             this.minutes += gameMinutes;
             if( this.minutes >= 60){
                 this.hour += this.minutes / 60; 
-
+                this.minutes = 0; 
             }
         
         while (this.hour >= 26) { // 2:00 AM is 26th hour from 6:00 AM
