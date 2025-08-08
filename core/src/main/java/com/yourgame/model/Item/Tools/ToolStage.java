@@ -1,4 +1,4 @@
-package com.yourgame.model.Item.Inventory.Tools;
+package com.yourgame.model.Item.Tools;
 
 public enum ToolStage {
     Primary(2000),

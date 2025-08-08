@@ -5,8 +5,8 @@ import java.util.ArrayList;
 
 import com.yourgame.model.App;
 import com.yourgame.model.IO.Response;
-import com.yourgame.model.Item.Inventory.Tools.FishingPole;
-import com.yourgame.model.Item.Inventory.Tools.PoleStage;
+import com.yourgame.model.Item.Tools.FishingPole;
+import com.yourgame.model.Item.Tools.PoleStage;
 import com.yourgame.model.Recipes.CraftingRecipes;
 import com.yourgame.model.UserInfo.Coin;
 import com.yourgame.model.enums.SymbolType;

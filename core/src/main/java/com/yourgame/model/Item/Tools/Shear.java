@@ -1,14 +1,12 @@
-package com.yourgame.model.Item.Inventory.Tools;
+package com.yourgame.model.Item.Tools;
 
 import com.yourgame.Graphics.Map.MapData;
 import com.yourgame.Graphics.Map.TileData;
-import com.yourgame.model.App;
-import com.yourgame.model.IO.Response;
 import com.yourgame.model.UserInfo.Player;
 
-public class Scythe extends Tool {
-    public Scythe() {
-        super(ToolType.Scythe, 0);
+public class Shear extends Tool {
+    public Shear() {
+        super(ToolType.Shears, 0);
     }
 
     @Override

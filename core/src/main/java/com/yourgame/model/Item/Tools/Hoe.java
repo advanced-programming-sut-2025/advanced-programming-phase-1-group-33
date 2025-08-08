@@ -1,4 +1,4 @@
-package com.yourgame.model.Item.Inventory.Tools;
+package com.yourgame.model.Item.Tools;
 
 import com.yourgame.Graphics.Map.MapData;
 import com.yourgame.Graphics.Map.TileData;

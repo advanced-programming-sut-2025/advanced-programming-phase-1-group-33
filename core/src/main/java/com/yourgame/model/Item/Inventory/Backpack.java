@@ -4,7 +4,7 @@ import com.yourgame.model.Animals.Animal;
 import com.yourgame.model.Animals.AnimalGood;
 import com.yourgame.model.Animals.Fish;
 import com.yourgame.model.Animals.Hay;
-import com.yourgame.model.Item.Inventory.Tools.Tool;
+import com.yourgame.model.Item.Tools.Tool;
 import com.yourgame.model.Item.*;
 import com.yourgame.model.ManuFactor.ArtisanMachine;
 import com.yourgame.model.ManuFactor.Ingredient;

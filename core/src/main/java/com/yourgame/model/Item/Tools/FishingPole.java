@@ -1,4 +1,4 @@
-package com.yourgame.model.Item.Inventory.Tools;
+package com.yourgame.model.Item.Tools;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.yourgame.Graphics.GameAssetManager;

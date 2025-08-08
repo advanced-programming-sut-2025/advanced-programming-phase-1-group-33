@@ -1,7 +1,7 @@
 package com.yourgame.model.Stores;
 
 
-import com.yourgame.model.Item.Inventory.Tools.PoleStage;
+import com.yourgame.model.Item.Tools.PoleStage;
 
 public class FishShopPoleItem extends ShopItem{
 
