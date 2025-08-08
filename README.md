@@ -1,8 +1,19 @@
-# Team: 33 
-## Aeen Karimian (403171146)
-## Matin Fadavi (403106392)
-[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-22041afd0340ce965d47ae6ef1cefeee28c7c493a6346c4f15d667ab976d596c.svg)](https://classroom.github.com/a/iDQJgb-p)
+# Stardew Valley Project
 
+## 📌 Overview
+
+This project is a custom implementation inspired by **Stardew Valley**, the popular farming simulation role-playing game. Developed as part of an academic course project, this version captures core gameplay mechanics such as farming, resource management, NPC interaction, and time progression in a simplified, educational context.
+
+## 👨‍💻 Authors
+
+- **Aeen Karimian** – Student ID: `403171146`
+- **Seyyed Sepehr Motevallian** – Student ID: `403106613`  
+- **Amirhossein Mollazeinal** – Student ID: `403106721`
+- **Matin Fadavi** – Student ID: `403106392`
+
+## 🚀 About the Project
+
+This project serves as a modular, object-oriented programming exercise. It emphasizes core software engineering principles, including design patterns, clean architecture, and maintainability. While inspired by the Stardew Valley game, it is built from scratch using **Java** and includes unique logic tailored for a coursework assignment.
 
 # How to use Gradle :
 run this command on your Linux to install gradle:  
