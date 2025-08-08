@@ -53,6 +53,7 @@ public class HUDManager {
     private ImageButton seasonButton;
 
     private Texture InventoryTexture;
+    private TextField timeField, dateField, goldField;
 
     // Inventory Bar
     private final Texture inventoryTexture;
@@ -141,24 +142,21 @@ public class HUDManager {
         // 2. Create a new table for time-related text fields
         Table timeInfoTable = new Table();
         timeInfoTable.setFillParent(true);
-        timeInfoTable.top().right().padTop(100).padRight(20); // adjust padding as needed
+        timeInfoTable.top().right().padTop(10).padRight(10); // adjust padding as needed
 
-        TextField timeField = new TextField("06:20", skin_Nz, "default");
-        TextField dateField = new TextField("Spring 1", skin_Nz, "default");
-        TextField goldField = new TextField("Gold: 350", skin_Nz, "default");
+        timeField = new TextField(App.getGameState().getGameTime().getTimeString(), skin_Nz, "default");
+        dateField = new TextField(App.getGameState().getGameTime().getDateToString(), skin_Nz, "default");
+        goldField = new TextField("todo", skin_Nz, "default");
 
-        // Optional: make fields smaller or non-editable
         timeField.setDisabled(true);
         dateField.setDisabled(true);
         goldField.setDisabled(true);
         timeField.setMaxLength(5);
 
-        // Add fields in vertical column or horizontal row
-        timeInfoTable.add(timeField).padBottom(5).top().right().height(20).row();
-        timeInfoTable.add(dateField).padBottom(5).row();
-        timeInfoTable.add(goldField);
+        timeInfoTable.add(dateField).padBottom(5).top().right().height(40).padBottom(40).row();
+        timeInfoTable.add(timeField).padBottom(5).top().right().height(40).padBottom(40).row();
+        timeInfoTable.add(goldField).top().right().height(40).padBottom(60);
 
-        // 3. Add time info table as another layer to the stack (won’t affect buttons)
         clockAndIndicatorsStack.add(timeInfoTable);
 
         clockBarTable.add(clockAndIndicatorsStack).size(196, 196).pad(10).top().right();
@@ -336,10 +334,16 @@ public class HUDManager {
     }
 
     public void updateTime(float delta) {
+        
+        timeField.setText(App.getGameState().getGameTime().getTimeString());
+        dateField.setText(App.getGameState().getGameTime().getDateToString());
 
         this.timeAccumulator += delta;
         if (this.timeAccumulator >= 7f) { // every 7 seconds = 10 minutes
-            Gdx.app.log("time", App.getGameState().getGameTime().getMinutes() + "Minuts");
+
+
+            Gdx.app.log("time", App.getGameState().getGameTime().getTimeString());
+            Gdx.app.log("time", App.getGameState().getGameTime().getDateToString());
             App.getGameState().getGameTime().advanceMinutes(10);
             this.timeAccumulator = 0f;
         }

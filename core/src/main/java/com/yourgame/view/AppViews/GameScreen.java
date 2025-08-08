@@ -337,8 +337,9 @@ public class GameScreen extends GameBaseScreen {
         }
 
         // Example: Update season (cycle through enums with 'R' key)
-        if (Gdx.input.isKeyJustPressed(Input.Keys.R)) {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.T)) {
             // TODO: need the cheat Code Be implemented 
+            App.getGameState().getGameTime().advanceMinutes(20);
             // HUDManager.seasonTypeButton[] seasons = HUDManager.seasonTypeButton.values();
             // int nextIndex = (currentSeason.ordinal() + 1) % seasons.length;
             // currentSeason = seasons[nextIndex];

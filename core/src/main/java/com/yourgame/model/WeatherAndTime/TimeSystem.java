@@ -14,16 +14,14 @@ public class TimeSystem {
     private Season season;
     private DaysOfTheWeek dayOfWeek;
     private int day;
-    private int minutes = 0 ; 
-
+    private int minutes = 0;
 
     private int hour;
     private Weather weather;
     private Weather nextDayWeather;
 
-
     public TimeSystem() {
-        this.minutes = 0; 
+        this.minutes = 0;
         this.hour = 6; // Stardew Valley starts at 6:00 AM
         this.dayOfWeek = DaysOfTheWeek.Saturday;
         this.season = Season.Spring;
@@ -46,21 +44,28 @@ public class TimeSystem {
         }
     }
 
-        public void advanceMinutes(int gameMinutes) {
+    public void advanceMinutes(int gameMinutes) {
 
-            this.minutes += gameMinutes;
-            if( this.minutes >= 60){
-                this.hour += this.minutes / 60; 
-                this.minutes = 0; 
-            }
-        
-        while (this.hour >= 26) { // 2:00 AM is 26th hour from 6:00 AM
-            this.hour = 6; // Reset to morning
+        this.minutes += gameMinutes;
+        if (this.minutes >= 60) {
+            this.hour += this.minutes / 60;
+            this.minutes = 0;
+        }
+
+        // If it's past midnight, move to next day when hitting 24:00
+        if (this.hour >= 24) {
+            this.hour = this.hour % 24;
             advanceDay(1);
         }
 
+        // Pass-out rule: if time >= 02:00 AM
+        if (this.hour >= 2 && this.hour < 6) {
+            this.hour = 6;
+            this.minutes = 0;
+        }
         notifyObservers();
     }
+
     public void advanceDay(int d) {
         for (int i = 0; i < d; i++) {
             this.day++;
@@ -79,7 +84,6 @@ public class TimeSystem {
         notifyObservers();
     }
 
-
     private void advanceSeason() {
         Season[] seasons = Season.values();
         int currentIndex = this.season.ordinal();
@@ -97,7 +101,6 @@ public class TimeSystem {
         return weatherList.get(new Random().nextInt(weatherList.size()));
     }
 
-
     public Season getSeason() {
         return season;
     }
@@ -113,6 +116,7 @@ public class TimeSystem {
     public int getHour() {
         return hour;
     }
+
     public int getMinutes() {
         return minutes;
     }
@@ -135,6 +139,15 @@ public class TimeSystem {
 
     public void setNextDayWeather(Weather nextDayWeather) {
         this.nextDayWeather = nextDayWeather;
+    }
+
+    public String getTimeString() {
+        return String.format("%02d:%02d", this.hour, this.minutes);
+    }
+
+    public String getDateToString() {
+        String dayAbbreviation = this.dayOfWeek.getDayOfWeek().substring(0, 3);
+        return String.format("%s %d", dayAbbreviation, this.day);
     }
 
     public TimeSystem clone() {
