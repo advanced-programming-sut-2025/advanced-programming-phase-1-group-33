@@ -6,8 +6,8 @@ import java.util.ArrayList;
 import com.yourgame.model.Animals.AnimalType;
 import com.yourgame.model.App;
 import com.yourgame.model.IO.Response;
-import com.yourgame.model.Inventory.Tools.MilkPail;
-import com.yourgame.model.Inventory.Tools.Shear;
+import com.yourgame.model.Item.Inventory.Tools.MilkPail;
+import com.yourgame.model.Item.Inventory.Tools.Shear;
 import com.yourgame.model.UserInfo.Coin;
 import com.yourgame.model.enums.SymbolType;
 

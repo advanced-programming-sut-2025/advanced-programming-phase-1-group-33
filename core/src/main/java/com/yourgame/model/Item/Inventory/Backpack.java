@@ -1,10 +1,10 @@
-package com.yourgame.model.Inventory;
+package com.yourgame.model.Item.Inventory;
 
 import com.yourgame.model.Animals.Animal;
 import com.yourgame.model.Animals.AnimalGood;
 import com.yourgame.model.Animals.Fish;
 import com.yourgame.model.Animals.Hay;
-import com.yourgame.model.Inventory.Tools.Tool;
+import com.yourgame.model.Item.Inventory.Tools.Tool;
 import com.yourgame.model.Item.*;
 import com.yourgame.model.ManuFactor.ArtisanMachine;
 import com.yourgame.model.ManuFactor.Ingredient;
@@ -17,17 +17,16 @@ import java.util.HashMap;
 import java.util.HashSet;
 
 public class Backpack {
-
     private BackpackType type;
-    private int capacity = 12;
+    private int capacity;
     private final ArrayList<Tool> tools = new ArrayList<>();
     private final Hay hay = new Hay();
     private final HashSet<CookingRecipe> cookingRecipes = new HashSet<>();
     private final HashSet<CraftingRecipes> craftingRecipes = new HashSet<>();
     private final ArrayList<ArtisanMachine> artisanMachines = new ArrayList<>();
-    private final ArrayList<Animal> animals = new ArrayList<>();
     private final Refrigerator refrigerator = new Refrigerator();
     private final TrashCan trashCan = new TrashCan();
+    private final ArrayList<Animal> animals = new ArrayList<>();
 
     private final HashMap<Ingredient, Integer> ingredientQuantity = new HashMap<>();
 
@@ -35,6 +34,7 @@ public class Backpack {
         this.type = type;
         switch (type) {
             case Primary:
+                this.capacity = 12;
                 break;
             case Big:
                 this.capacity = 24;

@@ -1,4 +1,4 @@
-package com.yourgame.model.Inventory;
+package com.yourgame.model.Item.Inventory;
 
 public enum BackpackType {
     Primary(),

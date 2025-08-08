@@ -1,6 +1,6 @@
-package com.yourgame.model.Inventory.Tools;
+package com.yourgame.model.Item.Inventory.Tools;
 
-public enum PoleType {
+public enum PoleStage {
     Training(0.1 , 2000),
     Bamboo(0.5 , 5000),
     Fiberglass(0.9, 10000),
@@ -9,7 +9,7 @@ public enum PoleType {
     private final double effectiveness;
     private final int priceForUpgrade;
 
-    PoleType(double effectiveness , int priceForUpgrade) {
+    PoleStage(double effectiveness , int priceForUpgrade) {
         this.effectiveness = effectiveness;
         this.priceForUpgrade = priceForUpgrade;
     }

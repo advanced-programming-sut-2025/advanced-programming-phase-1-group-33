@@ -97,8 +97,8 @@ public class GameMenu implements AppMenu {
                 return getToolsShowResponse(input);
             case TOOLS_SHOW_AVAILABLE:
                 return getToolsShowAvailable(input);
-            case TOOLS_USE_DIRECTION:
-                return getToolsUseDirection(input);
+//            case TOOLS_USE_DIRECTION:
+//                return getToolsUseDirection(input);
             case TOOLS_UPGRADE:
                 return getToolUpgradeResponse(input);
             case CHEAT_ADD_DOLLARS:
@@ -141,8 +141,8 @@ public class GameMenu implements AppMenu {
                 return getFeedHey(input);
             case PRODUCES:
                 return getProduces();
-            case COLLECT_PRODUCE:
-                return getCollectProduces(input);
+//            case COLLECT_PRODUCE:
+//                return getCollectProduces(input);
             case SELL_ANIMAL:
                 return getSellAnimal(input);
             case PET:
@@ -321,12 +321,12 @@ public class GameMenu implements AppMenu {
         return controller.getSellAnimal(request);
     }
 
-    private Response getCollectProduces(String input) {
-        Request request = new Request(input);
-        request.body.put("name", GameViewCommands.COLLECT_PRODUCE.getGroup(input, "name"));
-        return controller.getCollectProduces(request);
-
-    }
+//    private Response getCollectProduces(String input) {
+//        Request request = new Request(input);
+//        request.body.put("name", GameViewCommands.COLLECT_PRODUCE.getGroup(input, "name"));
+//        return controller.getCollectProduces(request);
+//
+//    }
 
     private Response getProduces() {
         return controller.getProduces();
@@ -413,12 +413,12 @@ public class GameMenu implements AppMenu {
         return controller.getWalk_FromHereAndShowMap(request);
     }
 
-    private Response getToolsUseDirection(String input) {
-        Request request = new Request(input);
-        request.body.put("direction", GameViewCommands.TOOLS_USE_DIRECTION.getGroup(input, "direction"));
-
-        return controller.getUseTool(request);
-    }
+//    private Response getToolsUseDirection(String input) {
+//        Request request = new Request(input);
+//        request.body.put("direction", GameViewCommands.TOOLS_USE_DIRECTION.getGroup(input, "direction"));
+//
+//        return controller.getUseTool(request);
+//    }
 
     private Response getAddDollars(String input) {
         Request request = new Request(input);

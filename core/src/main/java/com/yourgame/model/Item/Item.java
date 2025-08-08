@@ -1,65 +1,35 @@
 package com.yourgame.model.Item;
-import com.yourgame.model.enums.ItemType;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public abstract class Item {
-    private String id;
-    private String name;
-    private String description;
-    private ItemType type;
-    private int value; // Could represent in-game currency or utility
-    private boolean isStackable;
+    public enum ItemType {
+        FOOD, TOOL, CROP, MATERIAL, RESOURCE, TREASURE, QUEST_ITEM
+    }
 
-    // this needs to be cleaned!
-    public Item(String id, String name, String description, ItemType type, int value) {
-        this.id = id;
+    private final String name;
+    private final ItemType itemType;
+    private final int value; // Could represent in-game currency or utility
+    private final boolean isStackable;
+
+    public Item(String name,ItemType itemType, int value, boolean isStackable) {
         this.name = name;
-        this.description = description;
-        this.type = type;
+        this.itemType = itemType;
         this.value = value;
+        this.isStackable = isStackable;
     }
 
-        public void use(){}
-        // Getters and Setters
+    public abstract TextureRegion getTextureRegion();
 
-
-        public String getId() {
-            return id;
-        }
-
-        public void setId(String id) {
-            this.id = id;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
-
-        public String getDescription() {
-            return description;
-        }
-
-        public void setDescription(String description) {
-            this.description = description;
-        }
-
-        public ItemType getType() {
-            return type;
-        }
-
-    public void setType(ItemType type) {
-        this.type = type;
+    public String getName() {
+        return name;
     }
+
+    public ItemType getItemType() {
+            return itemType;
+        }
 
     public int getValue() {
         return value;
-    }
-
-    public void setValue(int value) {
-        this.value = value;
     }
 
     public String getSellPrice() {

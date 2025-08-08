@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 import com.yourgame.model.App;
 import com.yourgame.model.IO.Response;
-import com.yourgame.model.Inventory.BackpackType;
+import com.yourgame.model.Item.Inventory.BackpackType;
 import com.yourgame.model.Item.CropType;
 import com.yourgame.model.Item.Seeds;
 import com.yourgame.model.Item.TreeSource;

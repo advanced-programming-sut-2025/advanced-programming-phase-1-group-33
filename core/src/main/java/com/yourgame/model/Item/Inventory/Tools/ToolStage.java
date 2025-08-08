@@ -1,6 +1,6 @@
-package com.yourgame.model.Inventory.Tools;
+package com.yourgame.model.Item.Inventory.Tools;
 
-public enum ToolType {
+public enum ToolStage {
     Primary(2000),
     Coppery(5000),
     Metal(10000),
@@ -9,7 +9,7 @@ public enum ToolType {
 
     private final int priceForUpgrade;
 
-    ToolType(int priceForUpgrade) {
+    ToolStage(int priceForUpgrade) {
         this.priceForUpgrade = priceForUpgrade;
     }
 

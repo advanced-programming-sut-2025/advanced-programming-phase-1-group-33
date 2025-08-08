@@ -1,25 +1,20 @@
-package com.yourgame.model.Inventory.Tools;
+package com.yourgame.model.Item.Inventory.Tools;
 
+import com.yourgame.Graphics.Map.MapData;
+import com.yourgame.Graphics.Map.TileData;
 import com.yourgame.model.App;
 import com.yourgame.model.IO.Response;
 import com.yourgame.model.Skill.Ability;
+import com.yourgame.model.UserInfo.Player;
 import com.yourgame.model.WeatherAndTime.Weather;
 
 public class WateringCan extends Tool {
-    private ToolType type = ToolType.Primary;
     private int capacity = 40;
     private int waterCapacity = capacity;
 
-    public void upgradeTool() {
-        if (this.type == ToolType.Primary) {
-            this.type = ToolType.Coppery;
-        } else if (this.type == ToolType.Coppery) {
-            this.type = ToolType.Metal;
-        } else if (this.type == ToolType.Metal) {
-            this.type = ToolType.Golden;
-        } else if (this.type == ToolType.Golden) {
-            this.type = ToolType.Iridium;
-        }
+    public WateringCan() {
+        super(ToolType.WateringCan, 4);
+
     }
 
     @Override
@@ -28,7 +23,7 @@ public class WateringCan extends Tool {
     }
 
     @Override
-    public Response useTool() {
+    public void use(Player player, MapData map, TileData tile) {
         Weather weather = App.getGameState().getGameTime().getWeather();
         int multiple = switch (weather) {
             case Rainy -> 2;
@@ -37,7 +32,7 @@ public class WateringCan extends Tool {
         };
         int consumedEnergy;
         if (App.getGameState().getCurrentPlayer().getAbility().getFarmingLevel() == Ability.getMaxLevel()) {
-            consumedEnergy = switch (type) {
+            consumedEnergy = switch (getToolStage()) {
                 case Primary -> 4 * multiple;
                 case Coppery -> 3 * multiple;
                 case Metal -> 2 * multiple;
@@ -45,7 +40,7 @@ public class WateringCan extends Tool {
                 default -> 0;
             };
         } else {
-            consumedEnergy = switch (type) {
+            consumedEnergy = switch (getToolStage()) {
                 case Primary -> 5 * multiple;
                 case Coppery -> 4 * multiple;
                 case Metal -> 3 * multiple;
@@ -55,20 +50,15 @@ public class WateringCan extends Tool {
             };
         }
         waterCapacity--;
-
-        Response energyConsumptionResponse = App.getGameState().getCurrentPlayer().consumeEnergy(consumedEnergy);
-        if (!energyConsumptionResponse.getSuccessful())
-            return energyConsumptionResponse;
-
-        return new Response(true, "");
     }
 
-    public ToolType getToolType() {
-        return type;
-    }
-
-    public PoleType getPoleType() {
-        return null;
+    @Override
+    public boolean upgradeTool() {
+        if (super.upgradeTool()) {
+            capacity += 15;
+            return true;
+        }
+        return false;
     }
 
     public int getWaterCapacity() {
@@ -82,4 +72,5 @@ public class WateringCan extends Tool {
     public void makeFull() {
         waterCapacity = capacity;
     }
+
 }

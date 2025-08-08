@@ -1,21 +1,21 @@
 package com.yourgame.model.Stores;
 
 
-import com.yourgame.model.Inventory.Tools.PoleType;
+import com.yourgame.model.Item.Inventory.Tools.PoleStage;
 
 public class FishShopPoleItem extends ShopItem{
 
-    private final PoleType type;
+    private final PoleStage type;
     private final int fishingSkillRequired;
 
 
-    public FishShopPoleItem(String name, PoleType type, int fishingSkillRequired,int price, int dailyLimit) {
+    public FishShopPoleItem(String name, PoleStage type, int fishingSkillRequired, int price, int dailyLimit) {
         super(name, price, dailyLimit);
         this.type = type;
         this.fishingSkillRequired = fishingSkillRequired;
     }
 
-    public PoleType getType() {
+    public PoleStage getType() {
         return type;
     }
 

@@ -1,24 +1,15 @@
-package com.yourgame.model.Inventory.Tools;
+package com.yourgame.model.Item.Inventory.Tools;
 
-
+import com.yourgame.Graphics.Map.MapData;
+import com.yourgame.Graphics.Map.TileData;
 import com.yourgame.model.Skill.Ability;
+import com.yourgame.model.UserInfo.Player;
 import com.yourgame.model.WeatherAndTime.Weather;
 import com.yourgame.model.App;
-import com.yourgame.model.IO.Response;
 
 public class Axe extends Tool {
-    private ToolType type = ToolType.Primary;
-
-    public void upgradeTool() {
-        if (this.type == ToolType.Primary) {
-            this.type = ToolType.Coppery;
-        } else if (this.type == ToolType.Coppery) {
-            this.type = ToolType.Metal;
-        } else if (this.type == ToolType.Metal) {
-            this.type = ToolType.Golden;
-        } else if (this.type == ToolType.Golden) {
-            this.type = ToolType.Iridium;
-        }
+    public Axe() {
+        super(ToolType.Axe, 4);
     }
 
     @Override
@@ -27,7 +18,7 @@ public class Axe extends Tool {
     }
 
     @Override
-    public  Response useTool() {
+    public void use(Player player, MapData map, TileData tile) {
         Weather weather = App.getGameState().getGameTime().getWeather();
         int multiple = switch (weather) {
             case Rainy -> 2;
@@ -36,7 +27,7 @@ public class Axe extends Tool {
         };
         int consumedEnergy;
         if(App.getGameState().getCurrentPlayer().getAbility().getFarmingLevel() == Ability.getMaxLevel()){
-            consumedEnergy = switch (type) {
+            consumedEnergy = switch (getToolStage()) {
                 case Primary -> 4 * multiple;
                 case Coppery -> 3 * multiple;
                 case Metal -> 2 * multiple;
@@ -45,7 +36,7 @@ public class Axe extends Tool {
             };
         }
         else {
-            consumedEnergy = switch (type) {
+            consumedEnergy = switch (getToolStage()) {
                 case Primary -> 5 * multiple;
                 case Coppery -> 4 * multiple;
                 case Metal -> 3  * multiple;
@@ -54,21 +45,5 @@ public class Axe extends Tool {
                 default -> 0;
             };
         }
-        Response energyConsumptionResult = App.getGameState().getCurrentPlayer().consumeEnergy(consumedEnergy);
-        if (!energyConsumptionResult.getSuccessful()){
-            return energyConsumptionResult;
-        }
-
-        return energyConsumptionResult;
-
-
-
     }
-    public ToolType getToolType() {
-        return type;
-    }
-    public PoleType getPoleType() {
-        return null;
-    }
-
 }
