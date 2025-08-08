@@ -2,9 +2,9 @@ package com.yourgame.model.Item.Inventory.Tools;
 
 public enum ToolStage {
     Primary(2000),
-    Coppery(5000),
-    Metal(10000),
-    Golden(25000),
+    Copper(5000),
+    Steel(10000),
+    Gold(25000),
     Iridium(0);
 
     private final int priceForUpgrade;

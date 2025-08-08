@@ -29,18 +29,18 @@ public class Axe extends Tool {
         if(App.getGameState().getCurrentPlayer().getAbility().getFarmingLevel() == Ability.getMaxLevel()){
             consumedEnergy = switch (getToolStage()) {
                 case Primary -> 4 * multiple;
-                case Coppery -> 3 * multiple;
-                case Metal -> 2 * multiple;
-                case Golden -> 1;
+                case Copper -> 3 * multiple;
+                case Steel -> 2 * multiple;
+                case Gold -> 1;
                 default -> 0;
             };
         }
         else {
             consumedEnergy = switch (getToolStage()) {
                 case Primary -> 5 * multiple;
-                case Coppery -> 4 * multiple;
-                case Metal -> 3  * multiple;
-                case Golden -> 2 * multiple;
+                case Copper -> 4 * multiple;
+                case Steel -> 3  * multiple;
+                case Gold -> 2 * multiple;
                 case Iridium -> 1;
                 default -> 0;
             };

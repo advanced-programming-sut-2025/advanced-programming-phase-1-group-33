@@ -1,6 +1,7 @@
 package com.yourgame.model.Item;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.yourgame.Graphics.GameAssetManager;
 import com.yourgame.model.enums.ResourceType;
 
 public class Resource extends Item {
@@ -13,7 +14,7 @@ public class Resource extends Item {
 
 
     @Override
-    public TextureRegion getTextureRegion() {
+    public TextureRegion getTextureRegion(GameAssetManager assetManager) {
         return null;
     }
 }

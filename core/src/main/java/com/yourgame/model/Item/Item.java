@@ -1,15 +1,16 @@
 package com.yourgame.model.Item;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.yourgame.Graphics.GameAssetManager;
 
 public abstract class Item {
     public enum ItemType {
         FOOD, TOOL, CROP, MATERIAL, RESOURCE, TREASURE, QUEST_ITEM
     }
 
-    private final String name;
-    private final ItemType itemType;
-    private final int value; // Could represent in-game currency or utility
-    private final boolean isStackable;
+    protected final String name;
+    protected final ItemType itemType;
+    protected final int value; // Could represent in-game currency or utility
+    protected final boolean isStackable;
 
     public Item(String name,ItemType itemType, int value, boolean isStackable) {
         this.name = name;
@@ -18,7 +19,7 @@ public abstract class Item {
         this.isStackable = isStackable;
     }
 
-    public abstract TextureRegion getTextureRegion();
+    public abstract TextureRegion getTextureRegion(GameAssetManager assetManager);
 
     public String getName() {
         return name;

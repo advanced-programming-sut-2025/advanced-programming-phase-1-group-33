@@ -2,11 +2,12 @@
 package com.yourgame.model.Item.Inventory.Tools;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.yourgame.Graphics.GameAssetManager;
 import com.yourgame.model.Item.Item;
 import com.yourgame.model.Item.Usable;
 
 public abstract class Tool extends Item implements Usable {
-    public enum ToolType {Axe, Pickaxe, Hoe, WateringCan, FishingPole, Scythe, MilkPale, Shear}
+    public enum ToolType {Axe, Pickaxe, Hoe, WateringCan, FishingPole, Scythe, MilkPale, Shears}
 
     protected final ToolType toolType;
     protected final int maxLevel;
@@ -40,8 +41,12 @@ public abstract class Tool extends Item implements Usable {
         return ToolStage.values()[level];
     }
 
-    public TextureRegion getTextureRegion() {
-        return null;
+    public TextureRegion getTextureRegion(GameAssetManager assetManager) {
+        String basePath = "Game/Tool/";
+        ToolStage stage = getToolStage();
+        String level = (stage == ToolStage.Primary) ? "" : (stage.name() + "_");
+        String path = basePath + level + name + ".png";
+        return new TextureRegion(assetManager.getTexture(path));
     }
 
     public static Tool getToolByName(String name) {

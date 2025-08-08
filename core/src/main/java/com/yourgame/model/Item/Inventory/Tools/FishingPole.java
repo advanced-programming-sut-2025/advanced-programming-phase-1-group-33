@@ -1,5 +1,7 @@
 package com.yourgame.model.Item.Inventory.Tools;
 
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.yourgame.Graphics.GameAssetManager;
 import com.yourgame.Graphics.Map.MapData;
 import com.yourgame.Graphics.Map.TileData;
 import com.yourgame.model.App;
@@ -41,6 +43,12 @@ public class FishingPole extends Tool {
 
             };
         }
+    }
+
+    @Override
+    public TextureRegion getTextureRegion(GameAssetManager assetManager) {
+        String path = "Game/Tool/" + getPoleStage().name() + "_FishingPole.png";
+        return new TextureRegion(assetManager.getTexture(path));
     }
 
     public PoleStage getPoleStage() {
