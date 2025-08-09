@@ -17,7 +17,10 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.yourgame.Graphics.Map.MapElement;
 import com.yourgame.Graphics.MenuAssetManager;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
@@ -63,6 +66,10 @@ public class GameScreen extends GameBaseScreen {
 
     private static final float SPEED = 150f;
 
+    //MENUS
+    private Image menuIcon;
+    private boolean paused = false;
+
     public GameScreen() {
         this.game = Main.getMain();
         this.assetManager = GameAssetManager.getInstance();
@@ -81,6 +88,8 @@ public class GameScreen extends GameBaseScreen {
         mapManager = new MapManager(List.of(player));
         mapRenderer = new OrthogonalTiledMapRenderer(mapManager.getPlayersCurrentMap(player).getTiledMap());
         currentMap = mapManager.getPlayersCurrentMap(player);
+
+        menuIcon = new Image(new TextureRegion(assetManager.getMenuIcon()));
     }
 
     @Override
@@ -102,13 +111,32 @@ public class GameScreen extends GameBaseScreen {
         playerPosition = currentMap.getSpawnPoint();
         playerVelocity = new Vector2();
         direction = 0;
+
+        // placing the menu Icon
+        Table menuTable = new Table();
+        menuTable.setFillParent(true);
+        menuTable.left().top();
+        menuTable.add(menuIcon).width(80).height(80).pad(20);
+        HUDStage.addActor(menuTable);
+
+        menuIcon.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                openMenu();
+            }
+        });
     }
 
     @Override
     public void render(float delta) {
-        handleInput(delta);
-        checkForTeleport();
-        handleHudUpdates();
+        if (!paused) {
+            handleInput(delta);
+            checkForTeleport();
+            handleHudUpdates();
+
+            // Update animation timer
+            stateTime += delta;
+        }
 
         // Clear screen
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -116,9 +144,6 @@ public class GameScreen extends GameBaseScreen {
         camera.position.set(playerPosition.x, playerPosition.y, 0);
         clampCameraToMap();
         camera.update();
-
-        // Update animation timer
-        stateTime += delta;
 
         // Render map
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -323,6 +348,61 @@ public class GameScreen extends GameBaseScreen {
             currentSeason = seasons[nextIndex];
             hudManager.updateSeason(currentSeason);
         }
+    }
+
+    private void openMenu() {
+        paused = true;
+
+        Window menuWindow = new Window("Menu", MenuAssetManager.getInstance().getSkin(3));
+        menuWindow.setModal(true);
+        menuWindow.setMovable(false);
+        menuWindow.pad(20f);
+
+        // Set fixed size
+        menuWindow.setSize(1200, 900);
+
+        TextButton closeButton = assetManager.getButton("Close");
+        TextButton inventoryButton = assetManager.getButton("Inventory");
+        TextButton settingsButton = assetManager.getButton("Settings");
+        TextButton cookingButton = assetManager.getButton("Cooking");
+        TextButton skillButton = assetManager.getButton("Skills");
+        TextButton journalButton = assetManager.getButton("Journal");
+        TextButton mapButton = assetManager.getButton("Map");
+        TextButton socialButton = assetManager.getButton("Social");
+        TextButton craftingButton = assetManager.getButton("Crafting");
+
+        // Add buttons to the window directly
+        menuWindow.row().pad(10);
+        menuWindow.add(inventoryButton).width(300).padBottom(10);
+        menuWindow.add(skillButton).width(300).padBottom(10);
+        menuWindow.row();
+        menuWindow.add(socialButton).width(300).padBottom(10);
+        menuWindow.add(craftingButton).width(300).padBottom(10);
+        menuWindow.row();
+        menuWindow.add(cookingButton).width(300).padBottom(10);
+        menuWindow.add(mapButton).width(300).padBottom(10);
+        menuWindow.row();
+        menuWindow.add(journalButton).width(300).padBottom(10);
+        menuWindow.add(settingsButton).width(300).padBottom(10);
+        menuWindow.row();
+        menuWindow.add(closeButton).width(250);
+
+        // Close button logic
+        closeButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                paused = false;
+                menuWindow.remove();
+            }
+        });
+
+        // Center it manually
+        menuWindow.setPosition(
+            (HUDStage.getWidth() - menuWindow.getWidth()) / 2f,
+            (HUDStage.getHeight() - menuWindow.getHeight()) / 2f
+        );
+
+        HUDStage.addActor(menuWindow);
     }
 
 }
