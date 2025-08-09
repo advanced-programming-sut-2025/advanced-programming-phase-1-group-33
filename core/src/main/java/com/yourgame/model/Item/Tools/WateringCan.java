@@ -8,69 +8,48 @@ import com.yourgame.model.UserInfo.Player;
 import com.yourgame.model.WeatherAndTime.Weather;
 
 public class WateringCan extends Tool {
-    private int capacity = 40;
-    private int waterCapacity = capacity;
+    private int capacity;
+    private int waterLevel;
 
     public WateringCan() {
         super(ToolType.WateringCan, 4);
-
+        capacity = 40;
+        waterLevel = capacity;
     }
 
     @Override
     public int getConsumptionEnergy(Player player, Weather weather, boolean success) {
-        return 0;
+        int energyConsumed = 5 - level;
+        if (!success) energyConsumed--;
+        if (player.getAbility().getFarmingLevel() == Ability.MAX_LEVEL) energyConsumed--;
+        return (int) (Math.max(energyConsumed, 0) * weather.energyCoefficient);
     }
 
     @Override
     public boolean use(Player player, Map map, Tile tile) {
-        Weather weather = App.getGameState().getGameTime().getWeather();
-        int multiple = switch (weather) {
-            case Rainy -> 2;
-            case Snowy -> 3;
-            default -> 1;
-        };
-        int consumedEnergy;
-        if (App.getGameState().getCurrentPlayer().getAbility().getFarmingLevel() == Ability.getMaxLevel()) {
-            consumedEnergy = switch (getToolStage()) {
-                case Primary -> 4 * multiple;
-                case Copper -> 3 * multiple;
-                case Steel -> 2 * multiple;
-                case Gold -> 1;
-                default -> 0;
-            };
-        } else {
-            consumedEnergy = switch (getToolStage()) {
-                case Primary -> 5 * multiple;
-                case Copper -> 4 * multiple;
-                case Steel -> 3 * multiple;
-                case Gold -> 2 * multiple;
-                case Iridium -> 1;
-                default -> 0;
-            };
-        }
-        waterCapacity--;
-        return false;
+        if (tile.getDirtState() != Tile.DirtState.PLOWED) return false;
+        tile.setDirtState(Tile.DirtState.WATERED);
+        return true;
     }
 
     @Override
     public boolean upgradeTool() {
         if (super.upgradeTool()) {
-            capacity += 15;
+            capacity = 15 * level + 25;
             return true;
         }
         return false;
     }
 
-    public int getWaterCapacity() {
-        return waterCapacity;
+    public int getWaterLevel() {
+        return waterLevel;
     }
 
-    public void setWaterCapacity(int waterCapacity) {
-        this.waterCapacity = waterCapacity;
+    public void setWaterLevel(int waterLevel) {
+        this.waterLevel = waterLevel;
     }
 
     public void makeFull() {
-        waterCapacity = capacity;
+        waterLevel = capacity;
     }
-
 }
