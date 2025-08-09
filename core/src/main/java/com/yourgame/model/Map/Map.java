@@ -70,7 +70,7 @@ public class Map {
         // Initialize all tiles
         for (int x = 0; x < mapWidth; x++) {
             for (int y = 0; y < mapHeight; y++) {
-                tileStates[x][y] = new Tile();
+                tileStates[x][y] = new Tile(x, y);
             }
         }
 

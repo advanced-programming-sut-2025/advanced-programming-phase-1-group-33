@@ -15,11 +15,18 @@ import com.yourgame.Graphics.GameAssets.HUDManager;
 import com.yourgame.Graphics.GameAssets.clockUIAssetManager;
 import com.yourgame.Graphics.GameAssetManager;
 import com.yourgame.model.App;
+import com.yourgame.model.Item.Item;
+import com.yourgame.model.Item.Tools.Tool;
+import com.yourgame.model.Item.Usable;
 import com.yourgame.model.Map.*;
 import com.yourgame.model.UserInfo.Player;
 import com.yourgame.model.WeatherAndTime.Season;
+import com.yourgame.model.WeatherAndTime.Weather;
 
 import java.util.List;
+
+import static com.yourgame.Graphics.MenuAssetManager.PLAYER_HEIGHT;
+import static com.yourgame.Graphics.MenuAssetManager.PLAYER_WIDTH;
 
 public class GameScreen extends GameBaseScreen {
     private final Main game;
@@ -50,10 +57,15 @@ public class GameScreen extends GameBaseScreen {
     private static final float SPEED = 150f;
 
     public GameScreen() {
+        this.player = Player.guest();
+        this.mapManager = new MapManager(List.of(player));
+        this.mapRenderer = new OrthogonalTiledMapRenderer(mapManager.getPlayersCurrentMap(player).getTiledMap());
+        this.currentMap = mapManager.getPlayersCurrentMap(player);
+
         this.game = Main.getMain();
         this.assetManager = GameAssetManager.getInstance();
         this.clockUI = assetManager.getClockManager();
-        this.hudManager = new HUDManager(HUDStage, clockUI, assetManager);
+        this.hudManager = new HUDManager(HUDStage, clockUI, assetManager, player);
         this.currentEnergyPhase = 4;
         this.currentWeather = HUDManager.weatherTypeButton.Sunny; // Initial weather
         this.currentSeason = HUDManager.seasonTypeButton.Spring;
@@ -62,11 +74,6 @@ public class GameScreen extends GameBaseScreen {
         backgroundMusic = MenuAssetManager.getInstance().getMusic(); // Or
                                                                      // Gdx.audio.newMusic(Gdx.files.internal("path/to/your/game_music.mp3"));
         clickSound = MenuAssetManager.getInstance().getSounds("click"); // Example SFX
-
-        player = Player.guest();
-        mapManager = new MapManager(List.of(player));
-        mapRenderer = new OrthogonalTiledMapRenderer(mapManager.getPlayersCurrentMap(player).getTiledMap());
-        currentMap = mapManager.getPlayersCurrentMap(player);
     }
 
     @Override
@@ -206,6 +213,12 @@ public class GameScreen extends GameBaseScreen {
         }
 
         if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
+            Item item = player.getBackpack().getInventory().getSelectedItem();
+            if (item instanceof Usable usable) {
+                boolean success = usable.use(player, currentMap, getTileInFront());
+                if (item instanceof Tool tool)
+                    player.consumeEnergy(tool.getConsumptionEnergy(player, Weather.Sunny, success));
+            }
         }
 
         // --- Inventory Selection Input ---
@@ -213,14 +226,21 @@ public class GameScreen extends GameBaseScreen {
     }
 
     private Tile getTileInFront() {
-        int tileX = (int) (playerPosition.x / Tile.TILE_SIZE);
-        int tileY = (int) (playerPosition.y / Tile.TILE_SIZE);
+        // Calculate the center of the player's collision box
+        float playerCenterX = playerPosition.x + (PLAYER_WIDTH / 2f);
+        float playerCenterY = playerPosition.y + (PLAYER_HEIGHT / 4f); // Center of the feet/lower body
+
+        // Determine the tile the player is currently on
+        int tileX = (int) (playerCenterX / Tile.TILE_SIZE);
+        int tileY = (int) (playerCenterY / Tile.TILE_SIZE);
+
+        // Get the tile in front based on direction
         return switch (direction) {
-            case 0 -> currentMap.getTile(tileX, tileY - 1);
-            case 1 -> currentMap.getTile(tileX + 1, tileY);
-            case 2 -> currentMap.getTile(tileX, tileY + 1);
-            case 3 -> currentMap.getTile(tileX - 1, tileY);
-            default -> currentMap.getTile(tileX, tileY);
+            case 0 -> currentMap.getTile(tileX, tileY - 1); // Down
+            case 1 -> currentMap.getTile(tileX + 1, tileY); // Right
+            case 2 -> currentMap.getTile(tileX, tileY + 1); // Up
+            case 3 -> currentMap.getTile(tileX - 1, tileY); // Left
+            default -> currentMap.getTile(tileX, tileY);   // Should not happen
         };
     }
 
@@ -228,8 +248,8 @@ public class GameScreen extends GameBaseScreen {
         // Define a smaller collision box at the player's feet for better feel
         float boxX = x + 2; // small horizontal offset
         float boxY = y;
-        float boxWidth = MenuAssetManager.PLAYER_WIDTH - 4;
-        float boxHeight = MenuAssetManager.PLAYER_HEIGHT / 2f; // Check only the lower half of the player
+        float boxWidth = PLAYER_WIDTH - 4;
+        float boxHeight = PLAYER_HEIGHT / 2f; // Check only the lower half of the player
 
         // Check the four corners of the player's collision box
         if (currentMap.isTileBlocked(boxX, boxY)) return true;
@@ -254,7 +274,7 @@ public class GameScreen extends GameBaseScreen {
 
     private void checkForTeleport() {
         // Check the tile at the center of the player's feet
-        float checkX = playerPosition.x + (MenuAssetManager.PLAYER_WIDTH / 2f);
+        float checkX = playerPosition.x + (PLAYER_WIDTH / 2f);
         float checkY = playerPosition.y + 4; // A bit above the bottom edge
 
         Teleport teleport = currentMap.getTeleport(checkX, checkY);

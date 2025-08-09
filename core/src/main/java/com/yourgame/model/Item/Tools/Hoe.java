@@ -1,5 +1,6 @@
 package com.yourgame.model.Item.Tools;
 
+import com.yourgame.model.Map.Farm;
 import com.yourgame.model.Map.Map;
 import com.yourgame.model.Map.Tile;
 import com.yourgame.model.UserInfo.Player;
@@ -17,8 +18,10 @@ public class Hoe extends Tool {
 
     @Override
     public boolean use(Player player, Map map, Tile tile) {
+        if (!(map instanceof Farm)) return false;
         if (tile.getDirtState() != Tile.DirtState.NORMAL) return false;
         tile.setDirtState(Tile.DirtState.PLOWED);
+        ((Farm) map).updateTileVisuals(tile.tileX, tile.tileY);
         return true;
     }
 }

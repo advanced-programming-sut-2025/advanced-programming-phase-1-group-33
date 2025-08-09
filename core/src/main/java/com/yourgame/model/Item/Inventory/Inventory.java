@@ -7,15 +7,27 @@ import java.util.Iterator;
 
 public class Inventory {
     private final ArrayList<InventorySlot> slots;
+    private Item selectedItem;
     private int capacity;
     private boolean isCapacityUnlimited;
     private int itemCount;
 
     public Inventory(int initialCapacity) {
+        selectedItem = null;
         this.capacity = initialCapacity;
         this.slots = new ArrayList<>();
         this.isCapacityUnlimited = false;
         this.itemCount = 0;
+    }
+
+    public void selectItem(Item item) {
+        for (InventorySlot slot : slots) {
+            if (slot.item().equals(item)) selectedItem = slot.item();
+        }
+    }
+
+    public Item getSelectedItem() {
+        return selectedItem;
     }
 
     public int getItemQuantity(Item item) {

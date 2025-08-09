@@ -10,13 +10,16 @@ public class Tile {
     private boolean spawnable;
     private Teleport teleport; // Null for non-teleportable tiles
     private MapElement element;
+    public final int tileX, tileY;
 
-    public Tile() {
+    public Tile(int tileX, int tileY) {
         dirtState = DirtState.NON_FARMABLE;
         walkable = true;
         spawnable = false;
         teleport = null;
         element = null;
+        this.tileX = tileX;
+        this.tileY = tileY;
     }
 
     public DirtState getDirtState() {

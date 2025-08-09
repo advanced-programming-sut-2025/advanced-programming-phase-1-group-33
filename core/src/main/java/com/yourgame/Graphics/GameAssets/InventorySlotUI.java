@@ -10,12 +10,14 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.yourgame.Graphics.GameAssetManager;
 import com.yourgame.model.Item.Inventory.InventorySlot;
+import com.yourgame.model.Item.Item;
 
 /**
  * Represents a single visual slot in the inventory UI bar.
  * It is a Stack that layers a selection highlight, an item image, and a quantity label.
  */
 public class InventorySlotUI extends Stack {
+    private Item item;
     private final Image selectionImage;
     private final Image itemImage;
     private final Label quantityLabel;
@@ -48,10 +50,13 @@ public class InventorySlotUI extends Stack {
     public void update(InventorySlot dataSlot, GameAssetManager assetManager) {
         if (dataSlot == null || dataSlot.item() == null) {
             // The slot is empty
+            item = null;
             itemImage.setDrawable(null);
             quantityLabel.setVisible(false);
             return;
         }
+
+        item = dataSlot.item();
 
         // Update the item texture
         itemImage.setDrawable(new TextureRegionDrawable(dataSlot.item().getTextureRegion(assetManager)));
@@ -71,5 +76,9 @@ public class InventorySlotUI extends Stack {
      */
     public void setSelected(boolean isSelected) {
         selectionImage.setVisible(isSelected);
+    }
+
+    public Item getItem() {
+        return item;
     }
 }

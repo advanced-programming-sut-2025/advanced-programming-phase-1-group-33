@@ -20,7 +20,9 @@ import com.yourgame.Graphics.GameAssetManager;
 import com.yourgame.Graphics.MenuAssetManager;
 import com.yourgame.model.Item.Inventory.Inventory;
 import com.yourgame.model.Item.Inventory.InventorySlot;
+import com.yourgame.model.Item.Item;
 import com.yourgame.model.Item.Tools.Tool;
+import com.yourgame.model.UserInfo.Player;
 
 import java.util.ArrayList;
 
@@ -47,7 +49,9 @@ public class HUDManager {
     private final Drawable selectionDrawable;
     private final BitmapFont font;
 
-    public HUDManager(Stage stage, clockUIAssetManager clockUI, GameAssetManager assetManager) {
+    private final Player player;
+
+    public HUDManager(Stage stage, clockUIAssetManager clockUI, GameAssetManager assetManager, Player player) {
         this.hudStage = stage;
         this.clockUI = clockUI;
         this.assetManager = assetManager;
@@ -59,6 +63,7 @@ public class HUDManager {
         for (int i = 0; i < inventorySlotsUI.length; i++) {
             inventorySlotsUI[i] = new InventorySlotUI(selectionDrawable, font);
         }
+        this.player = player;
     }
 
     /**
@@ -167,6 +172,9 @@ public class HUDManager {
         inventorySlotsUI[selectedSlotIndex].setSelected(false); // Deselect the old one
         selectedSlotIndex = index;
         inventorySlotsUI[selectedSlotIndex].setSelected(true); // Select the new one
+
+        Item selectedItem = inventorySlotsUI[selectedSlotIndex].getItem();
+        player.getBackpack().getInventory().selectItem(selectedItem);
     }
 
     // Energy Bar HAndler
