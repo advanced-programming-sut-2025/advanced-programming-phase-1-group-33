@@ -1,6 +1,5 @@
 package com.yourgame.view.GameViews;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -59,51 +58,65 @@ public class MainMenuView extends Window {
         });
 
         // Skill button logic
-        closeButton.addListener(new ClickListener() {
+        skillButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                stage.clear();
+                stage.addActor(new SkillMenuView(MenuAssetManager.getInstance().getSkin(3), stage , gameScreen));
             }
         });
 
         // Social button logic
-        closeButton.addListener(new ClickListener() {
+        socialButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                stage.clear();
+                stage.addActor(new SocialMenuView(MenuAssetManager.getInstance().getSkin(3), stage , gameScreen));
             }
         });
 
         // Crafting button logic
-        closeButton.addListener(new ClickListener() {
+        craftingButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                stage.clear();
+                stage.addActor(new CraftingMenuView(MenuAssetManager.getInstance().getSkin(3), stage , gameScreen));
             }
         });
 
         // Cooking button logic
-        closeButton.addListener(new ClickListener() {
+        cookingButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                stage.clear();
+                stage.addActor(new CookingMenuView(MenuAssetManager.getInstance().getSkin(3), stage , gameScreen));
             }
         });
 
         // Map button logic
-        closeButton.addListener(new ClickListener() {
+        mapButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                stage.clear();
+                stage.addActor(new MapMenuView(MenuAssetManager.getInstance().getSkin(3), stage, gameScreen));
             }
         });
 
         // Journal button logic
-        closeButton.addListener(new ClickListener() {
+        journalButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                stage.clear();
+                stage.addActor(new JournalMenuView(MenuAssetManager.getInstance().getSkin(3), stage , gameScreen));
             }
         });
 
         // Settings button logic
-        closeButton.addListener(new ClickListener() {
+        settingsButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                stage.clear();
+                stage.addActor(new SettingsMenuView(MenuAssetManager.getInstance().getSkin(3), stage , gameScreen));
             }
         });
 

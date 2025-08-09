@@ -41,15 +41,16 @@ public class GameAssetManager extends AssetManager {
 
     private Texture menuIcon;
 
-    private TextButton closeButton;
-    private TextButton inventoryMenuButton;
-    private TextButton cookingMenuButton;
-    private TextButton journalButton;
-    private TextButton socialButton;
-    private TextButton mapButton;
-    private TextButton settingMenuButton;
-    private TextButton skillButton;
-    private TextButton craftingButton;
+    private final TextButton closeButton;
+    private final TextButton inventoryMenuButton;
+    private final TextButton cookingMenuButton;
+    private final TextButton journalButton;
+    private final TextButton socialButton;
+    private final TextButton mapButton;
+    private final TextButton settingMenuButton;
+    private final TextButton skillButton;
+    private final TextButton craftingButton;
+    private final TextButton backButton;
 
     // A cache for textures that are loaded dynamically by path.
     private final HashMap<String, Texture> textureCache = new HashMap<>();
@@ -71,6 +72,7 @@ public class GameAssetManager extends AssetManager {
         settingMenuButton = new TextButton("Settings", MenuAssetManager.getInstance().getSkin(3));
         skillButton = new TextButton("Skills", MenuAssetManager.getInstance().getSkin(3));
         craftingButton = new TextButton("Crafting", MenuAssetManager.getInstance().getSkin(3));
+        backButton = new TextButton("Back", MenuAssetManager.getInstance().getSkin(3));
     }
 
     public clockUIAssetManager getClockManager() {
@@ -99,6 +101,7 @@ public class GameAssetManager extends AssetManager {
             case "Close" -> closeButton;
             case "Skills" -> skillButton;
             case "Crafting" -> craftingButton;
+            case "Back" -> backButton;
             default -> null;
         };
     }

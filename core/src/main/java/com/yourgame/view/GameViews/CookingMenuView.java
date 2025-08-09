@@ -10,16 +10,16 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.yourgame.Graphics.GameAssetManager;
 import com.yourgame.view.AppViews.GameScreen;
 
-public class InventoryMenuView extends Window {
-    public InventoryMenuView(Skin skin, Stage stage, GameScreen gameScreen) {
-        super("Inventory", skin);
+public class CookingMenuView extends Window {
+    public CookingMenuView(Skin skin, Stage stage, GameScreen gameScreen) {
+        super("Cooking", skin);
 
         setSize(1200, 900);
         setModal(true);
         setMovable(false);
         pad(20f);
 
-        Label label = new Label("Your Items Go Here", skin);
+        Label label = new Label("Your Cookings Go Here", skin);
         TextButton backButton = GameAssetManager.getInstance().getButton("Back");
 
         add(label).row();
@@ -36,4 +36,3 @@ public class InventoryMenuView extends Window {
         });
     }
 }
-
