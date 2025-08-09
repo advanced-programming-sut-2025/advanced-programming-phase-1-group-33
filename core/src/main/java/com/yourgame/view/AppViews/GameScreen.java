@@ -2,23 +2,32 @@ package com.yourgame.view.AppViews;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.graphics.Cursor;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.yourgame.Graphics.MenuAssetManager;
 import com.yourgame.Main;
 import com.yourgame.Graphics.GameAssets.HUDManager;
 import com.yourgame.Graphics.GameAssets.clockUIAssetManager;
-import com.yourgame.Graphics.GameAssetManager;
+import com.yourgame.Graphics.Map.MapData;
 import com.yourgame.model.App;
-import com.yourgame.model.Item.Item;
-import com.yourgame.model.Item.Tools.Tool;
-import com.yourgame.model.Item.Usable;
-import com.yourgame.model.Map.*;
+import com.yourgame.model.GameState;
+import com.yourgame.model.Map.Teleport;
+import com.yourgame.Graphics.GameAssetManager;
+import com.yourgame.Graphics.MenuAssetManager;
 import com.yourgame.model.UserInfo.Player;
 import com.yourgame.model.WeatherAndTime.Season;
 import com.yourgame.model.WeatherAndTime.Weather;
@@ -28,33 +37,43 @@ import java.util.List;
 import static com.yourgame.Graphics.MenuAssetManager.PLAYER_HEIGHT;
 import static com.yourgame.Graphics.MenuAssetManager.PLAYER_WIDTH;
 
-public class GameScreen extends GameBaseScreen {
-    private final Main game;
-    private final GameAssetManager assetManager;
+public class GameScreen implements Screen {
+    private Main game;
+    private GameAssetManager assetManager;
 
     // ==HUD==
+    private Stage HUDStage;
     private clockUIAssetManager clockUI;
     private ImageButton clockImg;
+    private Image cursor;
     private HUDManager hudManager;
-    private int currentEnergyPhase;
-    private HUDManager.weatherTypeButton currentWeather; // New variable for dynamic weather
-    private HUDManager.seasonTypeButton currentSeason;
 
     // ==GAME==
     private MapManager mapManager;
     private Player player;
     private Map currentMap;
+    private GameState gameState; 
 
     private OrthogonalTiledMapRenderer mapRenderer;
     private OrthographicCamera camera;
 
+    private Texture playerSheet;
     private Animation<TextureRegion>[] walkAnimations;
     private float stateTime;
     private Vector2 playerPosition;
     private Vector2 playerVelocity;
     private int direction; // 0=Down, 1=Right, 2=Up, 3=Left
 
+    private static final int PLAYER_WIDTH = 16;
+    private static final int PLAYER_HEIGHT = 32;
     private static final float SPEED = 150f;
+
+    private SpriteBatch batch;
+
+    // ==MUSIC==
+    private Music backgroundMusic;
+    private Sound clickSound; // Example SFX, if you want it in game screen
+    private static boolean isMusicInitialized = false; // Replicated from MenuBaseScreen
 
     public GameScreen() {
         this.player = Player.guest();
@@ -63,17 +82,35 @@ public class GameScreen extends GameBaseScreen {
         this.currentMap = mapManager.getPlayersCurrentMap(player);
 
         this.game = Main.getMain();
-        this.assetManager = GameAssetManager.getInstance();
+        this.assetManager = new GameAssetManager();
         this.clockUI = assetManager.getClockManager();
-        this.hudManager = new HUDManager(HUDStage, clockUI, assetManager, player);
-        this.currentEnergyPhase = 4;
-        this.currentWeather = HUDManager.weatherTypeButton.Sunny; // Initial weather
-        this.currentSeason = HUDManager.seasonTypeButton.Spring;
+        
+        this.HUDStage = new Stage(new ScreenViewport());
+        Gdx.input.setInputProcessor(HUDStage);
+
+
+        cursor = MenuAssetManager.getInstance().getCursor();
+        cursor.setSize(32, 45);
+        HUDStage.addActor(cursor);
+        cursor.setTouchable(com.badlogic.gdx.scenes.scene2d.Touchable.disabled);
+        cursor.toFront();
+        Gdx.graphics.setSystemCursor(Cursor.SystemCursor.None);
 
         // Load background music and SFX directly here or through AssetManager
         backgroundMusic = MenuAssetManager.getInstance().getMusic(); // Or
                                                                      // Gdx.audio.newMusic(Gdx.files.internal("path/to/your/game_music.mp3"));
         clickSound = MenuAssetManager.getInstance().getSounds("click"); // Example SFX
+
+        if (!isMusicInitialized) {
+            playBackgroundMusic();
+            isMusicInitialized = true;
+        }
+
+        // Map and Player initialization
+        player = Player.guest();
+        mapManager = new MapManager(List.of(player));
+        mapRenderer = new OrthogonalTiledMapRenderer(mapManager.getPlayersCurrentMap(player).getTiledMap());
+        currentMap = mapManager.getPlayersCurrentMap(player);
     }
 
     @Override
@@ -81,7 +118,7 @@ public class GameScreen extends GameBaseScreen {
         assetManager.loadAllAssets();
 
         // Initialize HUD with initial states
-        hudManager.createHUD(currentWeather, currentSeason, currentEnergyPhase);
+        hudManager.createHUD();
 
         // Set up camera
         camera = new OrthographicCamera();
@@ -89,12 +126,22 @@ public class GameScreen extends GameBaseScreen {
         camera.zoom = 0.4f;
 
         // Load player sprite sheet
-        walkAnimations = MenuAssetManager.getInstance().getWalkAnimation(App.getCurrentUser().getAvatar());
+        playerSheet = new Texture("Game/Player/player.png");
+        TextureRegion[][] frames = TextureRegion.split(playerSheet, PLAYER_WIDTH, PLAYER_HEIGHT);
+
+        walkAnimations = new Animation[4]; // down, left, right, up
+
+        walkAnimations[0] = new Animation<>(0.2f, frames[0]); // Down
+        walkAnimations[1] = new Animation<>(0.2f, frames[1]); // Right
+        walkAnimations[2] = new Animation<>(0.2f, frames[2]); // Up
+        walkAnimations[3] = new Animation<>(0.2f, frames[3]); // Left
 
         stateTime = 0f;
         playerPosition = currentMap.getSpawnPoint();
         playerVelocity = new Vector2();
         direction = 0;
+
+        batch = new SpriteBatch();
     }
 
     @Override
@@ -114,29 +161,24 @@ public class GameScreen extends GameBaseScreen {
         stateTime += delta;
 
         // Render map
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         mapRenderer.setView(camera);
         mapRenderer.render();
 
-        // Render player and Map Elements
+        // Render player
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
-
-        Season gameSeason = Season.Spring;
-        for (MapElement element : currentMap.getMapElements()) {
-            TextureRegion texture = element.getTexture(assetManager, gameSeason);
-            if (texture != null) {
-                java.awt.Rectangle bounds = element.getPixelBounds();
-                batch.draw(texture, bounds.x, bounds.y, bounds.width, bounds.height);
-            }
-        }
-
         TextureRegion currentFrame = walkAnimations[direction].getKeyFrame(stateTime, true);
         batch.draw(currentFrame, playerPosition.x, playerPosition.y);
         batch.end();
 
-        hudManager.updateInventory(player.getBackpack().getInventory());
-        super.render(delta);
+        HUDStage.act(Math.min(delta, 1 / 30f));
+
+        float mouseX = Gdx.input.getX();
+        float mouseY = Gdx.graphics.getHeight() - Gdx.input.getY();
+        cursor.setPosition(mouseX - cursor.getWidth() / 2f, mouseY - cursor.getHeight() / 2f);
+        cursor.toFront();
+
+        HUDStage.draw();
     }
 
     @Override
@@ -146,15 +188,65 @@ public class GameScreen extends GameBaseScreen {
     }
 
     @Override
+    public void pause() {
+        // Pause music if the game is paused
+        if (backgroundMusic.isPlaying()) {
+            backgroundMusic.pause();
+        }
+    }
+
+    @Override
+    public void resume() {
+        // Resume music if the game resumes and it was playing before
+        if (!App.isIsMusicMuted() && !backgroundMusic.isPlaying()) {
+            backgroundMusic.play();
+        }
+    }
+
+    @Override
+    public void hide() {
+        // Stop music when the screen is hidden
+        stopBackgroundMusic();
+    }
+
+    @Override
     public void dispose() {
+        HUDStage.dispose();
         assetManager.dispose();
+        backgroundMusic.dispose(); // Dispose the music
+        if (clickSound != null) { // Dispose SFX if loaded
+            clickSound.dispose();
+        }
         mapRenderer.dispose();
+        playerSheet.dispose();
         batch.dispose();
     }
 
-    /**
-    * New method to handle key presses for selecting an inventory slot.
-    */
+    // Methods for music control, similar to MenuBaseScreen
+    public void playBackgroundMusic() {
+        if (App.isIsMusicMuted()) {
+            return;
+        }
+
+        backgroundMusic.setLooping(true);
+        backgroundMusic.play();
+    }
+
+    public void stopBackgroundMusic() {
+        backgroundMusic.stop();
+    }
+
+    // Optional: if you want SFX in GameScreen
+    public void playGameSFX(String string) {
+        switch (string) {
+            case "click" -> clickSound.play();
+            // Add other game SFX cases here
+        }
+    }
+
+        /**
+     * New method to handle key presses for selecting an inventory slot.
+     */
     private void handleInventoryInput() {
         if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_1)) hudManager.selectSlot(0);
         if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_2)) hudManager.selectSlot(1);
@@ -169,6 +261,7 @@ public class GameScreen extends GameBaseScreen {
         if (Gdx.input.isKeyJustPressed(Input.Keys.MINUS)) hudManager.selectSlot(10);
         if (Gdx.input.isKeyJustPressed(Input.Keys.EQUALS)) hudManager.selectSlot(11);
     }
+
 
     private void handleInput(float delta) {
         playerVelocity.setZero();
@@ -212,36 +305,8 @@ public class GameScreen extends GameBaseScreen {
             }
         }
 
-        if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
-            Item item = player.getBackpack().getInventory().getSelectedItem();
-            if (item instanceof Usable usable) {
-                boolean success = usable.use(player, currentMap, getTileInFront());
-                if (item instanceof Tool tool)
-                    player.consumeEnergy(tool.getConsumptionEnergy(player, Weather.Sunny, success));
-            }
-        }
-
         // --- Inventory Selection Input ---
         handleInventoryInput();
-    }
-
-    private Tile getTileInFront() {
-        // Calculate the center of the player's collision box
-        float playerCenterX = playerPosition.x + (PLAYER_WIDTH / 2f);
-        float playerCenterY = playerPosition.y + (PLAYER_HEIGHT / 4f); // Center of the feet/lower body
-
-        // Determine the tile the player is currently on
-        int tileX = (int) (playerCenterX / Tile.TILE_SIZE);
-        int tileY = (int) (playerCenterY / Tile.TILE_SIZE);
-
-        // Get the tile in front based on direction
-        return switch (direction) {
-            case 0 -> currentMap.getTile(tileX, tileY - 1); // Down
-            case 1 -> currentMap.getTile(tileX + 1, tileY); // Right
-            case 2 -> currentMap.getTile(tileX, tileY + 1); // Up
-            case 3 -> currentMap.getTile(tileX - 1, tileY); // Left
-            default -> currentMap.getTile(tileX, tileY);   // Should not happen
-        };
     }
 
     private boolean isBlocked(float x, float y) {
@@ -260,7 +325,7 @@ public class GameScreen extends GameBaseScreen {
         return false;
     }
 
-    private void changeMap(Map newMap, String spawnName) {
+    private void changeMap(MapData newMap, String spawnName) {
         if (newMap == null) return;
 
         this.currentMap = newMap;
@@ -281,7 +346,7 @@ public class GameScreen extends GameBaseScreen {
         if (teleport == null) return;
 
         // Find the correct map from the MapManager based on the destination string
-        Map newMap;
+        MapData newMap;
         if (teleport.dest().equalsIgnoreCase("town")) {
             newMap = mapManager.getTown();
         } else if (teleport.dest().contains("farm")) {

@@ -59,4 +59,8 @@ public enum Weather {
     public String getButtonPath() {
         return pathToButton;
     }
+
+    public String getButtonPath() {
+        return pathToButton;
+    }
 }

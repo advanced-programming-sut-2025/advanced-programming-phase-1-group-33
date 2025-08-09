@@ -25,7 +25,8 @@ import com.yourgame.model.enums.SymbolType;
 public class GameState {
     private final ArrayList<Player> players = new ArrayList<>();
     private final ArrayList<Farm> farms = new ArrayList<>();
-    private TimeSystem time;
+    private TimeSystem timeSystem;
+    
     private Map map;
 
     private Player currentPlayer;
@@ -37,54 +38,24 @@ public class GameState {
     private int tradeIndex = 0;
     private final ArrayList<Trade> trades = new ArrayList<>();
 
+    public GameState(ArrayList<Player> players) {
+        this.players.addAll(players);
+        this.timeSystem = new TimeSystem();
+
+    }
+
+
     public GameState(ArrayList<Player> players, ArrayList<Farm> farms, User u, Map x) {
         this.farms.addAll(farms);
         this.players.addAll(players);
-        this.time = new TimeSystem();
+        this.timeSystem = new TimeSystem();
         this.map = x;
         relationInitializer(players);
     }
 
-    /**
-     * Advances the game turn:
-     * <ul>
-     * <li>If all players are fainted, it skips the day and resets players for the
-     * new day.</li>
-     * <li>Otherwise, it selects the next active (non-fainted) player.</li>
-     * <li>If a full round is completed (wraps around), it advances the game clock
-     * by one hour.</li>
-     * </ul>
-     */
+
     public void nextPlayerTurn() {
-        int size = players.size();
-        int currentIndex = players.indexOf(currentPlayer);
-        int checkedPlayers = 0;
 
-        while (checkedPlayers < size) {
-            currentIndex = (currentIndex + 1) % size;
-            Player nextPlayer = players.get(currentIndex);
-
-            if (!nextPlayer.isFaintedToday()) {
-                setCurrentPlayer(nextPlayer);
-
-                break;
-            }
-            checkedPlayers++;
-        }
-
-        if (checkedPlayers == size) {
-            time.advancedDay(1);
-            // return new Response(true, "All players have been fainted! Next day is
-            // started!\n";
-
-        }
-
-        if (currentPlayer.equals(players.get(0))) {
-            time.advancedHour(1);
-            // return new Response(true, "An hour passed!\n");
-            // "Current player: " + players.getFirst().getUsername() + "\n\n" +
-            // players.getFirst().UncheckedNotifications());
-        }
     }
 
     public Map getMap() {
@@ -108,7 +79,7 @@ public class GameState {
     }
 
     public TimeSystem getGameTime() {
-        return time;
+        return timeSystem;
     }
 
     private void relationInitializer(ArrayList<Player> players) {

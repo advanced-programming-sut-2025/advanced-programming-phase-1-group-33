@@ -60,9 +60,7 @@ public class Player {
 
     public static Player guest() {
         return new Player(
-            new User("Aeen", "Aeen", "Aeen", "aeen", Gender.Male, SecurityQuestion.BirthDate, "Iran", Avatar.Sam)
-
-        );
+                new User("Aeen", "Aeen", "Aeen", "aeen", Gender.Male, SecurityQuestion.BirthDate, "Iran", Avatar.Sam));
     }
 
     public Player(User currentUser) {
@@ -119,29 +117,33 @@ public class Player {
 
     }
 
+    public int getEnergyPhase() {
+        if (energy <= 0)
+            return 0;
+        float energyPercentage = (float) energy / maxEnergy;
+        if (energyPercentage > 0.75f)
+            return 4;
+        if (energyPercentage > 0.50f)
+            return 3;
+        if (energyPercentage > 0.25f)
+            return 2;
+        return 1;
+    }
+
     public boolean isFaintedToday() {
         return isFaintedToday;
     }
 
-    public Response consumeEnergy(int energy) {
+    public void consumeEnergy(int energy) {
         if (isInfinite) {
-            return new Response(true, "infinite energy for this turn\n ");
+            return ; 
         }
         this.energy -= energy;
-        this.consumedEnergyInThisTurn += energy;
 
-        if (consumedEnergyInThisTurn >= 50 && this.energy > 0) {
-            App.getGameState().nextPlayerTurn();
-            return new Response(false,
-                    "You consumed " + this.consumedEnergyInThisTurn
-                            + " energy in your turn! The turn will be changed!\n");
-        }
         if (this.energy < 0) {
             this.energy = 0;
             faint();
-            return new Response(false, "You Fainted... Dummy\n");
         }
-        return new Response(true, "You consumed " + this.consumedEnergyInThisTurn + " in this turn until now! ");
     }
 
     public boolean isUnlimitedEnergy() {

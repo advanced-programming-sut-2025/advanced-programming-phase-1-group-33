@@ -2,15 +2,6 @@ package com.yourgame.model.enums.Commands;
 
 import com.badlogic.gdx.Screen;
 import com.yourgame.view.AppViews.*;
-import com.yourgame.view.Store.BlackSmithMenu;
-import com.yourgame.view.Store.CarpenterShopMenu;
-import com.yourgame.view.Store.FishShopMenu;
-import com.yourgame.view.Store.JojaMartMenu;
-import com.yourgame.view.Store.MarnieRanchMenu;
-import com.yourgame.view.Store.PierreGeneralStoreMenu;
-import com.yourgame.view.Store.StardopSaloonMenu;
-import com.yourgame.view.GameMenu;
-import com.yourgame.view.TradeMenu;
 
 public enum MenuTypes {
     SignupMenu,

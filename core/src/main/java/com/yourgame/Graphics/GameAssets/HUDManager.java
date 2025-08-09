@@ -13,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
@@ -21,7 +22,12 @@ import com.yourgame.Graphics.MenuAssetManager;
 import com.yourgame.model.Item.Inventory.Inventory;
 import com.yourgame.model.Item.Inventory.InventorySlot;
 import com.yourgame.model.Item.Item;
+import com.yourgame.Graphics.MenuAssetManager;
+import com.yourgame.model.App;
 import com.yourgame.model.Item.Tools.Tool;
+import com.yourgame.model.UserInfo.Player;
+import com.yourgame.model.WeatherAndTime.TimeSystem;
+import com.yourgame.observers.TimeObserver;
 import com.yourgame.model.UserInfo.Player;
 
 import java.util.ArrayList;
@@ -32,6 +38,9 @@ public class HUDManager {
     private Stage hudStage;
     private clockUIAssetManager clockUI;
     private GameAssetManager assetManager;
+    private final Skin skin_Nz = MenuAssetManager.getInstance().getSkin(3);
+
+    private Player localPlayer;
 
     // Energy Bar
     private Texture[] energy_bar_textures;
@@ -42,6 +51,7 @@ public class HUDManager {
     private ImageButton seasonButton;
 
     private Texture InventoryTexture;
+    private TextField timeField, dateField, goldField;
 
     // Inventory Bar
     private final InventorySlotUI[] inventorySlotsUI; // Array of our new UI slots
@@ -49,12 +59,18 @@ public class HUDManager {
     private final Drawable selectionDrawable;
     private final BitmapFont font;
 
-    private final Player player;
+    // Testing the Time
+    private TimeObserver timeObserver;
 
-    public HUDManager(Stage stage, clockUIAssetManager clockUI, GameAssetManager assetManager, Player player) {
+    public float timeAccumulator = 0f; // Used to track time for updates`
+
+    public HUDManager(Stage stage, clockUIAssetManager clockUI, GameAssetManager assetManager, Player localPlayer) {
         this.hudStage = stage;
         this.clockUI = clockUI;
         this.assetManager = assetManager;
+
+        this.localPlayer = localPlayer;
+
         this.energy_bar_textures = clockUI.getEnergyBarMode();
         this.inventorySlotsUI = new InventorySlotUI[12];
         this.font = MenuAssetManager.getInstance().getSkin(3).getFont("Text");
@@ -63,11 +79,11 @@ public class HUDManager {
         for (int i = 0; i < inventorySlotsUI.length; i++) {
             inventorySlotsUI[i] = new InventorySlotUI(selectionDrawable, font);
         }
-        this.player = player;
     }
 
     /**
-     * Creates a simple drawable that will be used to highlight the selected inventory slot.
+     * Creates a simple drawable that will be used to highlight the selected
+     * inventory slot.
      */
     private Drawable createSelectionHighlight() {
         Pixmap pixmap = new Pixmap(56, 56, Pixmap.Format.RGBA8888);
@@ -80,14 +96,13 @@ public class HUDManager {
 
     // Method to create and add the info bar (clock, weather, season) and energy bar
     // to the HUD stage
-    public void createHUD(weatherTypeButton initialWeather, seasonTypeButton initialSeason, int initialEnergyPhase) {
-        hudStage.addActor(createClockBarTable(initialWeather, initialSeason));
-        hudStage.addActor(createEnergyBarTable(initialEnergyPhase));
+    public void createHUD() {
+        hudStage.addActor(createClockBarTable());
+        hudStage.addActor(createEnergyBarTable());
         hudStage.addActor(createInventoryBarTable());
-
     }
 
-    public Table createClockBarTable(weatherTypeButton weatherType, seasonTypeButton seasonType) {
+    public Table createClockBarTable() {
         Table clockBarTable = new Table();
         clockBarTable.setFillParent(true);
         clockBarTable.top().right();
@@ -96,8 +111,11 @@ public class HUDManager {
         ImageButton clockImg = new ImageButton(clockSkin, "MainClockButton");
 
         // Create the weather and season buttons and store references to them
-        this.weatherTypeButton = new ImageButton(clockSkin, weatherType.getButtonPath());
-        this.seasonButton = new ImageButton(clockSkin, seasonType.getButtonPath());
+        String season_BPath = App.getGameState().getGameTime().getSeason().getButtonPath();
+        String weather_BPath = App.getGameState().getGameTime().getWeather().getButtonPath();
+
+        this.weatherTypeButton = new ImageButton(clockSkin, weather_BPath);
+        this.seasonButton = new ImageButton(clockSkin, season_BPath);
 
         Stack clockAndIndicatorsStack = new Stack();
         clockAndIndicatorsStack.add(clockImg);
@@ -114,6 +132,25 @@ public class HUDManager {
                 .align(Align.topLeft).expandX().size(35);
 
         clockAndIndicatorsStack.add(overlayButtonsTable);
+        // 2. Create a new table for time-related text fields
+        Table timeInfoTable = new Table();
+        timeInfoTable.setFillParent(true);
+        timeInfoTable.top().right().padTop(10).padRight(10); // adjust padding as needed
+
+        timeField = new TextField(App.getGameState().getGameTime().getTimeString(), skin_Nz, "default");
+        dateField = new TextField(App.getGameState().getGameTime().getDateToString(), skin_Nz, "default");
+        goldField = new TextField("todo", skin_Nz, "default");
+
+        timeField.setDisabled(true);
+        dateField.setDisabled(true);
+        goldField.setDisabled(true);
+        timeField.setMaxLength(5);
+
+        timeInfoTable.add(dateField).padBottom(5).top().right().height(40).padBottom(40).row();
+        timeInfoTable.add(timeField).padBottom(5).top().right().height(40).padBottom(40).row();
+        timeInfoTable.add(goldField).top().right().height(40).padBottom(60);
+
+        clockAndIndicatorsStack.add(timeInfoTable);
 
         clockBarTable.add(clockAndIndicatorsStack).size(196, 196).pad(10).top().right();
         return clockBarTable;
@@ -121,6 +158,8 @@ public class HUDManager {
 
     /**
      * Creates the inventory bar with 12 slots.
+     * Uses a Stack to overlay tool icons and a selection highlight on top of the
+     * inventory background image.
      */
     public Table createInventoryBarTable() {
         Table inventoryContainerTable = new Table();
@@ -145,6 +184,10 @@ public class HUDManager {
     }
 
     /**
+     * Adds a tool to a specific slot in the inventory.
+     * 
+     * @param tool  The tool to add.
+     * @param index The index of the slot (0-11).
      * This is the core method to keep the UI in sync with the player's data.
      * Call this whenever the inventory changes, or every frame.
      * @param playerInventory The player's actual inventory data.
@@ -164,6 +207,7 @@ public class HUDManager {
 
     /**
      * Selects an inventory slot, updating the visual highlight.
+     * 
      * @param index The index of the slot to select (0-11).
      */
     public void selectSlot(int index) {
@@ -174,51 +218,52 @@ public class HUDManager {
         inventorySlotsUI[selectedSlotIndex].setSelected(true); // Select the new one
 
         Item selectedItem = inventorySlotsUI[selectedSlotIndex].getItem();
-        player.getBackpack().getInventory().selectItem(selectedItem);
+        this.localPlayer.getBackpack().getInventory().selectItem(selectedItem);
     }
 
-    // Energy Bar HAndler
-    public Table createEnergyBarTable(int initialPhase) {
-        Table energy_barTable = new Table();
-        energy_barTable.setFillParent(true);
-        energy_barTable.bottom().right().padRight(10).padBottom(10);
+    public Table createEnergyBarTable() {
+        Table energyBarTable = new Table();
+        energyBarTable.setFillParent(true);
+        energyBarTable.bottom().right().padRight(10).padBottom(10);
 
-        if (initialPhase >= 0 && initialPhase < energy_bar_textures.length) {
-            this.energyBarImage = new Image(this.energy_bar_textures[initialPhase]);
-        } else {
-            Gdx.app.log("HUDManager", "Initial energy phase " + initialPhase + " is out of bounds. Using phase 0.");
-            this.energyBarImage = new Image(this.energy_bar_textures[0]);
-        }
+        int initialPhase = localPlayer.getEnergyPhase(); // Get phase from the player
+        this.energyBarImage = new Image(this.energy_bar_textures[initialPhase]);
 
-        energy_barTable.add(energyBarImage);
-        return energy_barTable;
+        energyBarTable.add(energyBarImage);
+        return energyBarTable;
     }
 
-    public void updateEnergyBar(int newPhase) {
+    public void updateEnergyBar() {
+
         if (energyBarImage == null) {
             Gdx.app.log("HUDManager", "Energy bar Image not initialized. Cannot update.");
             return;
         }
+
+        int newPhase = this.localPlayer.getEnergyPhase();
         if (newPhase >= 0 && newPhase < energy_bar_textures.length) {
+            Gdx.app.log("HUDManager", "updating Energy Bar.");
             energyBarImage.setDrawable(new Image(this.energy_bar_textures[newPhase]).getDrawable());
         } else {
             Gdx.app.log("Energy_bar", "Invalid energy bar phase: " + newPhase);
         }
     }
 
+    public void updateWeather() {
+        String b_path = App.getGameState().getGameTime().getWeather().getButtonPath();
 
-
-    public void updateWeather(weatherTypeButton newWeather) {
         if (weatherTypeButton != null) {
             Skin skin = clockUI.getClockWeatherSkin();
-            weatherTypeButton.setStyle(skin.get(newWeather.getButtonPath(), ImageButton.ImageButtonStyle.class));
+            weatherTypeButton.setStyle(skin.get(b_path, ImageButton.ImageButtonStyle.class));
         }
     }
 
-    public void updateSeason(seasonTypeButton newSeason) {
+    public void updateSeason() {
+        String b_path = App.getGameState().getGameTime().getSeason().getButtonPath();
+
         if (seasonButton != null) {
             Skin skin = clockUI.getClockWeatherSkin();
-            seasonButton.setStyle(skin.get(newSeason.getButtonPath(), ImageButton.ImageButtonStyle.class));
+            seasonButton.setStyle(skin.get(b_path, ImageButton.ImageButtonStyle.class));
         }
     }
 
@@ -226,39 +271,5 @@ public class HUDManager {
         return selectedSlotIndex;
     }
 
-    public enum weatherTypeButton {
-        Sunny("SunnyButton"),
-        Rainy("RainyButton"),
-        Snowy("SnowyButton"),
-        Wedding("WeddingButton"),
-        Stormy("StormyButton");
 
-        private final String pathToButton;
-
-        weatherTypeButton(String pathToButton) {
-            this.pathToButton = pathToButton;
-        }
-
-        public String getButtonPath() {
-            return pathToButton;
-        }
-    }
-
-    public enum seasonTypeButton {
-
-        Spring("SpringButton"),
-        Summer("SummerButton"),
-        Fall("FallButton"),
-        Winter("WinterButton");
-
-        private final String pathToButton;
-
-        seasonTypeButton(String pathToButton) {
-            this.pathToButton = pathToButton;
-        }
-
-        public String getButtonPath() {
-            return pathToButton;
-        }
-    }
 }
