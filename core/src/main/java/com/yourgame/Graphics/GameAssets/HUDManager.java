@@ -248,7 +248,22 @@ public class HUDManager {
             Gdx.app.log("Energy_bar", "Invalid energy bar phase: " + newPhase);
         }
     }
+    public void updateTime(float delta) {
+        
+        timeField.setText(App.getGameState().getGameTime().getTimeString());
+        dateField.setText(App.getGameState().getGameTime().getDateToString());
 
+        this.timeAccumulator += delta;
+        if (this.timeAccumulator >= 7f) { // every 7 seconds = 10 minutes
+
+
+            Gdx.app.log("time", App.getGameState().getGameTime().getTimeString());
+            Gdx.app.log("time", App.getGameState().getGameTime().getDateToString());
+            App.getGameState().getGameTime().advanceMinutes(10);
+            this.timeAccumulator = 0f;
+        }
+
+    }
     public void updateWeather() {
         String b_path = App.getGameState().getGameTime().getWeather().getButtonPath();
 

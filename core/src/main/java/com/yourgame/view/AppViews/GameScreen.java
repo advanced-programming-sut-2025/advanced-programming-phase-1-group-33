@@ -22,16 +22,16 @@ import com.yourgame.Graphics.MenuAssetManager;
 import com.yourgame.Main;
 import com.yourgame.Graphics.GameAssets.HUDManager;
 import com.yourgame.Graphics.GameAssets.clockUIAssetManager;
-import com.yourgame.Graphics.Map.MapData;
+import com.yourgame.model.Map.*;
 import com.yourgame.model.App;
 import com.yourgame.model.GameState;
-import com.yourgame.model.Map.Teleport;
 import com.yourgame.Graphics.GameAssetManager;
 import com.yourgame.Graphics.MenuAssetManager;
 import com.yourgame.model.UserInfo.Player;
 import com.yourgame.model.WeatherAndTime.Season;
 import com.yourgame.model.WeatherAndTime.Weather;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.yourgame.Graphics.MenuAssetManager.PLAYER_HEIGHT;
@@ -51,8 +51,9 @@ public class GameScreen implements Screen {
     // ==GAME==
     private MapManager mapManager;
     private Player player;
+    private ArrayList<Player> players = new ArrayList<>();
     private Map currentMap;
-    private GameState gameState; 
+    private GameState gameState;
 
     private OrthogonalTiledMapRenderer mapRenderer;
     private OrthographicCamera camera;
@@ -84,10 +85,11 @@ public class GameScreen implements Screen {
         this.game = Main.getMain();
         this.assetManager = new GameAssetManager();
         this.clockUI = assetManager.getClockManager();
-        
+        this.gameState = new GameState(players);
+        App.setGameState(gameState);
+
         this.HUDStage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(HUDStage);
-
 
         cursor = MenuAssetManager.getInstance().getCursor();
         cursor.setSize(32, 45);
@@ -105,12 +107,13 @@ public class GameScreen implements Screen {
             playBackgroundMusic();
             isMusicInitialized = true;
         }
-
         // Map and Player initialization
         player = Player.guest();
         mapManager = new MapManager(List.of(player));
         mapRenderer = new OrthogonalTiledMapRenderer(mapManager.getPlayersCurrentMap(player).getTiledMap());
         currentMap = mapManager.getPlayersCurrentMap(player);
+        // HUD‌ manager
+        this.hudManager = new HUDManager(HUDStage, clockUI, assetManager, this.player);
     }
 
     @Override
@@ -148,7 +151,7 @@ public class GameScreen implements Screen {
     public void render(float delta) {
         handleInput(delta);
         checkForTeleport();
-        handleHudUpdates();
+        handleHudUpdates(delta);
 
         // Clear screen
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -168,6 +171,16 @@ public class GameScreen implements Screen {
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
         TextureRegion currentFrame = walkAnimations[direction].getKeyFrame(stateTime, true);
+
+        Season gameSeason = App.getGameState().getGameTime().getSeason();
+        for (MapElement element : currentMap.getMapElements()) {
+            TextureRegion texture = element.getTexture(assetManager, gameSeason);
+            if (texture != null) {
+                java.awt.Rectangle bounds = element.getPixelBounds();
+                batch.draw(texture, bounds.x, bounds.y, bounds.width, bounds.height);
+            }
+        }
+        
         batch.draw(currentFrame, playerPosition.x, playerPosition.y);
         batch.end();
 
@@ -244,24 +257,35 @@ public class GameScreen implements Screen {
         }
     }
 
-        /**
+    /**
      * New method to handle key presses for selecting an inventory slot.
      */
     private void handleInventoryInput() {
-        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_1)) hudManager.selectSlot(0);
-        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_2)) hudManager.selectSlot(1);
-        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_3)) hudManager.selectSlot(2);
-        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_4)) hudManager.selectSlot(3);
-        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_5)) hudManager.selectSlot(4);
-        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_6)) hudManager.selectSlot(5);
-        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_7)) hudManager.selectSlot(6);
-        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_8)) hudManager.selectSlot(7);
-        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_9)) hudManager.selectSlot(8);
-        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_0)) hudManager.selectSlot(9);
-        if (Gdx.input.isKeyJustPressed(Input.Keys.MINUS)) hudManager.selectSlot(10);
-        if (Gdx.input.isKeyJustPressed(Input.Keys.EQUALS)) hudManager.selectSlot(11);
+        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_1))
+            hudManager.selectSlot(0);
+        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_2))
+            hudManager.selectSlot(1);
+        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_3))
+            hudManager.selectSlot(2);
+        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_4))
+            hudManager.selectSlot(3);
+        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_5))
+            hudManager.selectSlot(4);
+        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_6))
+            hudManager.selectSlot(5);
+        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_7))
+            hudManager.selectSlot(6);
+        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_8))
+            hudManager.selectSlot(7);
+        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_9))
+            hudManager.selectSlot(8);
+        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_0))
+            hudManager.selectSlot(9);
+        if (Gdx.input.isKeyJustPressed(Input.Keys.MINUS))
+            hudManager.selectSlot(10);
+        if (Gdx.input.isKeyJustPressed(Input.Keys.EQUALS))
+            hudManager.selectSlot(11);
     }
-
 
     private void handleInput(float delta) {
         playerVelocity.setZero();
@@ -317,16 +341,21 @@ public class GameScreen implements Screen {
         float boxHeight = PLAYER_HEIGHT / 2f; // Check only the lower half of the player
 
         // Check the four corners of the player's collision box
-        if (currentMap.isTileBlocked(boxX, boxY)) return true;
-        if (currentMap.isTileBlocked(boxX + boxWidth, boxY)) return true;
-        if (currentMap.isTileBlocked(boxX, boxY + boxHeight)) return true;
-        if (currentMap.isTileBlocked(boxX + boxWidth, boxY + boxHeight)) return true;
+        if (currentMap.isTileBlocked(boxX, boxY))
+            return true;
+        if (currentMap.isTileBlocked(boxX + boxWidth, boxY))
+            return true;
+        if (currentMap.isTileBlocked(boxX, boxY + boxHeight))
+            return true;
+        if (currentMap.isTileBlocked(boxX + boxWidth, boxY + boxHeight))
+            return true;
 
         return false;
     }
 
-    private void changeMap(MapData newMap, String spawnName) {
-        if (newMap == null) return;
+    private void changeMap(Map newMap, String spawnName) {
+        if (newMap == null)
+            return;
 
         this.currentMap = newMap;
         this.mapRenderer.setMap(currentMap.getTiledMap());
@@ -339,14 +368,15 @@ public class GameScreen implements Screen {
 
     private void checkForTeleport() {
         // Check the tile at the center of the player's feet
-        float checkX = playerPosition.x + (PLAYER_WIDTH / 2f);
+        float checkX = playerPosition.x + (MenuAssetManager.PLAYER_WIDTH / 2f);
         float checkY = playerPosition.y + 4; // A bit above the bottom edge
 
         Teleport teleport = currentMap.getTeleport(checkX, checkY);
-        if (teleport == null) return;
+        if (teleport == null)
+            return;
 
         // Find the correct map from the MapManager based on the destination string
-        MapData newMap;
+        Map newMap;
         if (teleport.dest().equalsIgnoreCase("town")) {
             newMap = mapManager.getTown();
         } else if (teleport.dest().contains("farm")) {
@@ -381,35 +411,39 @@ public class GameScreen implements Screen {
         camera.position.y = Math.min(mapHeight - cameraHalfHeight, camera.position.y);
     }
 
-     /**
+    /**
      * Handles updates to the HUD elements based on game state or input.
      * This is a good practice to separate HUD logic from main rendering.
      */
-    private void handleHudUpdates() {
-        // Example: Update energy bar
+    private void handleHudUpdates(float delta) {
         if (Gdx.input.isKeyJustPressed(Input.Keys.E)) {
-            currentEnergyPhase--;
-            if (currentEnergyPhase < 0) {
-                currentEnergyPhase = 4;
-            }
-            hudManager.updateEnergyBar(currentEnergyPhase);
+            player.consumeEnergy(10);
         }
 
         // Example: Update weather (cycle through enums with 'W' key)
         if (Gdx.input.isKeyJustPressed(Input.Keys.Q)) {
-            HUDManager.weatherTypeButton[] weathers = HUDManager.weatherTypeButton.values();
-            int nextIndex = (currentWeather.ordinal() + 1) % weathers.length;
-            currentWeather = weathers[nextIndex];
-            hudManager.updateWeather(currentWeather);
+            // TODO: Need the CheetCode Be Implemented
+            // HUDManager.weatherTypeButton[] weathers =
+            // HUDManager.weatherTypeButton.values();
+            // int nextIndex = (currentWeather.ordinal() + 1) % weathers.length;
+            // currentWeather = weathers[nextIndex];
+            // hudManager.updateWeather(currentWeather);
         }
 
         // Example: Update season (cycle through enums with 'R' key)
-        if (Gdx.input.isKeyJustPressed(Input.Keys.R)) {
-            HUDManager.seasonTypeButton[] seasons = HUDManager.seasonTypeButton.values();
-            int nextIndex = (currentSeason.ordinal() + 1) % seasons.length;
-            currentSeason = seasons[nextIndex];
-            hudManager.updateSeason(currentSeason);
+        if (Gdx.input.isKeyJustPressed(Input.Keys.T)) {
+            // TODO: need the cheat Code Be implemented
+            App.getGameState().getGameTime().advanceMinutes(20);
+            // HUDManager.seasonTypeButton[] seasons = HUDManager.seasonTypeButton.values();
+            // int nextIndex = (currentSeason.ordinal() + 1) % seasons.length;
+            // currentSeason = seasons[nextIndex];
+            // hudManager.updateSeason(currentSeason);
         }
+
+        hudManager.updateTime(delta);
+        hudManager.updateWeather();
+        hudManager.updateSeason();
+        hudManager.updateEnergyBar();
     }
 
 }

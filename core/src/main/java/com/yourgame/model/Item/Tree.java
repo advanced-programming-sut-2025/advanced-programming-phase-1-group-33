@@ -13,7 +13,6 @@ import java.awt.*;
 import java.util.List;
 
 public class Tree extends MapElement implements Growable {
-public class Tree extends MapElement implements Growable {
     private final TreeType type;
     private int levelOfGrowth;
     private TimeSystem lastGrowthTime;
@@ -24,24 +23,18 @@ public class Tree extends MapElement implements Growable {
 
     public Tree(TreeType type, TimeSystem timeOfPlanting, Fertilizer fertilizer, int worldX, int worldY) {
         super(ElementType.TREE, new Rectangle(worldX, worldY, 48, 80), 6);
-    public Tree(TreeType type, TimeSystem timeOfPlanting, Fertilizer fertilizer, int worldX, int worldY) {
-        super(ElementType.TREE, new Rectangle(worldX, worldY, 48, 80), 6);
         this.type = type;
         this.lastGrowthTime = timeOfPlanting.clone();
         this.lastWaterTime = timeOfPlanting.clone();
         this.fertilizer = fertilizer;
 
-        if (fertilizer == Fertilizer.GrowthFertilizer) levelOfGrowth = 1;
-        else levelOfGrowth = 0;
-
-        if (type == TreeType.OakTree || type == TreeType.MapleTree || type == TreeType.PineTree) {
-            numberOfDaysCanBeAliveWithoutWater = Integer.MAX_VALUE;
-        } else if (fertilizer == Fertilizer.WaterFertilizer) {
-            numberOfDaysCanBeAliveWithoutWater = 3;
+        // Corrected: The logic for levelOfGrowth and numberOfDaysCanBeAliveWithoutWater
+        // was duplicated and nested incorrectly. This block now correctly sets these values.
+        if (fertilizer == Fertilizer.GrowthFertilizer) {
+            levelOfGrowth = 1;
         } else {
-
-        if (fertilizer == Fertilizer.GrowthFertilizer) levelOfGrowth = 1;
-        else levelOfGrowth = 0;
+            levelOfGrowth = 0;
+        }
 
         if (type == TreeType.OakTree || type == TreeType.MapleTree || type == TreeType.PineTree) {
             numberOfDaysCanBeAliveWithoutWater = Integer.MAX_VALUE;
@@ -51,9 +44,7 @@ public class Tree extends MapElement implements Growable {
             numberOfDaysCanBeAliveWithoutWater = 2;
         }
     }
-
-    public TreeType getTreeType() {
-    }
+    
 
     public TreeType getTreeType() {
         return type;
@@ -74,10 +65,6 @@ public class Tree extends MapElement implements Growable {
 
     public boolean canGrowAgain() {
         return true;
-    }
-
-    public void setMature() {
-        levelOfGrowth = type.getStages().size();
     }
 
     public void setMature() {
