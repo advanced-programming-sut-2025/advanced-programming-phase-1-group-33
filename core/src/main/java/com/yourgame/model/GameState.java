@@ -178,10 +178,10 @@ public class GameState {
         for (Player player : players) {
             player.setConsumedEnergyInThisTurn(0);
             int ratio = 1;
-            if (player.getRemainingDaysAfterMarigDenied() > 0) {
+            if (player.getRemainingDaysAfterMarriageDenied() > 0) {
                 ratio = 2;
-                player.setRemainingDaysAfterMarigDenied(
-                        player.getRemainingDaysAfterMarigDenied() - 1);
+                player.setRemainingDaysAfterMarriageDenied(
+                        player.getRemainingDaysAfterMarriageDenied() - 1);
             }
             if (player.isFaintedToday()) {
                 player.setEnergy(150 / ratio);

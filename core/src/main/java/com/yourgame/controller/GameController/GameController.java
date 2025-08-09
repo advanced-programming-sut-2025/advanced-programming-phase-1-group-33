@@ -7,7 +7,6 @@ import com.yourgame.model.Item.Tools.FishingPole;
 import com.yourgame.model.Item.Tools.Tool;
 import com.yourgame.model.Item.Tools.WateringCan;
 import com.yourgame.model.Item.*;
-import com.yourgame.model.Item.Stone;
 import com.yourgame.model.Item.Wood;
 import com.yourgame.model.ManuFactor.ArtisanGood;
 import com.yourgame.model.ManuFactor.ArtisanGoodType;
@@ -2314,7 +2313,7 @@ public class GameController {
 
             tempRelation.setFriendshipLevel(PlayersFriendshipLevel.LevelZero);
 
-            temp.getSender().setRemainingDaysAfterMarigDenied(7);
+            temp.getSender().setRemainingDaysAfterMarriageDenied(7);
             return new Response(true, "You rejected the marriage request");
         }
 

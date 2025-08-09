@@ -48,10 +48,9 @@ public class Player {
     private final ArrayList<Notification> notifications = new ArrayList<>();
 
     private ArrayList<AnimalType> animals = new ArrayList<>();
-    private Backpack inventory;
     private final Ability ability = new Ability(this);
 
-    private int remainingDaysAfterMarigDenied = 0;
+    private int remainingDaysAfterMarriageDenied = 0;
 
     private Farm farm;
     private Position currentPosition;
@@ -183,15 +182,6 @@ public class Player {
         return maxEnergy;
     }
 
-    public Backpack getInventory() {
-        return inventory;
-    }
-
-    public void setInventory(Backpack inventory) {
-        this.inventory = inventory;
-
-    }
-
     public Farm getFarm() {
         return farm;
     }
@@ -245,12 +235,12 @@ public class Player {
         this.relationWithRobin = relationWithRobin;
     }
 
-    public int getRemainingDaysAfterMarigDenied() {
-        return remainingDaysAfterMarigDenied;
+    public int getRemainingDaysAfterMarriageDenied() {
+        return remainingDaysAfterMarriageDenied;
     }
 
-    public void setRemainingDaysAfterMarigDenied(int remainingDaysAfterMarigDenied) {
-        this.remainingDaysAfterMarigDenied = remainingDaysAfterMarigDenied;
+    public void setRemainingDaysAfterMarriageDenied(int remainingDaysAfterMarriageDenied) {
+        this.remainingDaysAfterMarriageDenied = remainingDaysAfterMarriageDenied;
     }
 
     public String getNickname() {
