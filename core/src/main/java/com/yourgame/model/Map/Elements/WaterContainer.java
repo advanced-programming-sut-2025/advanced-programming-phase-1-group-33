@@ -1,4 +1,4 @@
-package com.yourgame.model.Map;
+package com.yourgame.model.Map.Elements;
 
 public class WaterContainer {
     private int capacity;

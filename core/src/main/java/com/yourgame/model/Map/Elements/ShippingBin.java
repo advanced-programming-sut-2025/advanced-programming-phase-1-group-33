@@ -1,7 +1,8 @@
-package com.yourgame.model.Map;
+package com.yourgame.model.Map.Elements;
 
 import com.yourgame.model.App;
 import com.yourgame.model.ManuFactor.Ingredient;
+import com.yourgame.model.Map.Placeable;
 import com.yourgame.model.UserInfo.Coin;
 import com.yourgame.model.UserInfo.Player;
 import com.yourgame.model.enums.SymbolType;
@@ -9,7 +10,7 @@ import com.yourgame.model.enums.SymbolType;
 import java.awt.*;
 import java.util.HashMap;
 
-public class ShippingBin implements Placeable{
+public class ShippingBin implements Placeable {
     private HashMap<Player,Integer> dailyRevenue;
     private final Rectangle bounds;
 

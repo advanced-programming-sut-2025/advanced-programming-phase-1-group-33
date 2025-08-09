@@ -158,11 +158,11 @@ public class CarpenterShop extends Store {
                 int randomX = rand.nextInt(250);
                 int randomY = rand.nextInt(200);
 
-                if (App.getGameState().getCurrentPlayer().getFarm().getRectangle().contains(randomX, randomY)) {
-                    if(App.getGameState().getMap().addShippingBin(randomX, randomY)) {
-                        break;
-                    }
-                }
+//                if (App.getGameState().getCurrentPlayer().getFarm().getRectangle().contains(randomX, randomY)) {
+//                    if(App.getGameState().getMap().addShippingBin(randomX, randomY)) {
+//                        break;
+//                    }
+//                }
 
             }
 

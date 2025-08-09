@@ -4,9 +4,9 @@ package com.yourgame.model.Npc;
 import com.yourgame.model.App;
 import com.yourgame.model.Item.Food;
 import com.yourgame.model.Item.ForagingMineral;
+import com.yourgame.model.Item.Stone;
 import com.yourgame.model.ManuFactor.Ingredient;
 import com.yourgame.model.Map.NpcHome;
-import com.yourgame.model.Map.Stone;
 import com.yourgame.model.UserInfo.Coin;
 
 import java.util.ArrayList;
@@ -50,12 +50,12 @@ public class SebastianQuests {
                     App.getGameState().getCurrentPlayer().getBackpack().getIngredientQuantity().getOrDefault(ForagingMineral.Diamond, 0) + 2);
         }
 
-        for (NpcHome home : App.getGameState().getMap().getNpcHomes()) {
-            if (home.getNpc().getType().equals(NPCType.Sebastian)) {
-                home.getNpc().setFirstQuestDone(true);
-                break;
-            }
-        }
+//        for (NpcHome home : App.getGameState().getMap().getNpcHomes()) {
+//            if (home.getNpc().getType().equals(NPCType.Sebastian)) {
+//                home.getNpc().setFirstQuestDone(true);
+//                break;
+//            }
+//        }
 
         return true;
     }
@@ -94,12 +94,12 @@ public class SebastianQuests {
             }
         }
 
-        for (NpcHome home : App.getGameState().getMap().getNpcHomes()) {
-            if (home.getNpc().getType().equals(NPCType.Sebastian)) {
-                home.getNpc().setSecondQuestDone(true);
-                break;
-            }
-        }
+//        for (NpcHome home : App.getGameState().getMap().getNpcHomes()) {
+//            if (home.getNpc().getType().equals(NPCType.Sebastian)) {
+//                home.getNpc().setSecondQuestDone(true);
+//                break;
+//            }
+//        }
 
         return true;
     }
@@ -132,12 +132,12 @@ public class SebastianQuests {
                     App.getGameState().getCurrentPlayer().getBackpack().getIngredientQuantity().getOrDefault(ForagingMineral.Quartz, 0) + 50);
         }
 
-        for (NpcHome home : App.getGameState().getMap().getNpcHomes()) {
-            if (home.getNpc().getType().equals(NPCType.Sebastian)) {
-                home.getNpc().setThirdQuestDone(true);
-                break;
-            }
-        }
+//        for (NpcHome home : App.getGameState().getMap().getNpcHomes()) {
+//            if (home.getNpc().getType().equals(NPCType.Sebastian)) {
+//                home.getNpc().setThirdQuestDone(true);
+//                break;
+//            }
+//        }
 
         return true;
     }

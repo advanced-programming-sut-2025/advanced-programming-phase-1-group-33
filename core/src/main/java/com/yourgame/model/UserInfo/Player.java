@@ -15,7 +15,6 @@ import com.yourgame.model.Item.Tools.Tool;
 import com.yourgame.model.Item.Tools.WateringCan;
 import com.yourgame.model.Item.Wood;
 import com.yourgame.model.Item.Inventory.Backpack;
-import com.yourgame.model.Map.Farm;
 import com.yourgame.model.Map.Position;
 import com.yourgame.model.Npc.NPCType;
 import com.yourgame.model.Npc.RelationWithNPC;
@@ -52,7 +51,6 @@ public class Player {
 
     private int remainingDaysAfterMarriageDenied = 0;
 
-    private Farm farm;
     private Position currentPosition;
     private RelationWithNPC relationWithAbigail;
     private RelationWithNPC relationWithSebastian;
@@ -181,16 +179,6 @@ public class Player {
     public int getMaxEnergy() {
         return maxEnergy;
     }
-
-    public Farm getFarm() {
-        return farm;
-    }
-
-    public void setFarm(Farm map) {
-        this.farm = map;
-        this.currentPosition = farm.getPlayerDefaultPosition();
-    }
-
     public Position getPosition() {
         return currentPosition;
     }

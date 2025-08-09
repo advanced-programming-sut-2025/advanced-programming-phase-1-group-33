@@ -4,11 +4,11 @@ package com.yourgame.model.Npc;
 import com.yourgame.model.Animals.Fish;
 import com.yourgame.model.Animals.FishType;
 import com.yourgame.model.App;
+import com.yourgame.model.Item.Wood;
 import com.yourgame.model.ManuFactor.ArtisanGood;
 import com.yourgame.model.ManuFactor.ArtisanGoodType;
 import com.yourgame.model.ManuFactor.Ingredient;
 import com.yourgame.model.Map.NpcHome;
-import com.yourgame.model.Map.Wood;
 import com.yourgame.model.Recipes.CookingRecipe;
 import com.yourgame.model.UserInfo.Coin;
 
@@ -62,12 +62,12 @@ public class LeahQuests {
             }
         }
 
-        for (NpcHome home : App.getGameState().getMap().getNpcHomes()) {
-            if (home.getNpc().getType().equals(NPCType.Leah)) {
-                home.getNpc().setFirstQuestDone(true);
-                break;
-            }
-        }
+//        for (NpcHome home : App.getGameState().getMap().getNpcHomes()) {
+//            if (home.getNpc().getType().equals(NPCType.Leah)) {
+//                home.getNpc().setFirstQuestDone(true);
+//                break;
+//            }
+//        }
 
         return true;
     }
@@ -95,12 +95,12 @@ public class LeahQuests {
 
         App.getGameState().getCurrentPlayer().getBackpack().getCookingRecipes().add(CookingRecipe.SalmonDinner);
 
-        for (NpcHome home : App.getGameState().getMap().getNpcHomes()) {
-            if (home.getNpc().getType().equals(NPCType.Leah)) {
-                home.getNpc().setSecondQuestDone(true);
-                break;
-            }
-        }
+//        for (NpcHome home : App.getGameState().getMap().getNpcHomes()) {
+//            if (home.getNpc().getType().equals(NPCType.Leah)) {
+//                home.getNpc().setSecondQuestDone(true);
+//                break;
+//            }
+//        }
 
         return true;
     }
@@ -130,12 +130,12 @@ public class LeahQuests {
 
         // we don't need the reward in our app, so we don't add it to player inventory
 
-        for (NpcHome home : App.getGameState().getMap().getNpcHomes()) {
-            if (home.getNpc().getType().equals(NPCType.Leah)) {
-                home.getNpc().setThirdQuestDone(true);
-                break;
-            }
-        }
+//        for (NpcHome home : App.getGameState().getMap().getNpcHomes()) {
+//            if (home.getNpc().getType().equals(NPCType.Leah)) {
+//                home.getNpc().setThirdQuestDone(true);
+//                break;
+//            }
+//        }
 
         return true;
     }

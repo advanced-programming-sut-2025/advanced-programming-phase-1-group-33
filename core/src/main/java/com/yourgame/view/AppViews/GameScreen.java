@@ -9,18 +9,15 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
-import com.yourgame.Graphics.Map.*;
 import com.yourgame.Graphics.MenuAssetManager;
 import com.yourgame.Main;
 import com.yourgame.Graphics.GameAssets.HUDManager;
 import com.yourgame.Graphics.GameAssets.clockUIAssetManager;
 import com.yourgame.Graphics.GameAssetManager;
 import com.yourgame.model.App;
-import com.yourgame.model.Item.Tools.Axe;
-import com.yourgame.model.Item.Tools.Pickaxe;
+import com.yourgame.model.Map.*;
 import com.yourgame.model.UserInfo.Player;
 import com.yourgame.model.WeatherAndTime.Season;
-import com.yourgame.model.WeatherAndTime.Weather;
 
 import java.util.List;
 
@@ -39,7 +36,7 @@ public class GameScreen extends GameBaseScreen {
     // ==GAME==
     private MapManager mapManager;
     private Player player;
-    private MapData currentMap;
+    private Map currentMap;
 
     private OrthogonalTiledMapRenderer mapRenderer;
     private OrthographicCamera camera;
@@ -208,19 +205,15 @@ public class GameScreen extends GameBaseScreen {
         }
 
         if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
-            TileData tile = getTileInFront();
-            boolean success = axe.use(player, currentMap, tile);
-            int energy = axe.getConsumptionEnergy(player, Weather.Sunny, success);
-            Gdx.app.error("ToolUse", "energy: " + energy);
         }
 
         // --- Inventory Selection Input ---
         handleInventoryInput();
     }
-    Pickaxe axe = new Pickaxe();
-    private TileData getTileInFront() {
-        int tileX = (int) (playerPosition.x / TileData.TILE_SIZE);
-        int tileY = (int) (playerPosition.y / TileData.TILE_SIZE);
+
+    private Tile getTileInFront() {
+        int tileX = (int) (playerPosition.x / Tile.TILE_SIZE);
+        int tileY = (int) (playerPosition.y / Tile.TILE_SIZE);
         return switch (direction) {
             case 0 -> currentMap.getTile(tileX, tileY - 1);
             case 1 -> currentMap.getTile(tileX + 1, tileY);
@@ -246,7 +239,7 @@ public class GameScreen extends GameBaseScreen {
         return false;
     }
 
-    private void changeMap(MapData newMap, String spawnName) {
+    private void changeMap(Map newMap, String spawnName) {
         if (newMap == null) return;
 
         this.currentMap = newMap;
@@ -267,7 +260,7 @@ public class GameScreen extends GameBaseScreen {
         if (teleport == null) return;
 
         // Find the correct map from the MapManager based on the destination string
-        MapData newMap;
+        Map newMap;
         if (teleport.dest().equalsIgnoreCase("town")) {
             newMap = mapManager.getTown();
         } else if (teleport.dest().contains("farm")) {

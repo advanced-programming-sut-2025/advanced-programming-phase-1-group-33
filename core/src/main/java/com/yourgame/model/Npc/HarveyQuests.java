@@ -60,12 +60,12 @@ public class HarveyQuests {
             }
         }
 
-        for (NpcHome home : App.getGameState().getMap().getNpcHomes()) {
-            if (home.getNpc().getType().equals(NPCType.Harvey)) {
-                home.getNpc().setFirstQuestDone(true);
-                break;
-            }
-        }
+//        for (NpcHome home : App.getGameState().getMap().getNpcHomes()) {
+//            if (home.getNpc().getType().equals(NPCType.Harvey)) {
+//                home.getNpc().setFirstQuestDone(true);
+//                break;
+//            }
+//        }
 
         return true;
     }
@@ -96,12 +96,12 @@ public class HarveyQuests {
             App.getGameState().getCurrentPlayer().getRelationWithHarvey().increaseFriendshipLevel();
         }
 
-        for (NpcHome home : App.getGameState().getMap().getNpcHomes()) {
-            if (home.getNpc().getType().equals(NPCType.Harvey)) {
-                home.getNpc().setSecondQuestDone(true);
-                break;
-            }
-        }
+//        for (NpcHome home : App.getGameState().getMap().getNpcHomes()) {
+//            if (home.getNpc().getType().equals(NPCType.Harvey)) {
+//                home.getNpc().setSecondQuestDone(true);
+//                break;
+//            }
+//        }
         return true;
     }
 
@@ -136,12 +136,12 @@ public class HarveyQuests {
                     App.getGameState().getCurrentPlayer().getBackpack().getIngredientQuantity().getOrDefault(Food.Salad, 0) + 5);
         }
 
-        for (NpcHome home : App.getGameState().getMap().getNpcHomes()) {
-            if (home.getNpc().getType().equals(NPCType.Harvey)) {
-                home.getNpc().setThirdQuestDone(true);
-                break;
-            }
-        }
+//        for (NpcHome home : App.getGameState().getMap().getNpcHomes()) {
+//            if (home.getNpc().getType().equals(NPCType.Harvey)) {
+//                home.getNpc().setThirdQuestDone(true);
+//                break;
+//            }
+//        }
 
         return true;
     }

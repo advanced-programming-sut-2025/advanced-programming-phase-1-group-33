@@ -2,8 +2,8 @@ package com.yourgame.model.Item;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.yourgame.Graphics.GameAssetManager;
-import com.yourgame.Graphics.Map.MapElement;
-import com.yourgame.Graphics.Map.TileData;
+import com.yourgame.model.Map.MapElement;
+import com.yourgame.model.Map.Tile;
 import com.yourgame.model.WeatherAndTime.Season;
 
 import java.awt.*;
@@ -24,7 +24,7 @@ public class ForagingCropElement extends MapElement {
 
     @Override
     public MapElement clone(int tileX, int tileY) {
-        return new ForagingCropElement(foragingType, tileX * TileData.TILE_SIZE, tileY * TileData.TILE_SIZE);
+        return new ForagingCropElement(foragingType, tileX * Tile.TILE_SIZE, tileY * Tile.TILE_SIZE);
     }
 
     @Override

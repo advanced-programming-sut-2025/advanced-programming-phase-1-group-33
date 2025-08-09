@@ -48,12 +48,12 @@ public class AbigailQuests {
             App.getGameState().getCurrentPlayer().getRelationWithAbigail().increaseFriendshipLevel();
         }
 
-        for (NpcHome home : App.getGameState().getMap().getNpcHomes()) {
-            if (home.getNpc().getType().equals(NPCType.Abigail)) {
-                home.getNpc().setFirstQuestDone(true);
-                break;
-            }
-        }
+//        for (NpcHome home : App.getGameState().getMap().getNpcHomes()) {
+//            if (home.getNpc().getType().equals(NPCType.Abigail)) {
+//                home.getNpc().setFirstQuestDone(true);
+//                break;
+//            }
+//        }
 
         return true;
     }
@@ -90,12 +90,12 @@ public class AbigailQuests {
             }
         }
 
-        for (NpcHome home : App.getGameState().getMap().getNpcHomes()) {
-            if (home.getNpc().getType().equals(NPCType.Abigail)) {
-                home.getNpc().setSecondQuestDone(true);
-                break;
-            }
-        }
+//        for (NpcHome home : App.getGameState().getMap().getNpcHomes()) {
+//            if (home.getNpc().getType().equals(NPCType.Abigail)) {
+//                home.getNpc().setSecondQuestDone(true);
+//                break;
+//            }
+//        }
 
         return true;
     }
@@ -124,12 +124,12 @@ public class AbigailQuests {
         //TODO : Add reward to player
 
 
-        for (NpcHome home : App.getGameState().getMap().getNpcHomes()) {
-            if (home.getNpc().getType().equals(NPCType.Abigail)) {
-                home.getNpc().setThirdQuestDone(true);
-                break;
-            }
-        }
+//        for (NpcHome home : App.getGameState().getMap().getNpcHomes()) {
+//            if (home.getNpc().getType().equals(NPCType.Abigail)) {
+//                home.getNpc().setThirdQuestDone(true);
+//                break;
+//            }
+//        }
 
         return true;
 

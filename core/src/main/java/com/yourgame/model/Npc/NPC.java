@@ -9,8 +9,6 @@ import com.yourgame.model.Item.Fruit;
 import com.yourgame.model.ManuFactor.ArtisanGood;
 import com.yourgame.model.ManuFactor.ArtisanGoodType;
 import com.yourgame.model.ManuFactor.Ingredient;
-import com.yourgame.model.Map.Stone;
-import com.yourgame.model.Map.Wood;
 import com.yourgame.model.Recipes.CookingRecipe;
 import com.yourgame.model.UserInfo.Coin;
 import com.yourgame.model.UserInfo.Player;
@@ -145,10 +143,10 @@ public class NPC {
     public boolean isFavoriteGift(Ingredient gift) {
 
         if (this.type.equals(NPCType.Abigail)) {
-
-            if (gift instanceof Stone) {
-                return true;
-            }
+//
+//            if (gift instanceof Stone) {
+//                return true;
+//            }
             if (gift.equals(ForagingMineral.Iron)) {
                 return true;
             }
@@ -200,9 +198,9 @@ public class NPC {
             if (gift.equals(CookingRecipe.Spaghetti)) {
                 return true;
             }
-            if (gift instanceof Wood) {
-                return true;
-            }
+//            if (gift instanceof Wood) {
+//                return true;
+//            }
             if (gift instanceof ArtisanGood) {
                 return ((ArtisanGood) gift).getType().equals(ArtisanGoodType.IronBar);
             }
@@ -290,9 +288,9 @@ public class NPC {
 
                 for (Ingredient ingredient :
                         App.getGameState().getPlayers().get(playerIndex).getBackpack().getIngredientQuantity().keySet()) {
-                    if (ingredient instanceof Wood) {
-                        App.getGameState().getPlayers().get(playerIndex).getBackpack().getIngredientQuantity().put(ingredient, App.getGameState().getPlayers().get(playerIndex).getBackpack().getIngredientQuantity().getOrDefault(ingredient, 0) + 100);
-                    }
+//                    if (ingredient instanceof Wood) {
+//                        App.getGameState().getPlayers().get(playerIndex).getBackpack().getIngredientQuantity().put(ingredient, App.getGameState().getPlayers().get(playerIndex).getBackpack().getIngredientQuantity().getOrDefault(ingredient, 0) + 100);
+//                    }
                 }
 
             }

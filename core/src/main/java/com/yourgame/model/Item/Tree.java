@@ -3,10 +3,9 @@ package com.yourgame.model.Item;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.yourgame.Graphics.GameAssetManager;
-import com.yourgame.Graphics.Map.MapElement;
-import com.yourgame.Graphics.Map.TileData;
+import com.yourgame.model.Map.MapElement;
+import com.yourgame.model.Map.Tile;
 import com.yourgame.model.App;
-import com.yourgame.model.Map.Position;
 import com.yourgame.model.WeatherAndTime.Season;
 import com.yourgame.model.WeatherAndTime.TimeSystem;
 
@@ -177,7 +176,7 @@ public class Tree extends MapElement implements Growable {
 
     @Override
     public MapElement clone(int tileX, int tileY) {
-        int scale = TileData.TILE_SIZE;
+        int scale = Tile.TILE_SIZE;
         Tree tree = new Tree(type, lastGrowthTime, fertilizer, tileX * scale, tileY * scale);
         tree.levelOfGrowth = levelOfGrowth;
         tree.lastGrowthTime = lastGrowthTime;

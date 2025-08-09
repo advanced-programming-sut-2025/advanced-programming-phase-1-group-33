@@ -1,4 +1,4 @@
-package com.yourgame.Graphics.Map;
+package com.yourgame.model.Map;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.yourgame.Graphics.GameAssetManager;
@@ -25,10 +25,10 @@ public abstract class MapElement {
         this.type = type;
         this.pixelBounds = pixelBounds;
         this.tileBounds = new Rectangle(
-            Math.floorDiv(pixelBounds.x, TileData.TILE_SIZE),
-            Math.floorDiv(pixelBounds.y, TileData.TILE_SIZE),
-            pixelBounds.width / TileData.TILE_SIZE,
-            pixelBounds.height / TileData.TILE_SIZE
+            Math.floorDiv(pixelBounds.x, Tile.TILE_SIZE),
+            Math.floorDiv(pixelBounds.y, Tile.TILE_SIZE),
+            pixelBounds.width / Tile.TILE_SIZE,
+            pixelBounds.height / Tile.TILE_SIZE
         );
         this.health = health;
     }

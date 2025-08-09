@@ -1,9 +1,8 @@
 package com.yourgame.model.Item.Tools;
 
-import com.yourgame.Graphics.Map.MapData;
-import com.yourgame.Graphics.Map.MapElement;
-import com.yourgame.Graphics.Map.TileData;
-import com.yourgame.model.App;
+import com.yourgame.model.Map.Map;
+import com.yourgame.model.Map.MapElement;
+import com.yourgame.model.Map.Tile;
 import com.yourgame.model.Skill.Ability;
 import com.yourgame.model.UserInfo.Player;
 import com.yourgame.model.WeatherAndTime.Weather;
@@ -23,7 +22,7 @@ public class Pickaxe extends Tool {
 
 
     @Override
-    public boolean use(Player player, MapData map, TileData tile) {
+    public boolean use(Player player, Map map, Tile tile) {
         MapElement element = tile.getElement();
         if (element == null) return false;
 
