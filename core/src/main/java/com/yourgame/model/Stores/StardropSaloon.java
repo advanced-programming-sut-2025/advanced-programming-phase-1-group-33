@@ -96,7 +96,7 @@ public class StardropSaloon extends Store {
 
         } else if (item instanceof StardopSaloonArtisanGoodItem) {
 
-            if (!App.getGameState().getCurrentPlayer().getBackpack().hasCapacity()) {
+            if (App.getGameState().getCurrentPlayer().getBackpack().isInventoryFull()) {
                 return new Response(false, "Not enough capacity in your inventory");
             }
 
@@ -104,7 +104,7 @@ public class StardropSaloon extends Store {
 
         } else if (item instanceof StardopSaloonFoodItem) {
 
-            if (!App.getGameState().getCurrentPlayer().getBackpack().hasCapacity()) {
+            if (App.getGameState().getCurrentPlayer().getBackpack().isInventoryFull()) {
                 return new Response(false, "Not enough capacity in your inventory");
             }
 

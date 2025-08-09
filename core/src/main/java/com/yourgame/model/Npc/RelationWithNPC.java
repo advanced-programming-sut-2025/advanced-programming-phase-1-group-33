@@ -133,13 +133,13 @@ public class RelationWithNPC {
         increaseNumOfDaysAfterUnlockingSecondQuest();
         checkUnlockingThirdQuest();
 
-        if (this.npcFriendshipLevel.equals(NPCFriendshipLevel.LevelThree)) {
-            for (NpcHome home : App.getGameState().getMap().getNpcHomes()) {
-                if (home.getNpc().getType().equals(this.type)) {
-                    home.getNpc().giveRandomGiftToPlayer(player);
-                }
-            }
-        }
+//        if (this.npcFriendshipLevel.equals(NPCFriendshipLevel.LevelThree)) {
+//            for (NpcHome home : App.getGameState().getMap().getNpcHomes()) {
+//                if (home.getNpc().getType().equals(this.type)) {
+//                    home.getNpc().giveRandomGiftToPlayer(player);
+//                }
+//            }
+//        }
 
     }
 }

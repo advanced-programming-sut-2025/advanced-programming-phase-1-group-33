@@ -1,78 +1,65 @@
 package com.yourgame.model.Map;
-import com.yourgame.model.Item.Fertilizer;
-import com.yourgame.model.enums.SymbolType;
 
 public class Tile {
-    private Position position;
-    private boolean gotThor;
-    private SymbolType symbol = SymbolType.WALL;
-    private boolean walkable ;
-    private Placeable placeable;
-    private boolean isPlowed = false;
-    private Fertilizer fertilizer = null;
-    public Tile(Position position) {
-        this.position = position;
-        this.gotThor = false;
-        this.walkable = true;
+    public static final int TILE_SIZE = 16;
+
+    public enum DirtState {NON_FARMABLE, NORMAL, PLOWED, WATERED}
+
+    private DirtState dirtState;
+    private boolean walkable;
+    private boolean spawnable;
+    private Teleport teleport; // Null for non-teleportable tiles
+    private MapElement element;
+
+    public Tile() {
+        dirtState = DirtState.NON_FARMABLE;
+        walkable = true;
+        spawnable = false;
+        teleport = null;
+        element = null;
     }
 
-    public void setPosition(Position position) {
-        this.position = position;
+    public DirtState getDirtState() {
+        return dirtState;
     }
 
+    public void setDirtState(DirtState dirtState) {
+        this.dirtState = dirtState;
+    }
 
-    public Position getPosition() {
-        return position;
+    public boolean isWatered() {
+        return dirtState == DirtState.WATERED;
     }
-    public SymbolType getSymbol() {
-        return symbol;
-    }
-    public SymbolType getSymbolToPrint() {
-//        if(gotThor){
-//            return SymbolType.Thor;
-//        }
-        if(getPlaceable()!= null){
-            return getPlaceable().getSymbol();
-        }
-        return symbol;
-    }
-    public void setSymbol(SymbolType symbol) {
-        this.symbol = symbol;
-    }
-    public boolean isGotThor() {
-        return gotThor;
-    }
-    public void setGotThor(boolean gotThunder) {
-        this.gotThor = gotThunder;
+
+    public void setWalkable(boolean walkable) {
+        this.walkable = walkable;
     }
 
     public boolean isWalkable() {
         return walkable;
     }
 
-    public void setWalkable(boolean walkable) {
-        this.walkable = walkable;
-    }
-    public Placeable getPlaceable() {
-        return placeable;
-    }
-    public void setPlaceable(Placeable placeable) {
-        this.placeable = placeable;
+    public void setSpawnable(boolean spawnable) {
+        this.spawnable = spawnable;
     }
 
-    public boolean isPlowed() {
-        return isPlowed;
+    public boolean isSpawnable() {
+        return spawnable && element == null;
     }
 
-    public void setPlowed(boolean plowed) {
-        isPlowed = plowed;
+    public void setTeleport(Teleport teleport) {
+        this.teleport = teleport;
     }
 
-    public Fertilizer getFertilizer() {
-        return fertilizer;
+    public Teleport getTeleport() {
+        return teleport;
     }
 
-    public void setFertilizer(Fertilizer fertilizer) {
-        this.fertilizer = fertilizer;
+    public void setElement(MapElement element) {
+        this.element = element;
+    }
+
+    public MapElement getElement() {
+        return element;
     }
 }

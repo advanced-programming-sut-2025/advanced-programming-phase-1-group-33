@@ -5,6 +5,8 @@ import com.yourgame.model.Recipes.CraftingRecipes;
 import com.yourgame.model.UserInfo.Player;
 
 public class Ability {
+    public final static int MAX_LEVEL = 4;
+
     private int farmingLevel = 0;
     private int farmingRate = 0;
     private int miningLevel = 0;
@@ -14,14 +16,13 @@ public class Ability {
     private int fishingLevel = 0;
     private int fishingRate = 0;
     private final Player player;
-    private final static int maxLevel = 4;
 
     public Ability(Player player) {
         this.player = player;
     }
 
     public static int getMaxLevel() {
-        return maxLevel;
+        return MAX_LEVEL;
     }
 
     public static int getRequiredPointsForLevel(int level) {
@@ -62,7 +63,7 @@ public class Ability {
 
     public void increaseFarmingRate(int amount) {
         farmingRate += amount;
-        while (farmingLevel < maxLevel && farmingRate >= getRequiredPointsForLevel(farmingLevel + 1)) {
+        while (farmingLevel < MAX_LEVEL && farmingRate >= getRequiredPointsForLevel(farmingLevel + 1)) {
             farmingRate -= getRequiredPointsForLevel(farmingLevel + 1);
             increaseFarmingLevel();
         }
@@ -70,7 +71,7 @@ public class Ability {
 
     public void increaseMiningRate(int amount) {
         miningRate += amount;
-        while (miningLevel < maxLevel && miningRate >= getRequiredPointsForLevel(miningLevel + 1)) {
+        while (miningLevel < MAX_LEVEL && miningRate >= getRequiredPointsForLevel(miningLevel + 1)) {
             miningRate -= getRequiredPointsForLevel(miningLevel + 1);
             increaseMiningLevel();
         }
@@ -78,7 +79,7 @@ public class Ability {
 
     public void increaseForagingRate(int amount) {
         foragingRate += amount;
-        while (foragingLevel < maxLevel && foragingRate >= getRequiredPointsForLevel(foragingLevel + 1)) {
+        while (foragingLevel < MAX_LEVEL && foragingRate >= getRequiredPointsForLevel(foragingLevel + 1)) {
             foragingRate -= getRequiredPointsForLevel(foragingLevel + 1);
             increaseForagingLevel();
         }
@@ -86,7 +87,7 @@ public class Ability {
 
     public void increaseFishingRate(int amount) {
         fishingRate += amount;
-        while (fishingLevel < maxLevel && fishingRate >= getRequiredPointsForLevel(fishingLevel + 1)) {
+        while (fishingLevel < MAX_LEVEL && fishingRate >= getRequiredPointsForLevel(fishingLevel + 1)) {
             fishingRate -= getRequiredPointsForLevel(fishingLevel + 1);
             increaseFishingLevel();
         }

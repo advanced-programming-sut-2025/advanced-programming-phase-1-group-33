@@ -2,12 +2,12 @@ package com.yourgame.model.Npc;
 
 
 import com.yourgame.model.App;
+import com.yourgame.model.Item.Wood;
 import com.yourgame.model.ManuFactor.ArtisanGood;
 import com.yourgame.model.ManuFactor.ArtisanGoodType;
 import com.yourgame.model.ManuFactor.BeeHouse;
 import com.yourgame.model.ManuFactor.Ingredient;
 import com.yourgame.model.Map.NpcHome;
-import com.yourgame.model.Map.Wood;
 import com.yourgame.model.UserInfo.Coin;
 
 import java.util.ArrayList;
@@ -54,12 +54,12 @@ public class RobinQuests{
             }
         }
 
-        for (NpcHome home : App.getGameState().getMap().getNpcHomes()) {
-            if (home.getNpc().getType().equals(NPCType.Robin)) {
-                home.getNpc().setFirstQuestDone(true);
-                break;
-            }
-        }
+//        for (NpcHome home : App.getGameState().getMap().getNpcHomes()) {
+//            if (home.getNpc().getType().equals(NPCType.Robin)) {
+//                home.getNpc().setFirstQuestDone(true);
+//                break;
+//            }
+//        }
 
         return true;
     }
@@ -92,12 +92,12 @@ public class RobinQuests{
         }
 
 
-        for (NpcHome home : App.getGameState().getMap().getNpcHomes()) {
-            if (home.getNpc().getType().equals(NPCType.Robin)) {
-                home.getNpc().setSecondQuestDone(true);
-                break;
-            }
-        }
+//        for (NpcHome home : App.getGameState().getMap().getNpcHomes()) {
+//            if (home.getNpc().getType().equals(NPCType.Robin)) {
+//                home.getNpc().setSecondQuestDone(true);
+//                break;
+//            }
+//        }
 
         return true;
     }
@@ -135,12 +135,12 @@ public class RobinQuests{
             }
         }
 
-        for (NpcHome home : App.getGameState().getMap().getNpcHomes()) {
-            if (home.getNpc().getType().equals(NPCType.Robin)) {
-                home.getNpc().setThirdQuestDone(true);
-                break;
-            }
-        }
+//        for (NpcHome home : App.getGameState().getMap().getNpcHomes()) {
+//            if (home.getNpc().getType().equals(NPCType.Robin)) {
+//                home.getNpc().setThirdQuestDone(true);
+//                break;
+//            }
+//        }
 
         return true;
     }

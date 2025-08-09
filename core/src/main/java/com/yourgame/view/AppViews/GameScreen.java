@@ -4,32 +4,18 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.maps.MapObject;
-import com.badlogic.gdx.maps.MapObjects;
-import com.badlogic.gdx.maps.objects.PointMapObject;
-import com.badlogic.gdx.maps.objects.PolygonMapObject;
-import com.badlogic.gdx.maps.objects.RectangleMapObject;
-import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
-import com.yourgame.Graphics.Map.MapElement;
 import com.yourgame.Graphics.MenuAssetManager;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import com.yourgame.Graphics.Map.MapData;
-import com.yourgame.Graphics.Map.MapManager;
-import com.yourgame.Graphics.Map.Teleport;
 import com.yourgame.Main;
 import com.yourgame.Graphics.GameAssets.HUDManager;
 import com.yourgame.Graphics.GameAssets.clockUIAssetManager;
 import com.yourgame.Graphics.GameAssetManager;
 import com.yourgame.model.App;
-import com.yourgame.Graphics.MenuAssetManager;
+import com.yourgame.model.Map.*;
 import com.yourgame.model.UserInfo.Player;
 import com.yourgame.model.WeatherAndTime.Season;
 
@@ -50,7 +36,7 @@ public class GameScreen extends GameBaseScreen {
     // ==GAME==
     private MapManager mapManager;
     private Player player;
-    private MapData currentMap;
+    private Map currentMap;
 
     private OrthogonalTiledMapRenderer mapRenderer;
     private OrthographicCamera camera;
@@ -218,8 +204,23 @@ public class GameScreen extends GameBaseScreen {
             }
         }
 
+        if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
+        }
+
         // --- Inventory Selection Input ---
         handleInventoryInput();
+    }
+
+    private Tile getTileInFront() {
+        int tileX = (int) (playerPosition.x / Tile.TILE_SIZE);
+        int tileY = (int) (playerPosition.y / Tile.TILE_SIZE);
+        return switch (direction) {
+            case 0 -> currentMap.getTile(tileX, tileY - 1);
+            case 1 -> currentMap.getTile(tileX + 1, tileY);
+            case 2 -> currentMap.getTile(tileX, tileY + 1);
+            case 3 -> currentMap.getTile(tileX - 1, tileY);
+            default -> currentMap.getTile(tileX, tileY);
+        };
     }
 
     private boolean isBlocked(float x, float y) {
@@ -238,7 +239,7 @@ public class GameScreen extends GameBaseScreen {
         return false;
     }
 
-    private void changeMap(MapData newMap, String spawnName) {
+    private void changeMap(Map newMap, String spawnName) {
         if (newMap == null) return;
 
         this.currentMap = newMap;
@@ -259,7 +260,7 @@ public class GameScreen extends GameBaseScreen {
         if (teleport == null) return;
 
         // Find the correct map from the MapManager based on the destination string
-        MapData newMap;
+        Map newMap;
         if (teleport.dest().equalsIgnoreCase("town")) {
             newMap = mapManager.getTown();
         } else if (teleport.dest().contains("farm")) {

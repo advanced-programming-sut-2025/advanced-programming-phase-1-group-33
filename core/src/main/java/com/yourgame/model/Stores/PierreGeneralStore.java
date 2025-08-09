@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 import com.yourgame.model.App;
 import com.yourgame.model.IO.Response;
-import com.yourgame.model.Inventory.BackpackType;
+import com.yourgame.model.Item.Inventory.BackpackType;
 import com.yourgame.model.Item.CropType;
 import com.yourgame.model.Item.Seeds;
 import com.yourgame.model.Item.TreeSource;
@@ -154,7 +154,7 @@ public class PierreGeneralStore extends Store {
 
         if (item instanceof PierreGeneralStoreSeedsItem) {
 
-            if (!App.getGameState().getCurrentPlayer().getBackpack().hasCapacity()) {
+            if (App.getGameState().getCurrentPlayer().getBackpack().isInventoryFull()) {
                 return new Response(false, "Not enough capacity in your inventory");
             }
 
@@ -182,7 +182,7 @@ public class PierreGeneralStore extends Store {
 
         } else if (item instanceof PierreGeneralStoreSaplingItem) {
 
-            if (!App.getGameState().getCurrentPlayer().getBackpack().hasCapacity()) {
+            if (App.getGameState().getCurrentPlayer().getBackpack().isInventoryFull()) {
                 return new Response(false, "Not enough capacity in your inventory");
             }
 
@@ -190,7 +190,7 @@ public class PierreGeneralStore extends Store {
 
         } else {
 
-            if (!App.getGameState().getCurrentPlayer().getBackpack().hasCapacity() && !item.name.equals("Dehydrator")) {
+            if (App.getGameState().getCurrentPlayer().getBackpack().isInventoryFull() && !item.name.equals("Dehydrator")) {
                 return new Response(false, "Not enough capacity in your inventory");
             }
 

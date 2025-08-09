@@ -5,17 +5,16 @@ import java.util.*;
 import com.yourgame.model.Animals.AnimalType;
 import com.yourgame.model.IO.Response;
 import com.yourgame.model.App;
-import com.yourgame.model.Inventory.BackpackType;
-import com.yourgame.model.Inventory.TrashCan;
-import com.yourgame.model.Inventory.Tools.Axe;
-import com.yourgame.model.Inventory.Tools.Hoe;
-import com.yourgame.model.Inventory.Tools.Pickaxe;
-import com.yourgame.model.Inventory.Tools.Scythe;
-import com.yourgame.model.Inventory.Tools.Tool;
-import com.yourgame.model.Inventory.Tools.WateringCan;
+import com.yourgame.model.Item.Inventory.BackpackType;
+import com.yourgame.model.Item.Inventory.TrashCan;
+import com.yourgame.model.Item.Tools.Axe;
+import com.yourgame.model.Item.Tools.Hoe;
+import com.yourgame.model.Item.Tools.Pickaxe;
+import com.yourgame.model.Item.Tools.Scythe;
+import com.yourgame.model.Item.Tools.Tool;
+import com.yourgame.model.Item.Tools.WateringCan;
 import com.yourgame.model.Item.Wood;
-import com.yourgame.model.Inventory.Backpack;
-import com.yourgame.model.Map.Farm;
+import com.yourgame.model.Item.Inventory.Backpack;
 import com.yourgame.model.Map.Position;
 import com.yourgame.model.Npc.NPCType;
 import com.yourgame.model.Npc.RelationWithNPC;
@@ -48,12 +47,10 @@ public class Player {
     private final ArrayList<Notification> notifications = new ArrayList<>();
 
     private ArrayList<AnimalType> animals = new ArrayList<>();
-    private Backpack inventory;
     private final Ability ability = new Ability(this);
 
-    private int remainingDaysAfterMarigDenied = 0;
+    private int remainingDaysAfterMarriageDenied = 0;
 
-    private Farm farm;
     private Position currentPosition;
     private RelationWithNPC relationWithAbigail;
     private RelationWithNPC relationWithSebastian;
@@ -182,25 +179,6 @@ public class Player {
     public int getMaxEnergy() {
         return maxEnergy;
     }
-
-    public Backpack getInventory() {
-        return inventory;
-    }
-
-    public void setInventory(Backpack inventory) {
-        this.inventory = inventory;
-
-    }
-
-    public Farm getFarm() {
-        return farm;
-    }
-
-    public void setFarm(Farm map) {
-        this.farm = map;
-        this.currentPosition = farm.getPlayerDefaultPosition();
-    }
-
     public Position getPosition() {
         return currentPosition;
     }
@@ -245,12 +223,12 @@ public class Player {
         this.relationWithRobin = relationWithRobin;
     }
 
-    public int getRemainingDaysAfterMarigDenied() {
-        return remainingDaysAfterMarigDenied;
+    public int getRemainingDaysAfterMarriageDenied() {
+        return remainingDaysAfterMarriageDenied;
     }
 
-    public void setRemainingDaysAfterMarigDenied(int remainingDaysAfterMarigDenied) {
-        this.remainingDaysAfterMarigDenied = remainingDaysAfterMarigDenied;
+    public void setRemainingDaysAfterMarriageDenied(int remainingDaysAfterMarriageDenied) {
+        this.remainingDaysAfterMarriageDenied = remainingDaysAfterMarriageDenied;
     }
 
     public String getNickname() {

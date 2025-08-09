@@ -1,375 +1,300 @@
 package com.yourgame.model.Map;
 
-// need a way from farms to npc village  .....
-// doors are completed , but we need ways from each farm to npc village.
-
-import com.yourgame.model.Item.Crop;
-import com.yourgame.model.Item.CropType;
-import com.yourgame.model.Item.ForagingMineral;
+import com.badlogic.gdx.maps.MapObject;
+import com.badlogic.gdx.maps.MapObjects;
+import com.badlogic.gdx.maps.objects.PointMapObject;
+import com.badlogic.gdx.maps.objects.PolygonMapObject;
+import com.badlogic.gdx.maps.objects.RectangleMapObject;
+import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import com.badlogic.gdx.math.Polygon;
+import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
+import com.yourgame.model.Item.ForagingCrop;
+import com.yourgame.model.Item.ForagingCropElement;
 import com.yourgame.model.Item.Tree;
-import com.yourgame.model.Npc.NPC;
-import com.yourgame.model.Npc.NPCType;
-import com.yourgame.model.Stores.*;
-import com.yourgame.model.UserInfo.Player;
-import com.yourgame.model.WeatherAndTime.Weather;
-import com.yourgame.model.enums.SymbolType;
-import com.yourgame.model.enums.TileType;
-import com.yourgame.model.App;
+import com.yourgame.model.Item.TreeType;
+import com.yourgame.model.Map.Elements.Rock;
+import com.yourgame.model.Map.Elements.WoodElement;
+import com.yourgame.model.WeatherAndTime.Season;
+import com.yourgame.model.WeatherAndTime.TimeSystem;
 
-import java.awt.*;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class Map {
-    private final static Random rand = new Random();
-    private Tile[][] tiles = new Tile[250][200];
-    private ArrayList<Farm> farms = new ArrayList<>();
-    private NpcVillage npcVillage;
-    private final ArrayList<NpcHome> npcHomes = new ArrayList<>();
-    private final ArrayList<ShippingBin> shippingBins = new ArrayList<>();
+    // Spawning elements
+    private static final Random rand = new Random();
+    private static final Tree oakPrototype;
+    private static final Tree pinePrototype;
+    private static final Tree maplePrototype;
+    static {
+        oakPrototype = new Tree(TreeType.OakTree, new TimeSystem(), null, 0, 0);
+        oakPrototype.setMature();
 
-    public Map(ArrayList<Farm> farms) {
-        this.farms = farms;
+        pinePrototype = new Tree(TreeType.PineTree, new TimeSystem(), null, 0, 0);
+        pinePrototype.setMature();
+
+        maplePrototype = new Tree(TreeType.MapleTree, new TimeSystem(), null, 0, 0);
+        maplePrototype.setMature();
     }
 
-    public Tile findTile(int x, int y) {
-        for (int i = 0; i < tiles.length; i++) {
-            for (int j = 0; j < tiles[i].length; j++) {
-                if (x == i && y == j) {
-                    return tiles[i][j];
+    protected final String name;
+    protected final TiledMap tiledMap;
+    protected final int mapWidth, mapHeight;
+    protected final MapObjects spawnPoints;
+    protected final MapObjects collisions;
+    protected final MapObjects teleporters;
+    protected final Tile[][] tileStates; // runtime data
+    protected final List<MapElement> elements;
+
+    public Map(String name, String pathToTmx) {
+        this.name = name;
+
+        this.tiledMap = new TmxMapLoader().load(pathToTmx);
+        this.mapWidth = tiledMap.getProperties().get("width", Integer.class);
+        this.mapHeight = tiledMap.getProperties().get("height", Integer.class);
+
+        this.spawnPoints = tiledMap.getLayers().get("SpawnPoints").getObjects();
+        this.collisions = tiledMap.getLayers().get("Collisions").getObjects();
+        this.teleporters = tiledMap.getLayers().get("Teleporters").getObjects();
+
+        this.tileStates = new Tile[mapWidth][mapHeight];
+        this.elements = new ArrayList<>();
+
+        initTileData();
+    }
+
+    private void initTileData() {
+        // Initialize all tiles
+        for (int x = 0; x < mapWidth; x++) {
+            for (int y = 0; y < mapHeight; y++) {
+                tileStates[x][y] = new Tile();
+            }
+        }
+
+        initCollisions();
+        initTeleporters();
+    }
+
+    private void initCollisions() {
+        for (MapObject object : collisions) {
+            if (object instanceof RectangleMapObject rectObj) {
+                Rectangle rect = rectObj.getRectangle();
+
+                int startX = (int)(rect.x / Tile.TILE_SIZE);
+                int endX   = (int)((rect.x + rect.width) / Tile.TILE_SIZE);
+                int startY = (int)(rect.y / Tile.TILE_SIZE);
+                int endY   = (int)((rect.y + rect.height) / Tile.TILE_SIZE);
+
+                for (int x = startX; x <= endX; x++) {
+                    for (int y = startY; y <= endY; y++) {
+                        if (isInBounds(x, y, mapWidth, mapHeight)) {
+                            tileStates[x][y].setWalkable(false);
+                        }
+                    }
                 }
-            }
-        }
-        return null;
-    }
+            } else if (object instanceof PolygonMapObject polyObj) {
+                Polygon polygon = polyObj.getPolygon();
+                float[] verts = polygon.getTransformedVertices();
 
-    public Tile findTile(Position position) {
-        return findTile(position.getX(), position.getY());
-    }
+                float minX = Float.MAX_VALUE, maxX = Float.MIN_VALUE;
+                float minY = Float.MAX_VALUE, maxY = Float.MIN_VALUE;
 
-    public void buildMap(ArrayList<Player> players, TileType tileType) {
-        for (int i = 0; i < tiles.length; i++) {
-            for (int j = 0; j < tiles[i].length; j++) {
-                tiles[i][j] = new Tile(new Position(i, j));
-            }
-        }
-        farms.clear();
-        for (Player player : players) {
-            player.getFarm().setTilesSymbol(tiles);
-            farms.add(player.getFarm());
-        }
-        this.npcVillage = new NpcVillage(new Rectangle(100, 75, 49, 49),
-                new Blacksmith(102, 77, 3, 3),
-                new CarpenterShop(106, 81, 3, 3),
-                new FishShop(110, 85, 3, 3),
-                new JojaMart(114, 89, 3, 3),
-                new MarnieRanch(118, 93, 3, 3),
-                new PierreGeneralStore(122, 97, 3, 3),
-                new StardropSaloon(126, 101, 3, 3));
+                for (int i = 0; i < verts.length; i += 2) {
+                    minX = Math.min(minX, verts[i]);
+                    maxX = Math.max(maxX, verts[i]);
+                    minY = Math.min(minY, verts[i + 1]);
+                    maxY = Math.max(maxY, verts[i + 1]);
+                }
 
-        NPC abigailNpc = new NPC(NPCType.Abigail);
-        NPC sebastianNpc = new NPC(NPCType.Sebastian);
-        NPC leahNpc = new NPC(NPCType.Leah);
-        NPC robinNpc = new NPC(NPCType.Robin);
-        NPC harveyNpc = new NPC(NPCType.Harvey);
+                int startX = (int)(minX / Tile.TILE_SIZE);
+                int endX   = (int)(maxX / Tile.TILE_SIZE);
+                int startY = (int)(minY / Tile.TILE_SIZE);
+                int endY   = (int)(maxY / Tile.TILE_SIZE);
 
-        NpcHome abigailHome = new NpcHome(130, 104, 3, 3, abigailNpc);
-        npcHomes.add(abigailHome);
-        NpcHome harveyHome = new NpcHome(130, 109, 3, 3, harveyNpc);
-        npcHomes.add(harveyHome);
-        NpcHome robinHome = new NpcHome(130, 114, 3, 3, robinNpc);
-        npcHomes.add(robinHome);
-        NpcHome leahHome = new NpcHome(130, 119, 3, 3, leahNpc);
-        npcHomes.add(leahHome);
-        NpcHome sebastianHome = new NpcHome(130, 99, 3, 3, sebastianNpc);
-        npcHomes.add(sebastianHome);
+                polygon.setPosition(polygon.getX(), polygon.getY());
 
-        for (Farm farm : farms) {
+                for (int x = startX; x <= endX; x++) {
+                    for (int y = startY; y <= endY; y++) {
+                        float tileCenterX = x * Tile.TILE_SIZE + Tile.TILE_SIZE / 2f;
+                        float tileCenterY = y * Tile.TILE_SIZE + Tile.TILE_SIZE / 2f;
 
-            for (Placeable placeable : farm.getPlaceables()) {
-
-                for (int i = placeable.getBounds().x; i < placeable.getBounds().x + placeable.getBounds().width; i++) {
-                    for (int j = placeable.getBounds().y; j < placeable.getBounds().y
-                            + placeable.getBounds().height; j++) {
-                        tiles[i][j].setWalkable(false);
-
-                        tiles[i][j].setSymbol(placeable.getSymbol());
-                        tiles[i][j].setPlaceable(placeable);
-
+                        if (polygon.contains(tileCenterX, tileCenterY) && isInBounds(x, y, mapWidth, mapHeight)) {
+                            tileStates[x][y].setWalkable(false);
+                        }
                     }
                 }
             }
         }
-        for (int i = this.npcVillage.getRectangle().x; i < this.npcVillage.getRectangle().x
-                + this.npcVillage.getRectangle().width; i++) {
-            for (int j = this.npcVillage.getRectangle().y; j < this.npcVillage.getRectangle().y
-                    + this.npcVillage.getRectangle().height; j++) {
-                tiles[i][j].setSymbol(SymbolType.NpcVillageFLOOR);
-            }
-        }
-        for (Placeable p : this.npcVillage.getPlaceables()) {
-            for (int i = p.getBounds().x; i < p.getBounds().x + p.getBounds().width; i++) {
-                for (int j = p.getBounds().y; j < p.getBounds().y + p.getBounds().height; j++) {
-                    tiles[i][j].setWalkable(false);
-                    tiles[i][j].setSymbol(p.getSymbol());
-                    tiles[i][j].setPlaceable(p);
-                }
-            }
-        }
-        for (NpcHome h : npcHomes) {
-            for (int i = h.getBounds().x; i < h.getBounds().x + h.getBounds().width; i++) {
-                for (int j = h.getBounds().y; j < h.getBounds().y + h.getBounds().height; j++) {
-                    tiles[i][j].setSymbol(h.getSymbol());
-                    tiles[i][j].setPlaceable(h);
-                    tiles[i][j].setWalkable(false);
-                }
-            }
-        }
-
-        setBorderFarmsAndNpcVillage();
-        setDoorFarmsAndNpcVillage();
-        for (Farm farm : farms) {
-            setWalkableDoorTrue(farm.getDoor().getBounds().x, farm.getDoor().getBounds().y,
-                    farm.getDoor().getBounds().width, farm.getDoor().getBounds().height);
-        }
-        for (Door d : npcVillage.getDoors()) {
-            setWalkableDoorTrue(d.getBounds().x, d.getBounds().y, d.getBounds().width, d.getBounds().height);
-        }
-
     }
 
-    public ArrayList<NpcHome> getNpcHomes() {
-        return npcHomes;
-    }
+    private void initTeleporters() {
+        for (MapObject object : teleporters) {
+            if (object instanceof RectangleMapObject rectObj) {
+                Rectangle rect = rectObj.getRectangle();
 
-    public String printTheWholeMap() {
-        StringBuilder sb = new StringBuilder();
-        for (int y = 0; y < 200; y++) {
-            for (int x = 0; x < 250; x++) {
-                Tile tile = findTile(x, y);
-                if (tile.equals(findTile(App.getGameState().getCurrentPlayer().getPosition()))) {
-                    sb.append(SymbolType.PLAYER);
-                } else {
-                    sb.append(tile.getSymbolToPrint());
-                }
-            }
-            sb.append("\n");
-        }
-        return sb.toString();
-    }
+                int startX = (int)(rect.x / Tile.TILE_SIZE);
+                int endX   = (int)((rect.x + rect.width) / Tile.TILE_SIZE);
+                int startY = (int)(rect.y / Tile.TILE_SIZE);
+                int endY   = (int)((rect.y + rect.height) / Tile.TILE_SIZE);
 
-    /**
-     * Prints a sub-region of the map starting at (positionX, positionY)
-     * and covering a square area of given size.
-     * <p>
-     * It iterates from the starting coordinates up to size (or until the edge of
-     * the map)
-     * and prints the symbol for each tile. If the tile corresponds to the player's
-     * current position,
-     * it prints the player's symbol instead.
-     * </p>
-     *
-     * @param positionX the starting x-coordinate of the region to print
-     * @param positionY the starting y-coordinate of the region to print
-     * @param size      the length of the side of the square region to print
-     * @return the formatted map region as a String
-     */
-    public String printMap(int positionX, int positionY, int size) {
-        StringBuilder sb = new StringBuilder();
-        int maxX = Math.min(positionX + size, tiles.length);
-        int maxY = Math.min(positionY + size, tiles[0].length);
+                String destination = object.getProperties().get("dest", String.class);
+                String spawnName = object.getProperties().get("spawnName", String.class);
+                Teleport teleport = new Teleport(destination, spawnName);
 
-        for (int y = positionY; y < maxY; y++) {
-            for (int x = positionX; x < maxX; x++) {
-                Tile tile = findTile(x, y);
-                if (tile.equals(findTile(App.getGameState().getCurrentPlayer().getPosition()))) {
-                    sb.append(SymbolType.PLAYER.getColoredSymbol());
-                } else {
-                    sb.append(tile.getSymbolToPrint());
-                }
-            }
-            sb.append("\n");
-        }
-        return sb.toString();
-    }
-
-    public void setBorderFarmsAndNpcVillage() {
-
-        for (int i = 0; i < 200; i++) {
-            tiles[99][i].setSymbol(SymbolType.FARMBORDER);
-            tiles[149][i].setSymbol(SymbolType.FARMBORDER);
-        }
-        for (int i = 0; i < 250; i++) {
-            tiles[i][74].setSymbol(SymbolType.FARMBORDER);
-            tiles[i][124].setSymbol(SymbolType.FARMBORDER);
-        }
-
-    }
-
-    public void setDoorFarmsAndNpcVillage() {
-        farms.get(0).setDoor(new Door(99, 37, 1, 3));
-
-        farms.get(1).setDoor(new Door(149, 37, 1, 3));
-        // farms.get(2).setDoor(new Door(99 , 155 , 1 , 3));
-        // farms.get(3).setDoor(new Door(149 , 155 , 1 , 3));
-        npcVillage.addDoors(new Door(99, 105, 1, 3));
-        npcVillage.addDoors(new Door(149, 105, 1, 3));
-        npcVillage.addDoors(new Door(125, 74, 3, 1));
-        npcVillage.addDoors(new Door(125, 124, 3, 1));
-    }
-
-    public Tile[][] getTiles() {
-        return tiles;
-    }
-
-    public ArrayList<Farm> getFarms() {
-        return farms;
-
-    }
-
-    public NpcVillage getNpcVillage() {
-        return npcVillage;
-    }
-
-    public void setWalkableDoorTrue(int x, int y, int width, int height) {
-        for (int i = x; i < x + width; i++) {
-            for (int j = y; j < y + height; j++) {
-                tiles[i][j].setWalkable(true);
-                tiles[i][j].setSymbol(SymbolType.WalkableDoor);
-            }
-        }
-    }
-
-    public void randomForagingMineralGenerator() {
-        for (Farm farm : farms) {
-            for (Quarry quarry : farm.getQuarries()) {
-                int numberOfForagingMinerals = 2;
-                int counter = 0;
-                while (counter < numberOfForagingMinerals) {
-                    ForagingMineral foragingMineral = ForagingMineral.values()[rand
-                            .nextInt(ForagingMineral.values().length)];
-                    quarry.addForagingMineral(foragingMineral);
-                    counter++;
-
+                for (int x = startX; x <= endX; x++) {
+                    for (int y = startY; y <= endY; y++) {
+                        if (isInBounds(x, y, mapWidth, mapHeight)) {
+                            tileStates[x][y].setTeleport(teleport);
+                        }
+                    }
                 }
             }
         }
     }
 
-    public ArrayList<ShippingBin> getShippingBins() {
-        return shippingBins;
+    protected boolean isInBounds(int x, int y, int width, int height) {
+        return x >= 0 && x < width && y >= 0 && y < height;
     }
 
-    public boolean addShippingBin(int x, int y) {
-        if (!(tiles[x][y].getPlaceable() == null)) {
-            return false;
+    public TiledMap getTiledMap() {
+        return tiledMap;
+    }
+
+    public Tile getTile(int tileX, int tileY) {
+        return tileStates[tileX][tileY];
+    }
+
+    public Vector2 getSpawnPoint(String spawnName) {
+        MapObject object = spawnPoints.get(spawnName);
+
+        if (object instanceof PointMapObject) {
+            return ((PointMapObject) object).getPoint();
         }
 
-        ShippingBin temp = new ShippingBin(x, y);
+        return new Vector2();
+    }
 
-        this.shippingBins.add(temp);
-        tiles[x][y].setPlaceable(temp);
-        tiles[x][y].setPlowed(false);
-        tiles[x][y].setWalkable(false);
-        tiles[x][y].setSymbol(temp.getSymbol());
-        tiles[x][y].setFertilizer(null);
+    public Vector2 getSpawnPoint() {
+        return getSpawnPoint("spawn");
+    }
+
+    public boolean isTileBlocked(float worldX, float worldY) {
+        int tileX = (int)(worldX / Tile.TILE_SIZE);
+        int tileY = (int)(worldY / Tile.TILE_SIZE);
+
+        if (tileX < 0 || tileY < 0 || tileX >= tileStates.length || tileY >= tileStates[0].length)
+            return true;
+
+        return !tileStates[tileX][tileY].isWalkable();
+    }
+
+    public Teleport getTeleport(float worldX, float worldY) {
+        int tileX = (int)(worldX / Tile.TILE_SIZE);
+        int tileY = (int)(worldY / Tile.TILE_SIZE);
+
+        if (tileX < 0 || tileY < 0 || tileX >= tileStates.length || tileY >= tileStates[0].length)
+            return null;
+
+        return tileStates[tileX][tileY].getTeleport();
+    }
+
+    public List<MapElement> getMapElements() {
+        return elements;
+    }
+
+    public boolean addElement(MapElement element) {
+        if (!isElementPlaceable(element)) return false;
+        elements.add(element);
+
+        java.awt.Rectangle bounds = element.getTileBounds();
+        for (int y = bounds.y; y < bounds.y + bounds.height; y++) {
+            for (int x = bounds.x; x < bounds.x + bounds.width; x++) {
+                Tile tile = tileStates[x][y];
+                tile.setElement(element);
+                tile.setWalkable(false);
+            }
+        }
 
         return true;
     }
 
-    public Tile getTileByDirection(Tile currentTile, Direction direction) {
-        return switch (direction) {
-            case UP -> findTile(currentTile.getPosition().getX(), currentTile.getPosition().getY() - 1);
-            case DOWN -> findTile(currentTile.getPosition().getX(), currentTile.getPosition().getY() + 1);
-            case LEFT -> findTile(currentTile.getPosition().getX() - 1, currentTile.getPosition().getY());
-            case RIGHT -> findTile(currentTile.getPosition().getX() + 1, currentTile.getPosition().getY());
-            case UP_LEFT -> findTile(currentTile.getPosition().getX() - 1, currentTile.getPosition().getY() - 1);
-            case UP_RIGHT -> findTile(currentTile.getPosition().getX() + 1, currentTile.getPosition().getY() - 1);
-            case DOWN_LEFT -> findTile(currentTile.getPosition().getX() - 1, currentTile.getPosition().getY() + 1);
-            case DOWN_RIGHT -> findTile(currentTile.getPosition().getX() + 1, currentTile.getPosition().getY() + 1);
-        };
+    private boolean isElementPlaceable(MapElement element) {
+        if (element == null) return false;
+        java.awt.Rectangle bounds = element.getTileBounds();
+        for (int y = bounds.y; y < bounds.y + bounds.height; y++) {
+            for (int x = bounds.x; x < bounds.x + bounds.width; x++) {
+                Tile tile = tileStates[x][y];
+                if (tile == null || !tile.isSpawnable()) return false;
+            }
+        }
+        return true;
     }
 
-    // this method should call every day.
-    public void GotThunderByStormyWeather() {
-        if (App.getGameState().getGameTime().getWeather().equals(Weather.Stormy)) {
-            int x = rand.nextInt(250);
-            int y = rand.nextInt(200);
-            Tile tile = findTile(x, y);
-            if (tile != null) {
-                if (tile.getPlaceable() instanceof Tree tree) {
-                    tile.setWalkable(true);
-                    tile.setGotThor(true);
-                    tile.setPlaceable(null);
-                    tile.setSymbol(SymbolType.BurnedTree);
-                    App.getGameState().getCurrentPlayer().getBackpack().addIngredients(ForagingMineral.Coal, 1);
-                }
+    public void removeElement(MapElement element) {
+        elements.remove(element);
+        java.awt.Rectangle bounds = element.getTileBounds();
+        for (int y = bounds.y; y < bounds.y + bounds.height; y++) {
+            for (int x = bounds.x; x < bounds.x + bounds.width; x++) {
+                Tile tile = tileStates[x][y];
+                tile.setElement(null);
+                tile.setWalkable(true);
             }
         }
     }
 
-    public void generateRandomStoneFarm(Farm farm) {
-        int numberOfStone = rand.nextInt(2) + 1;
-        int counter = 0;
+    public void spawnRandomElements(Season season) {
+        spawnRandomTrees();
+        spawnRandomWoods();
+        spawnRandomRocks();
+        spawnRandomForagingCrops(season);
+    }
 
-        while (counter < numberOfStone) {
-            int x = rand.nextInt(farm.getRectangle().width) + farm.getRectangle().x;
-            int y = rand.nextInt(farm.getRectangle().height) + farm.getRectangle().y;
-            Tile tile = findTile(x, y);
-
-            if (tile.getPlaceable() == null) {
-                Stone stone = new Stone(x, y);
-                tile.setPlaceable(stone);
-                tile.setWalkable(false);
-                tile.setSymbol(stone.getSymbol());
-                farm.getStones().add(stone);
-                farm.getPlaceables().add(stone);
-            }
-            counter++;
+    public void spawnObject(MapElement prototype, int count) {
+        for (int i = 0; i < count; i++) {
+            int x = rand.nextInt(mapWidth);
+            int y = rand.nextInt(mapHeight);
+            MapElement element = prototype.clone(x, y);
+            addElement(element);
         }
     }
 
-    public boolean isAroundPlaceable(Player p, Placeable placeable) {
-        if (p.getPosition().getX() - 1 >= 0 && p.getPosition().getX() + 1 <= 250 && p.getPosition().getY() - 1 >= 0
-                && p.getPosition().getY() + 1 <= 200) {
-            for (int i = p.getPosition().getX() - 1; i <= p.getPosition().getX() + 1; i++) {
-                for (int j = p.getPosition().getY() - 1; j <= p.getPosition().getY() + 1; j++) {
-                    if (tiles[i][j].getPlaceable() != null &&
-                            tiles[i][j].getPlaceable().equals(placeable)) {
-                        return true;
-                    }
-                }
-            }
-            return false;
-        }
+    public void spawnRandomTrees() {
+        int oakNumber = 10 + rand.nextInt(10);
+        spawnObject(oakPrototype, oakNumber);
 
-        return false;
+        int mapleNumber = 10 + rand.nextInt(10);
+        spawnObject(maplePrototype, mapleNumber);
+
+        int pineNumber = 10 + rand.nextInt(10);
+        spawnObject(pinePrototype, pineNumber);
     }
 
-    public void generateRandomForagingCrop(Farm farm) {
+    public void spawnRandomWoods() {
+        int stumpNumber = 10 + rand.nextInt(10);
+        spawnObject(new WoodElement(true, 0, 0), stumpNumber);
 
-        int numberOfRandomCrops = 6;
-        int counter = 0;
-        while (counter < numberOfRandomCrops) {
-            int x = rand.nextInt(farm.getRectangle().width) + farm.getRectangle().x;
-            int y = rand.nextInt(farm.getRectangle().height) + farm.getRectangle().y;
-            Tile tile = findTile(x, y);
-            if (tile.getPlaceable() == null) {
-                Crop crop = new Crop(generateRandomCropType(), App.getGameState().getGameTime(), null, x, y);
-                tile.setPlaceable(crop);
-                tile.setWalkable(false);
-                tile.setSymbol(crop.getSymbol());
-                farm.getCrops().add(crop);
-                farm.getPlaceables().add(crop);
-            }
-            counter++;
-
-        }
-
+        int trunkNumber = 5 + rand.nextInt(5);
+        spawnObject(new WoodElement(false, 0, 0), trunkNumber);
     }
 
-    public CropType generateRandomCropType() {
-        CropType[] cropTypes = CropType.values();
-        return cropTypes[rand.nextInt(cropTypes.length)];
+    public void spawnRandomRocks() {
+        int smallNumber = 15 + rand.nextInt(10);
+        spawnObject(new Rock(true, 0, 0), smallNumber);
+
+        int bigNumber = 20 + rand.nextInt(5);
+        spawnObject(new Rock(false, 0, 0), bigNumber);
+    }
+
+    public void spawnRandomForagingCrops(Season season) {
+        List<ForagingCrop> foragingCrops = ForagingCrop.getCropsBySeason(season);
+        int number = 5 + rand.nextInt(3);
+        for (int i = 0; i < number; i++) {
+            int index = rand.nextInt(foragingCrops.size());
+            ForagingCropElement foraging = new ForagingCropElement(foragingCrops.get(index), 0, 0);
+            spawnObject(foraging, 1);
+        }
     }
 }

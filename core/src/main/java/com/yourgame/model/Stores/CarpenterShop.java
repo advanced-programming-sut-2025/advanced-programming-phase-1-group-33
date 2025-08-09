@@ -158,17 +158,17 @@ public class CarpenterShop extends Store {
                 int randomX = rand.nextInt(250);
                 int randomY = rand.nextInt(200);
 
-                if (App.getGameState().getCurrentPlayer().getFarm().getRectangle().contains(randomX, randomY)) {
-                    if(App.getGameState().getMap().addShippingBin(randomX, randomY)) {
-                        break;
-                    }
-                }
+//                if (App.getGameState().getCurrentPlayer().getFarm().getRectangle().contains(randomX, randomY)) {
+//                    if(App.getGameState().getMap().addShippingBin(randomX, randomY)) {
+//                        break;
+//                    }
+//                }
 
             }
 
         } else if (item.name.equals("Wood")){
 
-            if (!App.getGameState().getCurrentPlayer().getBackpack().hasCapacity()) {
+            if (App.getGameState().getCurrentPlayer().getBackpack().isInventoryFull()) {
                 return new Response(false, "Not enough capacity in your inventory");
             }
 
@@ -176,7 +176,7 @@ public class CarpenterShop extends Store {
 
         } else {
 
-            if (!App.getGameState().getCurrentPlayer().getBackpack().hasCapacity()) {
+            if (App.getGameState().getCurrentPlayer().getBackpack().isInventoryFull()) {
                 return new Response(false, "Not enough capacity in your inventory");
             }
 

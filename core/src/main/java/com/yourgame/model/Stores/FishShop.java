@@ -5,8 +5,8 @@ import java.util.ArrayList;
 
 import com.yourgame.model.App;
 import com.yourgame.model.IO.Response;
-import com.yourgame.model.Inventory.Tools.FishingPole;
-import com.yourgame.model.Inventory.Tools.PoleType;
+import com.yourgame.model.Item.Tools.FishingPole;
+import com.yourgame.model.Item.Tools.PoleStage;
 import com.yourgame.model.Recipes.CraftingRecipes;
 import com.yourgame.model.UserInfo.Coin;
 import com.yourgame.model.enums.SymbolType;
@@ -26,10 +26,10 @@ public class FishShop extends Store {
         inventory = new ArrayList<>();
 
         inventory.add(new FishShopCraftingRecipe("Fish Smoker", CraftingRecipes.FishSmoker , 10000 , 1));
-        inventory.add(new FishShopPoleItem("Training Rod", PoleType.Training , 0 , 25 , 1));
-        inventory.add(new FishShopPoleItem("Bamboo Pole", PoleType.Bamboo , 0 , 500 , 1));
-        inventory.add(new FishShopPoleItem("Fiberglass Rod", PoleType.Fiberglass , 2 , 1800 , 1));
-        inventory.add(new FishShopPoleItem("Iridium Rod", PoleType.Iridium , 4 , 7500 , 1));
+        inventory.add(new FishShopPoleItem("Training Rod", PoleStage.Training , 0 , 25 , 1));
+        inventory.add(new FishShopPoleItem("Bamboo Pole", PoleStage.Bamboo , 0 , 500 , 1));
+        inventory.add(new FishShopPoleItem("Fiberglass Rod", PoleStage.Fiberglass , 2 , 1800 , 1));
+        inventory.add(new FishShopPoleItem("Iridium Rod", PoleStage.Iridium , 4 , 7500 , 1));
         inventory.add(new ShopItem("Trout Soup",250,1));
 
     }
@@ -99,7 +99,7 @@ public class FishShop extends Store {
 
         } else {
 
-            if(!App.getGameState().getCurrentPlayer().getBackpack().hasCapacity()){
+            if(App.getGameState().getCurrentPlayer().getBackpack().isInventoryFull()){
                 return new Response(false, "Not enough capacity in your inventory");
             }
             App.getGameState().getCurrentPlayer().getBackpack().addIngredients(Food.TroutSoup,value);

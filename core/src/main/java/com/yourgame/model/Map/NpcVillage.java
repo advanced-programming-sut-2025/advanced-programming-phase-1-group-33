@@ -15,7 +15,6 @@ public class NpcVillage {
     private final PierreGeneralStore pierreGeneralStore;
     private final StardropSaloon saloon;
     private final ArrayList<Placeable> placeables = new ArrayList<>();
-    private final ArrayList<Door> doors = new ArrayList<>();
 
     public NpcVillage(Rectangle rectangle, Blacksmith blacksmith, CarpenterShop carpenterShop, FishShop fishShop,
             JojaMart jojaMart, MarnieRanch marnieRanch, PierreGeneralStore pierreGeneralStore, StardropSaloon saloon) {
@@ -76,14 +75,5 @@ public class NpcVillage {
 
     public ArrayList<Placeable> getPlaceables() {
         return placeables;
-    }
-
-    public void addDoors(Door door) {
-        doors.add(door);
-        placeables.add(door);
-    }
-
-    public ArrayList<Door> getDoors() {
-        return doors;
     }
 }

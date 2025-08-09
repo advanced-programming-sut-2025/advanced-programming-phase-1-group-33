@@ -1,65 +1,36 @@
 package com.yourgame.model.Item;
-import com.yourgame.model.enums.ItemType;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.yourgame.Graphics.GameAssetManager;
 
 public abstract class Item {
-    private String id;
-    private String name;
-    private String description;
-    private ItemType type;
-    private int value; // Could represent in-game currency or utility
-    private boolean isStackable;
+    public enum ItemType {
+        FOOD, TOOL, CROP, MATERIAL, RESOURCE, TREASURE, QUEST_ITEM
+    }
 
-    // this needs to be cleaned!
-    public Item(String id, String name, String description, ItemType type, int value) {
-        this.id = id;
+    protected final String name;
+    protected final ItemType itemType;
+    protected final int value; // Could represent in-game currency or utility
+    protected final boolean isStackable;
+
+    public Item(String name, ItemType itemType, int value, boolean isStackable) {
         this.name = name;
-        this.description = description;
-        this.type = type;
+        this.itemType = itemType;
         this.value = value;
+        this.isStackable = isStackable;
     }
 
-        public void use(){}
-        // Getters and Setters
+    public abstract TextureRegion getTextureRegion(GameAssetManager assetManager);
 
-
-        public String getId() {
-            return id;
-        }
-
-        public void setId(String id) {
-            this.id = id;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
-
-        public String getDescription() {
-            return description;
-        }
-
-        public void setDescription(String description) {
-            this.description = description;
-        }
-
-        public ItemType getType() {
-            return type;
-        }
-
-    public void setType(ItemType type) {
-        this.type = type;
+    public String getName() {
+        return name;
     }
+
+    public ItemType getItemType() {
+            return itemType;
+        }
 
     public int getValue() {
         return value;
-    }
-
-    public void setValue(int value) {
-        this.value = value;
     }
 
     public String getSellPrice() {
@@ -68,5 +39,13 @@ public abstract class Item {
 
     public boolean isStackable() {
         return isStackable;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass().getSuperclass() != obj.getClass().getSuperclass()) return false;
+        Item item = (Item) obj;
+        return name.equals(item.name);
     }
 }

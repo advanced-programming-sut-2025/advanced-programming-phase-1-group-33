@@ -1,7 +1,7 @@
 package com.yourgame.model.Stores;
 
 
-import com.yourgame.model.Inventory.BackpackType;
+import com.yourgame.model.Item.Inventory.BackpackType;
 
 public class PierreGeneralStoreBackPackUpgrade extends ShopItem {
 

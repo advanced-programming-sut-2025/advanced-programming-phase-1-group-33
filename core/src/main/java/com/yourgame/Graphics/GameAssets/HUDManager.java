@@ -2,20 +2,10 @@ package com.yourgame.Graphics.GameAssets;
 
 // Assuming these imports are already present or will be added
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.TmxMapLoader;
-import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
@@ -25,8 +15,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
-import com.badlogic.gdx.utils.viewport.ScreenViewport; // Recommended for HUD Stage
-import com.yourgame.model.Tool;
+import com.yourgame.Graphics.GameAssetManager;
+import com.yourgame.model.Item.Tools.Tool;
 
 // --- New HUDManager Class (Conceptual - you'll implement this) ---
 // This class will encapsulate the creation and management of HUD elements.
@@ -35,11 +25,9 @@ public class HUDManager {
     private clockUIAssetManager clockUI;
     private AssetManager assetManager;
 
-    // Energy Bar 
+    // Energy Bar
     private Texture[] energy_bar_textures;
     private Image energyBarImage;
-
-
 
     // Info Bar
     private ImageButton weatherTypeButton;
@@ -47,12 +35,11 @@ public class HUDManager {
 
     private Texture InventoryTexture;
 
-        // Inventory Bar
+    // Inventory Bar
     private final Texture inventoryTexture;
     private InventorySlot[] inventorySlots;
     private int selectedSlotIndex = 0;
     private Drawable selectionDrawable;
-
 
     public HUDManager(Stage stage, clockUIAssetManager clockUI, AssetManager assetManager) {
         this.hudStage = stage;
@@ -62,9 +49,9 @@ public class HUDManager {
         this.inventoryTexture = clockUI.getInventoryTexture(); // Assumes this texture is loaded
         this.inventorySlots = new InventorySlot[12];
         createSelectionHighlight();
+        for (int i = 0; i < inventorySlots.length; i++)
+            inventorySlots[i] = new InventorySlot(selectionDrawable);
     }
-
-
 
     /**
      * Creates a simple drawable that will be used to highlight the selected inventory slot.
@@ -97,7 +84,6 @@ public class HUDManager {
         Table clockBarTable = new Table();
         clockBarTable.setFillParent(true);
         clockBarTable.top().right();
-        
 
         Skin clockSkin = clockUI.getClockWeatherSkin();
         ImageButton clockImg = new ImageButton(clockSkin, "MainClockButton");
@@ -208,7 +194,7 @@ public class HUDManager {
         return (tool != null) ? tool.getName() : "Empty";
     }
 
-    // Energy Bar HAndler 
+    // Energy Bar HAndler
     public Table createEnergyBarTable(int initialPhase) {
         Table energy_barTable = new Table();
         energy_barTable.setFillParent(true);
@@ -257,9 +243,9 @@ public class HUDManager {
 
     public enum weatherTypeButton {
         Sunny("SunnyButton"),
-        Rainny("RainnyButton"),
+        Rainy("RainyButton"),
         Snowy("SnowyButton"),
-        Wedding("WeddingdayButton"),
+        Wedding("WeddingButton"),
         Stormy("StormyButton");
 
         private final String pathToButton;
@@ -291,7 +277,7 @@ public class HUDManager {
         }
     }
 
-        /**
+    /**
      * Represents a single slot in the inventory UI. It's a Stack that can hold
      * a tool image and a selection highlight.
      */
@@ -314,7 +300,8 @@ public class HUDManager {
         public void setTool(Tool newTool) {
             this.tool = newTool;
             if (newTool != null) {
-                this.toolImage.setDrawable(new TextureRegionDrawable(newTool.getTextureRegion()));
+                TextureRegionDrawable drawable = new TextureRegionDrawable(newTool.getTextureRegion(GameAssetManager.getInstance()));
+                this.toolImage.setDrawable(drawable);
             } else {
                 this.toolImage.setDrawable(null); // Clear the image if tool is null
             }

@@ -1,130 +1,64 @@
 package com.yourgame.model.Map;
 
-import com.yourgame.model.Animals.Habitat;
-import com.yourgame.model.Item.Crop;
-import com.yourgame.model.Item.Tree;
-import com.yourgame.model.Map.Water.Lake;
-import com.yourgame.model.enums.SymbolType;
+import com.badlogic.gdx.maps.MapLayer;
+import com.badlogic.gdx.maps.MapObject;
+import com.badlogic.gdx.maps.objects.RectangleMapObject;
+import com.badlogic.gdx.maps.tiled.TiledMapTile;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
+import com.badlogic.gdx.math.Rectangle;
 
-import java.awt.*;
-import java.util.ArrayList;
-import java.util.Random;
+public class Farm extends Map {
+    private final TiledMapTileLayer farmingLayer;
+    private final TiledMapTile plowedTile;
+    private final TiledMapTile wateredTile;
 
-public class Farm {
-
-    private final int type;
-    private final Cottage cottage;
-    private final GreenHouse greenHouse;
-    private final ArrayList<Lake> lakes;
-    private final ArrayList<Quarry> quarries;
-    private ArrayList<Tree> trees;
-    private final Rectangle rectangle;
-    private final ArrayList<Stone> stones;
-    private ArrayList<Placeable> placeables = new ArrayList<>();
-    private ArrayList<Crop> crops = new ArrayList<>();
-    private final ArrayList<Habitat> habitats = new ArrayList<>();
-    private Door door;
-
-    public Farm(Cottage cottage, GreenHouse greenHouse, ArrayList<Lake> lakes, ArrayList<Quarry> quarries,
-                ArrayList<Tree> trees, ArrayList<Stone> stones, ArrayList<Crop> crops, Rectangle rectangle, int type) {
-
-        this.cottage = cottage;
-        placeables.add(cottage);
-        this.greenHouse = greenHouse;
-        placeables.add(greenHouse);
-        this.lakes = lakes;
-        placeables.addAll(lakes);
-        this.quarries = quarries;
-        placeables.addAll(quarries);
-        this.trees = trees;
-        //placeables.addAll(trees);
-        this.stones = stones;
-        placeables.addAll(stones);
-        this.type = type;
-        this.rectangle = rectangle;
-        this.crops = crops;
-
-        placeables.addAll(crops);
-
+    public Farm(String name, String pathToTmx) {
+        super(name, pathToTmx);
+        this.farmingLayer = (TiledMapTileLayer) tiledMap.getLayers().get("Farming");
+        this.plowedTile = tiledMap.getTileSets().getTileSet("outdoors-spring").getTile(786);
+        this.wateredTile = tiledMap.getTileSets().getTileSet("outdoors-spring").getTile(2161);
+        initSpawnable();
     }
 
-    public Cottage getCottage() {
-        return cottage;
-    }
+    private void initSpawnable() {
+        MapLayer spawnable = tiledMap.getLayers().get("Spawnables");
+        if (spawnable == null) return;
 
-    public ArrayList<Stone> getStones() {
-        return stones;
-    }
+        for (MapObject object : spawnable.getObjects()) {
+            if (object instanceof RectangleMapObject rectObj) {
+                Rectangle rect = rectObj.getRectangle();
 
-    public ArrayList<Tree> getTrees() {
-        return trees;
-    }
+                int startX = (int)(rect.x / Tile.TILE_SIZE);
+                int endX   = (int)((rect.x + rect.width) / Tile.TILE_SIZE);
+                int startY = (int)(rect.y / Tile.TILE_SIZE);
+                int endY   = (int)((rect.y + rect.height) / Tile.TILE_SIZE);
 
-    public ArrayList<Quarry> getQuarries() {
-        return quarries;
-    }
-
-    public ArrayList<Lake> getLakes() {
-        return lakes;
-    }
-
-    public ArrayList<Crop> getCrops() {
-        return crops;
-    }
-
-    public GreenHouse getGreenHouse() {
-        return greenHouse;
-    }
-
-    public void setTilesSymbol(Tile[][] tiles) {
-        for (int i = this.rectangle.x; i < this.rectangle.x + this.rectangle.width; i++) {
-            for (int j = this.rectangle.y; j < this.rectangle.y + this.rectangle.height; j++) {
-                tiles[i][j].setSymbol(SymbolType.DefaultFloor);
+                for (int x = startX; x <= endX; x++) {
+                    for (int y = startY; y <= endY; y++) {
+                        if (isInBounds(x, y, mapWidth, mapHeight)) {
+                            tileStates[x][y].setSpawnable(true);
+                            tileStates[x][y].setDirtState(Tile.DirtState.NORMAL);
+                        }
+                    }
+                }
             }
         }
     }
 
-    public Rectangle getRectangle() {
-        return rectangle;
-    }
+    public void updateTileVisuals(int tileX, int tileY) {
+        Tile data = getTile(tileX, tileY);
+        if (data == null || farmingLayer == null) return;
 
-    public ArrayList<Placeable> getPlaceables() {
-        return placeables;
-    }
+        TiledMapTileLayer.Cell cell = farmingLayer.getCell(tileX, tileY);
+        if (cell == null) {
+            cell = new TiledMapTileLayer.Cell();
+            farmingLayer.setCell(tileX, tileY, cell);
+        }
 
-    public void addRandomTree() {
-        Random rand = new Random();
-
-    }
-
-    public void setTrees(ArrayList<Tree> trees) {
-        this.trees = trees;
-    }
-
-    public int getType() {
-        return type;
-    }
-
-    public void setDoor(Door door) {
-        this.door = door;
-        placeables.add(door);
-    }
-
-    public Door getDoor() {
-        return door;
-    }
-
-    public void addHabitat(Habitat habitat) {
-        habitats.add(habitat);
-    }
-
-    public ArrayList<Habitat> getHabitats() {
-        return habitats;
-    }
-
-    public Position getPlayerDefaultPosition() {
-        int defaultX = rectangle.x + rectangle.width / 2;
-        int defaultY = rectangle.y + rectangle.height / 2;
-        return new Position(defaultX, defaultY);
+        switch (data.getDirtState()) {
+            case PLOWED -> cell.setTile(plowedTile);
+            case WATERED -> cell.setTile(wateredTile);
+            case NON_FARMABLE, NORMAL -> cell.setTile(null);
+        }
     }
 }
