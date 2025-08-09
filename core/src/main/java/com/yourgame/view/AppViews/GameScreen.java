@@ -2,6 +2,7 @@ package com.yourgame.view.AppViews;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -18,6 +19,7 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -32,9 +34,9 @@ import com.yourgame.Graphics.GameAssets.HUDManager;
 import com.yourgame.Graphics.GameAssets.clockUIAssetManager;
 import com.yourgame.Graphics.GameAssetManager;
 import com.yourgame.model.App;
-import com.yourgame.Graphics.MenuAssetManager;
 import com.yourgame.model.UserInfo.Player;
 import com.yourgame.model.WeatherAndTime.Season;
+import com.yourgame.view.GameViews.MainMenuView;
 
 import java.util.List;
 
@@ -68,7 +70,8 @@ public class GameScreen extends GameBaseScreen {
 
     //MENUS
     private Image menuIcon;
-    private boolean paused = false;
+    public boolean paused = false;
+    private MainMenuView mainMenuView;
 
     public GameScreen() {
         this.game = Main.getMain();
@@ -90,6 +93,7 @@ public class GameScreen extends GameBaseScreen {
         currentMap = mapManager.getPlayersCurrentMap(player);
 
         menuIcon = new Image(new TextureRegion(assetManager.getMenuIcon()));
+        menuStage = new Stage(new ScreenViewport());
     }
 
     @Override
@@ -352,57 +356,12 @@ public class GameScreen extends GameBaseScreen {
 
     private void openMenu() {
         paused = true;
-
-        Window menuWindow = new Window("Menu", MenuAssetManager.getInstance().getSkin(3));
-        menuWindow.setModal(true);
-        menuWindow.setMovable(false);
-        menuWindow.pad(20f);
-
-        // Set fixed size
-        menuWindow.setSize(1200, 900);
-
-        TextButton closeButton = assetManager.getButton("Close");
-        TextButton inventoryButton = assetManager.getButton("Inventory");
-        TextButton settingsButton = assetManager.getButton("Settings");
-        TextButton cookingButton = assetManager.getButton("Cooking");
-        TextButton skillButton = assetManager.getButton("Skills");
-        TextButton journalButton = assetManager.getButton("Journal");
-        TextButton mapButton = assetManager.getButton("Map");
-        TextButton socialButton = assetManager.getButton("Social");
-        TextButton craftingButton = assetManager.getButton("Crafting");
-
-        // Add buttons to the window directly
-        menuWindow.row().pad(10);
-        menuWindow.add(inventoryButton).width(300).padBottom(10);
-        menuWindow.add(skillButton).width(300).padBottom(10);
-        menuWindow.row();
-        menuWindow.add(socialButton).width(300).padBottom(10);
-        menuWindow.add(craftingButton).width(300).padBottom(10);
-        menuWindow.row();
-        menuWindow.add(cookingButton).width(300).padBottom(10);
-        menuWindow.add(mapButton).width(300).padBottom(10);
-        menuWindow.row();
-        menuWindow.add(journalButton).width(300).padBottom(10);
-        menuWindow.add(settingsButton).width(300).padBottom(10);
-        menuWindow.row();
-        menuWindow.add(closeButton).width(250);
-
-        // Close button logic
-        closeButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                paused = false;
-                menuWindow.remove();
-            }
-        });
-
-        // Center it manually
-        menuWindow.setPosition(
-            (HUDStage.getWidth() - menuWindow.getWidth()) / 2f,
-            (HUDStage.getHeight() - menuWindow.getHeight()) / 2f
-        );
-
-        HUDStage.addActor(menuWindow);
+        Gdx.input.setInputProcessor(new InputMultiplexer(HUDStage,menuStage));
+        menuStage.addActor(mainMenuView = new MainMenuView(MenuAssetManager.getInstance().getSkin(3),menuStage,this));
     }
 
+    public void closeMenu() {
+        paused = false;
+        Gdx.input.setInputProcessor(HUDStage);
+    }
 }

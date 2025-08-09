@@ -6,17 +6,16 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Cursor;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.yourgame.Graphics.GameAssetManager;
 import com.yourgame.Graphics.MenuAssetManager;
 
 public abstract class GameBaseScreen implements Screen {
     protected Stage HUDStage;
+    protected Stage menuStage;
     protected Sound clickSound;
     protected Sound popUpSound;
     protected Music backgroundMusic;
@@ -25,6 +24,8 @@ public abstract class GameBaseScreen implements Screen {
 
     public GameBaseScreen() {
         this.HUDStage = new Stage(new ScreenViewport());
+        this.menuStage = new Stage(new ScreenViewport());
+
         Gdx.input.setInputProcessor(HUDStage);
 
         //Setting the SFXs needed in the game
@@ -57,6 +58,7 @@ public abstract class GameBaseScreen implements Screen {
     public void render(float delta) {
         // Clear screen
         HUDStage.act(Math.min(delta, 1 / 30f));
+        menuStage.act(Math.min(delta, 1 / 30f));
 
         float mouseX = Gdx.input.getX();
         float mouseY = Gdx.graphics.getHeight() - Gdx.input.getY();
@@ -66,6 +68,7 @@ public abstract class GameBaseScreen implements Screen {
             playGameSFX("click");
 
         cursor.toFront();
+        menuStage.draw();
         HUDStage.draw();
     }
 
