@@ -2,9 +2,11 @@ package com.yourgame.Graphics.Map;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.yourgame.Graphics.GameAssetManager;
+import com.yourgame.model.Item.Item;
 import com.yourgame.model.WeatherAndTime.Season;
 
 import java.awt.*;
+import java.util.List;
 
 public class Rock extends MapElement {
     private final boolean isSmall;
@@ -23,5 +25,10 @@ public class Rock extends MapElement {
     @Override
     public MapElement clone(int tileX, int tileY) {
         return new Rock(isSmall, tileX * TileData.TILE_SIZE, tileY * TileData.TILE_SIZE);
+    }
+
+    @Override
+    public List<Item> drop() {
+        return List.of();
     }
 }

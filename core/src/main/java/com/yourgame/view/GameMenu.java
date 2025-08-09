@@ -111,8 +111,8 @@ public class GameMenu implements AppMenu {
                 return craftShowRecipes(input);
             case CRAFTING_CRAFT:
                 return getCraftingResponse(input);
-            case CHEAT_ADD_ITEM:
-                return getAddItemCheatResponse(input);
+//            case CHEAT_ADD_ITEM:
+//                return getAddItemCheatResponse(input);
             case COOKING_REFRIGERATOR_PICK_PUT:
                 return getCookingRefrigeratorResponse(input);
             case COOKING_SHOW_RECIPES:
@@ -468,14 +468,14 @@ public class GameMenu implements AppMenu {
         return response;
     }
 
-    private Response getAddItemCheatResponse(String input) {
-        Response response;
-        Request request = new Request(input);
-        request.body.put("itemName", GameViewCommands.CHEAT_ADD_ITEM.getGroup(input, "itemName"));
-        request.body.put("count", GameViewCommands.CHEAT_ADD_ITEM.getGroup(input, "count"));
-        response = controller.handleAddItemCheat(request);
-        return response;
-    }
+//    private Response getAddItemCheatResponse(String input) {
+//        Response response;
+//        Request request = new Request(input);
+//        request.body.put("itemName", GameViewCommands.CHEAT_ADD_ITEM.getGroup(input, "itemName"));
+//        request.body.put("count", GameViewCommands.CHEAT_ADD_ITEM.getGroup(input, "count"));
+//        response = controller.handleAddItemCheat(request);
+//        return response;
+//    }
 
     private Response getCraftingResponse(String input) {
         Response response;

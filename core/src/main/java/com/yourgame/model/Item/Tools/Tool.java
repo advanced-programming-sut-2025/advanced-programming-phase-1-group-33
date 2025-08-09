@@ -5,6 +5,8 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.yourgame.Graphics.GameAssetManager;
 import com.yourgame.model.Item.Item;
 import com.yourgame.model.Item.Usable;
+import com.yourgame.model.UserInfo.Player;
+import com.yourgame.model.WeatherAndTime.Weather;
 
 public abstract class Tool extends Item implements Usable {
     public enum ToolType {Axe, Pickaxe, Hoe, WateringCan, FishingPole, Scythe, MilkPale, Shears}
@@ -22,7 +24,7 @@ public abstract class Tool extends Item implements Usable {
         this.maxLevel = maxLevel;
     }
 
-    protected abstract int getConsumptionEnergy();
+    public abstract int getConsumptionEnergy(Player player, Weather weather, boolean success);
 
     public ToolType getToolType() {
         return toolType;
@@ -57,7 +59,7 @@ public abstract class Tool extends Item implements Usable {
             case "milkpail" -> new MilkPail();
             case "pickaxe" -> new Pickaxe();
             case "scythe" -> new Scythe();
-            case "shear" -> new Shear();
+            case "shear" -> new Shears();
             case "wateringcan" -> new WateringCan();
             default -> null;
         };

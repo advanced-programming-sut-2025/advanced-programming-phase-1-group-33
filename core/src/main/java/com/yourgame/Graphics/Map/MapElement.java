@@ -2,9 +2,11 @@ package com.yourgame.Graphics.Map;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.yourgame.Graphics.GameAssetManager;
+import com.yourgame.model.Item.Item;
 import com.yourgame.model.WeatherAndTime.Season;
 
 import java.awt.*;
+import java.util.List;
 
 public abstract class MapElement {
     public enum ElementType {
@@ -33,6 +35,14 @@ public abstract class MapElement {
 
     public abstract TextureRegion getTexture(GameAssetManager assetManager, Season currentSeason);
     public abstract MapElement clone(int tileX, int tileY);
+    /**
+     * @return The items that the element should drop on destruction, or interaction.
+     * */
+    public abstract List<Item> drop();
+
+    public ElementType getType() {
+        return type;
+    }
 
     public Rectangle getPixelBounds() {
         return pixelBounds;
@@ -46,6 +56,9 @@ public abstract class MapElement {
         return health;
     }
 
+    /**
+     * @return true if the element is destroyed
+     * */
     public boolean takeDamage(float damage) {
         health -= damage;
         return health <= 0;

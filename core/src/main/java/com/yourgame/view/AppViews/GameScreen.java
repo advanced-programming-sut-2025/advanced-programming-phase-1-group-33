@@ -9,18 +9,17 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
-import com.yourgame.Graphics.Map.MapElement;
+import com.yourgame.Graphics.Map.*;
 import com.yourgame.Graphics.MenuAssetManager;
-import com.yourgame.Graphics.Map.MapData;
-import com.yourgame.Graphics.Map.MapManager;
-import com.yourgame.Graphics.Map.Teleport;
 import com.yourgame.Main;
 import com.yourgame.Graphics.GameAssets.HUDManager;
 import com.yourgame.Graphics.GameAssets.clockUIAssetManager;
 import com.yourgame.Graphics.GameAssetManager;
 import com.yourgame.model.App;
+import com.yourgame.model.Item.Tools.Axe;
 import com.yourgame.model.UserInfo.Player;
 import com.yourgame.model.WeatherAndTime.Season;
+import com.yourgame.model.WeatherAndTime.Weather;
 
 import java.util.List;
 
@@ -207,12 +206,27 @@ public class GameScreen extends GameBaseScreen {
             }
         }
 
-        if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
-
+        if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
+            TileData tile = getTileInFront();
+            boolean success = axe.use(player, currentMap, tile);
+            int energy = axe.getConsumptionEnergy(player, Weather.Sunny, success);
+            Gdx.app.error("ToolUse", "energy: " + energy);
         }
 
         // --- Inventory Selection Input ---
         handleInventoryInput();
+    }
+    Axe axe = new Axe();
+    private TileData getTileInFront() {
+        int tileX = (int) (playerPosition.x / TileData.TILE_SIZE);
+        int tileY = (int) (playerPosition.y / TileData.TILE_SIZE);
+        return switch (direction) {
+            case 0 -> currentMap.getTile(tileX, tileY - 1);
+            case 1 -> currentMap.getTile(tileX + 1, tileY);
+            case 2 -> currentMap.getTile(tileX, tileY + 1);
+            case 3 -> currentMap.getTile(tileX - 1, tileY);
+            default -> currentMap.getTile(tileX, tileY);
+        };
     }
 
     private boolean isBlocked(float x, float y) {

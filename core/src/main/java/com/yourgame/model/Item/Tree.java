@@ -11,6 +11,7 @@ import com.yourgame.model.WeatherAndTime.Season;
 import com.yourgame.model.WeatherAndTime.TimeSystem;
 
 import java.awt.*;
+import java.util.List;
 
 public class Tree extends MapElement implements Growable {
     private final TreeType type;
@@ -183,5 +184,10 @@ public class Tree extends MapElement implements Growable {
         tree.lastWaterTime = lastWaterTime;
         tree.lastHarvestTime = lastHarvestTime;
         return tree;
+    }
+
+    @Override
+    public java.util.List<Item> drop() {
+        return List.of();
     }
 }

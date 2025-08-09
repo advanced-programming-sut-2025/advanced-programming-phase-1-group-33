@@ -2,9 +2,11 @@ package com.yourgame.Graphics.Map;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.yourgame.Graphics.GameAssetManager;
+import com.yourgame.model.Item.Item;
 import com.yourgame.model.WeatherAndTime.Season;
 
 import java.awt.*;
+import java.util.List;
 
 public class WoodElement extends MapElement {
     private final boolean isStump;
@@ -26,5 +28,10 @@ public class WoodElement extends MapElement {
     @Override
     public MapElement clone(int tileX, int tileY) {
         return new WoodElement(isStump, tileX * TileData.TILE_SIZE, tileY * TileData.TILE_SIZE);
+    }
+
+    @Override
+    public java.util.List<Item> drop() {
+        return List.of();
     }
 }

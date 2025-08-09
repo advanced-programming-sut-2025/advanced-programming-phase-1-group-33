@@ -7,7 +7,7 @@ import com.yourgame.model.Animals.AnimalType;
 import com.yourgame.model.App;
 import com.yourgame.model.IO.Response;
 import com.yourgame.model.Item.Tools.MilkPail;
-import com.yourgame.model.Item.Tools.Shear;
+import com.yourgame.model.Item.Tools.Shears;
 import com.yourgame.model.UserInfo.Coin;
 import com.yourgame.model.enums.SymbolType;
 
@@ -140,7 +140,7 @@ public class MarnieRanch extends Store {
 
         } else if (item.name.equals("Shears")) {
 
-            App.getGameState().getCurrentPlayer().getBackpack().addTool(new Shear());
+            App.getGameState().getCurrentPlayer().getBackpack().addTool(new Shears());
 
         }
 

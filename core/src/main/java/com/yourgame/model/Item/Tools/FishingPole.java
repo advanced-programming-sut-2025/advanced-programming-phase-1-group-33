@@ -15,12 +15,12 @@ public class FishingPole extends Tool {
     }
 
     @Override
-    protected int getConsumptionEnergy() {
+    public int getConsumptionEnergy(Player player, Weather weather, boolean success) {
         return 0;
     }
 
     @Override
-    public void use(Player player, MapData map, TileData tile) {
+    public boolean use(Player player, MapData map, TileData tile) {
         Weather weather = App.getGameState().getGameTime().getWeather();
         int multiple = switch (weather) {
             case Rainy -> 2;
@@ -43,6 +43,7 @@ public class FishingPole extends Tool {
 
             };
         }
+        return false;
     }
 
     @Override

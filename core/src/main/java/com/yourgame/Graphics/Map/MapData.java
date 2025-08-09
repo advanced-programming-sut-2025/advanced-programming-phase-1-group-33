@@ -187,8 +187,8 @@ public class MapData {
         return tiledMap;
     }
 
-    public TileData getTileData(int x, int y) {
-        return tileStates[x][y];
+    public TileData getTile(int tileX, int tileY) {
+        return tileStates[tileX][tileY];
     }
 
     public Vector2 getSpawnPoint(String spawnName) {

@@ -5,9 +5,9 @@ import com.yourgame.Graphics.Map.TileData;
 import com.yourgame.model.UserInfo.Player;
 import com.yourgame.model.WeatherAndTime.Weather;
 
-public class MilkPail extends Tool {
-    public MilkPail() {
-        super(ToolType.MilkPale, 0);
+public class Shears extends Tool {
+    public Shears() {
+        super(ToolType.Shears, 0);
     }
 
     @Override

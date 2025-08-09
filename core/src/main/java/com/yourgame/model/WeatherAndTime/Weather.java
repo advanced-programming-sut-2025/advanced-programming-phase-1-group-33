@@ -6,24 +6,40 @@ import java.util.List;
 
 public enum Weather {
     Sunny(
-            "sunny", 1.5,
-            new ArrayList<Season>(Arrays.asList(Season.Spring, Season.Summer, Season.Fall, Season.Winter))),
+        "sunny",
+        "SunnyButton",
+        1,
+        1.5,
+        new ArrayList<>(Arrays.asList(Season.Spring, Season.Summer, Season.Fall, Season.Winter))),
     Rainy(
-            "rainy", 1.2,
-            new ArrayList<Season>(Arrays.asList(Season.Spring, Season.Summer, Season.Fall))),
+        "rainy",
+        "RainnyButton",
+        1.5,
+        1.2,
+        new ArrayList<>(Arrays.asList(Season.Spring, Season.Summer, Season.Fall))),
     Stormy(
-            "stormy", 0.5,
-            new ArrayList<Season>(Arrays.asList(Season.Spring, Season.Summer, Season.Fall))),
+        "stormy",
+        "StormyButton",
+        1.5,
+        0.5,
+        new ArrayList<>(Arrays.asList(Season.Spring, Season.Summer, Season.Fall))),
     Snowy(
-            "snowy", 1,
-            new ArrayList<Season>(List.of(Season.Winter)));
+        "snowy",
+        "SnowyButton",
+        2,
+        1,
+        new ArrayList<>(List.of(Season.Winter)));
 
     private final String name;
+    private final String pathToButton;
+    public final double energyCoefficient;
     private final double effectivenessOnFishing;
     private final ArrayList<Season> seasons = new ArrayList<>();
 
-    Weather(String name, double effectivenessOnFishing, ArrayList<Season> seasons) {
+    Weather(String name, String pathToButton, double energyCoefficient, double effectivenessOnFishing, ArrayList<Season> seasons) {
         this.name = name;
+        this.pathToButton = pathToButton;
+        this.energyCoefficient = energyCoefficient;
         this.effectivenessOnFishing = effectivenessOnFishing;
         this.seasons.addAll(seasons);
     }
@@ -38,5 +54,9 @@ public enum Weather {
 
     public double getEffectivenessOnFishing() {
         return effectivenessOnFishing;
+    }
+
+    public String getButtonPath() {
+        return pathToButton;
     }
 }

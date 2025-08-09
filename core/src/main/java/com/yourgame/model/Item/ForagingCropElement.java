@@ -7,6 +7,7 @@ import com.yourgame.Graphics.Map.TileData;
 import com.yourgame.model.WeatherAndTime.Season;
 
 import java.awt.*;
+import java.util.List;
 
 public class ForagingCropElement extends MapElement {
     private final ForagingCrop foragingType;
@@ -24,5 +25,10 @@ public class ForagingCropElement extends MapElement {
     @Override
     public MapElement clone(int tileX, int tileY) {
         return new ForagingCropElement(foragingType, tileX * TileData.TILE_SIZE, tileY * TileData.TILE_SIZE);
+    }
+
+    @Override
+    public java.util.List<Item> drop() {
+        return List.of();
     }
 }
