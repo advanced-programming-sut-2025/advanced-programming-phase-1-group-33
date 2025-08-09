@@ -70,11 +70,11 @@ public class Player {
         this.nickname = currentUser.getNickname();
         this.energy = maxEnergy;
         this.currentPosition = new Position(0, 0);
-        this.backpack.getTools().add(new Hoe());
-        this.backpack.getTools().add(new Pickaxe());
-        this.backpack.getTools().add(new Axe());
-        this.backpack.getTools().add(new WateringCan());
-        this.backpack.getTools().add(new Scythe());
+        this.backpack.addTool(new Hoe());
+        this.backpack.addTool(new Pickaxe());
+        this.backpack.addTool(new Axe());
+        this.backpack.addTool(new WateringCan());
+        this.backpack.addTool(new Scythe());
         this.backpack.getIngredientQuantity().put(new Coin(), 20);
         this.backpack.getIngredientQuantity().put(new Wood(), 100);
         this.relationWithAbigail = new RelationWithNPC(NPCType.Abigail);

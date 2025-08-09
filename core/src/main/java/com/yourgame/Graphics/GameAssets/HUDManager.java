@@ -6,6 +6,7 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
@@ -16,14 +17,19 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.yourgame.Graphics.GameAssetManager;
+import com.yourgame.Graphics.MenuAssetManager;
+import com.yourgame.model.Item.Inventory.Inventory;
+import com.yourgame.model.Item.Inventory.InventorySlot;
 import com.yourgame.model.Item.Tools.Tool;
+
+import java.util.ArrayList;
 
 // --- New HUDManager Class (Conceptual - you'll implement this) ---
 // This class will encapsulate the creation and management of HUD elements.
 public class HUDManager {
     private Stage hudStage;
     private clockUIAssetManager clockUI;
-    private AssetManager assetManager;
+    private GameAssetManager assetManager;
 
     // Energy Bar
     private Texture[] energy_bar_textures;
@@ -36,47 +42,43 @@ public class HUDManager {
     private Texture InventoryTexture;
 
     // Inventory Bar
-    private final Texture inventoryTexture;
-    private InventorySlot[] inventorySlots;
+    private final InventorySlotUI[] inventorySlotsUI; // Array of our new UI slots
     private int selectedSlotIndex = 0;
-    private Drawable selectionDrawable;
+    private final Drawable selectionDrawable;
+    private final BitmapFont font;
 
-    public HUDManager(Stage stage, clockUIAssetManager clockUI, AssetManager assetManager) {
+    public HUDManager(Stage stage, clockUIAssetManager clockUI, GameAssetManager assetManager) {
         this.hudStage = stage;
         this.clockUI = clockUI;
         this.assetManager = assetManager;
         this.energy_bar_textures = clockUI.getEnergyBarMode();
-        this.inventoryTexture = clockUI.getInventoryTexture(); // Assumes this texture is loaded
-        this.inventorySlots = new InventorySlot[12];
-        createSelectionHighlight();
-        for (int i = 0; i < inventorySlots.length; i++)
-            inventorySlots[i] = new InventorySlot(selectionDrawable);
+        this.inventorySlotsUI = new InventorySlotUI[12];
+        this.font = MenuAssetManager.getInstance().getSkin(3).getFont("Text");
+        this.selectionDrawable = createSelectionHighlight();
+        // Initialize the UI slots array
+        for (int i = 0; i < inventorySlotsUI.length; i++) {
+            inventorySlotsUI[i] = new InventorySlotUI(selectionDrawable, font);
+        }
     }
 
     /**
      * Creates a simple drawable that will be used to highlight the selected inventory slot.
      */
-    private void createSelectionHighlight() {
-        Pixmap pixmap = new Pixmap(48, 48, Pixmap.Format.RGBA8888); // Create a 48x48 pixel map
-        pixmap.setColor(new Color(1, 1, 0, 0.4f)); // Set color to semi-transparent yellow
-        pixmap.fill(); // Fill the pixmap with the color
-        this.selectionDrawable = new TextureRegionDrawable(new Texture(pixmap));
-        pixmap.dispose(); // Dispose of the pixmap to free memory
+    private Drawable createSelectionHighlight() {
+        Pixmap pixmap = new Pixmap(56, 56, Pixmap.Format.RGBA8888);
+        pixmap.setColor(new Color(1, 1, 0, 0.4f)); // Semi-transparent yellow
+        pixmap.fill();
+        TextureRegionDrawable drawable = new TextureRegionDrawable(new Texture(pixmap));
+        pixmap.dispose();
+        return drawable;
     }
 
     // Method to create and add the info bar (clock, weather, season) and energy bar
     // to the HUD stage
     public void createHUD(weatherTypeButton initialWeather, seasonTypeButton initialSeason, int initialEnergyPhase) {
-        // Create the clock/info bar table
-        Table clockBarTable = createClockBarTable(initialWeather, initialSeason);
-        hudStage.addActor(clockBarTable);
-
-        // Create and add the energy bar table
-        Table energyBarTable = createEnergyBarTable(initialEnergyPhase);
-        hudStage.addActor(energyBarTable);
-
-        Table InventoryBarTable  = createInventoryBarTable();
-        hudStage.addActor(InventoryBarTable);
+        hudStage.addActor(createClockBarTable(initialWeather, initialSeason));
+        hudStage.addActor(createEnergyBarTable(initialEnergyPhase));
+        hudStage.addActor(createInventoryBarTable());
 
     }
 
@@ -114,51 +116,44 @@ public class HUDManager {
 
     /**
      * Creates the inventory bar with 12 slots.
-     * Uses a Stack to overlay tool icons and a selection highlight on top of the inventory background image.
      */
     public Table createInventoryBarTable() {
         Table inventoryContainerTable = new Table();
         inventoryContainerTable.setFillParent(true);
         inventoryContainerTable.bottom().padBottom(10);
 
-        // Stack allows us to layer actors on top of each other.
         Stack inventoryStack = new Stack();
+        inventoryStack.add(new Image(clockUI.getInventoryTexture())); // Background
 
-        // 1. The background image of the inventory bar
-        Image inventoryBackground = new Image(inventoryTexture);
-        inventoryStack.add(inventoryBackground);
-
-        // 2. A table to hold the 12 individual slots
         Table slotsTable = new Table();
-        // This padding aligns the slots inside the background image. You may need to tweak these values.
-        slotsTable.pad(0, 4, 0, 4);
+        slotsTable.pad(20, 16, 19, 16);
 
         for (int i = 0; i < 12; i++) {
-            InventorySlot slot = new InventorySlot(selectionDrawable);
-            inventorySlots[i] = slot;
-            // Add the slot to the table. Tweak size and padding to fit your background image perfectly.
-            slotsTable.add(slot).width(52).height(52).padLeft(11).padRight(11);
+            // Add the UI slot to the table. Tweak size and padding to fit your background image.
+            slotsTable.add(inventorySlotsUI[i]).width(56).height(56).padLeft(4).padRight(4);
         }
         inventoryStack.add(slotsTable);
 
         inventoryContainerTable.add(inventoryStack);
-
-        // Select the first slot by default
-        selectSlot(0);
-
+        selectSlot(0); // Select the first slot by default
         return inventoryContainerTable;
     }
 
     /**
-     * Adds a tool to a specific slot in the inventory.
-     * @param tool The tool to add.
-     * @param index The index of the slot (0-11).
+     * This is the core method to keep the UI in sync with the player's data.
+     * Call this whenever the inventory changes, or every frame.
+     * @param playerInventory The player's actual inventory data.
      */
-    public void addTool(Tool tool, int index) {
-        if (index >= 0 && index < inventorySlots.length) {
-            inventorySlots[index].setTool(tool);
-        } else {
-            Gdx.app.log("HUDManager", "Invalid inventory slot index: " + index);
+    public void updateInventory(Inventory playerInventory) {
+        ArrayList<InventorySlot> dataSlots = playerInventory.getSlots();
+        for (int i = 0; i < 12; i++) {
+            if (i < dataSlots.size()) {
+                // Update the UI slot with data from the corresponding inventory slot
+                inventorySlotsUI[i].update(dataSlots.get(i), assetManager);
+            } else {
+                // This inventory slot is empty, so pass null to clear the UI slot
+                inventorySlotsUI[i].update(null, assetManager);
+            }
         }
     }
 
@@ -167,31 +162,11 @@ public class HUDManager {
      * @param index The index of the slot to select (0-11).
      */
     public void selectSlot(int index) {
-        if (index < 0 || index >= inventorySlots.length) return;
+        if (index < 0 || index >= inventorySlotsUI.length) return;
 
-        // Deselect the previously selected slot
-        inventorySlots[selectedSlotIndex].setSelected(false);
-
-        // Select the new slot
+        inventorySlotsUI[selectedSlotIndex].setSelected(false); // Deselect the old one
         selectedSlotIndex = index;
-        inventorySlots[selectedSlotIndex].setSelected(true);
-
-        Gdx.app.log("HUDManager", "Selected tool: " + getSelectedToolName());
-    }
-
-    /**
-     * @return The Tool object in the currently selected slot, or null if the slot is empty.
-     */
-    public Tool getSelectedTool() {
-        return inventorySlots[selectedSlotIndex].getTool();
-    }
-
-    /**
-     * @return The name of the tool in the selected slot, or "Empty" if there is none.
-     */
-    public String getSelectedToolName() {
-        Tool tool = getSelectedTool();
-        return (tool != null) ? tool.getName() : "Empty";
+        inventorySlotsUI[selectedSlotIndex].setSelected(true); // Select the new one
     }
 
     // Energy Bar HAndler
@@ -239,7 +214,9 @@ public class HUDManager {
         }
     }
 
-
+    public int getSelectedSlotIndex() {
+        return selectedSlotIndex;
+    }
 
     public enum weatherTypeButton {
         Sunny("SunnyButton"),
@@ -276,44 +253,4 @@ public class HUDManager {
             return pathToButton;
         }
     }
-
-    /**
-     * Represents a single slot in the inventory UI. It's a Stack that can hold
-     * a tool image and a selection highlight.
-     */
-    public static class InventorySlot extends Stack {
-        private Tool tool;
-        private final Image toolImage;
-        private final Image selectionImage;
-
-        public InventorySlot(Drawable selectionDrawable) {
-            this.toolImage = new Image();
-            this.toolImage.setAlign(Align.center);
-
-            this.selectionImage = new Image(selectionDrawable);
-            this.selectionImage.setVisible(false); // Hide highlight by default
-
-            this.add(selectionImage); // Add highlight behind the tool
-            this.add(toolImage);      // Add tool image on top
-        }
-
-        public void setTool(Tool newTool) {
-            this.tool = newTool;
-            if (newTool != null) {
-                TextureRegionDrawable drawable = new TextureRegionDrawable(newTool.getTextureRegion(GameAssetManager.getInstance()));
-                this.toolImage.setDrawable(drawable);
-            } else {
-                this.toolImage.setDrawable(null); // Clear the image if tool is null
-            }
-        }
-
-        public Tool getTool() {
-            return tool;
-        }
-
-        public void setSelected(boolean isSelected) {
-            selectionImage.setVisible(isSelected);
-        }
-    }
-
 }

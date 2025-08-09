@@ -128,6 +128,7 @@ public class GameScreen extends GameBaseScreen {
         batch.draw(currentFrame, playerPosition.x, playerPosition.y);
         batch.end();
 
+        hudManager.updateInventory(player.getBackpack().getInventory());
         super.render(delta);
     }
 
@@ -144,9 +145,9 @@ public class GameScreen extends GameBaseScreen {
         batch.dispose();
     }
 
-        /**
-     * New method to handle key presses for selecting an inventory slot.
-     */
+    /**
+    * New method to handle key presses for selecting an inventory slot.
+    */
     private void handleInventoryInput() {
         if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_1)) hudManager.selectSlot(0);
         if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_2)) hudManager.selectSlot(1);
