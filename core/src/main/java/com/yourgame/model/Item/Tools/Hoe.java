@@ -12,19 +12,13 @@ public class Hoe extends Tool {
 
     @Override
     public int getConsumptionEnergy(Player player, Weather weather, boolean success) {
-        return 0;
+        return (int) ((5 - level) * weather.energyCoefficient);
     }
 
     @Override
     public boolean use(Player player, Map map, Tile tile) {
-        int consumedEnergy = switch (getToolStage()) {
-            case Primary -> 5;
-            case Copper -> 4;
-            case Steel -> 3;
-            case Gold -> 2;
-            case Iridium -> 1;
-            default -> 0;
-        };
-        return consumedEnergy <= consumedEnergy;
+        if (tile.getDirtState() != Tile.DirtState.NORMAL) return false;
+        tile.setDirtState(Tile.DirtState.PLOWED);
+        return true;
     }
 }

@@ -27,6 +27,10 @@ public class Tile {
         this.dirtState = dirtState;
     }
 
+    public boolean isWatered() {
+        return dirtState == DirtState.WATERED;
+    }
+
     public void setWalkable(boolean walkable) {
         this.walkable = walkable;
     }
