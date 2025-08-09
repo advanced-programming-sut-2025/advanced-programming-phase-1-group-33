@@ -82,7 +82,7 @@ public class GameScreen extends GameBaseScreen {
     private Sound clickSound; // Example SFX, if you want it in game screen
     private static boolean isMusicInitialized = false; // Replicated from MenuBaseScreen
 
-    //MENUS
+    // MENUS
     private Image menuIcon;
     public boolean paused = false;
     private MainMenuView mainMenuView;
@@ -210,7 +210,7 @@ public class GameScreen extends GameBaseScreen {
                 batch.draw(texture, bounds.x, bounds.y, bounds.width, bounds.height);
             }
         }
-        
+
         batch.draw(currentFrame, playerPosition.x, playerPosition.y);
         batch.end();
 
@@ -291,27 +291,45 @@ public class GameScreen extends GameBaseScreen {
      * New method to handle key presses for selecting an inventory slot.
      */
     private void handleInventoryInput() {
-        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_1)) hudManager.selectSlot(0);
-        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_2)) hudManager.selectSlot(1);
-        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_3)) hudManager.selectSlot(2);
-        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_4)) hudManager.selectSlot(3);
-        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_5)) hudManager.selectSlot(4);
-        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_6)) hudManager.selectSlot(5);
-        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_7)) hudManager.selectSlot(6);
-        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_8)) hudManager.selectSlot(7);
-        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_9)) hudManager.selectSlot(8);
-        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_0)) hudManager.selectSlot(9);
-        if (Gdx.input.isKeyJustPressed(Input.Keys.MINUS)) hudManager.selectSlot(10);
-        if (Gdx.input.isKeyJustPressed(Input.Keys.EQUALS)) hudManager.selectSlot(11);
-        if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) { openMenu(); }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_1))
+            hudManager.selectSlot(0);
+        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_2))
+            hudManager.selectSlot(1);
+        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_3))
+            hudManager.selectSlot(2);
+        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_4))
+            hudManager.selectSlot(3);
+        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_5))
+            hudManager.selectSlot(4);
+        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_6))
+            hudManager.selectSlot(5);
+        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_7))
+            hudManager.selectSlot(6);
+        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_8))
+            hudManager.selectSlot(7);
+        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_9))
+            hudManager.selectSlot(8);
+        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_0))
+            hudManager.selectSlot(9);
+        if (Gdx.input.isKeyJustPressed(Input.Keys.MINUS))
+            hudManager.selectSlot(10);
+        if (Gdx.input.isKeyJustPressed(Input.Keys.EQUALS))
+            hudManager.selectSlot(11);
+        if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
+            if (paused == false) {
+                openMenu();
+            } else {
+                closeMenu();
+            }
+        }
         if (Gdx.input.isKeyJustPressed(Input.Keys.F)) {
             paused = true;
-            Gdx.input.setInputProcessor(new InputMultiplexer(HUDStage,menuStage));
+            Gdx.input.setInputProcessor(new InputMultiplexer(HUDStage, menuStage));
             menuStage.addActor(new JournalMenuView(MenuAssetManager.getInstance().getSkin(3), menuStage, this));
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.M)) {
             paused = true;
-            Gdx.input.setInputProcessor(new InputMultiplexer(HUDStage,menuStage));
+            Gdx.input.setInputProcessor(new InputMultiplexer(HUDStage, menuStage));
             menuStage.addActor(new MapMenuView(MenuAssetManager.getInstance().getSkin(3), menuStage, this));
         }
     }
@@ -477,8 +495,8 @@ public class GameScreen extends GameBaseScreen {
 
     private void openMenu() {
         paused = true;
-        Gdx.input.setInputProcessor(new InputMultiplexer(HUDStage,menuStage));
-        menuStage.addActor(mainMenuView = new MainMenuView(MenuAssetManager.getInstance().getSkin(3),menuStage,this));
+        Gdx.input.setInputProcessor(new InputMultiplexer(HUDStage, menuStage));
+        menuStage.addActor(mainMenuView = new MainMenuView(MenuAssetManager.getInstance().getSkin(3), menuStage, this));
     }
 
     public void closeMenu() {
