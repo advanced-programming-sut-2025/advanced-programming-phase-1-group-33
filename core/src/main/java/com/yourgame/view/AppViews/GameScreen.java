@@ -17,6 +17,7 @@ import com.yourgame.Graphics.GameAssets.clockUIAssetManager;
 import com.yourgame.Graphics.GameAssetManager;
 import com.yourgame.model.App;
 import com.yourgame.model.Item.Tools.Axe;
+import com.yourgame.model.Item.Tools.Pickaxe;
 import com.yourgame.model.UserInfo.Player;
 import com.yourgame.model.WeatherAndTime.Season;
 import com.yourgame.model.WeatherAndTime.Weather;
@@ -216,7 +217,7 @@ public class GameScreen extends GameBaseScreen {
         // --- Inventory Selection Input ---
         handleInventoryInput();
     }
-    Axe axe = new Axe();
+    Pickaxe axe = new Pickaxe();
     private TileData getTileInFront() {
         int tileX = (int) (playerPosition.x / TileData.TILE_SIZE);
         int tileY = (int) (playerPosition.y / TileData.TILE_SIZE);

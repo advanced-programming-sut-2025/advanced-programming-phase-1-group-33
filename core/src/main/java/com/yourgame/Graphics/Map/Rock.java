@@ -12,7 +12,7 @@ public class Rock extends MapElement {
     private final boolean isSmall;
 
     public Rock(boolean small, int worldX, int worldY) {
-        super(ElementType.ROCK, new Rectangle(worldX, worldY, small ? 16 : 32, small ? 16 : 32), 5);
+        super(ElementType.ROCK, new Rectangle(worldX, worldY, small ? 16 : 32, small ? 16 : 32), small ? 2 : 5);
         isSmall = small;
     }
 
