@@ -99,7 +99,7 @@ public class FishShop extends Store {
 
         } else {
 
-            if(!App.getGameState().getCurrentPlayer().getBackpack().hasCapacity()){
+            if(App.getGameState().getCurrentPlayer().getBackpack().isInventoryFull()){
                 return new Response(false, "Not enough capacity in your inventory");
             }
             App.getGameState().getCurrentPlayer().getBackpack().addIngredients(Food.TroutSoup,value);

@@ -15,11 +15,11 @@ import com.yourgame.model.UserInfo.Coin;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.stream.Collectors;
 
 public class Backpack {
     private BackpackType type;
-    private int capacity;
-    private final ArrayList<Tool> tools = new ArrayList<>();
+    private final Inventory inventory;
     private final Hay hay = new Hay();
     private final HashSet<CookingRecipe> cookingRecipes = new HashSet<>();
     private final HashSet<CraftingRecipes> craftingRecipes = new HashSet<>();
@@ -32,63 +32,39 @@ public class Backpack {
 
     public Backpack(BackpackType type) {
         this.type = type;
-        switch (type) {
-            case Primary:
-                this.capacity = 12;
-                break;
-            case Big:
-                this.capacity = 24;
-                break;
-            case Deluxe:
-                this.capacity = Integer.MAX_VALUE;
+        this.inventory = new Inventory(type.capacity);
+    }
+
+    public boolean changeType(BackpackType type) {
+        if (inventory.setCapacity(type.capacity)) {
+            this.type = type;
+            return true;
         }
+        return false;
     }
 
-    public void changeType(BackpackType type) {
-        switch (type) {
-            case Big:
-                this.type = BackpackType.Big;
-                this.capacity = 24;
-                break;
-            case Primary:
-                this.type = BackpackType.Primary;
-                this.capacity = 12;
-                break;
-            case Deluxe:
-                this.capacity = Integer.MAX_VALUE;
-                this.type = BackpackType.Deluxe;
-        }
-
+    public Inventory getInventory() {
+        return inventory;
     }
 
-    public int getCapacity() {
-        return capacity;
-    }
-
-    public boolean hasCapacity() {
-        return capacity > ingredientQuantity.size();
-    }
-
-    public boolean hasCapacity(int quantity) {
-        return capacity > ingredientQuantity.size() + quantity;
+    public boolean isInventoryFull() {
+        return inventory.isInventoryFull();
     }
 
     public void addTool(Tool tool) {
-        tools.add(tool);
-
+        inventory.addItem(tool, 1);
     }
 
     public ArrayList<Tool> getTools() {
+        ArrayList<Tool> tools = new ArrayList<>();
+        for (InventorySlot slot : inventory.getSlots()) {
+            if (slot.item().getItemType() == Item.ItemType.TOOL) tools.add((Tool) slot.item());
+        }
         return tools;
     }
 
-    public void removeTool(Tool tool) {
-        tools.remove(tool);
-
-    }
-
     public void addIngredients(Ingredient ingredient, int quantity) {
-        if (capacity > ingredientQuantity.size()) {
+        if (inventory.getCapacity() > ingredientQuantity.size()) {
             int value = ingredientQuantity.getOrDefault(ingredient, 0);
             ingredientQuantity.put(ingredient, value + quantity);
         }

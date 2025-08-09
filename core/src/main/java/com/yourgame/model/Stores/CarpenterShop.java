@@ -168,7 +168,7 @@ public class CarpenterShop extends Store {
 
         } else if (item.name.equals("Wood")){
 
-            if (!App.getGameState().getCurrentPlayer().getBackpack().hasCapacity()) {
+            if (App.getGameState().getCurrentPlayer().getBackpack().isInventoryFull()) {
                 return new Response(false, "Not enough capacity in your inventory");
             }
 
@@ -176,7 +176,7 @@ public class CarpenterShop extends Store {
 
         } else {
 
-            if (!App.getGameState().getCurrentPlayer().getBackpack().hasCapacity()) {
+            if (App.getGameState().getCurrentPlayer().getBackpack().isInventoryFull()) {
                 return new Response(false, "Not enough capacity in your inventory");
             }
 

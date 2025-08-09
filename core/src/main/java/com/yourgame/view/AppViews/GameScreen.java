@@ -207,6 +207,10 @@ public class GameScreen extends GameBaseScreen {
             }
         }
 
+        if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
+
+        }
+
         // --- Inventory Selection Input ---
         handleInventoryInput();
     }

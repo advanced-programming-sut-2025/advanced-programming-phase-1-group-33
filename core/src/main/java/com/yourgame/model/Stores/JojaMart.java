@@ -125,7 +125,7 @@ public class JojaMart extends Store {
             return new Response(false, "Not enough stock");
         }
 
-        if (!App.getGameState().getCurrentPlayer().getBackpack().hasCapacity()) {
+        if (App.getGameState().getCurrentPlayer().getBackpack().isInventoryFull()) {
             return new Response(false, "Not enough capacity in your inventory");
         }
 

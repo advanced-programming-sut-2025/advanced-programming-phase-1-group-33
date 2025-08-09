@@ -12,7 +12,7 @@ public abstract class Item {
     protected final int value; // Could represent in-game currency or utility
     protected final boolean isStackable;
 
-    public Item(String name,ItemType itemType, int value, boolean isStackable) {
+    public Item(String name, ItemType itemType, int value, boolean isStackable) {
         this.name = name;
         this.itemType = itemType;
         this.value = value;
@@ -39,5 +39,13 @@ public abstract class Item {
 
     public boolean isStackable() {
         return isStackable;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass().getSuperclass() != obj.getClass().getSuperclass()) return false;
+        Item item = (Item) obj;
+        return name.equals(item.name);
     }
 }

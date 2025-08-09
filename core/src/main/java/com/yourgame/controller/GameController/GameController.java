@@ -468,7 +468,7 @@ public class GameController {
             return new Response(false, "Recipe <" + itemName + "> not found!");
         if (!player.getBackpack().containRecipe(recipe))
             return new Response(false, "You don't have <" + itemName + "> CraftingRecipe in your backpack!");
-        if (!player.getBackpack().hasCapacity())
+        if (player.getBackpack().isInventoryFull())
             return new Response(false, "You don't have enough space in backpack!");
         Response energyConsumptionResult = player.consumeEnergy(2);
         if (!energyConsumptionResult.getSuccessful())
@@ -492,124 +492,124 @@ public class GameController {
         return new Response(true, "You craft <" + itemName + "> successfully!");
     }
 
-    public Response handleAddItemCheat(Request request) {
-        String count = request.body.get("count");
-        int quantity = Integer.parseInt(count);
-        String ItemName = request.body.get("itemName");
-        Player player = App.getGameState().getCurrentPlayer();
-
-        if (quantity <= 0)
-            return new Response(false, "The quantity must be greater than zero!");
-        if (!player.getBackpack().hasCapacity())
-            return new Response(false,
-                "You don't have enough space in backpack!" + +player.getBackpack().getCapacity());
-        CraftingRecipes craftingRecipe = CraftingRecipes.getRecipeByName(ItemName);
-        ArtisanMachine machine;
-        if (craftingRecipe != null) {
-            if ((machine = ArtisanMachine.getArtisanMachineByRecipe(craftingRecipe)) != null) {
-                player.getBackpack().addArtisanMachine(machine);
-            } else if (craftingRecipe.equals(CraftingRecipes.MysticTreeSeed)) {
-                player.getBackpack().addIngredients(TreeSource.MysticTreeSeeds, quantity);
-            }
-            player.getBackpack().addRecipe(craftingRecipe);
-            return new Response(true, "You added<" + ItemName + "> successfully!");
-        }
-
-        CookingRecipe cookingRecipe = CookingRecipe.getRecipeByName(ItemName);
-        if (cookingRecipe != null) {
-            Food food = Food.getFoodByName(ItemName);
-            player.getBackpack().addIngredients(food, quantity);
-            player.getBackpack().addRecipe(cookingRecipe);
-            return new Response(true, "You added<" + ItemName + "> successfully!");
-        }
-
-        CropType cropType = CropType.getCropTypeByName(ItemName);
-        if (cropType != null) {
-            player.getBackpack().addIngredients(new Crop(cropType, gameState.getGameTime(), null, 1, 1), quantity);
-            return new Response(true, "You add <" + ItemName + "> successfully!");
-        }
-
-        FishType fishType = FishType.getFishTypeByName(ItemName);
-        if (fishType != null) {
-            player.getBackpack().addIngredients(new Fish(fishType, Quality.Regular), quantity);
-            return new Response(true, "You add <" + ItemName + "> successfully!");
-        }
-
-        Seeds seeds = Seeds.getSeedByName(ItemName);
-        if (seeds != null) {
-            player.getBackpack().addIngredients(seeds, quantity);
-            return new Response(true, "You added<" + ItemName + "> successfully!");
-        }
-
-        TreeSource treeSource = TreeSource.getTreeSourceByName(ItemName);
-        if (treeSource != null) {
-            player.getBackpack().addIngredients(treeSource, quantity);
-            return new Response(true, "You added<" + ItemName + "> successfully!");
-        }
-
-        ArtisanGoodType artisanGoodType = ArtisanGoodType.getByName(ItemName);
-        if (artisanGoodType != null) {
-            player.getBackpack().addIngredients(new ArtisanGood(artisanGoodType), quantity);
-            return new Response(true, "You added <" + ItemName + "> successfully!");
-        }
-
-        Tool tool = Tool.getToolByName(ItemName);
-        if (tool != null) {
-            for (int i = 0; i < quantity; i++)
-                player.getBackpack().addTool(tool);
-            return new Response(true, "You add <" + ItemName + "> successfully!");
-        }
-        Fruit fruit = Fruit.getByName(ItemName);
-        if (fruit != null) {
-            player.getBackpack().addIngredients(fruit, quantity);
-            return new Response(true, "You added<" + ItemName + "> successfully!");
-        }
-
-        ForagingMineral foragingMineral = ForagingMineral.getByName(ItemName);
-        if (foragingMineral != null) {
-            player.getBackpack().addIngredients(foragingMineral, quantity);
-            return new Response(true, "You added<" + ItemName + "> successfully!");
-        }
-
-        ForagingCrop foragingCrop = ForagingCrop.getByName(ItemName);
-        if (foragingCrop != null) {
-            player.getBackpack().addIngredients(foragingCrop, quantity);
-            return new Response(true, "You added<" + ItemName + "> successfully!");
-        }
-
-        Fertilizer fertilizer = Fertilizer.getByName(ItemName);
-        if (fertilizer != null) {
-            player.getBackpack().addIngredients(fertilizer, quantity);
-            return new Response(true, "You added<" + ItemName + "> successfully!");
-        }
-
-        AnimalGoodType animalGoodType = AnimalGoodType.getAnimalGoodTypeByName(ItemName);
-        if (animalGoodType != null) {
-            player.getBackpack().addIngredients(animalGoodType, quantity);
-            return new Response(true, "You added<" + ItemName + "> successfully!");
-        }
-        if (ItemName.equalsIgnoreCase("hay")) {
-            player.getBackpack().increaseHay(quantity);
-            return new Response(true, "You add <" + ItemName + "> successfully!");
-        }
-
-        if (ItemName.equalsIgnoreCase("wood")) {
-            player.getBackpack().addIngredients(new Wood(), quantity);
-            return new Response(true, "You add <" + ItemName + "> successfully!");
-        }
-
-        if (ItemName.equalsIgnoreCase("stone")) {
-            player.getBackpack().addIngredients(new Stone(), quantity);
-            return new Response(true, "You add <" + ItemName + "> successfully!");
-        }
-
-        if (ItemName.equalsIgnoreCase("bouquet")) {
-            player.getBackpack().addIngredients(new Bouquet(), quantity);
-            return new Response(true, "You add <" + ItemName + "> successfully!");
-        }
-
-        return new Response(false, "There is no such Item!");
-    }
+//    public Response handleAddItemCheat(Request request) {
+//        String count = request.body.get("count");
+//        int quantity = Integer.parseInt(count);
+//        String ItemName = request.body.get("itemName");
+//        Player player = App.getGameState().getCurrentPlayer();
+//
+//        if (quantity <= 0)
+//            return new Response(false, "The quantity must be greater than zero!");
+//        if (player.getBackpack().isInventoryFull())
+//            return new Response(false,
+//                "You don't have enough space in backpack!" + +player.getBackpack().getCapacity());
+//        CraftingRecipes craftingRecipe = CraftingRecipes.getRecipeByName(ItemName);
+//        ArtisanMachine machine;
+//        if (craftingRecipe != null) {
+//            if ((machine = ArtisanMachine.getArtisanMachineByRecipe(craftingRecipe)) != null) {
+//                player.getBackpack().addArtisanMachine(machine);
+//            } else if (craftingRecipe.equals(CraftingRecipes.MysticTreeSeed)) {
+//                player.getBackpack().addIngredients(TreeSource.MysticTreeSeeds, quantity);
+//            }
+//            player.getBackpack().addRecipe(craftingRecipe);
+//            return new Response(true, "You added<" + ItemName + "> successfully!");
+//        }
+//
+//        CookingRecipe cookingRecipe = CookingRecipe.getRecipeByName(ItemName);
+//        if (cookingRecipe != null) {
+//            Food food = Food.getFoodByName(ItemName);
+//            player.getBackpack().addIngredients(food, quantity);
+//            player.getBackpack().addRecipe(cookingRecipe);
+//            return new Response(true, "You added<" + ItemName + "> successfully!");
+//        }
+//
+//        CropType cropType = CropType.getCropTypeByName(ItemName);
+//        if (cropType != null) {
+//            player.getBackpack().addIngredients(new Crop(cropType, gameState.getGameTime(), null, 1, 1), quantity);
+//            return new Response(true, "You add <" + ItemName + "> successfully!");
+//        }
+//
+//        FishType fishType = FishType.getFishTypeByName(ItemName);
+//        if (fishType != null) {
+//            player.getBackpack().addIngredients(new Fish(fishType, Quality.Regular), quantity);
+//            return new Response(true, "You add <" + ItemName + "> successfully!");
+//        }
+//
+//        Seeds seeds = Seeds.getSeedByName(ItemName);
+//        if (seeds != null) {
+//            player.getBackpack().addIngredients(seeds, quantity);
+//            return new Response(true, "You added<" + ItemName + "> successfully!");
+//        }
+//
+//        TreeSource treeSource = TreeSource.getTreeSourceByName(ItemName);
+//        if (treeSource != null) {
+//            player.getBackpack().addIngredients(treeSource, quantity);
+//            return new Response(true, "You added<" + ItemName + "> successfully!");
+//        }
+//
+//        ArtisanGoodType artisanGoodType = ArtisanGoodType.getByName(ItemName);
+//        if (artisanGoodType != null) {
+//            player.getBackpack().addIngredients(new ArtisanGood(artisanGoodType), quantity);
+//            return new Response(true, "You added <" + ItemName + "> successfully!");
+//        }
+//
+//        Tool tool = Tool.getToolByName(ItemName);
+//        if (tool != null) {
+//            for (int i = 0; i < quantity; i++)
+//                player.getBackpack().addTool(tool);
+//            return new Response(true, "You add <" + ItemName + "> successfully!");
+//        }
+//        Fruit fruit = Fruit.getByName(ItemName);
+//        if (fruit != null) {
+//            player.getBackpack().addIngredients(fruit, quantity);
+//            return new Response(true, "You added<" + ItemName + "> successfully!");
+//        }
+//
+//        ForagingMineral foragingMineral = ForagingMineral.getByName(ItemName);
+//        if (foragingMineral != null) {
+//            player.getBackpack().addIngredients(foragingMineral, quantity);
+//            return new Response(true, "You added<" + ItemName + "> successfully!");
+//        }
+//
+//        ForagingCrop foragingCrop = ForagingCrop.getByName(ItemName);
+//        if (foragingCrop != null) {
+//            player.getBackpack().addIngredients(foragingCrop, quantity);
+//            return new Response(true, "You added<" + ItemName + "> successfully!");
+//        }
+//
+//        Fertilizer fertilizer = Fertilizer.getByName(ItemName);
+//        if (fertilizer != null) {
+//            player.getBackpack().addIngredients(fertilizer, quantity);
+//            return new Response(true, "You added<" + ItemName + "> successfully!");
+//        }
+//
+//        AnimalGoodType animalGoodType = AnimalGoodType.getAnimalGoodTypeByName(ItemName);
+//        if (animalGoodType != null) {
+//            player.getBackpack().addIngredients(animalGoodType, quantity);
+//            return new Response(true, "You added<" + ItemName + "> successfully!");
+//        }
+//        if (ItemName.equalsIgnoreCase("hay")) {
+//            player.getBackpack().increaseHay(quantity);
+//            return new Response(true, "You add <" + ItemName + "> successfully!");
+//        }
+//
+//        if (ItemName.equalsIgnoreCase("wood")) {
+//            player.getBackpack().addIngredients(new Wood(), quantity);
+//            return new Response(true, "You add <" + ItemName + "> successfully!");
+//        }
+//
+//        if (ItemName.equalsIgnoreCase("stone")) {
+//            player.getBackpack().addIngredients(new Stone(), quantity);
+//            return new Response(true, "You add <" + ItemName + "> successfully!");
+//        }
+//
+//        if (ItemName.equalsIgnoreCase("bouquet")) {
+//            player.getBackpack().addIngredients(new Bouquet(), quantity);
+//            return new Response(true, "You add <" + ItemName + "> successfully!");
+//        }
+//
+//        return new Response(false, "There is no such Item!");
+//    }
 
     public Response cookingRefrigerator(Request request) {
         String action = request.body.get("action");
@@ -632,7 +632,7 @@ public class GameController {
         } else {
             if (!player.getBackpack().getRefrigerator().containFood(food))
                 return new Response(false, "You don't have this food in the Refrigerator!");
-            if (!player.getBackpack().hasCapacity())
+            if (player.getBackpack().isInventoryFull())
                 return new Response(false, "You don't have enough space in the Backpack!");
             player.getBackpack().getRefrigerator().removeItem(food, 1);
             player.getBackpack().addIngredients(food, 1);
@@ -665,7 +665,7 @@ public class GameController {
         if (!player.getBackpack().containRecipe(recipe)) {
             return new Response(false, "You don't have <" + ItemName + "> CookingRecipe in your backpack!");
         }
-        if (!player.getBackpack().hasCapacity()) {
+        if (player.getBackpack().isInventoryFull()) {
             return new Response(false, "You don't have enough space in backpack!");
         }
 
