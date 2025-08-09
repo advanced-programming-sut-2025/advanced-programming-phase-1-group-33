@@ -13,6 +13,7 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFont
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGeneratorLoader;
 import com.badlogic.gdx.graphics.g2d.freetype.FreetypeFontLoader;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.yourgame.Graphics.GameAssets.clockUIAssetManager;
 import com.yourgame.model.WeatherAndTime.Weather;
 
@@ -38,6 +39,19 @@ public class GameAssetManager extends AssetManager {
 
     private Music backgroundMusic;
 
+    private Texture menuIcon;
+
+    private final TextButton closeButton;
+    private final TextButton inventoryMenuButton;
+    private final TextButton cookingMenuButton;
+    private final TextButton journalButton;
+    private final TextButton socialButton;
+    private final TextButton mapButton;
+    private final TextButton settingMenuButton;
+    private final TextButton skillButton;
+    private final TextButton craftingButton;
+    private final TextButton backButton;
+
     // A cache for textures that are loaded dynamically by path.
     private final HashMap<String, Texture> textureCache = new HashMap<>();
 
@@ -46,6 +60,19 @@ public class GameAssetManager extends AssetManager {
                 EnergyBarPath, InventoryBarDirectoryPath);
 
         backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("Musics/02. Cloud Country.mp3"));
+
+        menuIcon = new Texture(Gdx.files.internal("Game/Game Menu/menu-icon.png"));
+
+        closeButton = new TextButton("Close" , MenuAssetManager.getInstance().getSkin(3));
+        inventoryMenuButton = new TextButton("Inventory" , MenuAssetManager.getInstance().getSkin(3));
+        cookingMenuButton = new TextButton("Cooking" , MenuAssetManager.getInstance().getSkin(3));
+        journalButton = new TextButton("Journal" , MenuAssetManager.getInstance().getSkin(3));
+        socialButton = new TextButton("Social" , MenuAssetManager.getInstance().getSkin(3));
+        mapButton = new TextButton("Map" , MenuAssetManager.getInstance().getSkin(3));
+        settingMenuButton = new TextButton("Settings", MenuAssetManager.getInstance().getSkin(3));
+        skillButton = new TextButton("Skills", MenuAssetManager.getInstance().getSkin(3));
+        craftingButton = new TextButton("Crafting", MenuAssetManager.getInstance().getSkin(3));
+        backButton = new TextButton("Back", MenuAssetManager.getInstance().getSkin(3));
     }
 
     public clockUIAssetManager getClockManager() {
@@ -57,6 +84,26 @@ public class GameAssetManager extends AssetManager {
     }
 
     public void loadAllAssets() {
+    }
+
+    public Texture getMenuIcon() {
+        return menuIcon;
+    }
+
+    public TextButton getButton(String name) {
+        return switch (name) {
+            case "Inventory" -> inventoryMenuButton;
+            case "Cooking" -> cookingMenuButton;
+            case "Journal" -> journalButton;
+            case "Social" -> socialButton;
+            case "Map" -> mapButton;
+            case "Settings" -> settingMenuButton;
+            case "Close" -> closeButton;
+            case "Skills" -> skillButton;
+            case "Crafting" -> craftingButton;
+            case "Back" -> backButton;
+            default -> null;
+        };
     }
 
     public Skin getWeatherClockSkin() {

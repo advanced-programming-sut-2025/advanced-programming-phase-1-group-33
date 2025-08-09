@@ -2,6 +2,7 @@ package com.yourgame.view.AppViews;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
@@ -14,9 +15,12 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.yourgame.Graphics.MenuAssetManager;
 import com.yourgame.Main;
@@ -26,9 +30,11 @@ import com.yourgame.model.Map.*;
 import com.yourgame.model.App;
 import com.yourgame.model.GameState;
 import com.yourgame.Graphics.GameAssetManager;
-import com.yourgame.Graphics.MenuAssetManager;
 import com.yourgame.model.UserInfo.Player;
 import com.yourgame.model.WeatherAndTime.Season;
+import com.yourgame.view.GameViews.JournalMenuView;
+import com.yourgame.view.GameViews.MainMenuView;
+import com.yourgame.view.GameViews.MapMenuView;
 import com.yourgame.model.WeatherAndTime.Weather;
 
 import java.util.ArrayList;
@@ -37,7 +43,7 @@ import java.util.List;
 import static com.yourgame.Graphics.MenuAssetManager.PLAYER_HEIGHT;
 import static com.yourgame.Graphics.MenuAssetManager.PLAYER_WIDTH;
 
-public class GameScreen implements Screen {
+public class GameScreen extends GameBaseScreen {
     private Main game;
     private GameAssetManager assetManager;
 
@@ -75,6 +81,11 @@ public class GameScreen implements Screen {
     private Music backgroundMusic;
     private Sound clickSound; // Example SFX, if you want it in game screen
     private static boolean isMusicInitialized = false; // Replicated from MenuBaseScreen
+
+    //MENUS
+    private Image menuIcon;
+    public boolean paused = false;
+    private MainMenuView mainMenuView;
 
     public GameScreen() {
         this.player = Player.guest();
@@ -114,6 +125,9 @@ public class GameScreen implements Screen {
         currentMap = mapManager.getPlayersCurrentMap(player);
         // HUD‌ manager
         this.hudManager = new HUDManager(HUDStage, clockUI, assetManager, this.player);
+
+        menuIcon = new Image(new TextureRegion(assetManager.getMenuIcon()));
+        menuStage = new Stage(new ScreenViewport());
     }
 
     @Override
@@ -144,14 +158,33 @@ public class GameScreen implements Screen {
         playerVelocity = new Vector2();
         direction = 0;
 
+        // placing the menu Icon
+        Table menuTable = new Table();
+        menuTable.setFillParent(true);
+        menuTable.left().top();
+        menuTable.add(menuIcon).width(80).height(80).pad(20);
+        HUDStage.addActor(menuTable);
+
+        menuIcon.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                openMenu();
+            }
+        });
+
         batch = new SpriteBatch();
     }
 
     @Override
     public void render(float delta) {
-        handleInput(delta);
-        checkForTeleport();
-        handleHudUpdates(delta);
+        if (!paused) {
+            handleInput(delta);
+            checkForTeleport();
+            handleHudUpdates(delta);
+
+            // Update animation timer
+            stateTime += delta;
+        }
 
         // Clear screen
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -159,9 +192,6 @@ public class GameScreen implements Screen {
         camera.position.set(playerPosition.x, playerPosition.y, 0);
         clampCameraToMap();
         camera.update();
-
-        // Update animation timer
-        stateTime += delta;
 
         // Render map
         mapRenderer.setView(camera);
@@ -261,30 +291,29 @@ public class GameScreen implements Screen {
      * New method to handle key presses for selecting an inventory slot.
      */
     private void handleInventoryInput() {
-        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_1))
-            hudManager.selectSlot(0);
-        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_2))
-            hudManager.selectSlot(1);
-        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_3))
-            hudManager.selectSlot(2);
-        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_4))
-            hudManager.selectSlot(3);
-        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_5))
-            hudManager.selectSlot(4);
-        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_6))
-            hudManager.selectSlot(5);
-        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_7))
-            hudManager.selectSlot(6);
-        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_8))
-            hudManager.selectSlot(7);
-        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_9))
-            hudManager.selectSlot(8);
-        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_0))
-            hudManager.selectSlot(9);
-        if (Gdx.input.isKeyJustPressed(Input.Keys.MINUS))
-            hudManager.selectSlot(10);
-        if (Gdx.input.isKeyJustPressed(Input.Keys.EQUALS))
-            hudManager.selectSlot(11);
+        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_1)) hudManager.selectSlot(0);
+        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_2)) hudManager.selectSlot(1);
+        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_3)) hudManager.selectSlot(2);
+        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_4)) hudManager.selectSlot(3);
+        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_5)) hudManager.selectSlot(4);
+        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_6)) hudManager.selectSlot(5);
+        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_7)) hudManager.selectSlot(6);
+        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_8)) hudManager.selectSlot(7);
+        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_9)) hudManager.selectSlot(8);
+        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_0)) hudManager.selectSlot(9);
+        if (Gdx.input.isKeyJustPressed(Input.Keys.MINUS)) hudManager.selectSlot(10);
+        if (Gdx.input.isKeyJustPressed(Input.Keys.EQUALS)) hudManager.selectSlot(11);
+        if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) { openMenu(); }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.F)) {
+            paused = true;
+            Gdx.input.setInputProcessor(new InputMultiplexer(HUDStage,menuStage));
+            menuStage.addActor(new JournalMenuView(MenuAssetManager.getInstance().getSkin(3), menuStage, this));
+        }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.M)) {
+            paused = true;
+            Gdx.input.setInputProcessor(new InputMultiplexer(HUDStage,menuStage));
+            menuStage.addActor(new MapMenuView(MenuAssetManager.getInstance().getSkin(3), menuStage, this));
+        }
     }
 
     private void handleInput(float delta) {
@@ -446,4 +475,14 @@ public class GameScreen implements Screen {
         hudManager.updateEnergyBar();
     }
 
+    private void openMenu() {
+        paused = true;
+        Gdx.input.setInputProcessor(new InputMultiplexer(HUDStage,menuStage));
+        menuStage.addActor(mainMenuView = new MainMenuView(MenuAssetManager.getInstance().getSkin(3),menuStage,this));
+    }
+
+    public void closeMenu() {
+        paused = false;
+        Gdx.input.setInputProcessor(HUDStage);
+    }
 }
