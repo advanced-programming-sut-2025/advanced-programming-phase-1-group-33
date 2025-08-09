@@ -36,7 +36,9 @@ import com.yourgame.Graphics.GameAssetManager;
 import com.yourgame.model.App;
 import com.yourgame.model.UserInfo.Player;
 import com.yourgame.model.WeatherAndTime.Season;
+import com.yourgame.view.GameViews.JournalMenuView;
 import com.yourgame.view.GameViews.MainMenuView;
+import com.yourgame.view.GameViews.MapMenuView;
 
 import java.util.List;
 
@@ -203,6 +205,17 @@ public class GameScreen extends GameBaseScreen {
         if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_0)) hudManager.selectSlot(9);
         if (Gdx.input.isKeyJustPressed(Input.Keys.MINUS)) hudManager.selectSlot(10);
         if (Gdx.input.isKeyJustPressed(Input.Keys.EQUALS)) hudManager.selectSlot(11);
+        if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) { openMenu(); }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.F)) {
+            paused = true;
+            Gdx.input.setInputProcessor(new InputMultiplexer(HUDStage,menuStage));
+            menuStage.addActor(new JournalMenuView(MenuAssetManager.getInstance().getSkin(3), menuStage, this));
+        }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.M)) {
+            paused = true;
+            Gdx.input.setInputProcessor(new InputMultiplexer(HUDStage,menuStage));
+            menuStage.addActor(new MapMenuView(MenuAssetManager.getInstance().getSkin(3), menuStage, this));
+        }
     }
 
     private void handleInput(float delta) {

@@ -19,7 +19,7 @@ public class SettingsMenuView extends Window {
         setMovable(false);
         pad(20f);
 
-        Label label = new Label("Your Settings Go Here", skin);
+        Label label = new Label("", skin);
         TextButton backButton = GameAssetManager.getInstance().getButton("Back");
 
         add(label).row();
