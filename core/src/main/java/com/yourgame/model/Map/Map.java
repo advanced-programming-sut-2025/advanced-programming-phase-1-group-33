@@ -30,13 +30,13 @@ public class Map {
     private static final Tree pinePrototype;
     private static final Tree maplePrototype;
     static {
-        oakPrototype = new Tree(TreeType.OakTree, new TimeSystem(), null, 0, 0);
+        oakPrototype = new Tree(TreeType.OakTree, null, 0, 0);
         oakPrototype.setMature();
 
-        pinePrototype = new Tree(TreeType.PineTree, new TimeSystem(), null, 0, 0);
+        pinePrototype = new Tree(TreeType.PineTree, null, 0, 0);
         pinePrototype.setMature();
 
-        maplePrototype = new Tree(TreeType.MapleTree, new TimeSystem(), null, 0, 0);
+        maplePrototype = new Tree(TreeType.MapleTree, null, 0, 0);
         maplePrototype.setMature();
     }
 

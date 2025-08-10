@@ -13,28 +13,21 @@ import com.yourgame.model.WeatherAndTime.TimeSystem;
 import java.awt.*;
 import java.util.List;
 
-public class Tree extends MapElement implements Growable {
+public class Tree extends Plant {
     private final TreeType type;
-    private int levelOfGrowth;
-    private TimeSystem lastGrowthTime;
     private TimeSystem lastHarvestTime;
-    private TimeSystem lastWaterTime;
-    private final Fertilizer fertilizer;
     private final int numberOfDaysCanBeAliveWithoutWater;
+    private boolean hasFruit;
 
-    public Tree(TreeType type, TimeSystem timeOfPlanting, Fertilizer fertilizer, int worldX, int worldY) {
-        super(ElementType.TREE, new Rectangle(worldX, worldY, 48, 80), 6);
+    public Tree(TreeType type, Fertilizer fertilizer, int worldX, int worldY) {
+        super(ElementType.TREE, new Rectangle(worldX, worldY, 48, 80), 6, fertilizer);
         this.type = type;
-        this.lastGrowthTime = timeOfPlanting.clone();
-        this.lastWaterTime = timeOfPlanting.clone();
-        this.fertilizer = fertilizer;
+        this.hasFruit = false;
 
-        // Corrected: The logic for levelOfGrowth and numberOfDaysCanBeAliveWithoutWater
-        // was duplicated and nested incorrectly. This block now correctly sets these values.
         if (fertilizer == Fertilizer.GrowthFertilizer) {
-            levelOfGrowth = 1;
+            currentStage = 1;
         } else {
-            levelOfGrowth = 0;
+            currentStage = 0;
         }
 
         if (type == TreeType.OakTree || type == TreeType.MapleTree || type == TreeType.PineTree) {
@@ -46,94 +39,21 @@ public class Tree extends MapElement implements Growable {
         }
     }
 
-
     public TreeType getTreeType() {
         return type;
     }
 
-    public void grow(TimeSystem today) {
-        if (isComplete())
-            return;
-
-        int timeForGrow = type.getTimeForGrow(levelOfGrowth);
-
-        if (lastGrowthTime.getDay() + timeForGrow == today.getDay()) {
-            levelOfGrowth++;
-            lastGrowthTime = today;
-        }
-
-    }
-
-    public boolean canGrowAgain() {
-        return true;
-    }
-
     public void setMature() {
-        levelOfGrowth = type.getStages().size();
-    }
-
-    public boolean isComplete() {
-        return levelOfGrowth >= type.getStages().size();
-    }
-
-    public boolean harvest() {
-        if (!isComplete())
-            return false;
-
-        TimeSystem today = App.getGameState().getGameTime().clone();
-        int timeForGrow = type.getHarvestCycle();
-
-        if (lastHarvestTime == null || lastHarvestTime.getDay() + timeForGrow <= today.getDay()) {
-            lastHarvestTime = today;
-            return true;
-        }
-        return false;
-    }
-
-    public void watering() {
-        lastWaterTime = App.getGameState().getGameTime().clone();
-    }
-
-    public boolean canBeAlive(TimeSystem today) {
-        return today.getDay() <= lastWaterTime.getDay() + numberOfDaysCanBeAliveWithoutWater;
-    }
-
-    public int getNumberOfDaysToComplete() {
-        int passedDays = 0;
-        for (int i = 0; i < levelOfGrowth; i++) {
-            passedDays += type.getTimeForGrow(i);
-        }
-        passedDays += App.getGameState().getGameTime().getDay() - lastGrowthTime.getDay();
-        return type.getTotalHarvestTime() - passedDays;
-    }
-
-    public int getCurrentStage() {
-        return levelOfGrowth;
-    }
-
-    public boolean hasWateredToday() {
-        return App.getGameState().getGameTime().getDay() == lastWaterTime.getDay();
-    }
-
-    public boolean hasFertilized() {
-        return fertilizer != null;
-    }
-
-    public Fertilizer getFertilizer() {
-        return fertilizer;
-    }
-
-    public String getNameOfProduct() {
-        return type.getFruit().name();
-    }
-
-    public String getName() {
-        return type.name();
+        currentStage = type.getStages().size();
     }
 
     public boolean hasFruit() {
-        //return isComplete() && type.getSeason() == App.getGameState().getGameTime().getSeason();
-        return false;
+        return hasFruit;
+    }
+
+    @Override
+    public boolean isMature() {
+        return currentStage >= type.getStages().size();
     }
 
     @Override
@@ -143,7 +63,7 @@ public class Tree extends MapElement implements Growable {
         String path;
 
         // Stage 5 is the final, mature stage with seasonal variations
-        if (isComplete()) {
+        if (isMature()) {
             // Check if it should have fruit
             if (hasFruit()) {
                 path = basePath + "_Stage_5_Fruit.png";
@@ -171,8 +91,8 @@ public class Tree extends MapElement implements Growable {
                 int regionX = seasonIndex * regionWidth;
                 return new TextureRegion(seasonalSheet, regionX, 0, regionWidth, regionHeight);
             }
-        } else if (levelOfGrowth >= 0) {
-            path = basePath + "_Stage_" + (levelOfGrowth + 1) + ".png";
+        } else if (currentStage >= 0) {
+            path = basePath + "_Stage_" + (currentStage + 1) + ".png";
         } else {
             path = basePath + "_Sapling.png";
         }
@@ -184,16 +104,33 @@ public class Tree extends MapElement implements Growable {
     @Override
     public MapElement clone(int tileX, int tileY) {
         int scale = Tile.TILE_SIZE;
-        Tree tree = new Tree(type, lastGrowthTime, fertilizer, tileX * scale, tileY * scale);
-        tree.levelOfGrowth = levelOfGrowth;
-        tree.lastGrowthTime = lastGrowthTime;
-        tree.lastWaterTime = lastWaterTime;
+        Tree tree = new Tree(type, fertilizer, tileX * scale, tileY * scale);
+        tree.currentStage = currentStage;
         tree.lastHarvestTime = lastHarvestTime;
         return tree;
     }
 
     @Override
-    public java.util.List<Item> drop() {
+    public List<Item> drop() {
+        if (health <= 0) return List.of(new Wood.WoodItem());
+        else if (hasFruit) return List.of(type.getFruit().getItem());
         return List.of();
+    }
+
+    @Override
+    public void onTimeChanged(TimeSystem timeSystem) {
+        if (isMature()) {
+            daysSinceLastHarvest++;
+            if (daysSinceLastHarvest >= type.getHarvestCycle()) {
+                hasFruit = true;
+            }
+        } else if (wateredToday) {
+            daysSinceLastStage++;
+            if (daysSinceLastStage >= type.getStages().get(currentStage)) {
+                currentStage++;
+                daysSinceLastStage = 0;
+            }
+        }
+        wateredToday = false;
     }
 }
