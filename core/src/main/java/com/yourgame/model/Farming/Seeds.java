@@ -1,73 +1,62 @@
 package com.yourgame.model.Farming;
 
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.yourgame.Graphics.GameAssetManager;
+import com.yourgame.model.Item.Item;
 import com.yourgame.model.ManuFactor.Ingredient;
 import com.yourgame.model.WeatherAndTime.Season;
-import java.util.HashMap;
 
 public enum Seeds implements Ingredient {
     // Remove the CropType argument from here
-    JazzSeeds(Season.Spring),
-    CarrotSeeds(Season.Spring),
-    CauliflowerSeeds(Season.Spring),
-    CoffeeBean(Season.Spring),
-    GarlicSeeds(Season.Spring),
-    BeanStarter(Season.Spring),
-    KaleSeeds(Season.Spring),
-    ParsnipSeeds(Season.Spring),
-    PotatoSeeds(Season.Spring),
-    RhubarbSeeds(Season.Spring),
-    StrawberrySeeds(Season.Spring),
-    TulipBulb(Season.Spring),
-    RiceShoot(Season.Spring),
-    BlueberrySeeds(Season.Summer),
-    CornSeeds(Season.Summer),
-    HopsStarter(Season.Summer),
-    PepperSeeds(Season.Summer),
-    MelonSeeds(Season.Summer),
-    PoppySeeds(Season.Summer),
-    RadishSeeds(Season.Summer),
-    RedCabbageSeeds(Season.Summer),
-    StarfruitSeeds(Season.Summer),
-    SpangleSeeds(Season.Summer),
-    SummerSquashSeeds(Season.Summer),
-    SunflowerSeeds(Season.Summer),
-    TomatoSeeds(Season.Summer),
-    WheatSeeds(Season.Summer),
-    AmaranthSeeds(Season.Fall),
-    ArtichokeSeeds(Season.Fall),
-    BeetSeeds(Season.Fall),
-    BokChoySeeds(Season.Fall),
-    BroccoliSeeds(Season.Fall),
-    CranberrySeeds(Season.Fall),
-    EggplantSeeds(Season.Fall),
-    FairySeeds(Season.Fall),
-    GrapeStarter(Season.Fall),
-    PumpkinSeeds(Season.Fall),
-    YamSeeds(Season.Fall),
-    RareSeed(Season.Fall),
-    PowdermelonSeeds(Season.Winter),
+    Jazz_Seeds(Season.Spring),
+    Carrot_Seeds(Season.Spring),
+    Cauliflower_Seeds(Season.Spring),
+    Coffee_Bean(Season.Spring),
+    Garlic_Seeds(Season.Spring),
+    Bean_Starter(Season.Spring),
+    Kale_Seeds(Season.Spring),
+    Parsnip_Seeds(Season.Spring),
+    Potato_Seeds(Season.Spring),
+    Rhubarb_Seeds(Season.Spring),
+    Strawberry_Seeds(Season.Spring),
+    Tulip_Bulb(Season.Spring),
+    Rice_Shoot(Season.Spring),
+    Blueberry_Seeds(Season.Summer),
+    Corn_Seeds(Season.Summer),
+    Hops_Starter(Season.Summer),
+    Pepper_Seeds(Season.Summer),
+    Melon_Seeds(Season.Summer),
+    Poppy_Seeds(Season.Summer),
+    Radish_Seeds(Season.Summer),
+    Red_Cabbage_Seeds(Season.Summer),
+    Starfruit_Seeds(Season.Summer),
+    Spangle_Seeds(Season.Summer),
+    Summer_Squash_Seeds(Season.Summer),
+    Sunflower_Seeds(Season.Summer),
+    Tomato_Seeds(Season.Summer),
+    Wheat_Seeds(Season.Summer),
+    Amaranth_Seeds(Season.Fall),
+    Artichoke_Seeds(Season.Fall),
+    Beet_Seeds(Season.Fall),
+    Bok_Choy_Seeds(Season.Fall),
+    Broccoli_Seeds(Season.Fall),
+    Cranberry_Seeds(Season.Fall),
+    Eggplant_Seeds(Season.Fall),
+    Fairy_Seeds(Season.Fall),
+    Grape_Starter(Season.Fall),
+    Pumpkin_Seeds(Season.Fall),
+    Yam_Seeds(Season.Fall),
+    Rare_Seed(Season.Fall),
+    Powdermelon_Seeds(Season.Winter),
     // AncientSeeds(Season.Special),
     // MixedSeeds(Season.Special);
-    AncientSeeds(Season.Winter),
-    MixedSeeds(Season.Winter);
+    Ancient_Seeds(Season.Winter),
+    Mixed_Seeds(Season.Winter);
 
     private final Season season;
-    // Remove the CropType field
-    // private CropType crop;
 
-    private final static HashMap<String, Seeds> stringToSeeds = new HashMap<>();
-
-    // Remove CropType cropType from the constructor
     Seeds(Season season) {
-        // Remove setting the crop field
-        // this.crop = cropType;
         this.season = season;
-    }
-
-    static {
-        for (Seeds value : Seeds.values()) {
-            stringToSeeds.put(value.name().toLowerCase(), value);
-        }
     }
 
     public String getName() {
@@ -78,16 +67,20 @@ public enum Seeds implements Ingredient {
         return season;
     }
 
-    // Remove the getCrop() method
-    /*
-    public CropType getCrop() {
-        return crop;
-    }
-    */
-
     public static Seeds getSeedByName(String name) {
         if (name == null || name.isEmpty())
             return null;
-        return stringToSeeds.getOrDefault(name.trim().toLowerCase(), null);
+        return Seeds.valueOf(name);
+    }
+
+    public static final class SeedItem extends Item {
+        public SeedItem(Seeds seed) {
+            super(seed.name(), ItemType.INGREDIENT, 5, true);
+        }
+
+        @Override
+        public TextureRegion getTextureRegion(GameAssetManager assetManager) {
+            return new TextureRegion(assetManager.getTexture("Game/Crop/" + this.getName() + ".png"));
+        }
     }
 }

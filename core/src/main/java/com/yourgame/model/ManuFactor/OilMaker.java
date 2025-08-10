@@ -44,7 +44,7 @@ public class OilMaker extends ArtisanMachine {
                     processingTimes.put(new ArtisanGood(ArtisanGoodType.Oil), new TimeFrame(0, 6));
                     return new Response(true, "Your product is being made.Please wait.");
                 }
-                if (ingredient.equals(Seeds.SunflowerSeeds)) {
+                if (ingredient.equals(Seeds.Sunflower_Seeds)) {
                     player.getBackpack().removeIngredients(ingredient, 1);
                     producingGood = new ArtisanGood(ArtisanGoodType.Oil);
                     processingTimes.put(new ArtisanGood(ArtisanGoodType.Oil), new TimeFrame(2, 0));
