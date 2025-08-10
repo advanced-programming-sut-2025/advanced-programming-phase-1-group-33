@@ -33,19 +33,7 @@ public class Axe extends Tool {
 
         if (element.getType() == MapElement.ElementType.TREE || element.getType() == MapElement.ElementType.WOOD) {
             if (element.takeDamage(damage)) {
-                List<Item> droppedLoot = element.drop();
-
-                // Get the center position of the destroyed element to spawn the loot
-                Rectangle bounds = element.getPixelBounds();
-                float dropX = bounds.x + bounds.width / 2f;
-                float dropY = bounds.y + bounds.height / 2f;
-
-                // Spawn each item on the map
-                for (Item loot : droppedLoot) {
-                    map.spawnDroppedItem(loot, dropX, dropY);
-                }
-
-                map.removeElement(element);
+                dropElement(map, element);
             }
             return true;
         }
