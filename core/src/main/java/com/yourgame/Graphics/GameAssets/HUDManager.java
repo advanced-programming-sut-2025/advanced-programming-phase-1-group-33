@@ -184,10 +184,6 @@ public class HUDManager {
     }
 
     /**
-     * Adds a tool to a specific slot in the inventory.
-     * 
-     * @param tool  The tool to add.
-     * @param index The index of the slot (0-11).
      * This is the core method to keep the UI in sync with the player's data.
      * Call this whenever the inventory changes, or every frame.
      * @param playerInventory The player's actual inventory data.
@@ -207,7 +203,6 @@ public class HUDManager {
 
     /**
      * Selects an inventory slot, updating the visual highlight.
-     * 
      * @param index The index of the slot to select (0-11).
      */
     public void selectSlot(int index) {
@@ -234,7 +229,6 @@ public class HUDManager {
     }
 
     public void updateEnergyBar() {
-
         if (energyBarImage == null) {
             Gdx.app.log("HUDManager", "Energy bar Image not initialized. Cannot update.");
             return;
@@ -249,7 +243,7 @@ public class HUDManager {
         }
     }
     public void updateTime(float delta) {
-        
+
         timeField.setText(App.getGameState().getGameTime().getTimeString());
         dateField.setText(App.getGameState().getGameTime().getDateToString());
 
@@ -285,6 +279,4 @@ public class HUDManager {
     public int getSelectedSlotIndex() {
         return selectedSlotIndex;
     }
-
-
 }

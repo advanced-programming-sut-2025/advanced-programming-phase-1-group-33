@@ -45,8 +45,8 @@ public class MainMenuView extends MenuBaseScreen {
         if(Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)){
             // make music enable/disable
             if(Gdx.input.getX() >= 28 && Gdx.input.getX() <= 66 && Gdx.input.getY() >= 37 && Gdx.input.getY() <= 72){
-                App.setIsMusicMuted(!App.isIsMusicMuted());
-                if(App.isIsMusicMuted()){
+                App.setIsMusicMuted(!App.isMusicMuted());
+                if(App.isMusicMuted()){
                     stopBackgroundMusic();
                     redLine.setVisible(true);
                 }
@@ -59,7 +59,7 @@ public class MainMenuView extends MenuBaseScreen {
     }
 
     private Table createTable(){
-        if(App.isIsMusicMuted())
+        if(App.isMusicMuted())
             redLine.setVisible(true);
 
         controller.handleIsThereALoggedInUser();

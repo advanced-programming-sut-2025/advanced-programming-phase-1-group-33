@@ -93,7 +93,7 @@ public abstract class MenuBaseScreen implements Screen {
     @Override public void resume() {}
 
     public void playBackgroundMusic() {
-        if(App.isIsMusicMuted()) {
+        if(App.isMusicMuted()) {
             return;
         }
 
