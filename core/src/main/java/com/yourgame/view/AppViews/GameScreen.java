@@ -2,6 +2,7 @@ package com.yourgame.view.AppViews;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
@@ -141,6 +142,30 @@ public class GameScreen extends GameBaseScreen {
         });
 
         batch = new SpriteBatch();
+
+        InputMultiplexer multiplexer = new InputMultiplexer();
+        multiplexer.addProcessor(HUDStage);
+        multiplexer.addProcessor(new InputAdapter() {
+            @Override
+            public boolean scrolled(float amountX, float amountY) {
+                int direction = (int) amountY;
+
+                int currentSlot = hudManager.getSelectedSlotIndex();
+
+                int newIndex = currentSlot + direction;
+
+                if (newIndex < 0) {
+                    newIndex = 11; // Wrap from 0 to 11
+                } else if (newIndex > 11) {
+                    newIndex = 0; // Wrap from 11 to 0
+                }
+
+                hudManager.selectSlot(newIndex);
+
+                return true;
+            }
+        });
+        Gdx.input.setInputProcessor(multiplexer);
     }
 
     @Override
