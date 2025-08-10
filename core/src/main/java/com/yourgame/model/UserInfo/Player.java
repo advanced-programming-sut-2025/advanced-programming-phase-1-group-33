@@ -6,6 +6,7 @@ import com.yourgame.model.Animals.AnimalType;
 import com.yourgame.model.App;
 import com.yourgame.model.Item.Inventory.BackpackType;
 import com.yourgame.model.Item.Inventory.TrashCan;
+import com.yourgame.model.Item.Stone;
 import com.yourgame.model.Item.Tools.Axe;
 import com.yourgame.model.Item.Tools.Hoe;
 import com.yourgame.model.Item.Tools.Pickaxe;

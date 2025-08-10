@@ -56,6 +56,10 @@ public class Backpack {
         inventory.addItem(tool, 1);
     }
 
+    public void addItem(Item item, int quantity) {
+        inventory.addItem(item, quantity);
+    }
+
     public ArrayList<Tool> getTools() {
         ArrayList<Tool> tools = new ArrayList<>();
         for (InventorySlot slot : inventory.getSlots()) {
