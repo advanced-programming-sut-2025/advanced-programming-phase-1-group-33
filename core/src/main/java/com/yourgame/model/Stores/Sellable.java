@@ -7,6 +7,7 @@ import com.yourgame.model.Animals.Fish;
 import com.yourgame.model.Animals.FishType;
 import com.yourgame.model.App;
 import com.yourgame.model.Farming.Crop;
+import com.yourgame.model.Farming.CropType;
 import com.yourgame.model.Farming.Fruit;
 import com.yourgame.model.Item.*;
 import com.yourgame.model.ManuFactor.ArtisanGood;

@@ -2,7 +2,7 @@ package com.yourgame.model.Npc;
 
 
 import com.yourgame.model.Farming.Crop;
-import com.yourgame.model.Item.CropType;
+import com.yourgame.model.Farming.CropType;
 import com.yourgame.model.ManuFactor.ArtisanGood;
 import com.yourgame.model.ManuFactor.ArtisanGoodType;
 import com.yourgame.model.ManuFactor.Ingredient;

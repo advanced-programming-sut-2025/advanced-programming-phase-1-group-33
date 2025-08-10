@@ -1,6 +1,5 @@
-package com.yourgame.model.Item;
+package com.yourgame.model.Farming;
 
-import com.yourgame.model.Farming.Seeds;
 import com.yourgame.model.ManuFactor.Ingredient;
 import com.yourgame.model.WeatherAndTime.Season;
 import java.util.ArrayList;

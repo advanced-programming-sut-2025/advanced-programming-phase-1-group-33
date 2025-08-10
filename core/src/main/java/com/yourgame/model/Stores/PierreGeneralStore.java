@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import com.yourgame.model.App;
 import com.yourgame.model.IO.Response;
 import com.yourgame.model.Item.Inventory.BackpackType;
-import com.yourgame.model.Item.CropType;
+import com.yourgame.model.Farming.CropType;
 import com.yourgame.model.Farming.Seeds;
 import com.yourgame.model.Farming.TreeSource;
 import com.yourgame.model.ManuFactor.ArtisanGood;

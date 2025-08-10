@@ -1,7 +1,6 @@
 package com.yourgame.model.Farming;
 
 import com.yourgame.model.App;
-import com.yourgame.model.Item.CropType;
 import com.yourgame.model.ManuFactor.Ingredient;
 import com.yourgame.model.Map.Placeable;
 import com.yourgame.model.Stores.Sellable;

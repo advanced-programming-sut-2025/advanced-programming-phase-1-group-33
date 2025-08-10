@@ -2,7 +2,7 @@ package com.yourgame.model.Recipes;
 
 import com.yourgame.model.Animals.AnimalGoodType;
 import com.yourgame.model.Animals.FishType;
-import com.yourgame.model.Item.CropType;
+import com.yourgame.model.Farming.CropType;
 import com.yourgame.model.Item.Food;
 import com.yourgame.model.Farming.ForagingCrop;
 import com.yourgame.model.Farming.Fruit;

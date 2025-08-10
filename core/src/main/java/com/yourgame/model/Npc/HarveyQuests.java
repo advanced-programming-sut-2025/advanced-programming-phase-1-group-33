@@ -4,7 +4,7 @@ package com.yourgame.model.Npc;
 import com.yourgame.model.Animals.Fish;
 import com.yourgame.model.Animals.FishType;
 import com.yourgame.model.Farming.Crop;
-import com.yourgame.model.Item.CropType;
+import com.yourgame.model.Farming.CropType;
 import com.yourgame.model.Item.Food;
 import com.yourgame.model.Farming.Fruit;
 import com.yourgame.model.ManuFactor.ArtisanGood;

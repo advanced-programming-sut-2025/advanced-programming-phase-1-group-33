@@ -1,7 +1,6 @@
 package com.yourgame.model.Farming;
 
 
-import com.yourgame.model.Item.CropType;
 import com.yourgame.model.WeatherAndTime.Season;
 
 import java.util.ArrayList;
