@@ -45,7 +45,15 @@ public class Crop extends Plant {
 
     @Override
     public List<Item> harvest() {
-        if (hasProduct()) return List.of(new CropItem(cropType));
+        if (hasProduct()) {
+            if (getCropType().isOneTime()) health = 0;
+            return List.of(new CropItem(cropType));
+        }
+        return List.of();
+    }
+
+    @Override
+    public List<Item> drop() {
         return List.of();
     }
 

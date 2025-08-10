@@ -33,6 +33,7 @@ import com.yourgame.model.Map.*;
 import com.yourgame.model.App;
 import com.yourgame.model.GameState;
 import com.yourgame.Graphics.GameAssetManager;
+import com.yourgame.model.Map.Elements.DroppedItem;
 import com.yourgame.model.UserInfo.Player;
 import com.yourgame.model.WeatherAndTime.Season;
 import com.yourgame.view.GameViews.JournalMenuView;
@@ -41,6 +42,7 @@ import com.yourgame.view.GameViews.MapMenuView;
 import com.yourgame.model.WeatherAndTime.Weather;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class GameScreen extends GameBaseScreen {
@@ -72,6 +74,10 @@ public class GameScreen extends GameBaseScreen {
     private static final int PLAYER_WIDTH = 16;
     private static final int PLAYER_HEIGHT = 32;
     private static final float SPEED = 150f;
+
+    private static final float ITEM_PULL_RADIUS = 48f; // The distance at which items start moving towards the player.
+    private static final float ITEM_PICKUP_RADIUS = 12f; // The distance at which items are collected.
+    private static final float ITEM_MOVE_SPEED = 180f;
 
     private SpriteBatch batch;
 
@@ -174,6 +180,7 @@ public class GameScreen extends GameBaseScreen {
             handleInput(delta);
             checkForTeleport();
             handleHudUpdates(delta);
+            updateDroppedItems(delta);
 
             // Update animation timer
             stateTime += delta;
@@ -201,6 +208,16 @@ public class GameScreen extends GameBaseScreen {
             if (texture != null) {
                 java.awt.Rectangle bounds = element.getPixelBounds();
                 batch.draw(texture, bounds.x, bounds.y, bounds.width, bounds.height);
+            }
+
+            if (element.getHealth() <= 0) currentMap.removeElement(element);
+        }
+
+        // Render dropped items
+        for (DroppedItem droppedItem : currentMap.getDroppedItems()) {
+            TextureRegion texture = droppedItem.getTexture(assetManager, gameSeason);
+            if (texture != null) {
+                batch.draw(texture, droppedItem.getPosition().x, droppedItem.getPosition().y);
             }
         }
 
@@ -252,6 +269,38 @@ public class GameScreen extends GameBaseScreen {
         batch.dispose();
     }
 
+    private void updateDroppedItems(float delta) {
+        // Use an iterator to safely remove items from the list while looping through it
+        Iterator<DroppedItem> iterator = currentMap.getDroppedItems().iterator();
+        while (iterator.hasNext()) {
+            DroppedItem droppedItem = iterator.next();
+
+            float distance = playerPosition.dst(droppedItem.getPosition());
+
+            // 1. Check for immediate pickup
+            if (distance < ITEM_PICKUP_RADIUS) {
+                // Try to add the item to the player's inventory
+                if (player.getBackpack().getInventory().addItem(droppedItem.getItem(), 1)) {
+                    // If adding was successful, remove the item from the map
+                    iterator.remove();
+                    playGameSFX("popUp");
+                    continue;
+                }
+            }
+            // 2. Check for magnetic pull
+            else if (distance < ITEM_PULL_RADIUS) {
+                droppedItem.moveTo(playerPosition, ITEM_MOVE_SPEED);
+            }
+            // 3. If the item is out of range, ensure it's not moving
+            else {
+                droppedItem.stopMovement();
+            }
+
+            // Update the item's position based on its velocity
+            droppedItem.update(delta);
+        }
+    }
+
     // Methods for music control, similar to MenuBaseScreen
     public void playBackgroundMusic() {
         if (App.isMusicMuted()) {
@@ -264,14 +313,6 @@ public class GameScreen extends GameBaseScreen {
 
     public void stopBackgroundMusic() {
         backgroundMusic.stop();
-    }
-
-    // Optional: if you want SFX in GameScreen
-    public void playGameSFX(String string) {
-        switch (string) {
-            case "click" -> clickSound.play();
-            // Add other game SFX cases here
-        }
     }
 
     /**

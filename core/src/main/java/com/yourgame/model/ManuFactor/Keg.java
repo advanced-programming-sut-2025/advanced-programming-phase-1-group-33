@@ -72,24 +72,24 @@ public class Keg extends ArtisanMachine {
                 }
                 return new Response(false, "You don't have enough Ingredients!");
             }
-            case "Juice", "juice" -> {
-                for (Ingredient ingredient : player.getBackpack().getIngredientQuantity().keySet()) {
-                    if (ingredient instanceof Crop crop) {
-
-                        if (player.getBackpack().getIngredientQuantity().getOrDefault(ingredient, 0) >= 1) {
-
-                            player.getBackpack().removeIngredients(ingredient, 1);
-
-                            producingGood = new ArtisanGood(ArtisanGoodType.Juice,
-                                    2 * crop.getType().getEnergy(),
-                                    (int) (2.25 * crop.getType().getBaseSellPrice()));
-                            return new Response(true, "Your product is being made.Please wait.");
-                        }
-                        return new Response(false, "You don't have enough Ingredients!");
-                    }
-                }
-                return new Response(false, "You don't have enough Ingredients!");
-            }
+//            case "Juice", "juice" -> {
+//                for (Ingredient ingredient : player.getBackpack().getIngredientQuantity().keySet()) {
+//                    if (ingredient instanceof Crop crop) {
+//
+//                        if (player.getBackpack().getIngredientQuantity().getOrDefault(ingredient, 0) >= 1) {
+//
+//                            player.getBackpack().removeIngredients(ingredient, 1);
+//
+//                            producingGood = new ArtisanGood(ArtisanGoodType.Juice,
+//                                    2 * crop.getType().getEnergy(),
+//                                    (int) (2.25 * crop.getType().getBaseSellPrice()));
+//                            return new Response(true, "Your product is being made.Please wait.");
+//                        }
+//                        return new Response(false, "You don't have enough Ingredients!");
+//                    }
+//                }
+//                return new Response(false, "You don't have enough Ingredients!");
+//            }
             case "Mead", "mead" -> {
                 for (Ingredient ingredient : player.getBackpack().getIngredientQuantity().keySet()) {
                     if (ingredient instanceof ArtisanGood artisanGood && artisanGood.getType().equals(ArtisanGoodType.Honey)) {

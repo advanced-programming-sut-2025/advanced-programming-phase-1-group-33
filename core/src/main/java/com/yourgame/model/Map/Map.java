@@ -14,6 +14,8 @@ import com.yourgame.model.Farming.ForagingCrop;
 import com.yourgame.model.Farming.ForagingCropElement;
 import com.yourgame.model.Farming.Tree;
 import com.yourgame.model.Farming.TreeType;
+import com.yourgame.model.Item.Item;
+import com.yourgame.model.Map.Elements.DroppedItem;
 import com.yourgame.model.Map.Elements.Rock;
 import com.yourgame.model.Map.Elements.WoodElement;
 import com.yourgame.model.WeatherAndTime.Season;
@@ -48,6 +50,7 @@ public class Map {
     protected final MapObjects teleporters;
     protected final Tile[][] tileStates; // runtime data
     protected final List<MapElement> elements;
+    private final List<DroppedItem> droppedItems;
 
     public Map(String name, String pathToTmx) {
         this.name = name;
@@ -62,6 +65,7 @@ public class Map {
 
         this.tileStates = new Tile[mapWidth][mapHeight];
         this.elements = new ArrayList<>();
+        this.droppedItems = new ArrayList<>();
 
         initTileData();
     }
@@ -205,6 +209,10 @@ public class Map {
         return elements;
     }
 
+    public List<DroppedItem> getDroppedItems() {
+        return droppedItems;
+    }
+
     public boolean addElement(MapElement element) {
         if (!isElementPlaceable(element)) return false;
         elements.add(element);
@@ -296,5 +304,24 @@ public class Map {
             ForagingCropElement foraging = new ForagingCropElement(foragingCrops.get(index), 0, 0);
             spawnObject(foraging, 1);
         }
+    }
+
+    /**
+     * Creates a new DroppedItem entity and adds it to the map.
+     * @param item The item that was dropped.
+     * @param worldX The X coordinate where the item should appear.
+     * @param worldY The Y coordinate where the item should appear.
+     */
+    public void spawnDroppedItem(Item item, float worldX, float worldY) {
+        // Give the drop a slight random offset for a more natural look
+        float offsetX = (rand.nextFloat() - 0.5f) * 8f; // -4 to +4 pixels
+        float offsetY = (rand.nextFloat() - 0.5f) * 8f;
+
+        DroppedItem droppedItem = new DroppedItem(item, worldX + offsetX, worldY + offsetY);
+        droppedItems.add(droppedItem);
+    }
+
+    public void removeDroppedItem(DroppedItem item) {
+        droppedItems.remove(item);
     }
 }

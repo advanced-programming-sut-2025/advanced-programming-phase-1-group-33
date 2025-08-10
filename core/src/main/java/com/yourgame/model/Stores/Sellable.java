@@ -35,16 +35,6 @@ public interface Sellable {
             return null;
         }
 
-        CropType cropType = CropType.getCropTypeByName(name);
-        if (cropType != null) {
-            for (Ingredient ingredient : player.getBackpack().getIngredientQuantity().keySet()) {
-                if (ingredient instanceof Crop crop && crop.getType().equals(cropType)) {
-                    return crop;
-                }
-            }
-            return null;
-        }
-
         FishType fishType = FishType.getFishTypeByName(name);
         if (fishType != null) {
             for (Ingredient ingredient : player.getBackpack().getIngredientQuantity().keySet()) {

@@ -10,6 +10,7 @@ import com.yourgame.model.WeatherAndTime.Season;
 import com.yourgame.model.WeatherAndTime.TimeSystem;
 
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Tree extends Plant {
@@ -102,6 +103,13 @@ public class Tree extends Plant {
     public List<Item> harvest() {
         if (hasProduct()) return List.of(new Fruit.FruitItem(treeType.getFruit()));
         return List.of();
+    }
+
+    @Override
+    public List<Item> drop() {
+        List<Item> items = new ArrayList<>();
+        for (int i = 0; i < 5; i++) items.add(new Wood.WoodItem());
+        return items;
     }
 
     @Override

@@ -47,9 +47,4 @@ public abstract class Plant extends MapElement implements TimeObserver {
     public boolean hasProduct() {
         return hasProduct;
     }
-
-    @Override
-    public List<Item> drop() {
-        return List.of(new Wood.WoodItem());
-    }
 }

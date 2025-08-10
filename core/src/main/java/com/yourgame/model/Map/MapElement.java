@@ -10,7 +10,7 @@ import java.util.List;
 
 public abstract class MapElement {
     public enum ElementType {
-        TREE, ROCK, WOOD, FORAGING, CROP, CRAFTING, ANIMAL_PRODUCT
+        TREE, ROCK, WOOD, FORAGING, CROP, CRAFTING, ANIMAL_PRODUCT, DROPPED_ITEM
     }
 
     protected final ElementType type;
