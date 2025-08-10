@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import com.yourgame.model.App;
 import com.yourgame.model.IO.Response;
 import com.yourgame.model.Item.Food;
-import com.yourgame.model.Item.Seeds;
+import com.yourgame.model.Farming.Seeds;
 import com.yourgame.model.UserInfo.Coin;
 import com.yourgame.model.WeatherAndTime.Season;
 import com.yourgame.model.enums.SymbolType;

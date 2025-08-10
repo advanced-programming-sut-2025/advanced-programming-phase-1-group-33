@@ -1,8 +1,9 @@
-package com.yourgame.model.Item;
+package com.yourgame.model.Farming;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.yourgame.Graphics.GameAssetManager;
+import com.yourgame.model.Item.Item;
 import com.yourgame.model.Map.MapElement;
 import com.yourgame.model.Map.Tile;
 import com.yourgame.model.App;
@@ -44,7 +45,7 @@ public class Tree extends MapElement implements Growable {
             numberOfDaysCanBeAliveWithoutWater = 2;
         }
     }
-    
+
 
     public TreeType getTreeType() {
         return type;

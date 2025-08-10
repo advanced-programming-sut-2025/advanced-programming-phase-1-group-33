@@ -3,7 +3,6 @@ package com.yourgame.model.UserInfo;
 import java.util.*;
 
 import com.yourgame.model.Animals.AnimalType;
-import com.yourgame.model.IO.Response;
 import com.yourgame.model.App;
 import com.yourgame.model.Item.Inventory.BackpackType;
 import com.yourgame.model.Item.Inventory.TrashCan;
@@ -13,7 +12,7 @@ import com.yourgame.model.Item.Tools.Pickaxe;
 import com.yourgame.model.Item.Tools.Scythe;
 import com.yourgame.model.Item.Tools.Tool;
 import com.yourgame.model.Item.Tools.WateringCan;
-import com.yourgame.model.Item.Wood;
+import com.yourgame.model.Farming.Wood;
 import com.yourgame.model.Item.Inventory.Backpack;
 import com.yourgame.model.Map.Position;
 import com.yourgame.model.Npc.NPCType;
@@ -136,7 +135,7 @@ public class Player {
 
     public void consumeEnergy(int energy) {
         if (isInfinite) {
-            return ; 
+            return ;
         }
         this.energy -= energy;
 

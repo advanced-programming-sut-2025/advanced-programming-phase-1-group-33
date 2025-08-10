@@ -3,10 +3,10 @@ package com.yourgame.model.Npc;
 
 import com.yourgame.model.Animals.Fish;
 import com.yourgame.model.Animals.FishType;
-import com.yourgame.model.Item.Crop;
+import com.yourgame.model.Farming.Crop;
 import com.yourgame.model.Item.CropType;
 import com.yourgame.model.Item.Food;
-import com.yourgame.model.Item.Fruit;
+import com.yourgame.model.Farming.Fruit;
 import com.yourgame.model.ManuFactor.ArtisanGood;
 import com.yourgame.model.ManuFactor.ArtisanGoodType;
 import com.yourgame.model.ManuFactor.Ingredient;
@@ -15,7 +15,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import com.yourgame.model.App;
-import com.yourgame.model.Map.NpcHome;
 import com.yourgame.model.UserInfo.Coin;
 
 public class HarveyQuests {

@@ -1,7 +1,8 @@
-package com.yourgame.model.Item;
+package com.yourgame.model.Farming;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.yourgame.Graphics.GameAssetManager;
+import com.yourgame.model.Item.Item;
 import com.yourgame.model.Map.MapElement;
 import com.yourgame.model.Map.Tile;
 import com.yourgame.model.WeatherAndTime.Season;

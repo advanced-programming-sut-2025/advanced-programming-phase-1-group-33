@@ -3,15 +3,9 @@ package com.yourgame.model;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import com.yourgame.model.Animals.Animal;
-import com.yourgame.model.Item.Crop;
-import com.yourgame.model.Item.Growable;
-import com.yourgame.model.Item.Tree;
-import com.yourgame.model.Map.Elements.ShippingBin;
 import com.yourgame.model.Map.Farm;
 import com.yourgame.model.Map.Map;
 import com.yourgame.model.UserInfo.GiftBetweenPlayers;
@@ -20,13 +14,12 @@ import com.yourgame.model.UserInfo.RelationNetwork;
 import com.yourgame.model.UserInfo.PlayersRelation;
 import com.yourgame.model.UserInfo.User;
 import com.yourgame.model.WeatherAndTime.TimeSystem;
-import com.yourgame.model.enums.SymbolType;
 
 public class GameState {
     private final ArrayList<Player> players = new ArrayList<>();
     private final ArrayList<Farm> farms = new ArrayList<>();
     private TimeSystem timeSystem;
-    
+
     private Map map;
 
     private Player currentPlayer;

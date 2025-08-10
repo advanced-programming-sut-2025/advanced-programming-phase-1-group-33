@@ -1,6 +1,7 @@
-package com.yourgame.model.Item;
+package com.yourgame.model.Farming;
 
 import com.yourgame.model.App;
+import com.yourgame.model.Item.CropType;
 import com.yourgame.model.ManuFactor.Ingredient;
 import com.yourgame.model.Map.Placeable;
 import com.yourgame.model.Stores.Sellable;
@@ -9,7 +10,7 @@ import com.yourgame.model.enums.SymbolType;
 
 import java.awt.*;
 
-public class Crop implements Ingredient, Growable , Placeable, Sellable {
+public class Crop implements Ingredient, Growable, Placeable, Sellable {
     private final CropType type;
     private int levelOfGrowth;
     private TimeSystem lastGrowthTime;

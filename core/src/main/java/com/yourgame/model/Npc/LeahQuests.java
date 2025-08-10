@@ -4,11 +4,10 @@ package com.yourgame.model.Npc;
 import com.yourgame.model.Animals.Fish;
 import com.yourgame.model.Animals.FishType;
 import com.yourgame.model.App;
-import com.yourgame.model.Item.Wood;
+import com.yourgame.model.Farming.Wood;
 import com.yourgame.model.ManuFactor.ArtisanGood;
 import com.yourgame.model.ManuFactor.ArtisanGoodType;
 import com.yourgame.model.ManuFactor.Ingredient;
-import com.yourgame.model.Map.NpcHome;
 import com.yourgame.model.Recipes.CookingRecipe;
 import com.yourgame.model.UserInfo.Coin;
 

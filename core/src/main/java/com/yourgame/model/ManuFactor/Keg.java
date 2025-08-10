@@ -2,9 +2,9 @@ package com.yourgame.model.ManuFactor;
 
 
 import com.yourgame.model.IO.Response;
-import com.yourgame.model.Item.Crop;
+import com.yourgame.model.Farming.Crop;
 import com.yourgame.model.Item.CropType;
-import com.yourgame.model.Item.Fruit;
+import com.yourgame.model.Farming.Fruit;
 import com.yourgame.model.UserInfo.Player;
 import com.yourgame.model.WeatherAndTime.TimeFrame;
 
