@@ -1,140 +1,85 @@
 package com.yourgame.model.Farming;
 
-import com.yourgame.model.App;
-import com.yourgame.model.ManuFactor.Ingredient;
-import com.yourgame.model.Map.Placeable;
-import com.yourgame.model.Stores.Sellable;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.yourgame.Graphics.GameAssetManager;
+import com.yourgame.model.Item.Item;
+import com.yourgame.model.Map.MapElement;
+import com.yourgame.model.WeatherAndTime.Season;
 import com.yourgame.model.WeatherAndTime.TimeSystem;
-import com.yourgame.model.enums.SymbolType;
 
 import java.awt.*;
+import java.util.List;
 
-public class Crop implements Ingredient, Growable, Placeable, Sellable {
-    private final CropType type;
-    private int levelOfGrowth;
-    private TimeSystem lastGrowthTime;
-    private TimeSystem lastHarvestTime;
-    private TimeSystem lastWaterTime;
-    private final Fertilizer fertilizer;
+import static com.yourgame.model.Map.Tile.TILE_SIZE;
+
+public class Crop extends Plant {
+    private final CropType cropType;
     private final int numberOfDaysCanBeAliveWithoutWater;
-    private final Rectangle bounds;
 
-
-
-    public Crop(CropType type, TimeSystem timeOfPlanting, Fertilizer fertilizer , int x ,  int y) {
-        this.type = type;
-        this.lastGrowthTime = timeOfPlanting.clone();
-        this.lastWaterTime = timeOfPlanting.clone();
-        this.fertilizer = fertilizer;
-        if (fertilizer == null) {
-            levelOfGrowth = 0;
+    public Crop(CropType cropType, Fertilizer fertilizer, int worldX, int worldY) {
+        super(ElementType.CROP, new Rectangle(worldX, worldY, TILE_SIZE, TILE_SIZE), 1, fertilizer);
+        this.cropType = cropType;
+        if (fertilizer == Fertilizer.WaterFertilizer) {
+            numberOfDaysCanBeAliveWithoutWater = 3;
+        } else {
             numberOfDaysCanBeAliveWithoutWater = 2;
         }
-        else {
-            if (fertilizer.equals(Fertilizer.WaterFertilizer)) {
-                levelOfGrowth = 0;
-                numberOfDaysCanBeAliveWithoutWater = 3;
-            } else {
-                levelOfGrowth = 1;
-                numberOfDaysCanBeAliveWithoutWater = 2;
-            }
-        }
-        this.bounds = new Rectangle(x, y,1, 1);
     }
 
-    public int calculatePrice() {
-        return 0;
-    }
-
-    public CropType getType() {
-        return type;
-    }
-
-    public void grow(TimeSystem today) {
-        if (isComplete())
-            return;
-
-        int timeForGrow = type.getTimeForGrow(levelOfGrowth);
-
-        if (lastGrowthTime.getDay() + timeForGrow == today.getDay()) {
-            levelOfGrowth++;
-            lastGrowthTime = today.clone();
-        }
-
-    }
-
-    public boolean canGrowAgain() {
-        return !type.isOneTime();
-    }
-
-    public boolean harvest() {
-        if (!isComplete() || type.isOneTime())
-            return false;
-
-        TimeSystem today = App.getGameState().getGameTime().clone();
-        int timeForGrow = type.getRegrowthTime();
-
-        if (lastHarvestTime == null || lastHarvestTime.getDay() + timeForGrow <= today.getDay()) {
-            lastHarvestTime = today;
-            return true;
-        }
-        return false;
-    }
-
-    public boolean isComplete() {
-        return levelOfGrowth >= type.getNumberOfStages();
-    }
-
-    public void watering() {
-        lastWaterTime = App.getGameState().getGameTime().clone();
-    }
-
-    public boolean canBeAlive(TimeSystem today) {
-        return today.getDay() <= lastWaterTime.getDay() + numberOfDaysCanBeAliveWithoutWater;
-    }
-
-    public int getNumberOfDaysToComplete() {
-        int passedDays = 0;
-        for (int i = 0; i < levelOfGrowth; i++) {
-            passedDays += type.getTimeForGrow(i);
-        }
-        passedDays += App.getGameState().getGameTime().getDay() - lastGrowthTime.getDay();
-        return type.getTotalHarvestTime() - passedDays;
-    }
-
-    public int getCurrentStage() {
-        return levelOfGrowth;
-    }
-
-    public boolean hasWateredToday() {
-        return App.getGameState().getGameTime().getDay() == lastWaterTime.getDay();
-    }
-
-    public boolean hasFertilized() {
-        return fertilizer != null;
-    }
-
-    public Fertilizer getFertilizer() {
-        return fertilizer;
+    public CropType getCropType() {
+        return cropType;
     }
 
     public String getNameOfProduct() {
-        return type.getName();
-    }
-
-    public String getName() {
-        return type.name();
-    }
-
-    public Rectangle getBounds() {
-        return bounds;
-    }
-
-    public SymbolType getSymbol() {
-        return SymbolType.Crop;
+        return cropType.getName();
     }
 
     public int getSellPrice() {
-        return type.getBaseSellPrice();
+        return cropType.getBaseSellPrice();
+    }
+
+    @Override
+    public boolean isMature() {
+        return currentStage >= cropType.getNumberOfStages();
+    }
+
+    @Override
+    public List<Item> harvest() {
+        if (hasProduct()) return List.of(new CropItem(cropType));
+        return List.of();
+    }
+
+    @Override
+    public TextureRegion getTexture(GameAssetManager assetManager, Season currentSeason) {
+        return null;
+    }
+
+    @Override
+    public MapElement clone(int tileX, int tileY) {
+        Crop crop = new Crop(cropType, fertilizer, tileX * TILE_SIZE, tileY * TILE_SIZE);
+        crop.daysSinceLastHarvest = daysSinceLastHarvest;
+        crop.daysSinceLastStage = daysSinceLastStage;
+        crop.currentStage = currentStage;
+        crop.wateredToday = wateredToday;
+        return crop;
+    }
+
+    @Override
+    public void onTimeChanged(TimeSystem timeSystem) {
+        if (isMature()) {
+            if (cropType.isOneTime() || hasProduct) return;
+            daysSinceLastHarvest++;
+            if (daysSinceLastHarvest >= cropType.getRegrowthTime()) {
+                hasProduct = true;
+                daysSinceLastHarvest = 0;
+            }
+        } else if (wateredToday) {
+            daysSinceLastStage++;
+            if (daysSinceLastStage >= cropType.getStages().get(currentStage)) {
+                currentStage++;
+                daysSinceLastStage = 0;
+            }
+        }
+        wateredToday = false;
     }
 }

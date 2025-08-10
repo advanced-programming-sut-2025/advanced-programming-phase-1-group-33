@@ -6,7 +6,6 @@ import com.yourgame.Graphics.GameAssetManager;
 import com.yourgame.model.Item.Item;
 import com.yourgame.model.Map.MapElement;
 import com.yourgame.model.Map.Tile;
-import com.yourgame.model.App;
 import com.yourgame.model.WeatherAndTime.Season;
 import com.yourgame.model.WeatherAndTime.TimeSystem;
 
@@ -14,23 +13,14 @@ import java.awt.*;
 import java.util.List;
 
 public class Tree extends Plant {
-    private final TreeType type;
-    private TimeSystem lastHarvestTime;
+    private final TreeType treeType;
     private final int numberOfDaysCanBeAliveWithoutWater;
-    private boolean hasFruit;
 
-    public Tree(TreeType type, Fertilizer fertilizer, int worldX, int worldY) {
+    public Tree(TreeType treeType, Fertilizer fertilizer, int worldX, int worldY) {
         super(ElementType.TREE, new Rectangle(worldX, worldY, 48, 80), 6, fertilizer);
-        this.type = type;
-        this.hasFruit = false;
+        this.treeType = treeType;
 
-        if (fertilizer == Fertilizer.GrowthFertilizer) {
-            currentStage = 1;
-        } else {
-            currentStage = 0;
-        }
-
-        if (type == TreeType.OakTree || type == TreeType.MapleTree || type == TreeType.PineTree) {
+        if (treeType == TreeType.OakTree || treeType == TreeType.MapleTree || treeType == TreeType.PineTree) {
             numberOfDaysCanBeAliveWithoutWater = Integer.MAX_VALUE;
         } else if (fertilizer == Fertilizer.WaterFertilizer) {
             numberOfDaysCanBeAliveWithoutWater = 3;
@@ -40,32 +30,28 @@ public class Tree extends Plant {
     }
 
     public TreeType getTreeType() {
-        return type;
+        return treeType;
     }
 
     public void setMature() {
-        currentStage = type.getStages().size();
-    }
-
-    public boolean hasFruit() {
-        return hasFruit;
+        currentStage = treeType.getStages().size();
     }
 
     @Override
     public boolean isMature() {
-        return currentStage >= type.getStages().size();
+        return currentStage >= treeType.getStages().size();
     }
 
     @Override
     public TextureRegion getTexture(GameAssetManager assetManager, Season currentSeason) {
-        String treeName = type.name().replace("Tree", ""); // "AppleTree" -> "Apple"
+        String treeName = treeType.name().replace("Tree", ""); // "AppleTree" -> "Apple"
         String basePath = "Game/Tree/" + treeName + "/" + treeName; // "Tree/Apple/Apple"
         String path;
 
         // Stage 5 is the final, mature stage with seasonal variations
         if (isMature()) {
             // Check if it should have fruit
-            if (hasFruit()) {
+            if (hasProduct()) {
                 path = basePath + "_Stage_5_Fruit.png";
                 Texture texture = assetManager.getTexture(path);
                 return new TextureRegion(texture);
@@ -104,29 +90,32 @@ public class Tree extends Plant {
     @Override
     public MapElement clone(int tileX, int tileY) {
         int scale = Tile.TILE_SIZE;
-        Tree tree = new Tree(type, fertilizer, tileX * scale, tileY * scale);
+        Tree tree = new Tree(treeType, fertilizer, tileX * scale, tileY * scale);
+        tree.daysSinceLastHarvest = daysSinceLastHarvest;
+        tree.daysSinceLastStage = daysSinceLastStage;
         tree.currentStage = currentStage;
-        tree.lastHarvestTime = lastHarvestTime;
+        tree.wateredToday = wateredToday;
         return tree;
     }
 
     @Override
-    public List<Item> drop() {
-        if (health <= 0) return List.of(new Wood.WoodItem());
-        else if (hasFruit) return List.of(type.getFruit().getItem());
+    public List<Item> harvest() {
+        if (hasProduct()) return List.of(new Fruit.FruitItem(treeType.getFruit()));
         return List.of();
     }
 
     @Override
     public void onTimeChanged(TimeSystem timeSystem) {
         if (isMature()) {
+            if (hasProduct) return;
             daysSinceLastHarvest++;
-            if (daysSinceLastHarvest >= type.getHarvestCycle()) {
-                hasFruit = true;
+            if (daysSinceLastHarvest >= treeType.getHarvestCycle()) {
+                hasProduct = true;
+                daysSinceLastHarvest = 0;
             }
         } else if (wateredToday) {
             daysSinceLastStage++;
-            if (daysSinceLastStage >= type.getStages().get(currentStage)) {
+            if (daysSinceLastStage >= treeType.getStages().get(currentStage)) {
                 currentStage++;
                 daysSinceLastStage = 0;
             }

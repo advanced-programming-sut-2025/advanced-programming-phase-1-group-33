@@ -36,7 +36,7 @@ public abstract class MapElement {
     public abstract TextureRegion getTexture(GameAssetManager assetManager, Season currentSeason);
     public abstract MapElement clone(int tileX, int tileY);
     /**
-     * @return The items that the element should drop on destruction, or interaction.
+     * @return The items that the element should drop on destruction.
      * */
     public abstract List<Item> drop();
 
