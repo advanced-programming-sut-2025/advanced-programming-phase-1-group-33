@@ -4,6 +4,7 @@ import java.util.*;
 
 import com.yourgame.model.Animals.AnimalType;
 import com.yourgame.model.App;
+import com.yourgame.model.Farming.Seeds;
 import com.yourgame.model.Item.Inventory.BackpackType;
 import com.yourgame.model.Item.Inventory.TrashCan;
 import com.yourgame.model.Item.Stone;
@@ -73,6 +74,7 @@ public class Player {
         this.backpack.addTool(new Axe());
         this.backpack.addTool(new WateringCan());
         this.backpack.addTool(new Scythe());
+        this.backpack.addItem(new Seeds.SeedItem(Seeds.Amaranth_Seeds), 5);
         this.backpack.getIngredientQuantity().put(new Coin(), 20);
         this.backpack.getIngredientQuantity().put(new Wood(), 100);
         this.relationWithAbigail = new RelationWithNPC(NPCType.Abigail);

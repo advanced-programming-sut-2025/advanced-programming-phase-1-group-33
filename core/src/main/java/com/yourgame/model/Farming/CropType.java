@@ -56,7 +56,7 @@ public enum CropType implements Ingredient {
             new ArrayList<>(Arrays.asList(1, 1, 2, 2)),
             6, true, 0, 30, true, 45,
             new ArrayList<>(List.of(Season.Spring)), false),
-    UnMilledRice(Seeds.Rice_Shoot,
+    UnmilledRice(Seeds.Rice_Shoot,
             new ArrayList<>(Arrays.asList(1, 2, 2, 3)),
             8, true, 0, 30, true, 3,
             new ArrayList<>(List.of(Season.Spring)), false),

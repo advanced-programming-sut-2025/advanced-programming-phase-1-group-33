@@ -1,11 +1,14 @@
 package com.yourgame.model.Map;
 
+import com.yourgame.model.Farming.Fertilizer;
+
 public class Tile {
     public static final int TILE_SIZE = 16;
 
     public enum DirtState {NON_FARMABLE, NORMAL, PLOWED, WATERED}
 
     private DirtState dirtState;
+    private Fertilizer fertilizer;
     private boolean walkable;
     private boolean spawnable;
     private Teleport teleport; // Null for non-teleportable tiles
@@ -14,6 +17,7 @@ public class Tile {
 
     public Tile(int tileX, int tileY) {
         dirtState = DirtState.NON_FARMABLE;
+        fertilizer = null;
         walkable = true;
         spawnable = false;
         teleport = null;
@@ -28,6 +32,14 @@ public class Tile {
 
     public void setDirtState(DirtState dirtState) {
         this.dirtState = dirtState;
+    }
+
+    public Fertilizer getFertilizer() {
+        return fertilizer;
+    }
+
+    public void setFertilizer(Fertilizer fertilizer) {
+        this.fertilizer = fertilizer;
     }
 
     public boolean isWatered() {

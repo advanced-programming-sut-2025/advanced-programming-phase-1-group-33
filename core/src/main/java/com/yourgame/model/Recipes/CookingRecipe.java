@@ -22,7 +22,7 @@ public enum CookingRecipe implements Ingredient {
     Spaghetti(new HashMap<>(Map.of(CropType.Wheat, 1, CropType.Tomato, 1))),
     Pizza(new HashMap<>(Map.of(CropType.Wheat, 1, CropType.Tomato, 1, new ArtisanGood(ArtisanGoodType.CheeseByMilk), 1))),
     Tortilla(new HashMap<>(Map.of(CropType.Corn, 1))),
-    MakiRoll(new HashMap<>(Map.of(FishType.Salmon, 1, CropType.UnMilledRice, 1))),
+    MakiRoll(new HashMap<>(Map.of(FishType.Salmon, 1, CropType.UnmilledRice, 1))),
     TripleShotEspresso(new HashMap<>(Map.of(new ArtisanGood(ArtisanGoodType.Coffee), 3))),
     Cookie(new HashMap<>(Map.of(CropType.Wheat, 1, AnimalGoodType.Egg, 1))),
     HashBrowns(new HashMap<>(Map.of(CropType.Potato, 1, new ArtisanGood(ArtisanGoodType.Oil), 1))),

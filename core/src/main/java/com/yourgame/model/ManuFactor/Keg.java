@@ -42,7 +42,7 @@ public class Keg extends ArtisanMachine {
             }
             case "Vinegar", "vinegar" -> {
                 for (Ingredient ingredient : player.getBackpack().getIngredientQuantity().keySet()) {
-                    if (ingredient instanceof Crop crop && crop.getType().equals(CropType.UnMilledRice)) {
+                    if (ingredient instanceof Crop crop && crop.getType().equals(CropType.UnmilledRice)) {
 
                         if (player.getBackpack().getIngredientQuantity().getOrDefault(ingredient, 0) >= 1) {
 
