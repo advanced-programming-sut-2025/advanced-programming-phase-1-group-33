@@ -2,7 +2,6 @@ package com.yourgame.Graphics.GameAssets;
 
 // Assuming these imports are already present or will be added
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
@@ -22,13 +21,9 @@ import com.yourgame.Graphics.MenuAssetManager;
 import com.yourgame.model.Item.Inventory.Inventory;
 import com.yourgame.model.Item.Inventory.InventorySlot;
 import com.yourgame.model.Item.Item;
-import com.yourgame.Graphics.MenuAssetManager;
 import com.yourgame.model.App;
-import com.yourgame.model.Item.Tools.Tool;
 import com.yourgame.model.UserInfo.Player;
-import com.yourgame.model.WeatherAndTime.TimeSystem;
-import com.yourgame.observers.TimeObserver;
-import com.yourgame.model.UserInfo.Player;
+import com.yourgame.model.WeatherAndTime.TimeObserver;
 
 import java.util.ArrayList;
 

@@ -4,11 +4,7 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.List;
 
-import com.yourgame.model.App;
-import com.yourgame.observers.TimeObserver;
-
 public class TimeSystem {
-
     private final List<TimeObserver> observers = new ArrayList<>();
 
     private Season season;
@@ -45,7 +41,6 @@ public class TimeSystem {
     }
 
     public void advanceMinutes(int gameMinutes) {
-
         this.minutes += gameMinutes;
         if (this.minutes >= 60) {
             this.hour += this.minutes / 60;
@@ -63,7 +58,6 @@ public class TimeSystem {
             this.hour = 6;
             this.minutes = 0;
         }
-        notifyObservers();
     }
 
     public void advanceDay(int d) {
@@ -76,12 +70,12 @@ public class TimeSystem {
             DaysOfTheWeek[] days = DaysOfTheWeek.values();
             int currentIndex = this.dayOfWeek.ordinal();
             this.dayOfWeek = days[(currentIndex + 1) % days.length];
+
+            this.weather = this.nextDayWeather;
+            this.nextDayWeather = createNextDayWeather();
+
+            notifyObservers();
         }
-
-        this.weather = this.nextDayWeather;
-        this.nextDayWeather = createNextDayWeather();
-
-        notifyObservers();
     }
 
     private void advanceSeason() {
