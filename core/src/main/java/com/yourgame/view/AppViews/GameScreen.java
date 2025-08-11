@@ -142,6 +142,7 @@ public class GameScreen extends GameBaseScreen {
     @Override
     public void render(float delta) {
         if (!paused) {
+            controller.updateSelectedTile(camera);
             handleInput(delta);
             checkForTeleport();
             handleHudUpdates(delta);

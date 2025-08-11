@@ -1,8 +1,11 @@
 package com.yourgame.controller.GameController;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Vector3;
 import com.yourgame.Graphics.GameAssetManager;
 import com.yourgame.Graphics.MenuAssetManager;
 import com.yourgame.model.App;
@@ -33,6 +36,7 @@ public class GameController {
     private MapManager mapManager;
     private Player player;
     private Map currentMap;
+    private Tile selectedTile;
 
     private Sound popUpSound;
 
@@ -41,6 +45,7 @@ public class GameController {
         mapManager = new MapManager(List.of(player));
         currentMap = mapManager.getPlayersCurrentMap(player);
         player.playerPosition = currentMap.getSpawnPoint();
+        selectedTile = null;
 
         popUpSound = MenuAssetManager.getInstance().getSounds("popUp");
     }
@@ -120,6 +125,7 @@ public class GameController {
         }
     }
 
+    @Deprecated
     public Tile getTileInFront() {
         // Calculate the center of the player's collision box
         float playerCenterX = player.playerPosition.x + (PLAYER_WIDTH / 2f);
@@ -163,15 +169,15 @@ public class GameController {
      * This method is called when the player hits the left mouse button.
      * */
     public void handleInteraction() {
-        Tile tile = getTileInFront();
+        if (selectedTile == null) return;
 
         // Harvest Tree or Crop
-        MapElement element = tile.getElement();
+        MapElement element = selectedTile.getElement();
         if (element instanceof Plant plant && plant.hasProduct()) {
             List<Item> harvestedItems = plant.harvest();
             if (harvestedItems != null && !harvestedItems.isEmpty()) {
                 for (Item item : harvestedItems) {
-                    currentMap.spawnDroppedItem(item, tile.tileX * TILE_SIZE, tile.tileY * TILE_SIZE);
+                    currentMap.spawnDroppedItem(item, selectedTile.tileX * TILE_SIZE, selectedTile.tileY * TILE_SIZE);
                 }
                 // If the plant is single-harvest, it will be destroyed.
                 if (plant.getHealth() <= 0) {
@@ -184,7 +190,7 @@ public class GameController {
         if (element instanceof ForagingCropElement foraging) {
             List<Item> dropped = foraging.drop();
             for (Item item : dropped) {
-                currentMap.spawnDroppedItem(item, tile.tileX * TILE_SIZE, tile.tileY * TILE_SIZE);
+                currentMap.spawnDroppedItem(item, selectedTile.tileX * TILE_SIZE, selectedTile.tileY * TILE_SIZE);
             }
             currentMap.removeElement(foraging);
             return;
@@ -193,9 +199,35 @@ public class GameController {
         // Use item
         Item item = player.getBackpack().getInventory().getSelectedItem();
         if (item instanceof Usable usable) {
-            boolean success = usable.use(player, currentMap, tile);
+            boolean success = usable.use(player, currentMap, selectedTile);
             if (item instanceof Tool tool)
                 player.consumeEnergy(tool.getConsumptionEnergy(player, Weather.Sunny, success));
+        }
+    }
+
+    /**
+     * This method calculates which tile is under the mouse and checks if it's in range.
+     * It should be called every frame from the GameScreen.
+     * @param camera The game's camera, used to unproject coordinates.
+     */
+    public void updateSelectedTile(OrthographicCamera camera) {
+        // 1. Convert screen coordinates (mouse position) to world coordinates.
+        Vector3 worldCoordinates = camera.unproject(new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0));
+        int mouseTileX = (int) (worldCoordinates.x / TILE_SIZE);
+        int mouseTileY = (int) (worldCoordinates.y / TILE_SIZE);
+
+        // 2. Get the player's current tile coordinates.
+        int playerTileX = (int) (player.playerPosition.x / TILE_SIZE);
+        int playerTileY = (int) (player.playerPosition.y / TILE_SIZE);
+
+        // 3. Check if the mouse is within the 3x3 grid around the player.
+        boolean inRange = mouseTileX >= playerTileX - 1 && mouseTileX <= playerTileX + 1 &&
+            mouseTileY >= playerTileY - 1 && mouseTileY <= playerTileY + 1;
+
+        if (inRange) {
+            this.selectedTile = currentMap.getTile(mouseTileX, mouseTileY);
+        } else {
+            this.selectedTile = null;
         }
     }
 }
