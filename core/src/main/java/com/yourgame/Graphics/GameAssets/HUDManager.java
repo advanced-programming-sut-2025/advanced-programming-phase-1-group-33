@@ -231,10 +231,7 @@ public class HUDManager {
 
         int newPhase = this.localPlayer.getEnergyPhase();
         if (newPhase >= 0 && newPhase < energy_bar_textures.length) {
-            Gdx.app.log("HUDManager", "updating Energy Bar.");
             energyBarImage.setDrawable(new Image(this.energy_bar_textures[newPhase]).getDrawable());
-        } else {
-            Gdx.app.log("Energy_bar", "Invalid energy bar phase: " + newPhase);
         }
     }
 
@@ -244,7 +241,7 @@ public class HUDManager {
         dateField.setText(App.getGameState().getGameTime().getDateToString());
 
         this.timeAccumulator += delta;
-        if (this.timeAccumulator >= 7f) { // every 7 seconds = 10 minutes
+        if (this.timeAccumulator >= 1f) { // every 7 seconds = 10 minutes
             Gdx.app.log("time", App.getGameState().getGameTime().getTimeString());
             Gdx.app.log("time", App.getGameState().getGameTime().getDateToString());
             App.getGameState().getGameTime().advanceMinutes(10);

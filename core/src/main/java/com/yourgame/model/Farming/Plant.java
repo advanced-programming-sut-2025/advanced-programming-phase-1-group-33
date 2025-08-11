@@ -13,15 +13,19 @@ public abstract class Plant extends MapElement implements TimeObserver {
     protected int currentStage;
     protected int daysSinceLastStage;
     protected int daysSinceLastHarvest;
+    protected int daysSinceWatered;
     protected boolean hasProduct;
+    protected final int maxDryDays;
 
     public Plant(ElementType type, Rectangle pixelBounds, float health, Fertilizer fertilizer) {
         super(type, pixelBounds, health);
         this.fertilizer = fertilizer;
         if (fertilizer == Fertilizer.Growth_Fertilizer) {
             currentStage = 1;
+            maxDryDays = 2;
         } else {
             currentStage = 0;
+            maxDryDays = 3;
         }
     }
 

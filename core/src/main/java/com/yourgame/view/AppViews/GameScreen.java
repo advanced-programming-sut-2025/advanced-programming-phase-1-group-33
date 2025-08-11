@@ -20,9 +20,6 @@ import com.yourgame.Graphics.MenuAssetManager;
 import com.yourgame.Graphics.GameAssets.HUDManager;
 import com.yourgame.Graphics.GameAssets.clockUIAssetManager;
 import com.yourgame.controller.GameController.GameController;
-import com.yourgame.model.Item.Item;
-import com.yourgame.model.Item.Tools.Tool;
-import com.yourgame.model.Item.Usable;
 import com.yourgame.model.Map.*;
 import com.yourgame.model.App;
 import com.yourgame.Graphics.GameAssetManager;
@@ -30,7 +27,6 @@ import com.yourgame.model.UserInfo.Player;
 import com.yourgame.view.GameViews.JournalMenuView;
 import com.yourgame.view.GameViews.MainMenuView;
 import com.yourgame.view.GameViews.MapMenuView;
-import com.yourgame.model.WeatherAndTime.Weather;
 
 import static com.yourgame.model.UserInfo.Player.*;
 
@@ -44,7 +40,7 @@ public class GameScreen extends GameBaseScreen {
 
     // ==GAME==
     private final GameController controller;
-    private Player player;
+    private final Player player;
     private float stateTime;
 
     private OrthogonalTiledMapRenderer mapRenderer;
@@ -57,11 +53,13 @@ public class GameScreen extends GameBaseScreen {
     public boolean paused = false;
     private MainMenuView mainMenuView;
 
-    // --- NEW: Fields for Day/Night Cycle ---
+    // Fields for Day/Night Cycle
     private Texture nightOverlayTexture;
     private Color ambientLightColor;
 
     public GameScreen() {
+        super();
+
         controller = new GameController();
         player = controller.getPlayer();
         stateTime = 0f;
@@ -174,15 +172,7 @@ public class GameScreen extends GameBaseScreen {
         batch.end();
 
         // Render Day & Night
-        batch.setProjectionMatrix(HUDStage.getCamera().combined);
-        batch.begin();
-        // Set the batch's color to our managed ambient light color
-        batch.setColor(ambientLightColor);
-        // Draw the 1x1 texture scaled to fill the entire screen
-        batch.draw(nightOverlayTexture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        // IMPORTANT: Reset the batch color to white so the HUD isn't tinted!
-        batch.setColor(Color.WHITE);
-        batch.end();
+        renderOverlay();
 
         hudManager.updateInventory(player.getBackpack().getInventory());
         super.render(delta);
@@ -226,6 +216,15 @@ public class GameScreen extends GameBaseScreen {
         }
         mapRenderer.dispose();
         batch.dispose();
+    }
+
+    private void renderOverlay() {
+        batch.setProjectionMatrix(HUDStage.getCamera().combined);
+        batch.begin();
+        batch.setColor(ambientLightColor);
+        batch.draw(nightOverlayTexture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        batch.setColor(Color.WHITE);
+        batch.end();
     }
 
     // Methods for music control, similar to MenuBaseScreen

@@ -74,7 +74,7 @@ public class Player {
         this.backpack.addTool(new Axe());
         this.backpack.addTool(new WateringCan());
         this.backpack.addTool(new Scythe());
-        this.backpack.addItem(new Seeds.SeedItem(Seeds.Grape_Starter), 5);
+        this.backpack.addItem(new Seeds.SeedItem(Seeds.Garlic_Seeds), 5);
         this.backpack.addItem(new Fertilizer.FertilizerItem(Fertilizer.Growth_Fertilizer), 2);
         this.backpack.addItem(new Fertilizer.FertilizerItem(Fertilizer.Water_Fertilizer), 2);
         this.backpack.getIngredientQuantity().put(new Coin(), 20);

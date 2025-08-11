@@ -6,8 +6,6 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.yourgame.Graphics.GameAssetManager;
 import com.yourgame.Graphics.MenuAssetManager;
 import com.yourgame.model.App;
-import com.yourgame.model.Farming.Plant;
-import com.yourgame.model.GameState;
 import com.yourgame.model.Item.Item;
 import com.yourgame.model.Item.Tools.Tool;
 import com.yourgame.model.Item.Usable;
@@ -62,14 +60,18 @@ public class GameController {
 
     public void renderMapObjects(GameAssetManager assetManager, SpriteBatch batch) {
         Season gameSeason = App.getGameState().getGameTime().getSeason();
-        for (MapElement element : currentMap.getMapElements()) {
+        Iterator<MapElement> iterator = currentMap.getMapElements().iterator();
+        while (iterator.hasNext()) {
+            MapElement element = iterator.next();
+            if (element.getHealth() <= 0) {
+                iterator.remove();
+                continue;
+            }
             TextureRegion texture = element.getTexture(assetManager, gameSeason);
             if (texture != null) {
                 java.awt.Rectangle bounds = element.getPixelBounds();
                 batch.draw(texture, bounds.x, bounds.y, bounds.width, bounds.height);
             }
-
-            if (element.getHealth() <= 0) currentMap.removeElement(element);
         }
 
         // Render dropped items

@@ -14,16 +14,10 @@ import static com.yourgame.model.Map.Tile.TILE_SIZE;
 
 public class Crop extends Plant {
     private final CropType cropType;
-    private final int numberOfDaysCanBeAliveWithoutWater;
 
     public Crop(CropType cropType, Fertilizer fertilizer, int worldX, int worldY) {
         super(ElementType.CROP, new Rectangle(worldX, worldY, TILE_SIZE, TILE_SIZE), 1, fertilizer);
         this.cropType = cropType;
-        if (fertilizer == Fertilizer.Water_Fertilizer) {
-            numberOfDaysCanBeAliveWithoutWater = 3;
-        } else {
-            numberOfDaysCanBeAliveWithoutWater = 2;
-        }
     }
 
     public CropType getCropType() {
@@ -77,20 +71,40 @@ public class Crop extends Plant {
 
     @Override
     public void onTimeChanged(TimeSystem timeSystem) {
-        if (isMature()) {
-            if (cropType.isOneTime() || hasProduct) return;
-            daysSinceLastHarvest++;
-            if (daysSinceLastHarvest >= cropType.getRegrowthTime()) {
-                hasProduct = true;
-                daysSinceLastHarvest = 0;
-            }
-        } else if (wateredToday) {
+        if (health <= 0) return;
+
+        // Handle Growth Logic First
+        if (!isMature() && wateredToday) {
             daysSinceLastStage++;
             if (daysSinceLastStage >= cropType.getStages().get(currentStage)) {
                 currentStage++;
                 daysSinceLastStage = 0;
             }
         }
+
+        if (isMature()) {
+            if (cropType.isOneTime()) {
+                hasProduct = true;
+            } else if (hasProduct) {
+                // It has a product, do nothing until harvested.
+            } else {
+                daysSinceLastHarvest++;
+                if (daysSinceLastHarvest >= cropType.getRegrowthTime()) {
+                    hasProduct = true;
+                    daysSinceLastHarvest = 0;
+                }
+            }
+        }
+
+        if (wateredToday) {
+            daysSinceWatered = 0;
+        } else {
+            daysSinceWatered++;
+        }
         wateredToday = false;
+
+        if (daysSinceWatered > maxDryDays) {
+            this.health = 0;
+        }
     }
 }

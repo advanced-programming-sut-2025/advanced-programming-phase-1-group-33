@@ -1,5 +1,7 @@
 package com.yourgame.model.Item.Tools;
 
+import com.badlogic.gdx.Gdx;
+import com.yourgame.model.Farming.Crop;
 import com.yourgame.model.Map.Farm;
 import com.yourgame.model.Map.Map;
 import com.yourgame.model.Map.Tile;

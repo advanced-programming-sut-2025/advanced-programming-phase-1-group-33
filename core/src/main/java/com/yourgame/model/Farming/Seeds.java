@@ -110,8 +110,9 @@ public enum Seeds implements Ingredient {
                     Crop crop = new Crop(CropType.getCropForSeed(seed), tile.getFertilizer(), x, y);
                     crop.setWateredToday(tile.isWatered());
 
-                    map.addElement(crop);
-                    App.getGameState().getGameTime().addObserver(crop);
+                    if (!map.addElement(crop)) yield false;
+
+                    App.getGameState().getGameTime().addPlant(crop);
 
                     player.getBackpack().getInventory().reduceItemQuantity(this, 1);
 
