@@ -14,7 +14,8 @@ public class CropItem extends Item {
 
     @Override
     public TextureRegion getTextureRegion(GameAssetManager assetManager) {
-        return null;
+        String path = "Game/Crop/" + cropType.getName() + "/" + cropType.getName() + ".png";
+        return new TextureRegion(assetManager.getTexture(path));
     }
 
     public CropType getCropType() {

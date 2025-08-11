@@ -30,6 +30,6 @@ public class ForagingCropElement extends MapElement {
 
     @Override
     public java.util.List<Item> drop() {
-        return List.of();
+        return List.of(foragingType.getItem());
     }
 }

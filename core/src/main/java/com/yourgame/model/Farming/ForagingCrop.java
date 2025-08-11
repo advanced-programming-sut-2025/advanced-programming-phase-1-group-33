@@ -1,5 +1,8 @@
 package com.yourgame.model.Farming;
 
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.yourgame.Graphics.GameAssetManager;
+import com.yourgame.model.Item.Item;
 import com.yourgame.model.ManuFactor.Ingredient;
 import com.yourgame.model.WeatherAndTime.Season;
 
@@ -91,5 +94,24 @@ public enum ForagingCrop implements Ingredient {
             }
         }
         return crops;
+    }
+
+    @Override
+    public Item getItem() {
+        return new ForagingCropItem(this);
+    }
+
+    public static final class ForagingCropItem extends Item {
+        private final ForagingCrop cropType;
+
+        public ForagingCropItem(ForagingCrop cropType) {
+            super(cropType.name(), ItemType.INGREDIENT, cropType.baseSellPrice, true);
+            this.cropType = cropType;
+        }
+
+        @Override
+        public TextureRegion getTextureRegion(GameAssetManager assetManager) {
+            return new TextureRegion(assetManager.getTexture("Game/Foraging/" + cropType.getName() + ".png"));
+        }
     }
 }

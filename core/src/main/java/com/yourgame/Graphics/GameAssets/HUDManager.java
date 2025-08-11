@@ -241,7 +241,7 @@ public class HUDManager {
         dateField.setText(App.getGameState().getGameTime().getDateToString());
 
         this.timeAccumulator += delta;
-        if (this.timeAccumulator >= 1f) { // every 7 seconds = 10 minutes
+        if (this.timeAccumulator >= 7f) { // every 7 seconds = 10 minutes
             Gdx.app.log("time", App.getGameState().getGameTime().getTimeString());
             Gdx.app.log("time", App.getGameState().getGameTime().getDateToString());
             App.getGameState().getGameTime().advanceMinutes(10);

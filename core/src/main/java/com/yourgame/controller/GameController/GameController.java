@@ -6,6 +6,9 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.yourgame.Graphics.GameAssetManager;
 import com.yourgame.Graphics.MenuAssetManager;
 import com.yourgame.model.App;
+import com.yourgame.model.Farming.ForagingCrop;
+import com.yourgame.model.Farming.ForagingCropElement;
+import com.yourgame.model.Farming.Plant;
 import com.yourgame.model.Item.Item;
 import com.yourgame.model.Item.Tools.Tool;
 import com.yourgame.model.Item.Usable;
@@ -84,6 +87,8 @@ public class GameController {
     }
 
     public void updateDroppedItems(float delta) {
+        if (player.getBackpack().isInventoryFull()) return;
+
         // Use an iterator to safely remove items from the list while looping through it
         Iterator<DroppedItem> iterator = currentMap.getDroppedItems().iterator();
         while (iterator.hasNext()) {
@@ -161,14 +166,29 @@ public class GameController {
         Tile tile = getTileInFront();
 
         // Harvest Tree or Crop
-//        MapElement element = tile.getElement();
-//        if (element instanceof Plant plant && plant.hasProduct()) {
-//            for (Item item : plant.harvest()) {
-//                currentMap.spawnDroppedItem(item, tile.tileX * TILE_SIZE, tile.tileY * TILE_SIZE);
-//                plant.setHasProduct(false);
-//                return;
-//            }
-//        }
+        MapElement element = tile.getElement();
+        if (element instanceof Plant plant && plant.hasProduct()) {
+            List<Item> harvestedItems = plant.harvest();
+            if (harvestedItems != null && !harvestedItems.isEmpty()) {
+                for (Item item : harvestedItems) {
+                    currentMap.spawnDroppedItem(item, tile.tileX * TILE_SIZE, tile.tileY * TILE_SIZE);
+                }
+                // If the plant is single-harvest, it will be destroyed.
+                if (plant.getHealth() <= 0) {
+                    currentMap.removeElement(plant);
+                }
+                return;
+            }
+        }
+        // Harvest Foraging
+        if (element instanceof ForagingCropElement foraging) {
+            List<Item> dropped = foraging.drop();
+            for (Item item : dropped) {
+                currentMap.spawnDroppedItem(item, tile.tileX * TILE_SIZE, tile.tileY * TILE_SIZE);
+            }
+            currentMap.removeElement(foraging);
+            return;
+        }
 
         // Use item
         Item item = player.getBackpack().getInventory().getSelectedItem();
