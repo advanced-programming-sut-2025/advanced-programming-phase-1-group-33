@@ -5,7 +5,10 @@ import com.yourgame.model.Farming.Fertilizer;
 public class Tile {
     public static final int TILE_SIZE = 16;
 
-    public enum DirtState {NON_FARMABLE, NORMAL, PLOWED, WATERED}
+    public enum DirtState {
+        NON_FARMABLE, NORMAL, PLOWED, WATERED,
+        PLOWED_GROWTH, PLOWED_WATER, WATERED_GROWTH, WATERED_WATER // These are fertilized tiles
+    }
 
     private DirtState dirtState;
     private Fertilizer fertilizer;

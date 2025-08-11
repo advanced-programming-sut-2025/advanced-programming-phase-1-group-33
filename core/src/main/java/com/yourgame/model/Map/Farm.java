@@ -11,12 +11,20 @@ public class Farm extends Map {
     private final TiledMapTileLayer farmingLayer;
     private final TiledMapTile plowedTile;
     private final TiledMapTile wateredTile;
+    private final TiledMapTile plowedGrowthTile;
+    private final TiledMapTile plowedWaterTile;
+    private final TiledMapTile wateredGrowthTile;
+    private final TiledMapTile wateredWaterTile;
 
     public Farm(String name, String pathToTmx) {
         super(name, pathToTmx);
         this.farmingLayer = (TiledMapTileLayer) tiledMap.getLayers().get("Farming");
         this.plowedTile = tiledMap.getTileSets().getTileSet("outdoors-spring").getTile(786);
         this.wateredTile = tiledMap.getTileSets().getTileSet("outdoors-spring").getTile(2161);
+        this.plowedGrowthTile = tiledMap.getTileSets().getTileSet("outdoors-spring").getTile(929);
+        this.plowedWaterTile = tiledMap.getTileSets().getTileSet("outdoors-spring").getTile(928);
+        this.wateredGrowthTile = tiledMap.getTileSets().getTileSet("outdoors-spring").getTile(888);
+        this.wateredWaterTile = tiledMap.getTileSets().getTileSet("outdoors-spring").getTile(887);
         initSpawnable();
     }
 
@@ -58,7 +66,11 @@ public class Farm extends Map {
         switch (data.getDirtState()) {
             case PLOWED -> cell.setTile(plowedTile);
             case WATERED -> cell.setTile(wateredTile);
-            case NON_FARMABLE, NORMAL -> cell.setTile(null);
+            case PLOWED_GROWTH -> cell.setTile(plowedGrowthTile);
+            case WATERED_GROWTH -> cell.setTile(wateredGrowthTile);
+            case PLOWED_WATER -> cell.setTile(plowedWaterTile);
+            case WATERED_WATER -> cell.setTile(wateredWaterTile);
+            default -> cell.setTile(null);
         }
     }
 }

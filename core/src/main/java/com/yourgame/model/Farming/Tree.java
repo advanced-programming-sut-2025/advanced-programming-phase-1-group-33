@@ -23,7 +23,7 @@ public class Tree extends Plant {
 
         if (treeType == TreeType.OakTree || treeType == TreeType.MapleTree || treeType == TreeType.PineTree) {
             numberOfDaysCanBeAliveWithoutWater = Integer.MAX_VALUE;
-        } else if (fertilizer == Fertilizer.WaterFertilizer) {
+        } else if (fertilizer == Fertilizer.Water_Fertilizer) {
             numberOfDaysCanBeAliveWithoutWater = 3;
         } else {
             numberOfDaysCanBeAliveWithoutWater = 2;

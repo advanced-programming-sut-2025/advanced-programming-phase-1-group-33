@@ -28,11 +28,28 @@ public class WateringCan extends Tool {
 
     @Override
     public boolean use(Player player, Map map, Tile tile) {
-        if (!(map instanceof Farm)) return false;
-        if (tile.getDirtState() != Tile.DirtState.PLOWED) return false;
-        tile.setDirtState(Tile.DirtState.WATERED);
-        ((Farm) map).updateTileVisuals(tile.tileX, tile.tileY);
-        return true;
+        if (waterLevel <= 0) return false;
+        if (!(map instanceof Farm farm)) return false;
+
+        waterLevel--;
+        return switch (tile.getDirtState()) {
+            case PLOWED -> {
+                tile.setDirtState(Tile.DirtState.WATERED);
+                farm.updateTileVisuals(tile.tileX, tile.tileY);
+                yield true;
+            }
+            case PLOWED_GROWTH -> {
+                tile.setDirtState(Tile.DirtState.WATERED_GROWTH);
+                farm.updateTileVisuals(tile.tileX, tile.tileY);
+                yield true;
+            }
+            case PLOWED_WATER -> {
+                tile.setDirtState(Tile.DirtState.WATERED_WATER);
+                farm.updateTileVisuals(tile.tileX, tile.tileY);
+                yield true;
+            }
+            default -> false;
+        };
     }
 
     @Override

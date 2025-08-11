@@ -18,7 +18,7 @@ public abstract class Plant extends MapElement implements TimeObserver {
     public Plant(ElementType type, Rectangle pixelBounds, float health, Fertilizer fertilizer) {
         super(type, pixelBounds, health);
         this.fertilizer = fertilizer;
-        if (fertilizer == Fertilizer.GrowthFertilizer) {
+        if (fertilizer == Fertilizer.Growth_Fertilizer) {
             currentStage = 1;
         } else {
             currentStage = 0;

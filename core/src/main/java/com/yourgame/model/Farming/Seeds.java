@@ -104,7 +104,7 @@ public enum Seeds implements Ingredient {
             if (tile.getElement() != null) return false;
             return switch (tile.getDirtState()) {
                 case NON_FARMABLE, NORMAL -> false;
-                case PLOWED, WATERED -> {
+                default -> {
                     int x = tile.tileX * Tile.TILE_SIZE;
                     int y = tile.tileY * Tile.TILE_SIZE;
                     Crop crop = new Crop(CropType.getCropForSeed(seed), tile.getFertilizer(), x, y);
