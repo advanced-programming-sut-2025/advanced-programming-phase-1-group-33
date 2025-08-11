@@ -222,7 +222,7 @@ public class Map {
             for (int x = bounds.x; x < bounds.x + bounds.width; x++) {
                 Tile tile = tileStates[x][y];
                 tile.setElement(element);
-                tile.setWalkable(false);
+                if (element.getType() != MapElement.ElementType.CROP) tile.setWalkable(false);
             }
         }
 

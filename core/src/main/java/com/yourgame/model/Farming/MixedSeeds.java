@@ -13,11 +13,11 @@ public class MixedSeeds {
 
     static {
         seasonSeeds.put(Season.Spring, new ArrayList<>(Arrays.asList(CropType.Cauliflower, CropType.Parsnip,
-                CropType.Potato, CropType.BlueJazz, CropType.Tulip)));
-        seasonSeeds.put(Season.Summer, new ArrayList<>(Arrays.asList(CropType.Corn, CropType.HotPepper,
-                CropType.Radish, CropType.Wheat, CropType.Poppy, CropType.Sunflower, CropType.SummerSpangle)));
+                CropType.Potato, CropType.Blue_Jazz, CropType.Tulip)));
+        seasonSeeds.put(Season.Summer, new ArrayList<>(Arrays.asList(CropType.Corn, CropType.Hot_Pepper,
+                CropType.Radish, CropType.Wheat, CropType.Poppy, CropType.Sunflower, CropType.Summer_Spangle)));
         seasonSeeds.put(Season.Fall, new ArrayList<>(Arrays.asList(CropType.Artichoke, CropType.Corn,
-                CropType.Eggplant, CropType.Pumpkin, CropType.Sunflower, CropType.FairyRose)));
+                CropType.Eggplant, CropType.Pumpkin, CropType.Sunflower, CropType.Fairy_Rose)));
         seasonSeeds.put(Season.Winter, new ArrayList<>(List.of(CropType.PowderMelon)));
     }
 

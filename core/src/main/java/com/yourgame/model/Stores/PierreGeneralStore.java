@@ -197,7 +197,7 @@ public class PierreGeneralStore extends Store {
             switch (item.name) {
 
                 case "Rice":{
-                    App.getGameState().getCurrentPlayer().getBackpack().addIngredients(CropType.UnmilledRice,value);
+                    App.getGameState().getCurrentPlayer().getBackpack().addIngredients(CropType.Unmilled_Rice,value);
                     break;
                 }
                case "Bouquet":{

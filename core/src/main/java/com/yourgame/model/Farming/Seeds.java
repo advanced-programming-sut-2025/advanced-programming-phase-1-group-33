@@ -94,7 +94,8 @@ public enum Seeds implements Ingredient {
 
         @Override
         public TextureRegion getTextureRegion(GameAssetManager assetManager) {
-            return new TextureRegion(assetManager.getTexture("Game/Crop/" + this.getName() + ".png"));
+            String path = "Game/Crop/" + CropType.getCropForSeed(seed).getName() + "/" + this.getName() + ".png";
+            return new TextureRegion(assetManager.getTexture(path));
         }
 
         @Override

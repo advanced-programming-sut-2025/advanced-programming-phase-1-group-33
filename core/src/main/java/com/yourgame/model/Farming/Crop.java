@@ -59,7 +59,10 @@ public class Crop extends Plant {
 
     @Override
     public TextureRegion getTexture(GameAssetManager assetManager, Season currentSeason) {
-        return new TextureRegion(assetManager.getTexture("Game/Crop/" + cropType.getName() + "_Stage_1.png"));
+        int stage = currentStage + 1;
+        if (!cropType.isOneTime() && !hasProduct) stage++;
+        String path = "Game/Crop/" + cropType.getName() + "/" + cropType.getName() + "_Stage_" + stage + ".png";
+        return new TextureRegion(assetManager.getTexture(path));
     }
 
     @Override

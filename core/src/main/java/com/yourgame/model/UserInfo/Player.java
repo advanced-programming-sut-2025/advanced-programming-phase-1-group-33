@@ -74,7 +74,7 @@ public class Player {
         this.backpack.addTool(new Axe());
         this.backpack.addTool(new WateringCan());
         this.backpack.addTool(new Scythe());
-        this.backpack.addItem(new Seeds.SeedItem(Seeds.Amaranth_Seeds), 5);
+        this.backpack.addItem(new Seeds.SeedItem(Seeds.Grape_Starter), 5);
         this.backpack.getIngredientQuantity().put(new Coin(), 20);
         this.backpack.getIngredientQuantity().put(new Wood(), 100);
         this.relationWithAbigail = new RelationWithNPC(NPCType.Abigail);
