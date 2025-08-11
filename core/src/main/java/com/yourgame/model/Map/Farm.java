@@ -8,6 +8,7 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Rectangle;
 import com.yourgame.model.WeatherAndTime.TimeObserver;
 import com.yourgame.model.WeatherAndTime.TimeSystem;
+import com.yourgame.model.WeatherAndTime.Weather;
 
 public class Farm extends Map implements TimeObserver {
     private final TiledMapTileLayer farmingLayer;
@@ -79,5 +80,11 @@ public class Farm extends Map implements TimeObserver {
     @Override
     public void onTimeChanged(TimeSystem timeSystem) {
         spawnRandomElements(timeSystem.getSeason());
+        for (int x = 0; x < mapWidth; x++) {
+            for (int y = 0; y < mapHeight; y++) {
+                tileStates[x][y].setWatered(timeSystem.getWeather() == Weather.Rainy);
+                updateTileVisuals(x, y);
+            }
+        }
     }
 }

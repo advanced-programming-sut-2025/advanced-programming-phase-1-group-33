@@ -47,7 +47,7 @@ public class TimeSystem {
             this.minutes = 0;
         }
 
-        // If it's past midnight, move to next day when hitting 24:00
+        // If it's past midnight, move to the next day when hitting 24:00
         if (this.hour >= 24) {
             this.hour = this.hour % 24;
             advanceDay(1);

@@ -49,18 +49,8 @@ public enum Fertilizer implements Ingredient {
         public boolean use(Player player, Map map, Tile tile) {
             if (!(map instanceof Farm farm)) return false;
             return switch (tile.getDirtState()) {
-                case PLOWED -> {
+                case PLOWED, WATERED -> {
                     tile.setFertilizer(fertilizerType);
-                    if (fertilizerType == Growth_Fertilizer) tile.setDirtState(Tile.DirtState.PLOWED_GROWTH);
-                    else tile.setDirtState(Tile.DirtState.PLOWED_WATER);
-                    farm.updateTileVisuals(tile.tileX, tile.tileY);
-                    player.getBackpack().getInventory().reduceItemQuantity(this, 1);
-                    yield true;
-                }
-                case WATERED -> {
-                    tile.setFertilizer(fertilizerType);
-                    if (fertilizerType == Growth_Fertilizer) tile.setDirtState(Tile.DirtState.WATERED_GROWTH);
-                    else tile.setDirtState(Tile.DirtState.WATERED_WATER);
                     farm.updateTileVisuals(tile.tileX, tile.tileY);
                     player.getBackpack().getInventory().reduceItemQuantity(this, 1);
                     yield true;

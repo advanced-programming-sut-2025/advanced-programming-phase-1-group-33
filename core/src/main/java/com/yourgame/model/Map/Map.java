@@ -235,6 +235,12 @@ public class Map {
             for (int x = bounds.x; x < bounds.x + bounds.width; x++) {
                 Tile tile = tileStates[x][y];
                 if (tile == null || !tile.isSpawnable()) return false;
+                switch (tile.getDirtState()) {
+                    case NON_FARMABLE, NORMAL -> {}
+                    default -> {
+                        return false;
+                    }
+                }
             }
         }
         return true;

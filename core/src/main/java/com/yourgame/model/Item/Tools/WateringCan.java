@@ -33,18 +33,8 @@ public class WateringCan extends Tool {
 
         waterLevel--;
         return switch (tile.getDirtState()) {
-            case PLOWED -> {
-                tile.setDirtState(Tile.DirtState.WATERED);
-                farm.updateTileVisuals(tile.tileX, tile.tileY);
-                yield true;
-            }
-            case PLOWED_GROWTH -> {
-                tile.setDirtState(Tile.DirtState.WATERED_GROWTH);
-                farm.updateTileVisuals(tile.tileX, tile.tileY);
-                yield true;
-            }
-            case PLOWED_WATER -> {
-                tile.setDirtState(Tile.DirtState.WATERED_WATER);
+            case PLOWED, PLOWED_GROWTH, PLOWED_WATER -> {
+                tile.setWatered(true);
                 farm.updateTileVisuals(tile.tileX, tile.tileY);
                 yield true;
             }
