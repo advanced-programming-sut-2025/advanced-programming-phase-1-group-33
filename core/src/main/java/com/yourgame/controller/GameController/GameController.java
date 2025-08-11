@@ -217,7 +217,7 @@ public class GameController {
         int mouseTileY = (int) (worldCoordinates.y / TILE_SIZE);
 
         // 2. Get the player's current tile coordinates.
-        int playerTileX = (int) (player.playerPosition.x / TILE_SIZE);
+        int playerTileX = (int) ((player.playerPosition.x + (float) PLAYER_WIDTH / 2) / TILE_SIZE);
         int playerTileY = (int) (player.playerPosition.y / TILE_SIZE);
 
         // 3. Check if the mouse is within the 3x3 grid around the player.
