@@ -45,35 +45,3 @@ public class Server {
         server.start();
     }
 }
-
-// ClientHandler.java (to be implemented)
-// This class will handle communication for a single client.
-class ClientHandler implements Runnable {
-    private final Socket clientSocket;
-    private final Server server;
-
-    public ClientHandler(Socket socket, Server server) {
-        this.clientSocket = socket;
-        this.server = server;
-    }
-
-    @Override
-    public void run() {
-        try {
-            // Implement logic for communication with the client here
-            // Example: reading from and writing to the clientSocket streams
-            
-            // For now, let's just simulate some work and then disconnect.
-            Thread.sleep(5000); // Simulate client session
-        } catch (InterruptedException e) {
-            System.err.println("Client handler interrupted for " + clientSocket.getInetAddress());
-        } finally {
-            try {
-                clientSocket.close();
-            } catch (IOException e) {
-                System.err.println("Error closing socket for client " + clientSocket.getInetAddress());
-            }
-            server.removeClient(this);
-        }
-    }
-}

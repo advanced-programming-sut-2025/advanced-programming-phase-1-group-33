@@ -80,3 +80,10 @@ project(':server') {
 
     mainClassName = 'com.yourgame.server.Server'
 }
+
+project(':core') {
+    task testClient(type: JavaExec) {
+        classpath = sourceSets.main.runtimeClasspath
+        mainClass = "com.yourgame.network.ClientTester"
+    }
+}

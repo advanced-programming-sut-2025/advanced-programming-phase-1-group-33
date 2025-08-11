@@ -1,7 +1,9 @@
 package com.yourgame.model.UserInfo;
 
 import java.util.*;
-
+// this is going to be for GSON‌ :(‌)
+import com.google.gson.annotations.Expose;
+// 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
