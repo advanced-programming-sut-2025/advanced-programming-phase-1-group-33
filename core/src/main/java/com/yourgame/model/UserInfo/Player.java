@@ -2,13 +2,16 @@ package com.yourgame.model.UserInfo;
 
 import java.util.*;
 
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Vector2;
 import com.yourgame.model.Animals.AnimalType;
 import com.yourgame.model.App;
 import com.yourgame.model.Farming.Fertilizer;
 import com.yourgame.model.Farming.Seeds;
 import com.yourgame.model.Item.Inventory.BackpackType;
 import com.yourgame.model.Item.Inventory.TrashCan;
-import com.yourgame.model.Item.Stone;
 import com.yourgame.model.Item.Tools.Axe;
 import com.yourgame.model.Item.Tools.Hoe;
 import com.yourgame.model.Item.Tools.Pickaxe;
@@ -27,38 +30,35 @@ import com.yourgame.model.enums.SecurityQuestion;
 import com.yourgame.model.notification.Notification;
 
 public class Player {
-    private String username;
-    private String hashedPassword;
-    private String nickname;
+    public static final int PLAYER_WIDTH = 16;
+    public static final int PLAYER_HEIGHT = 32;
+    public static final float SPEED = 150f;
+    public static final int MAX_ENERGY = 300;
 
-    private String email;
-    private Gender gender;
     private int energy;
-    private Tool currentTool;
     private boolean isFaintedToday = false;
-    private boolean isMarried = false;
-
     private boolean isInfinite = false;
     private int consumedEnergyInThisTurn = 0;
-
-    private int maxEnergy = 200;
     private boolean unlimitedEnergy = false;
+
     private final Backpack backpack = new Backpack(BackpackType.Primary);
-    private final TrashCan trashCan = new TrashCan();
-
     private final ArrayList<Notification> notifications = new ArrayList<>();
-
-    private ArrayList<AnimalType> animals = new ArrayList<>();
     private final Ability ability = new Ability(this);
 
     private int remainingDaysAfterMarriageDenied = 0;
-
-    private Position currentPosition;
+    private boolean isMarried = false;
     private RelationWithNPC relationWithAbigail;
     private RelationWithNPC relationWithSebastian;
     private RelationWithNPC relationWithHarvey;
     private RelationWithNPC relationWithLeah;
     private RelationWithNPC relationWithRobin;
+
+    // Graphic fields
+    private final Texture playerSheet;
+    public final Animation<TextureRegion>[] walkAnimations;
+    public Vector2 playerPosition;
+    public Vector2 playerVelocity;
+    public int direction; // 0=Down, 1=Right, 2=Up, 3=Left
 
     public static Player guest() {
         return new Player(
@@ -66,10 +66,7 @@ public class Player {
     }
 
     public Player(User currentUser) {
-        this.username = currentUser.getUsername();
-        this.nickname = currentUser.getNickname();
-        this.energy = maxEnergy;
-        this.currentPosition = new Position(0, 0);
+        this.energy = MAX_ENERGY;
         this.backpack.addTool(new Hoe());
         this.backpack.addTool(new Pickaxe());
         this.backpack.addTool(new Axe());
@@ -85,27 +82,28 @@ public class Player {
         this.relationWithHarvey = new RelationWithNPC(NPCType.Harvey);
         this.relationWithLeah = new RelationWithNPC(NPCType.Leah);
         this.relationWithRobin = new RelationWithNPC(NPCType.Robin);
-        for (Tool tool : this.backpack.getTools()) {
-            if (tool instanceof Axe) {
-                setCurrentTool(tool);
-                break;
-            }
-        }
+
+        // Load player sprite sheet
+        playerSheet = new Texture("Game/Player/player.png");
+        TextureRegion[][] frames = TextureRegion.split(playerSheet, PLAYER_WIDTH, PLAYER_HEIGHT);
+
+        walkAnimations = new Animation[4]; // down, left, right, up
+
+        walkAnimations[0] = new Animation<>(0.2f, frames[0]); // Down
+        walkAnimations[1] = new Animation<>(0.2f, frames[1]); // Right
+        walkAnimations[2] = new Animation<>(0.2f, frames[2]); // Up
+        walkAnimations[3] = new Animation<>(0.2f, frames[3]); // Left
+
+        playerPosition = new Vector2();
+        playerVelocity = new Vector2();
+        direction = 0;
     }
 
     public void addEnergy(int energy) {
         if (!isInfinite) {
             this.energy += energy;
-            this.energy = Math.min(this.energy, maxEnergy);
+            this.energy = Math.min(this.energy, MAX_ENERGY);
         }
-    }
-
-    public void setCurrentTool(Tool currentTool) {
-        this.currentTool = currentTool;
-    }
-
-    public Tool getCurrentTool() {
-        return currentTool;
     }
 
     public Backpack getBackpack() {
@@ -119,13 +117,12 @@ public class Player {
     public void faint() {
         isFaintedToday = true;
         App.getGameState().nextPlayerTurn();
-
     }
 
     public int getEnergyPhase() {
         if (energy <= 0)
             return 0;
-        float energyPercentage = (float) energy / maxEnergy;
+        float energyPercentage = (float) energy / MAX_ENERGY;
         if (energyPercentage > 0.75f)
             return 4;
         if (energyPercentage > 0.50f)
@@ -171,23 +168,12 @@ public class Player {
         this.unlimitedEnergy = unlimitedEnergy;
     }
 
-    public String getUsername() {
-        return username;
-    }
-
     public int getEnergy() {
         return energy;
     }
 
     public void setEnergy(int energy) {
         this.energy = energy;
-    }
-
-    public int getMaxEnergy() {
-        return maxEnergy;
-    }
-    public Position getPosition() {
-        return currentPosition;
     }
 
     public RelationWithNPC getRelationWithAbigail() {
@@ -238,10 +224,6 @@ public class Player {
         this.remainingDaysAfterMarriageDenied = remainingDaysAfterMarriageDenied;
     }
 
-    public String getNickname() {
-        return nickname;
-    }
-
     public void addNotification(Notification notification) {
         this.notifications.add(notification);
     }
@@ -257,9 +239,4 @@ public class Player {
     public void setMarried(boolean married) {
         isMarried = married;
     }
-
-    public void setNickname(String nickname) {
-        this.nickname = nickname;
-    }
-
 }
