@@ -35,6 +35,7 @@ public class Player {
     public static final float SPEED = 150f;
     public static final int MAX_ENERGY = 300;
 
+    private final User user;
     private int energy;
     private boolean isFaintedToday = false;
     private boolean isInfinite = false;
@@ -66,6 +67,7 @@ public class Player {
     }
 
     public Player(User currentUser) {
+        this.user = currentUser;
         this.energy = MAX_ENERGY;
         this.backpack.addTool(new Hoe());
         this.backpack.addTool(new Pickaxe());
@@ -97,6 +99,10 @@ public class Player {
         playerPosition = new Vector2();
         playerVelocity = new Vector2();
         direction = 0;
+    }
+
+    public User getUser() {
+        return user;
     }
 
     public void addEnergy(int energy) {

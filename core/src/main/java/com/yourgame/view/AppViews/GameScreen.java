@@ -6,8 +6,6 @@ import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
@@ -20,36 +18,24 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.yourgame.Graphics.MenuAssetManager;
-import com.yourgame.Main;
 import com.yourgame.Graphics.GameAssets.HUDManager;
 import com.yourgame.Graphics.GameAssets.clockUIAssetManager;
+import com.yourgame.controller.GameController.GameController;
 import com.yourgame.model.Item.Item;
 import com.yourgame.model.Item.Tools.Tool;
 import com.yourgame.model.Item.Usable;
 import com.yourgame.model.Map.*;
 import com.yourgame.model.App;
-import com.yourgame.model.GameState;
 import com.yourgame.Graphics.GameAssetManager;
-import com.yourgame.model.Map.Elements.DroppedItem;
 import com.yourgame.model.UserInfo.Player;
-import com.yourgame.model.WeatherAndTime.Season;
 import com.yourgame.view.GameViews.JournalMenuView;
 import com.yourgame.view.GameViews.MainMenuView;
 import com.yourgame.view.GameViews.MapMenuView;
 import com.yourgame.model.WeatherAndTime.Weather;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
 import static com.yourgame.model.UserInfo.Player.*;
 
 public class GameScreen extends GameBaseScreen {
-    private static final float ITEM_PULL_RADIUS = 48f; // The distance at which items start moving towards the player.
-    private static final float ITEM_PICKUP_RADIUS = 12f; // The distance at which items are collected.
-    private static final float ITEM_MOVE_SPEED = 180f;
-
-    private Main game;
     private GameAssetManager assetManager;
 
     // ==HUD==
@@ -58,11 +44,8 @@ public class GameScreen extends GameBaseScreen {
     private HUDManager hudManager;
 
     // ==GAME==
-    private MapManager mapManager;
+    private final GameController controller;
     private Player player;
-    private ArrayList<Player> players = new ArrayList<>();
-    private Map currentMap;
-    private GameState gameState;
     private float stateTime;
 
     private OrthogonalTiledMapRenderer mapRenderer;
@@ -76,21 +59,17 @@ public class GameScreen extends GameBaseScreen {
     private MainMenuView mainMenuView;
 
     public GameScreen() {
-        this.player = Player.guest();
-        this.mapManager = new MapManager(List.of(player));
-        this.mapRenderer = new OrthogonalTiledMapRenderer(mapManager.getPlayersCurrentMap(player).getTiledMap());
-        this.currentMap = mapManager.getPlayersCurrentMap(player);
-        this.player.playerPosition = currentMap.getSpawnPoint();
-
-        this.game = Main.getMain();
-        this.assetManager = new GameAssetManager();
-        this.clockUI = assetManager.getClockManager();
-        this.gameState = new GameState(players);
-        App.setGameState(gameState);
+        controller = new GameController();
+        player = controller.getPlayer();
         stateTime = 0f;
 
+        mapRenderer = new OrthogonalTiledMapRenderer(controller.getCurrentMap().getTiledMap());
+
+        assetManager = new GameAssetManager();
+        clockUI = assetManager.getClockManager();
+
         // HUD‌ manager
-        this.hudManager = new HUDManager(HUDStage, clockUI, assetManager, this.player);
+        hudManager = new HUDManager(HUDStage, clockUI, assetManager, player);
 
         menuIcon = new Image(new TextureRegion(assetManager.getMenuIcon()));
         menuStage = new Stage(new ScreenViewport());
@@ -155,7 +134,7 @@ public class GameScreen extends GameBaseScreen {
             handleInput(delta);
             checkForTeleport();
             handleHudUpdates(delta);
-            updateDroppedItems(delta);
+            controller.updateDroppedItems(delta);
 
             // Update animation timer
             stateTime += delta;
@@ -175,27 +154,8 @@ public class GameScreen extends GameBaseScreen {
         // Render player
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
+        controller.renderMapObjects(assetManager, batch);
         TextureRegion currentFrame = player.walkAnimations[player.direction].getKeyFrame(stateTime, true);
-
-        Season gameSeason = App.getGameState().getGameTime().getSeason();
-        for (MapElement element : currentMap.getMapElements()) {
-            TextureRegion texture = element.getTexture(assetManager, gameSeason);
-            if (texture != null) {
-                java.awt.Rectangle bounds = element.getPixelBounds();
-                batch.draw(texture, bounds.x, bounds.y, bounds.width, bounds.height);
-            }
-
-            if (element.getHealth() <= 0) currentMap.removeElement(element);
-        }
-
-        // Render dropped items
-        for (DroppedItem droppedItem : currentMap.getDroppedItems()) {
-            TextureRegion texture = droppedItem.getTexture(assetManager, gameSeason);
-            if (texture != null) {
-                batch.draw(texture, droppedItem.getPosition().x, droppedItem.getPosition().y);
-            }
-        }
-
         batch.draw(currentFrame, player.playerPosition.x, player.playerPosition.y);
         batch.end();
 
@@ -243,38 +203,6 @@ public class GameScreen extends GameBaseScreen {
         batch.dispose();
     }
 
-    private void updateDroppedItems(float delta) {
-        // Use an iterator to safely remove items from the list while looping through it
-        Iterator<DroppedItem> iterator = currentMap.getDroppedItems().iterator();
-        while (iterator.hasNext()) {
-            DroppedItem droppedItem = iterator.next();
-
-            float distance = player.playerPosition.dst(droppedItem.getPosition());
-
-            // 1. Check for immediate pickup
-            if (distance < ITEM_PICKUP_RADIUS) {
-                // Try to add the item to the player's inventory
-                if (player.getBackpack().getInventory().addItem(droppedItem.getItem(), 1)) {
-                    // If adding was successful, remove the item from the map
-                    iterator.remove();
-                    playGameSFX("popUp");
-                    continue;
-                }
-            }
-            // 2. Check for magnetic pull
-            else if (distance < ITEM_PULL_RADIUS) {
-                droppedItem.moveTo(player.playerPosition, ITEM_MOVE_SPEED);
-            }
-            // 3. If the item is out of range, ensure it's not moving
-            else {
-                droppedItem.stopMovement();
-            }
-
-            // Update the item's position based on its velocity
-            droppedItem.update(delta);
-        }
-    }
-
     // Methods for music control, similar to MenuBaseScreen
     public void playBackgroundMusic() {
         if (App.isMusicMuted()) {
@@ -289,9 +217,6 @@ public class GameScreen extends GameBaseScreen {
         backgroundMusic.stop();
     }
 
-    /**
-     * New method to handle key presses for selecting an inventory slot.
-     */
     private void handleInventoryInput() {
         if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_1))
             hudManager.selectSlot(0);
@@ -367,13 +292,13 @@ public class GameScreen extends GameBaseScreen {
 
             // Move on X axis and check for collisions
             player.playerPosition.x += player.playerVelocity.x * delta;
-            if (isBlocked(player.playerPosition.x, oldPos.y)) {
+            if (controller.isBlocked(player.playerPosition.x, oldPos.y)) {
                 player.playerPosition.x = oldPos.x; // Revert if collision
             }
 
             // Move on Y axis and check for collisions
             player.playerPosition.y += player.playerVelocity.y * delta;
-            if (isBlocked(player.playerPosition.x, player.playerPosition.y)) {
+            if (controller.isBlocked(player.playerPosition.x, player.playerPosition.y)) {
                 player.playerPosition.y = oldPos.y; // Revert if collision
             }
         }
@@ -381,7 +306,7 @@ public class GameScreen extends GameBaseScreen {
         if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
             Item item = player.getBackpack().getInventory().getSelectedItem();
             if (item instanceof Usable usable) {
-                boolean success = usable.use(player, currentMap, getTileInFront());
+                boolean success = usable.use(player, controller.getCurrentMap(), controller.getTileInFront());
                 if (item instanceof Tool tool)
                     player.consumeEnergy(tool.getConsumptionEnergy(player, Weather.Sunny, success));
             }
@@ -391,52 +316,13 @@ public class GameScreen extends GameBaseScreen {
         handleInventoryInput();
     }
 
-    private Tile getTileInFront() {
-        // Calculate the center of the player's collision box
-        float playerCenterX = player.playerPosition.x + (PLAYER_WIDTH / 2f);
-        float playerCenterY = player.playerPosition.y + (PLAYER_HEIGHT / 4f); // Center of the feet/lower body
-
-        // Determine the tile the player is currently on
-        int tileX = (int) (playerCenterX / Tile.TILE_SIZE);
-        int tileY = (int) (playerCenterY / Tile.TILE_SIZE);
-
-        // Get the tile in front based on direction
-        return switch (player.direction) {
-            case 0 -> currentMap.getTile(tileX, tileY - 1); // Down
-            case 1 -> currentMap.getTile(tileX + 1, tileY); // Right
-            case 2 -> currentMap.getTile(tileX, tileY + 1); // Up
-            case 3 -> currentMap.getTile(tileX - 1, tileY); // Left
-            default -> currentMap.getTile(tileX, tileY);   // Should not happen
-        };
-    }
-
-    private boolean isBlocked(float x, float y) {
-        // Define a smaller collision box at the player's feet for better feel
-        float boxX = x + 2; // small horizontal offset
-        float boxY = y;
-        float boxWidth = PLAYER_WIDTH - 4;
-        float boxHeight = PLAYER_HEIGHT / 2f; // Check only the lower half of the player
-
-        // Check the four corners of the player's collision box
-        if (currentMap.isTileBlocked(boxX, boxY))
-            return true;
-        if (currentMap.isTileBlocked(boxX + boxWidth, boxY))
-            return true;
-        if (currentMap.isTileBlocked(boxX, boxY + boxHeight))
-            return true;
-        if (currentMap.isTileBlocked(boxX + boxWidth, boxY + boxHeight))
-            return true;
-
-        return false;
-    }
-
-    private void changeMap(Map newMap, String spawnName) {
+    public void changeMap(Map newMap, String spawnName) {
         if (newMap == null)
             return;
 
-        currentMap = newMap;
-        mapRenderer.setMap(currentMap.getTiledMap());
-        player.playerPosition.set(currentMap.getSpawnPoint(spawnName));
+        controller.setCurrentMap(newMap);
+        mapRenderer.setMap(newMap.getTiledMap());
+        player.playerPosition.set(newMap.getSpawnPoint(spawnName));
         // Reset camera to new position immediately
         camera.position.set(player.playerPosition.x, player.playerPosition.y, 0);
         clampCameraToMap();
@@ -448,21 +334,21 @@ public class GameScreen extends GameBaseScreen {
         float checkX = player.playerPosition.x + (MenuAssetManager.PLAYER_WIDTH / 2f);
         float checkY = player.playerPosition.y + 4; // A bit above the bottom edge
 
-        Teleport teleport = currentMap.getTeleport(checkX, checkY);
+        Teleport teleport = controller.getCurrentMap().getTeleport(checkX, checkY);
         if (teleport == null)
             return;
 
         // Find the correct map from the MapManager based on the destination string
         Map newMap;
         if (teleport.dest().equalsIgnoreCase("town")) {
-            newMap = mapManager.getTown();
+            newMap = controller.getMapManager().getTown();
         } else if (teleport.dest().contains("farm")) {
-            newMap = mapManager.getFarm(player);
+            newMap = controller.getMapManager().getFarm(player);
         } else if (teleport.dest().contains("house")) {
-            newMap = mapManager.getHouse(player);
+            newMap = controller.getMapManager().getHouse(player);
         } else {
             // If it's not a special map, assume it's a building
-            newMap = mapManager.getBuilding(teleport.dest());
+            newMap = controller.getMapManager().getBuilding(teleport.dest());
         }
 
         if (newMap != null) {
@@ -471,10 +357,9 @@ public class GameScreen extends GameBaseScreen {
     }
 
     private void clampCameraToMap() {
-        float tileWidth = currentMap.getTiledMap().getProperties().get("tilewidth", Integer.class);
-        float tileHeight = currentMap.getTiledMap().getProperties().get("tileheight", Integer.class);
-        float mapWidth = currentMap.getTiledMap().getProperties().get("width", Integer.class) * tileWidth;
-        float mapHeight = currentMap.getTiledMap().getProperties().get("height", Integer.class) * tileHeight;
+        Map currentMap = controller.getCurrentMap();
+        float mapWidth = currentMap.getTiledMap().getProperties().get("width", Integer.class) * Tile.TILE_SIZE;
+        float mapHeight = currentMap.getTiledMap().getProperties().get("height", Integer.class) * Tile.TILE_SIZE;
 
         float cameraHalfWidth = camera.viewportWidth * camera.zoom * 0.5f;
         float cameraHalfHeight = camera.viewportHeight * camera.zoom * 0.5f;

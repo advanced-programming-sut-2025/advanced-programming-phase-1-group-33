@@ -1,4 +1,4 @@
-package com.yourgame.controller.GameController.StoreController;
+package com.yourgame.controller.GameController;
 
 import com.yourgame.model.App;
 import com.yourgame.model.IO.Request;

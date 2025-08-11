@@ -19,10 +19,4 @@ public class PlayersDialogues {
     public Player getSender() {
         return sender;
     }
-
-    @Override
-    public String toString() {
-        return sender.getUsername() + " : " + dialogue;
-    }
-
 }

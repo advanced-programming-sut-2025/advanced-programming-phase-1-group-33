@@ -79,23 +79,4 @@ public class Trade {
         this.accepted = accepted;
     }
 
-    @Override
-    public String toString() {
-        String message =
-                "Id: " + id + "        seller: " + seller.getUsername() + "    product: " + Sellable.getNameInString(sellable) +
-                "       quantity: " + quantity + "    price: " + price + "    isResponded: ";
-        if (isResponded) {
-            if (accepted) {
-                message += "accepted";
-            } else {
-                message += "rejected";
-            }
-        } else {
-            message += "no";
-        }
-
-        return message;
-
-    }
-
 }

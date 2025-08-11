@@ -31,7 +31,7 @@ public class GameState {
     private int tradeIndex = 0;
     private final ArrayList<Trade> trades = new ArrayList<>();
 
-    public GameState(ArrayList<Player> players) {
+    public GameState(List<Player> players) {
         this.players.addAll(players);
         this.timeSystem = new TimeSystem();
 
