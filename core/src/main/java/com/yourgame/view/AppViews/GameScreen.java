@@ -4,8 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.InputMultiplexer;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
@@ -58,6 +57,10 @@ public class GameScreen extends GameBaseScreen {
     public boolean paused = false;
     private MainMenuView mainMenuView;
 
+    // --- NEW: Fields for Day/Night Cycle ---
+    private Texture nightOverlayTexture;
+    private Color ambientLightColor;
+
     public GameScreen() {
         controller = new GameController();
         player = controller.getPlayer();
@@ -103,6 +106,16 @@ public class GameScreen extends GameBaseScreen {
 
         batch = new SpriteBatch();
 
+        // Create a 1x1 black pixel texture for the overlay
+        Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
+        pixmap.setColor(Color.BLACK); // Use black for a neutral darkness
+        pixmap.fill();
+        nightOverlayTexture = new Texture(pixmap);
+        pixmap.dispose();
+
+        // This color object will be modified to change the overlay's transparency
+        ambientLightColor = new Color(0, 0, 0, 0);
+
         InputMultiplexer multiplexer = new InputMultiplexer();
         multiplexer.addProcessor(HUDStage);
         multiplexer.addProcessor(new InputAdapter() {
@@ -135,6 +148,7 @@ public class GameScreen extends GameBaseScreen {
             checkForTeleport();
             handleHudUpdates(delta);
             controller.updateDroppedItems(delta);
+            updateDayNightCycle();
 
             // Update animation timer
             stateTime += delta;
@@ -157,6 +171,17 @@ public class GameScreen extends GameBaseScreen {
         controller.renderMapObjects(assetManager, batch);
         TextureRegion currentFrame = player.walkAnimations[player.direction].getKeyFrame(stateTime, true);
         batch.draw(currentFrame, player.playerPosition.x, player.playerPosition.y);
+        batch.end();
+
+        // Render Day & Night
+        batch.setProjectionMatrix(HUDStage.getCamera().combined);
+        batch.begin();
+        // Set the batch's color to our managed ambient light color
+        batch.setColor(ambientLightColor);
+        // Draw the 1x1 texture scaled to fill the entire screen
+        batch.draw(nightOverlayTexture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        // IMPORTANT: Reset the batch color to white so the HUD isn't tinted!
+        batch.setColor(Color.WHITE);
         batch.end();
 
         hudManager.updateInventory(player.getBackpack().getInventory());
@@ -304,12 +329,7 @@ public class GameScreen extends GameBaseScreen {
         }
 
         if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
-            Item item = player.getBackpack().getInventory().getSelectedItem();
-            if (item instanceof Usable usable) {
-                boolean success = usable.use(player, controller.getCurrentMap(), controller.getTileInFront());
-                if (item instanceof Tool tool)
-                    player.consumeEnergy(tool.getConsumptionEnergy(player, Weather.Sunny, success));
-            }
+            controller.handleInteraction();
         }
 
         // --- Inventory Selection Input ---
@@ -417,5 +437,24 @@ public class GameScreen extends GameBaseScreen {
     public void closeMenu() {
         paused = false;
         Gdx.input.setInputProcessor(HUDStage);
+    }
+
+    private void updateDayNightCycle() {
+        int hour = App.getGameState().getGameTime().getHour();
+        int minute = App.getGameState().getGameTime().getMinutes();
+
+        float alpha = 0f; // Default to fully transparent (daytime)
+
+        if (hour < 6 || hour >= 20) { // Deep night (8 PM to 6 AM)
+            alpha = 0.7f; // Very dark
+        } else if (hour >= 17 && hour < 20) { // Evening (5 PM to 8 PM)
+            // Smoothly fades to dark
+            float totalMinutesInEvening = 3 * 60;
+            float elapsedMinutes = (hour - 17) * 60 + minute;
+            alpha = (elapsedMinutes / totalMinutesInEvening) * 0.7f;
+        }
+
+        // Set the alpha (transparency) of our color object
+        ambientLightColor.a = alpha;
     }
 }

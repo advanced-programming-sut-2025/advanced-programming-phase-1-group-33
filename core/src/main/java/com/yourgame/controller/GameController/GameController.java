@@ -6,15 +6,21 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.yourgame.Graphics.GameAssetManager;
 import com.yourgame.Graphics.MenuAssetManager;
 import com.yourgame.model.App;
+import com.yourgame.model.Farming.Plant;
 import com.yourgame.model.GameState;
+import com.yourgame.model.Item.Item;
+import com.yourgame.model.Item.Tools.Tool;
+import com.yourgame.model.Item.Usable;
 import com.yourgame.model.Map.*;
 import com.yourgame.model.Map.Elements.DroppedItem;
 import com.yourgame.model.UserInfo.Player;
 import com.yourgame.model.WeatherAndTime.Season;
+import com.yourgame.model.WeatherAndTime.Weather;
 
 import java.util.Iterator;
 import java.util.List;
 
+import static com.yourgame.model.Map.Tile.TILE_SIZE;
 import static com.yourgame.model.UserInfo.Player.PLAYER_HEIGHT;
 import static com.yourgame.model.UserInfo.Player.PLAYER_WIDTH;
 
@@ -118,8 +124,8 @@ public class GameController {
         float playerCenterY = player.playerPosition.y + (PLAYER_HEIGHT / 4f); // Center of the feet/lower body
 
         // Determine the tile the player is currently on
-        int tileX = (int) (playerCenterX / Tile.TILE_SIZE);
-        int tileY = (int) (playerCenterY / Tile.TILE_SIZE);
+        int tileX = (int) (playerCenterX / TILE_SIZE);
+        int tileY = (int) (playerCenterY / TILE_SIZE);
 
         // Get the tile in front based on direction
         return switch (player.direction) {
@@ -149,5 +155,30 @@ public class GameController {
             return true;
 
         return false;
+    }
+
+    /**
+     * This method is called when the player hits the left mouse button.
+     * */
+    public void handleInteraction() {
+        Tile tile = getTileInFront();
+
+        // Harvest Tree or Crop
+//        MapElement element = tile.getElement();
+//        if (element instanceof Plant plant && plant.hasProduct()) {
+//            for (Item item : plant.harvest()) {
+//                currentMap.spawnDroppedItem(item, tile.tileX * TILE_SIZE, tile.tileY * TILE_SIZE);
+//                plant.setHasProduct(false);
+//                return;
+//            }
+//        }
+
+        // Use item
+        Item item = player.getBackpack().getInventory().getSelectedItem();
+        if (item instanceof Usable usable) {
+            boolean success = usable.use(player, currentMap, tile);
+            if (item instanceof Tool tool)
+                player.consumeEnergy(tool.getConsumptionEnergy(player, Weather.Sunny, success));
+        }
     }
 }

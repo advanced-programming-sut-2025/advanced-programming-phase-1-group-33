@@ -47,4 +47,8 @@ public abstract class Plant extends MapElement implements TimeObserver {
     public boolean hasProduct() {
         return hasProduct;
     }
+
+    public void setHasProduct(boolean hasProduct) {
+        this.hasProduct = hasProduct;
+    }
 }
