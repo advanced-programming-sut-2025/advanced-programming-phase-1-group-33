@@ -1,7 +1,7 @@
 package com.yourgame.model.Stores;
 
 
-import com.yourgame.model.Item.Seeds;
+import com.yourgame.model.Farming.Seeds;
 import com.yourgame.model.WeatherAndTime.Season;
 
 public class PierreGeneralStoreSeedsItem extends ShopItem {

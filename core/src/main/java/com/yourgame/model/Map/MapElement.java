@@ -10,7 +10,7 @@ import java.util.List;
 
 public abstract class MapElement {
     public enum ElementType {
-        TREE, ROCK, WOOD, FORAGING, CROP, CRAFTING, ANIMAL_PRODUCT
+        TREE, ROCK, WOOD, FORAGING, CROP, CRAFTING, ANIMAL_PRODUCT, DROPPED_ITEM
     }
 
     protected final ElementType type;
@@ -36,7 +36,7 @@ public abstract class MapElement {
     public abstract TextureRegion getTexture(GameAssetManager assetManager, Season currentSeason);
     public abstract MapElement clone(int tileX, int tileY);
     /**
-     * @return The items that the element should drop on destruction, or interaction.
+     * @return The items that the element should drop on destruction.
      * */
     public abstract List<Item> drop();
 

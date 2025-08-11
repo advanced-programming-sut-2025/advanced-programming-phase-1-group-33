@@ -28,9 +28,4 @@ public class Notification {
     public Player getSender() {
         return sender;
     }
-
-    @Override
-    public String toString() {
-        return "sender: " + sender.getUsername() + "  message: " + getMessage();
-    }
 }

@@ -2,7 +2,7 @@ package com.yourgame.model.ManuFactor;
 
 
 import com.yourgame.model.IO.Response;
-import com.yourgame.model.Item.Wood;
+import com.yourgame.model.Farming.Wood;
 import com.yourgame.model.UserInfo.Player;
 import com.yourgame.model.WeatherAndTime.TimeFrame;
 

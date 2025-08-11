@@ -1,11 +1,15 @@
 package com.yourgame.model.Item.Tools;
 
+import com.yourgame.model.Item.Item;
 import com.yourgame.model.Map.Map;
 import com.yourgame.model.Map.MapElement;
 import com.yourgame.model.Map.Tile;
 import com.yourgame.model.Skill.Ability;
 import com.yourgame.model.UserInfo.Player;
 import com.yourgame.model.WeatherAndTime.Weather;
+
+import java.awt.*;
+import java.util.List;
 
 public class Axe extends Tool {
     public Axe() {
@@ -29,10 +33,7 @@ public class Axe extends Tool {
 
         if (element.getType() == MapElement.ElementType.TREE || element.getType() == MapElement.ElementType.WOOD) {
             if (element.takeDamage(damage)) {
-                // TODO:
-                // add the dropped items to the player inventory
-                element.drop();
-                map.removeElement(element);
+                dropElement(map, element);
             }
             return true;
         }

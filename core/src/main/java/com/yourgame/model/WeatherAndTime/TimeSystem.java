@@ -1,15 +1,14 @@
 package com.yourgame.model.WeatherAndTime;
 
+import com.yourgame.model.Farming.Plant;
+
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.List;
 
-import com.yourgame.model.App;
-import com.yourgame.observers.TimeObserver;
-
 public class TimeSystem {
-
     private final List<TimeObserver> observers = new ArrayList<>();
+    private final List<Plant> plants = new ArrayList<>();
 
     private Season season;
     private DaysOfTheWeek dayOfWeek;
@@ -30,6 +29,14 @@ public class TimeSystem {
         this.nextDayWeather = Weather.Sunny;
     }
 
+    public void addPlant(Plant plant) {
+        plants.add(plant);
+    }
+
+    public void removePlant(Plant plant) {
+        plants.remove(plant);
+    }
+
     public void addObserver(TimeObserver observer) {
         observers.add(observer);
     }
@@ -44,26 +51,30 @@ public class TimeSystem {
         }
     }
 
-    public void advanceMinutes(int gameMinutes) {
+    private void notifyPlants() {
+        for (Plant plant : plants) {
+            plant.onTimeChanged(this);
+        }
+    }
 
+    public void advanceMinutes(int gameMinutes) {
         this.minutes += gameMinutes;
         if (this.minutes >= 60) {
             this.hour += this.minutes / 60;
-            this.minutes = 0;
+            this.minutes %= 60;
         }
 
-        // If it's past midnight, move to next day when hitting 24:00
+        // If it's past midnight
         if (this.hour >= 24) {
             this.hour = this.hour % 24;
-            advanceDay(1);
         }
 
         // Pass-out rule: if time >= 02:00 AM
         if (this.hour >= 2 && this.hour < 6) {
             this.hour = 6;
             this.minutes = 0;
+            advanceDay(1);
         }
-        notifyObservers();
     }
 
     public void advanceDay(int d) {
@@ -76,12 +87,13 @@ public class TimeSystem {
             DaysOfTheWeek[] days = DaysOfTheWeek.values();
             int currentIndex = this.dayOfWeek.ordinal();
             this.dayOfWeek = days[(currentIndex + 1) % days.length];
+
+            this.weather = this.nextDayWeather;
+            this.nextDayWeather = createNextDayWeather();
+
+            notifyPlants();
+            notifyObservers();
         }
-
-        this.weather = this.nextDayWeather;
-        this.nextDayWeather = createNextDayWeather();
-
-        notifyObservers();
     }
 
     private void advanceSeason() {

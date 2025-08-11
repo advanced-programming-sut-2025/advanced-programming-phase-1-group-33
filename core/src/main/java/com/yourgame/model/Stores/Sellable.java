@@ -6,6 +6,9 @@ import com.yourgame.model.Animals.AnimalGoodType;
 import com.yourgame.model.Animals.Fish;
 import com.yourgame.model.Animals.FishType;
 import com.yourgame.model.App;
+import com.yourgame.model.Farming.Crop;
+import com.yourgame.model.Farming.CropType;
+import com.yourgame.model.Farming.Fruit;
 import com.yourgame.model.Item.*;
 import com.yourgame.model.ManuFactor.ArtisanGood;
 import com.yourgame.model.ManuFactor.ArtisanGoodType;
@@ -27,16 +30,6 @@ public interface Sellable {
             for (Ingredient ingredient : player.getBackpack().getIngredientQuantity().keySet()) {
                 if (ingredient instanceof AnimalGood animalGood && animalGood.getType().equals(animalGoodType)) {
                     return animalGood;
-                }
-            }
-            return null;
-        }
-
-        CropType cropType = CropType.getCropTypeByName(name);
-        if (cropType != null) {
-            for (Ingredient ingredient : player.getBackpack().getIngredientQuantity().keySet()) {
-                if (ingredient instanceof Crop crop && crop.getType().equals(cropType)) {
-                    return crop;
                 }
             }
             return null;

@@ -1,5 +1,6 @@
 package com.yourgame.model.Map;
 
+import com.yourgame.model.App;
 import com.yourgame.model.UserInfo.Player;
 import com.yourgame.model.WeatherAndTime.Season;
 
@@ -29,14 +30,15 @@ public class MapManager {
         houses = new HashMap<>();
         playersCurrentMap = new HashMap<>();
         for (Player player : players) {
-            Farm farm = new Farm(player.getUsername() + "-farm", "Game/Map/standard-farm.tmx");
+            Farm farm = new Farm(player.getUser().getUsername() + "-farm", "Game/Map/standard-farm.tmx");
             farm.spawnRandomElements(Season.Spring);
             farms.put(player, farm);
             houses.put(
                 player,
-                new Map(player.getUsername() + "-house", "Game/Map/Buildings/farm-house.tmx")
+                new Map(player.getUser().getUsername()+ "-house", "Game/Map/Buildings/farm-house.tmx")
             );
             playersCurrentMap.put(player, farm);
+            App.getGameState().getGameTime().addObserver(farm);
         }
     }
 

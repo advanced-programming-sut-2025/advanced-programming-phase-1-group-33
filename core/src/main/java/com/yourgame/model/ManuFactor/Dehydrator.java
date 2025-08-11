@@ -3,10 +3,10 @@ package com.yourgame.model.ManuFactor;
 
 import com.yourgame.model.IO.Response;
 import com.yourgame.model.App;
-import com.yourgame.model.Item.Crop;
-import com.yourgame.model.Item.CropType;
-import com.yourgame.model.Item.ForagingCrop;
-import com.yourgame.model.Item.Fruit;
+import com.yourgame.model.Farming.Crop;
+import com.yourgame.model.Farming.CropType;
+import com.yourgame.model.Farming.ForagingCrop;
+import com.yourgame.model.Farming.Fruit;
 import com.yourgame.model.UserInfo.Player;
 
 public class Dehydrator extends ArtisanMachine {
@@ -54,31 +54,31 @@ public class Dehydrator extends ArtisanMachine {
                 }
                 return new Response(false, "You don't have enough Ingredients!");
             }
-            case "Dried_Fruit", "dried_fruit" -> {
-                for (Ingredient ingredient : player.getBackpack().getIngredientQuantity().keySet()) {
-
-                    if (ingredient instanceof Fruit ||
-                            ingredient instanceof Crop crop && !(crop.getType().equals(CropType.Grape))) {
-
-                        if (player.getBackpack().getIngredientQuantity().getOrDefault(ingredient, 0) >= 5) {
-
-                            player.getBackpack().removeIngredients(ingredient, 5);
-
-                            if (ingredient instanceof Fruit)
-                                producingGood = new ArtisanGood(ArtisanGoodType.DriedFruit,
-                                        75,
-                                        (int) (7.5 * ((Fruit) ingredient).getSellPrice() + 25));
-                            else
-                                producingGood = new ArtisanGood(ArtisanGoodType.DriedFruit,
-                                        75,
-                                        (int) (7.5 * ((Crop) ingredient).getType().getBaseSellPrice() + 25));
-                            return new Response(true, "Your product is being made.Please wait.");
-                        }
-                        return new Response(false, "You don't have enough Ingredients!");
-                    }
-                }
-                return new Response(false, "You don't have enough Ingredients!");
-            }
+//            case "Dried_Fruit", "dried_fruit" -> {
+//                for (Ingredient ingredient : player.getBackpack().getIngredientQuantity().keySet()) {
+//
+//                    if (ingredient instanceof Fruit ||
+//                            ingredient instanceof Crop crop && !(crop.getType().equals(CropType.Grape))) {
+//
+//                        if (player.getBackpack().getIngredientQuantity().getOrDefault(ingredient, 0) >= 5) {
+//
+//                            player.getBackpack().removeIngredients(ingredient, 5);
+//
+//                            if (ingredient instanceof Fruit)
+//                                producingGood = new ArtisanGood(ArtisanGoodType.DriedFruit,
+//                                        75,
+//                                        (int) (7.5 * ((Fruit) ingredient).getSellPrice() + 25));
+//                            else
+//                                producingGood = new ArtisanGood(ArtisanGoodType.DriedFruit,
+//                                        75,
+//                                        (int) (7.5 * ((Crop) ingredient).getType().getBaseSellPrice() + 25));
+//                            return new Response(true, "Your product is being made.Please wait.");
+//                        }
+//                        return new Response(false, "You don't have enough Ingredients!");
+//                    }
+//                }
+//                return new Response(false, "You don't have enough Ingredients!");
+//            }
             case "Raisins", "raisins" -> {
                 for (Ingredient ingredient : player.getBackpack().getIngredientQuantity().keySet()) {
 

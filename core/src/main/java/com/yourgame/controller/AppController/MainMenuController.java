@@ -3,7 +3,9 @@ package com.yourgame.controller.AppController;
 import com.badlogic.gdx.Gdx;
 import com.yourgame.Main;
 import com.yourgame.model.App;
+import com.yourgame.model.GameState;
 import com.yourgame.model.UserInfo.HandleStayedLoggedIn;
+import com.yourgame.model.UserInfo.Player;
 import com.yourgame.model.UserInfo.User;
 import com.yourgame.model.enums.Commands.MenuTypes;
 import com.yourgame.view.AppViews.*;
@@ -33,6 +35,8 @@ public class MainMenuController {
     public void handleGoingToPreGameMenu(){
         //App.setCurrentMenu(MenuTypes.PreGameMenu);
         view.stopBackgroundMusic();
+        Player player = new Player(App.getCurrentUser());
+        App.setGameState(new GameState(List.of(player)));
         Main.getMain().getScreen().dispose();
         Main.getMain().setScreen(new GameScreen());
     }

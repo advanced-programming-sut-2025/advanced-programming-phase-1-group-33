@@ -1,12 +1,11 @@
 package com.yourgame.model.Npc;
 
 
-import com.yourgame.model.Item.Crop;
-import com.yourgame.model.Item.CropType;
+import com.yourgame.model.Farming.Crop;
+import com.yourgame.model.Farming.CropType;
 import com.yourgame.model.ManuFactor.ArtisanGood;
 import com.yourgame.model.ManuFactor.ArtisanGoodType;
 import com.yourgame.model.ManuFactor.Ingredient;
-import com.yourgame.model.Map.NpcHome;
 import com.yourgame.model.App;
 import com.yourgame.model.UserInfo.Coin;
 

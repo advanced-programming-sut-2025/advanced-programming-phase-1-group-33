@@ -9,7 +9,7 @@ import com.yourgame.model.Animals.HabitatType;
 import com.yourgame.model.App;
 import com.yourgame.model.IO.Response;
 import com.yourgame.model.Item.Stone;
-import com.yourgame.model.Item.Wood;
+import com.yourgame.model.Farming.Wood;
 import com.yourgame.model.UserInfo.Coin;
 import com.yourgame.model.enums.SymbolType;
 

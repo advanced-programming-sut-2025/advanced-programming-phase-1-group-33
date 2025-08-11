@@ -6,9 +6,9 @@ import java.util.ArrayList;
 import com.yourgame.model.App;
 import com.yourgame.model.IO.Response;
 import com.yourgame.model.Item.Inventory.BackpackType;
-import com.yourgame.model.Item.CropType;
-import com.yourgame.model.Item.Seeds;
-import com.yourgame.model.Item.TreeSource;
+import com.yourgame.model.Farming.CropType;
+import com.yourgame.model.Farming.Seeds;
+import com.yourgame.model.Farming.TreeSource;
 import com.yourgame.model.ManuFactor.ArtisanGood;
 import com.yourgame.model.ManuFactor.ArtisanGoodType;
 import com.yourgame.model.ManuFactor.Bouquet;
@@ -48,45 +48,45 @@ public class PierreGeneralStore extends Store {
                 Integer.MAX_VALUE));
 
         //Spring Seeds
-        inventory.add(new PierreGeneralStoreSeedsItem("Parsnip Seeds", Seeds.ParsnipSeeds, Season.Spring, 30, 5));
-        inventory.add(new PierreGeneralStoreSeedsItem("Bean Starter", Seeds.BeanStarter, Season.Spring, 90, 5));
-        inventory.add(new PierreGeneralStoreSeedsItem("Cauliflower Seeds", Seeds.CauliflowerSeeds, Season.Spring, 120
+        inventory.add(new PierreGeneralStoreSeedsItem("Parsnip Seeds", Seeds.Parsnip_Seeds, Season.Spring, 30, 5));
+        inventory.add(new PierreGeneralStoreSeedsItem("Bean Starter", Seeds.Bean_Starter, Season.Spring, 90, 5));
+        inventory.add(new PierreGeneralStoreSeedsItem("Cauliflower Seeds", Seeds.Cauliflower_Seeds, Season.Spring, 120
                 , 5));
-        inventory.add(new PierreGeneralStoreSeedsItem("Potato Seeds", Seeds.PotatoSeeds, Season.Spring, 75, 5));
-        inventory.add(new PierreGeneralStoreSeedsItem("Tulip Bulb", Seeds.TulipBulb, Season.Spring, 30, 5));
-        inventory.add(new PierreGeneralStoreSeedsItem("Kale Seeds", Seeds.KaleSeeds, Season.Spring, 105, 5));
-        inventory.add(new PierreGeneralStoreSeedsItem("Jazz Seeds", Seeds.JazzSeeds, Season.Spring, 45, 5));
-        inventory.add(new PierreGeneralStoreSeedsItem("Garlic Seeds", Seeds.GarlicSeeds, Season.Spring, 60, 5));
-        inventory.add(new PierreGeneralStoreSeedsItem("Rice Shoot", Seeds.RiceShoot, Season.Spring, 60, 5));
+        inventory.add(new PierreGeneralStoreSeedsItem("Potato Seeds", Seeds.Potato_Seeds, Season.Spring, 75, 5));
+        inventory.add(new PierreGeneralStoreSeedsItem("Tulip Bulb", Seeds.Tulip_Bulb, Season.Spring, 30, 5));
+        inventory.add(new PierreGeneralStoreSeedsItem("Kale Seeds", Seeds.Kale_Seeds, Season.Spring, 105, 5));
+        inventory.add(new PierreGeneralStoreSeedsItem("Jazz Seeds", Seeds.Jazz_Seeds, Season.Spring, 45, 5));
+        inventory.add(new PierreGeneralStoreSeedsItem("Garlic Seeds", Seeds.Garlic_Seeds, Season.Spring, 60, 5));
+        inventory.add(new PierreGeneralStoreSeedsItem("Rice Shoot", Seeds.Rice_Shoot, Season.Spring, 60, 5));
 
         //Summer Seeds
-        inventory.add(new PierreGeneralStoreSeedsItem("Melon Seeds", Seeds.MelonSeeds, Season.Summer, 120, 5));
-        inventory.add(new PierreGeneralStoreSeedsItem("Tomato Seeds", Seeds.TomatoSeeds, Season.Summer, 75, 5));
-        inventory.add(new PierreGeneralStoreSeedsItem("Blueberry Seeds", Seeds.BlueberrySeeds, Season.Summer, 120, 5));
-        inventory.add(new PierreGeneralStoreSeedsItem("Pepper Seeds", Seeds.PepperSeeds, Season.Summer, 60, 5));
-        inventory.add(new PierreGeneralStoreSeedsItem("Wheat Seeds", Seeds.WheatSeeds, Season.Summer, 15, 5));
-        inventory.add(new PierreGeneralStoreSeedsItem("Radish Seeds", Seeds.RadishSeeds, Season.Summer, 60, 5));
-        inventory.add(new PierreGeneralStoreSeedsItem("Poppy Seeds", Seeds.PoppySeeds, Season.Summer, 150, 5));
-        inventory.add(new PierreGeneralStoreSeedsItem("Spangle Seeds", Seeds.SpangleSeeds, Season.Summer, 75, 5));
-        inventory.add(new PierreGeneralStoreSeedsItem("Hops Starter", Seeds.HopsStarter, Season.Summer, 90, 5));
-        inventory.add(new PierreGeneralStoreSeedsItem("Corn Seeds", Seeds.CornSeeds, Season.Summer, 225, 5));
-        inventory.add(new PierreGeneralStoreSeedsItem("Sunflower Seeds", Seeds.SunflowerSeeds, Season.Summer, 300, 5));
-        inventory.add(new PierreGeneralStoreSeedsItem("Red Cabbage Seeds", Seeds.RedCabbageSeeds, Season.Summer, 150,
+        inventory.add(new PierreGeneralStoreSeedsItem("Melon Seeds", Seeds.Melon_Seeds, Season.Summer, 120, 5));
+        inventory.add(new PierreGeneralStoreSeedsItem("Tomato Seeds", Seeds.Tomato_Seeds, Season.Summer, 75, 5));
+        inventory.add(new PierreGeneralStoreSeedsItem("Blueberry Seeds", Seeds.Blueberry_Seeds, Season.Summer, 120, 5));
+        inventory.add(new PierreGeneralStoreSeedsItem("Pepper Seeds", Seeds.Pepper_Seeds, Season.Summer, 60, 5));
+        inventory.add(new PierreGeneralStoreSeedsItem("Wheat Seeds", Seeds.Wheat_Seeds, Season.Summer, 15, 5));
+        inventory.add(new PierreGeneralStoreSeedsItem("Radish Seeds", Seeds.Radish_Seeds, Season.Summer, 60, 5));
+        inventory.add(new PierreGeneralStoreSeedsItem("Poppy Seeds", Seeds.Poppy_Seeds, Season.Summer, 150, 5));
+        inventory.add(new PierreGeneralStoreSeedsItem("Spangle Seeds", Seeds.Spangle_Seeds, Season.Summer, 75, 5));
+        inventory.add(new PierreGeneralStoreSeedsItem("Hops Starter", Seeds.Hops_Starter, Season.Summer, 90, 5));
+        inventory.add(new PierreGeneralStoreSeedsItem("Corn Seeds", Seeds.Corn_Seeds, Season.Summer, 225, 5));
+        inventory.add(new PierreGeneralStoreSeedsItem("Sunflower Seeds", Seeds.Sunflower_Seeds, Season.Summer, 300, 5));
+        inventory.add(new PierreGeneralStoreSeedsItem("Red Cabbage Seeds", Seeds.Red_Cabbage_Seeds, Season.Summer, 150,
                 5));
 
         //Fall Seeds
-        inventory.add(new PierreGeneralStoreSeedsItem("Eggplant Seeds", Seeds.EggplantSeeds, Season.Fall, 30, 5));
-        inventory.add(new PierreGeneralStoreSeedsItem("Corn Seeds", Seeds.CornSeeds, Season.Fall, 225, 5));
-        inventory.add(new PierreGeneralStoreSeedsItem("Pumpkin Seeds", Seeds.PumpkinSeeds, Season.Fall, 150, 5));
-        inventory.add(new PierreGeneralStoreSeedsItem("Bok Choy Seeds", Seeds.BokChoySeeds, Season.Fall, 75, 5));
-        inventory.add(new PierreGeneralStoreSeedsItem("Yam Seeds", Seeds.YamSeeds, Season.Fall, 90, 5));
-        inventory.add(new PierreGeneralStoreSeedsItem("Cranberry Seeds", Seeds.CranberrySeeds, Season.Fall, 360, 5));
-        inventory.add(new PierreGeneralStoreSeedsItem("Sunflower Seeds", Seeds.SunflowerSeeds, Season.Fall, 300, 5));
-        inventory.add(new PierreGeneralStoreSeedsItem("Fairy Seeds", Seeds.FairySeeds, Season.Fall, 300, 5));
-        inventory.add(new PierreGeneralStoreSeedsItem("Amaranth Seeds", Seeds.AmaranthSeeds, Season.Fall, 105, 5));
-        inventory.add(new PierreGeneralStoreSeedsItem("Grape Starter", Seeds.GrapeStarter, Season.Fall, 90, 5));
-        inventory.add(new PierreGeneralStoreSeedsItem("Wheat Seeds", Seeds.WheatSeeds, Season.Fall, 15, 5));
-        inventory.add(new PierreGeneralStoreSeedsItem("Artichoke Seeds", Seeds.ArtichokeSeeds, Season.Fall, 45, 5));
+        inventory.add(new PierreGeneralStoreSeedsItem("Eggplant Seeds", Seeds.Eggplant_Seeds, Season.Fall, 30, 5));
+        inventory.add(new PierreGeneralStoreSeedsItem("Corn Seeds", Seeds.Corn_Seeds, Season.Fall, 225, 5));
+        inventory.add(new PierreGeneralStoreSeedsItem("Pumpkin Seeds", Seeds.Pumpkin_Seeds, Season.Fall, 150, 5));
+        inventory.add(new PierreGeneralStoreSeedsItem("Bok Choy Seeds", Seeds.Bok_Choy_Seeds, Season.Fall, 75, 5));
+        inventory.add(new PierreGeneralStoreSeedsItem("Yam Seeds", Seeds.Yam_Seeds, Season.Fall, 90, 5));
+        inventory.add(new PierreGeneralStoreSeedsItem("Cranberry Seeds", Seeds.Cranberry_Seeds, Season.Fall, 360, 5));
+        inventory.add(new PierreGeneralStoreSeedsItem("Sunflower Seeds", Seeds.Sunflower_Seeds, Season.Fall, 300, 5));
+        inventory.add(new PierreGeneralStoreSeedsItem("Fairy Seeds", Seeds.Fairy_Seeds, Season.Fall, 300, 5));
+        inventory.add(new PierreGeneralStoreSeedsItem("Amaranth Seeds", Seeds.Amaranth_Seeds, Season.Fall, 105, 5));
+        inventory.add(new PierreGeneralStoreSeedsItem("Grape Starter", Seeds.Grape_Starter, Season.Fall, 90, 5));
+        inventory.add(new PierreGeneralStoreSeedsItem("Wheat Seeds", Seeds.Wheat_Seeds, Season.Fall, 15, 5));
+        inventory.add(new PierreGeneralStoreSeedsItem("Artichoke Seeds", Seeds.Artichoke_Seeds, Season.Fall, 45, 5));
 
         inventory.add(new ShopItem("Rice", 200, Integer.MAX_VALUE));
         inventory.add(new ShopItem("Bouquet", 1000, 2));
@@ -197,7 +197,7 @@ public class PierreGeneralStore extends Store {
             switch (item.name) {
 
                 case "Rice":{
-                    App.getGameState().getCurrentPlayer().getBackpack().addIngredients(CropType.UnMilledRice,value);
+                    App.getGameState().getCurrentPlayer().getBackpack().addIngredients(CropType.Unmilled_Rice,value);
                     break;
                 }
                case "Bouquet":{

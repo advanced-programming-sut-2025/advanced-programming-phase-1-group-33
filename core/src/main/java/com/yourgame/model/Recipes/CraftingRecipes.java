@@ -2,8 +2,8 @@ package com.yourgame.model.Recipes;
 
 import com.yourgame.model.Item.ForagingMineral;
 import com.yourgame.model.Item.Stone;
-import com.yourgame.model.Item.TreeSource;
-import com.yourgame.model.Item.Wood;
+import com.yourgame.model.Farming.TreeSource;
+import com.yourgame.model.Farming.Wood;
 import com.yourgame.model.ManuFactor.ArtisanGood;
 import com.yourgame.model.ManuFactor.ArtisanGoodType;
 import com.yourgame.model.ManuFactor.Ingredient;

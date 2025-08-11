@@ -4,9 +4,9 @@ package com.yourgame.model.ManuFactor;
 import com.yourgame.model.Animals.AnimalGood;
 import com.yourgame.model.Animals.AnimalGoodType;
 import com.yourgame.model.IO.Response;
-import com.yourgame.model.Item.Crop;
-import com.yourgame.model.Item.CropType;
-import com.yourgame.model.Item.Seeds;
+import com.yourgame.model.Farming.Crop;
+import com.yourgame.model.Farming.CropType;
+import com.yourgame.model.Farming.Seeds;
 import com.yourgame.model.UserInfo.Player;
 import com.yourgame.model.WeatherAndTime.TimeFrame;
 
@@ -44,7 +44,7 @@ public class OilMaker extends ArtisanMachine {
                     processingTimes.put(new ArtisanGood(ArtisanGoodType.Oil), new TimeFrame(0, 6));
                     return new Response(true, "Your product is being made.Please wait.");
                 }
-                if (ingredient.equals(Seeds.SunflowerSeeds)) {
+                if (ingredient.equals(Seeds.Sunflower_Seeds)) {
                     player.getBackpack().removeIngredients(ingredient, 1);
                     producingGood = new ArtisanGood(ArtisanGoodType.Oil);
                     processingTimes.put(new ArtisanGood(ArtisanGoodType.Oil), new TimeFrame(2, 0));

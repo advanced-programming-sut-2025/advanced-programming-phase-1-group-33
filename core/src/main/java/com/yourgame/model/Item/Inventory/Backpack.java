@@ -4,6 +4,8 @@ import com.yourgame.model.Animals.Animal;
 import com.yourgame.model.Animals.AnimalGood;
 import com.yourgame.model.Animals.Fish;
 import com.yourgame.model.Animals.Hay;
+import com.yourgame.model.Farming.Crop;
+import com.yourgame.model.Farming.Fruit;
 import com.yourgame.model.Item.Tools.Tool;
 import com.yourgame.model.Item.*;
 import com.yourgame.model.ManuFactor.ArtisanMachine;
@@ -15,7 +17,6 @@ import com.yourgame.model.UserInfo.Coin;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.stream.Collectors;
 
 public class Backpack {
     private BackpackType type;
@@ -53,6 +54,10 @@ public class Backpack {
 
     public void addTool(Tool tool) {
         inventory.addItem(tool, 1);
+    }
+
+    public void addItem(Item item, int quantity) {
+        inventory.addItem(item, quantity);
     }
 
     public ArrayList<Tool> getTools() {

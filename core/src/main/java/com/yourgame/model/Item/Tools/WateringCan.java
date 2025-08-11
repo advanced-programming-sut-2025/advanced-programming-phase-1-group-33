@@ -1,5 +1,7 @@
 package com.yourgame.model.Item.Tools;
 
+import com.badlogic.gdx.Gdx;
+import com.yourgame.model.Farming.Crop;
 import com.yourgame.model.Map.Farm;
 import com.yourgame.model.Map.Map;
 import com.yourgame.model.Map.Tile;
@@ -28,11 +30,18 @@ public class WateringCan extends Tool {
 
     @Override
     public boolean use(Player player, Map map, Tile tile) {
-        if (!(map instanceof Farm)) return false;
-        if (tile.getDirtState() != Tile.DirtState.PLOWED) return false;
-        tile.setDirtState(Tile.DirtState.WATERED);
-        ((Farm) map).updateTileVisuals(tile.tileX, tile.tileY);
-        return true;
+        if (waterLevel <= 0) return false;
+        if (!(map instanceof Farm farm)) return false;
+
+        waterLevel--;
+        return switch (tile.getDirtState()) {
+            case PLOWED, PLOWED_GROWTH, PLOWED_WATER -> {
+                tile.setWatered(true);
+                farm.updateTileVisuals(tile.tileX, tile.tileY);
+                yield true;
+            }
+            default -> false;
+        };
     }
 
     @Override

@@ -2,7 +2,6 @@ package com.yourgame.Graphics.GameAssets;
 
 // Assuming these imports are already present or will be added
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
@@ -22,13 +21,9 @@ import com.yourgame.Graphics.MenuAssetManager;
 import com.yourgame.model.Item.Inventory.Inventory;
 import com.yourgame.model.Item.Inventory.InventorySlot;
 import com.yourgame.model.Item.Item;
-import com.yourgame.Graphics.MenuAssetManager;
 import com.yourgame.model.App;
-import com.yourgame.model.Item.Tools.Tool;
 import com.yourgame.model.UserInfo.Player;
-import com.yourgame.model.WeatherAndTime.TimeSystem;
-import com.yourgame.observers.TimeObserver;
-import com.yourgame.model.UserInfo.Player;
+import com.yourgame.model.WeatherAndTime.TimeObserver;
 
 import java.util.ArrayList;
 
@@ -236,12 +231,10 @@ public class HUDManager {
 
         int newPhase = this.localPlayer.getEnergyPhase();
         if (newPhase >= 0 && newPhase < energy_bar_textures.length) {
-            Gdx.app.log("HUDManager", "updating Energy Bar.");
             energyBarImage.setDrawable(new Image(this.energy_bar_textures[newPhase]).getDrawable());
-        } else {
-            Gdx.app.log("Energy_bar", "Invalid energy bar phase: " + newPhase);
         }
     }
+
     public void updateTime(float delta) {
 
         timeField.setText(App.getGameState().getGameTime().getTimeString());
@@ -249,8 +242,6 @@ public class HUDManager {
 
         this.timeAccumulator += delta;
         if (this.timeAccumulator >= 7f) { // every 7 seconds = 10 minutes
-
-
             Gdx.app.log("time", App.getGameState().getGameTime().getTimeString());
             Gdx.app.log("time", App.getGameState().getGameTime().getDateToString());
             App.getGameState().getGameTime().advanceMinutes(10);
@@ -258,6 +249,7 @@ public class HUDManager {
         }
 
     }
+
     public void updateWeather() {
         String b_path = App.getGameState().getGameTime().getWeather().getButtonPath();
 

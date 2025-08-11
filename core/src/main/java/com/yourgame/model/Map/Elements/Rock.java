@@ -3,11 +3,13 @@ package com.yourgame.model.Map.Elements;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.yourgame.Graphics.GameAssetManager;
 import com.yourgame.model.Item.Item;
+import com.yourgame.model.Item.Stone;
 import com.yourgame.model.Map.MapElement;
 import com.yourgame.model.Map.Tile;
 import com.yourgame.model.WeatherAndTime.Season;
 
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Rock extends MapElement {
@@ -31,6 +33,11 @@ public class Rock extends MapElement {
 
     @Override
     public List<Item> drop() {
-        return List.of();
+        List<Item> items = new ArrayList<>();
+        int amount = isSmall ? 1 : 3;
+        for (int i = 0; i < amount; i++) {
+            items.add(new Stone.StoneItem());
+        }
+        return items;
     }
 }

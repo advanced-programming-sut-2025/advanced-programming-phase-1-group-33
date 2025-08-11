@@ -5,8 +5,13 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.yourgame.Graphics.GameAssetManager;
 import com.yourgame.model.Item.Item;
 import com.yourgame.model.Item.Usable;
+import com.yourgame.model.Map.Map;
+import com.yourgame.model.Map.MapElement;
 import com.yourgame.model.UserInfo.Player;
 import com.yourgame.model.WeatherAndTime.Weather;
+
+import java.awt.*;
+import java.util.List;
 
 public abstract class Tool extends Item implements Usable {
     public enum ToolType {Axe, Pickaxe, Hoe, WateringCan, FishingPole, Scythe, MilkPale, Shears}
@@ -63,5 +68,21 @@ public abstract class Tool extends Item implements Usable {
             case "wateringcan" -> new WateringCan();
             default -> null;
         };
+    }
+
+    protected void dropElement(Map map, MapElement element) {
+        List<Item> droppedLoot = element.drop();
+
+        // Get the center position of the destroyed element to spawn the loot
+        Rectangle bounds = element.getPixelBounds();
+        float dropX = bounds.x + bounds.width / 2f;
+        float dropY = bounds.y + bounds.height / 2f;
+
+        // Spawn each item on the map
+        for (Item loot : droppedLoot) {
+            map.spawnDroppedItem(loot, dropX, dropY);
+        }
+
+        map.removeElement(element);
     }
 }

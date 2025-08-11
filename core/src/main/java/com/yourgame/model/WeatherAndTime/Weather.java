@@ -13,7 +13,7 @@ public enum Weather {
         new ArrayList<>(Arrays.asList(Season.Spring, Season.Summer, Season.Fall, Season.Winter))),
     Rainy(
         "rainy",
-        "RainnyButton",
+        "RainyButton",
         1.5,
         1.2,
         new ArrayList<>(Arrays.asList(Season.Spring, Season.Summer, Season.Fall))),
@@ -59,6 +59,4 @@ public enum Weather {
     public String getButtonPath() {
         return pathToButton;
     }
-
-
 }
