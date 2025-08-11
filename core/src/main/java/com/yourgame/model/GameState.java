@@ -37,7 +37,6 @@ public class GameState {
 
     }
 
-
     public GameState(ArrayList<Player> players, ArrayList<Farm> farms, User u, Map x) {
         this.farms.addAll(farms);
         this.players.addAll(players);

@@ -31,9 +31,7 @@ public class GameController {
 
     private MapManager mapManager;
     private Player player;
-    private List<Player> players;
     private Map currentMap;
-    private GameState gameState;
 
     private Sound popUpSound;
 
@@ -42,9 +40,6 @@ public class GameController {
         mapManager = new MapManager(List.of(player));
         currentMap = mapManager.getPlayersCurrentMap(player);
         player.playerPosition = currentMap.getSpawnPoint();
-        players = List.of(player);
-        gameState = new GameState(players);
-        App.setGameState(gameState);
 
         popUpSound = MenuAssetManager.getInstance().getSounds("popUp");
     }

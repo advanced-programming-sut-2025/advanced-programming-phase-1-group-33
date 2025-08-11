@@ -6,8 +6,10 @@ import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMapTile;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Rectangle;
+import com.yourgame.model.WeatherAndTime.TimeObserver;
+import com.yourgame.model.WeatherAndTime.TimeSystem;
 
-public class Farm extends Map {
+public class Farm extends Map implements TimeObserver {
     private final TiledMapTileLayer farmingLayer;
     private final TiledMapTile plowedTile;
     private final TiledMapTile wateredTile;
@@ -72,5 +74,10 @@ public class Farm extends Map {
             case WATERED_WATER -> cell.setTile(wateredWaterTile);
             default -> cell.setTile(null);
         }
+    }
+
+    @Override
+    public void onTimeChanged(TimeSystem timeSystem) {
+        spawnRandomElements(timeSystem.getSeason());
     }
 }
