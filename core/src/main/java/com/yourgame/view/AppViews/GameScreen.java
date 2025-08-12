@@ -24,14 +24,14 @@ import com.yourgame.controller.GameController.GameController;
 import com.yourgame.model.Map.*;
 import com.yourgame.model.App;
 import com.yourgame.Graphics.GameAssetManager;
+import com.yourgame.model.Map.Store.Store;
+import com.yourgame.model.Map.Store.PierreGeneralStore;
 import com.yourgame.model.UserInfo.Player;
 import com.yourgame.model.WeatherAndTime.ThunderManager;
 import com.yourgame.view.GameViews.JournalMenuView;
 import com.yourgame.view.GameViews.MainMenuView;
 import com.yourgame.view.GameViews.MapMenuView;
 import com.yourgame.view.GameViews.PierreShopMenuView;
-
-import java.awt.*;
 
 import static com.yourgame.model.UserInfo.Player.*;
 
@@ -63,7 +63,7 @@ public class GameScreen extends GameBaseScreen {
 
     // Pierre's shop
     private PierreShopMenuView pierreShopMenuView;
-
+    private PierreGeneralStore pierreGeneralStore;
 
     private final ThunderManager thunderManager;
 
@@ -162,11 +162,6 @@ public class GameScreen extends GameBaseScreen {
             updateDayNightCycle();
             thunderManager.update(delta);
 
-            //handle pierre's shop menu
-            if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
-                openMenu("pierreShop");
-            }
-
             // Update animation timer
             stateTime += delta;
         }
@@ -196,6 +191,10 @@ public class GameScreen extends GameBaseScreen {
 
         // Render Day & Night
         renderOverlay();
+
+        if(Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
+            openMenu("pierreShop");
+        }
 
         hudManager.updateInventory(player.getBackpack().getInventory());
         super.render(delta);
@@ -290,23 +289,6 @@ public class GameScreen extends GameBaseScreen {
             hudManager.selectSlot(10);
         if (Gdx.input.isKeyJustPressed(Input.Keys.EQUALS))
             hudManager.selectSlot(11);
-        if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
-            if (paused == false) {
-                openMenu("main");
-            } else {
-                closeMenu();
-            }
-        }
-        if (Gdx.input.isKeyJustPressed(Input.Keys.F)) {
-            paused = true;
-            Gdx.input.setInputProcessor(new InputMultiplexer(HUDStage, menuStage));
-            menuStage.addActor(new JournalMenuView(MenuAssetManager.getInstance().getSkin(3), menuStage, this));
-        }
-        if (Gdx.input.isKeyJustPressed(Input.Keys.M)) {
-            paused = true;
-            Gdx.input.setInputProcessor(new InputMultiplexer(HUDStage, menuStage));
-            menuStage.addActor(new MapMenuView(MenuAssetManager.getInstance().getSkin(3), menuStage, this));
-        }
     }
 
     private void handleInput(float delta) {
@@ -351,13 +333,32 @@ public class GameScreen extends GameBaseScreen {
             }
         }
 
-        if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
+        if (Gdx.input.isButtonJustPressed(Input.Keys.SPACE)) {
             controller.handleInteraction();
             if (controller.getCurrentMap() instanceof Store store) {
                 if (store.isPlayerInTradeZone(player)) {
-                    Gdx.app.log("Store", "Player is in trade zone");
+                    Gdx.app.exit();
+                    openMenu("pierreShop");
                 }
             }
+        }
+
+        if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
+            if (!paused) {
+                openMenu("main");
+            } else {
+                closeMenu();
+            }
+        }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.F)) {
+            paused = true;
+            Gdx.input.setInputProcessor(new InputMultiplexer(HUDStage, menuStage));
+            menuStage.addActor(new JournalMenuView(MenuAssetManager.getInstance().getSkin(3), menuStage, this));
+        }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.M)) {
+            paused = true;
+            Gdx.input.setInputProcessor(new InputMultiplexer(HUDStage, menuStage));
+            menuStage.addActor(new MapMenuView(MenuAssetManager.getInstance().getSkin(3), menuStage, this));
         }
 
         // --- Inventory Selection Input ---
