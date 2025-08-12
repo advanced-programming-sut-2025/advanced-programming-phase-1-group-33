@@ -170,6 +170,14 @@ public class Map {
         return tileStates[tileX][tileY];
     }
 
+    public int getMapWidth() {
+        return mapWidth;
+    }
+
+    public int getMapHeight() {
+        return mapHeight;
+    }
+
     public Vector2 getSpawnPoint(String spawnName) {
         MapObject object = spawnPoints.get(spawnName);
 

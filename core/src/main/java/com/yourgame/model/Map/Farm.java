@@ -6,6 +6,7 @@ import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMapTile;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Rectangle;
+import com.yourgame.model.App;
 import com.yourgame.model.WeatherAndTime.TimeObserver;
 import com.yourgame.model.WeatherAndTime.TimeSystem;
 import com.yourgame.model.WeatherAndTime.Weather;
@@ -85,6 +86,9 @@ public class Farm extends Map implements TimeObserver {
                 tileStates[x][y].setWatered(timeSystem.getWeather() == Weather.Rainy);
                 updateTileVisuals(x, y);
             }
+        }
+        if (timeSystem.getWeather() == Weather.Stormy) {
+            App.getGameState().getThunderManager().triggerThunderStrike(this);
         }
     }
 }

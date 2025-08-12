@@ -6,6 +6,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.yourgame.Graphics.GameAssetManager;
+import com.yourgame.controller.GameController.GameController;
 import com.yourgame.model.Map.Farm;
 import com.yourgame.model.Map.Map;
 import com.yourgame.model.UserInfo.GiftBetweenPlayers;
@@ -13,12 +15,14 @@ import com.yourgame.model.UserInfo.Player;
 import com.yourgame.model.UserInfo.RelationNetwork;
 import com.yourgame.model.UserInfo.PlayersRelation;
 import com.yourgame.model.UserInfo.User;
+import com.yourgame.model.WeatherAndTime.ThunderManager;
 import com.yourgame.model.WeatherAndTime.TimeSystem;
 
 public class GameState {
     private final ArrayList<Player> players = new ArrayList<>();
     private final ArrayList<Farm> farms = new ArrayList<>();
     private TimeSystem timeSystem;
+    private ThunderManager thunderManager;
 
     private Map map;
 
@@ -34,7 +38,7 @@ public class GameState {
     public GameState(List<Player> players) {
         this.players.addAll(players);
         this.timeSystem = new TimeSystem();
-
+        this.thunderManager = new ThunderManager();
     }
 
     public GameState(ArrayList<Player> players, ArrayList<Farm> farms, User u, Map x) {
@@ -45,6 +49,9 @@ public class GameState {
         relationInitializer(players);
     }
 
+    public ThunderManager getThunderManager() {
+        return thunderManager;
+    }
 
     public void nextPlayerTurn() {
 

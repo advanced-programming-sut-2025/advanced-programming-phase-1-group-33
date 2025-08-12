@@ -182,6 +182,7 @@ public class GameController {
                 // If the plant is single-harvest, it will be destroyed.
                 if (plant.getHealth() <= 0) {
                     currentMap.removeElement(plant);
+                    App.getGameState().getGameTime().removePlant(plant);
                 }
                 return;
             }

@@ -20,7 +20,6 @@ import com.yourgame.model.WeatherAndTime.Weather;
 import java.util.HashMap;
 
 public class GameAssetManager extends AssetManager {
-
     private static GameAssetManager instance;
     public static GameAssetManager getInstance() {
         if (instance == null) {
@@ -55,7 +54,7 @@ public class GameAssetManager extends AssetManager {
     // A cache for textures that are loaded dynamically by path.
     private final HashMap<String, Texture> textureCache = new HashMap<>();
 
-    public GameAssetManager() {
+    private GameAssetManager() {
         this.clockManager = new clockUIAssetManager(WEATHER_CLOCK_SKIN_PATH, CLOCK_ATLAS_PATH, Default_FONT_PATH,
                 EnergyBarPath, InventoryBarDirectoryPath);
 

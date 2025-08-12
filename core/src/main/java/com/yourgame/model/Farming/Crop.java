@@ -18,7 +18,6 @@ public class Crop extends Plant {
     public Crop(CropType cropType, Fertilizer fertilizer, int worldX, int worldY) {
         super(ElementType.CROP, new Rectangle(worldX, worldY, TILE_SIZE, TILE_SIZE), 1, fertilizer);
         this.cropType = cropType;
-        currentStage = cropType.getNumberOfStages();
     }
 
     public CropType getCropType() {

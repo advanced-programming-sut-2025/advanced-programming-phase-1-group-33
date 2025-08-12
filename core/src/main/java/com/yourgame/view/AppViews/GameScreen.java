@@ -24,6 +24,8 @@ import com.yourgame.model.Map.*;
 import com.yourgame.model.App;
 import com.yourgame.Graphics.GameAssetManager;
 import com.yourgame.model.UserInfo.Player;
+import com.yourgame.model.WeatherAndTime.ThunderManager;
+import com.yourgame.model.WeatherAndTime.Weather;
 import com.yourgame.view.GameViews.JournalMenuView;
 import com.yourgame.view.GameViews.MainMenuView;
 import com.yourgame.view.GameViews.MapMenuView;
@@ -57,6 +59,8 @@ public class GameScreen extends GameBaseScreen {
     private Texture nightOverlayTexture;
     private Color ambientLightColor;
 
+    private final ThunderManager thunderManager;
+
     public GameScreen() {
         super();
 
@@ -66,8 +70,10 @@ public class GameScreen extends GameBaseScreen {
 
         mapRenderer = new OrthogonalTiledMapRenderer(controller.getCurrentMap().getTiledMap());
 
-        assetManager = new GameAssetManager();
+        assetManager = GameAssetManager.getInstance();
         clockUI = assetManager.getClockManager();
+
+        thunderManager = App.getGameState().getThunderManager();
 
         // HUD‌ manager
         hudManager = new HUDManager(HUDStage, clockUI, assetManager, player);
@@ -148,6 +154,7 @@ public class GameScreen extends GameBaseScreen {
             handleHudUpdates(delta);
             controller.updateDroppedItems(delta);
             updateDayNightCycle();
+            thunderManager.update(delta);
 
             // Update animation timer
             stateTime += delta;
@@ -164,12 +171,16 @@ public class GameScreen extends GameBaseScreen {
         mapRenderer.setView(camera);
         mapRenderer.render();
 
-        // Render player
+        // Render On-Map
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
+        // Map Elements
         controller.renderMapObjects(assetManager, batch);
+        // Player
         TextureRegion currentFrame = player.walkAnimations[player.direction].getKeyFrame(stateTime, true);
         batch.draw(currentFrame, player.playerPosition.x, player.playerPosition.y);
+        // Thunder
+        thunderManager.render(batch);
         batch.end();
 
         // Render Day & Night
@@ -216,6 +227,7 @@ public class GameScreen extends GameBaseScreen {
             clickSound.dispose();
         }
         mapRenderer.dispose();
+        thunderManager.dispose();
         batch.dispose();
     }
 
@@ -402,6 +414,11 @@ public class GameScreen extends GameBaseScreen {
             player.consumeEnergy(10);
         }
 
+        if (Gdx.input.isKeyJustPressed(Input.Keys.H)) {
+            if (!(controller.getCurrentMap() instanceof Farm)) return;
+            App.getGameState().getThunderManager().triggerThunderStrike(controller.getCurrentMap());
+        }
+
         // Example: Update weather (cycle through enums with 'W' key)
         if (Gdx.input.isKeyJustPressed(Input.Keys.Q)) {
             // TODO: Need the CheetCode Be Implemented
@@ -415,7 +432,7 @@ public class GameScreen extends GameBaseScreen {
         // Example: Update season (cycle through enums with 'R' key)
         if (Gdx.input.isKeyJustPressed(Input.Keys.T)) {
             // TODO: need the cheat Code Be implemented
-            App.getGameState().getGameTime().advanceMinutes(20);
+            App.getGameState().getGameTime().advanceMinutes(40);
             // HUDManager.seasonTypeButton[] seasons = HUDManager.seasonTypeButton.values();
             // int nextIndex = (currentSeason.ordinal() + 1) % seasons.length;
             // currentSeason = seasons[nextIndex];
