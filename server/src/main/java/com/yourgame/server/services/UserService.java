@@ -1,0 +1,54 @@
+// server/src/main/java/com/yourgame/server/services/UserService.java
+package com.yourgame.server.services;
+
+import com.yourgame.model.UserInfo.User;
+import com.yourgame.persistence.UserDAO;
+// The BCrypt import is removed
+import java.sql.SQLException;
+
+public class UserService {
+
+    private final UserDAO userDAO;
+
+    public UserService() {
+        this.userDAO = new UserDAO();
+    }
+
+    /**
+     * DANGER: This method stores a plain text password. This is extremely insecure.
+     * Do NOT use this in a real application.
+     */
+    public String registerUser(User user) {
+        try {
+            if (userDAO.userExists(user.getUsername())) {
+                return "Error: Username already exists.";
+            }
+
+            // DANGER: Saving the user object directly, which contains the plain text password.
+            userDAO.saveUser(user);
+            return "Success: User registered successfully!";
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return "Error: A database error occurred.";
+        }
+    }
+
+    /**
+     * DANGER: This method compares passwords in plain text. This is extremely insecure.
+     * Do NOT use this in a real application.
+     */
+    public User loginUser(String username, String plainTextPassword) {
+        try {
+            User user = userDAO.loadUser(username);
+
+            // DANGER: A simple, insecure string comparison.
+            if (user != null && plainTextPassword.equals(user.getPassword())) {
+                return user; // Login successful
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null; // Login failed
+    }
+}

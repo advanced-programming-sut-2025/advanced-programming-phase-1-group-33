@@ -3,10 +3,10 @@ package com.yourgame;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.yourgame.network.ClientConnectionManager;
+import com.yourgame.network.GameNetworkHandler;
 import com.yourgame.view.AppViews.GameScreen;
 import com.yourgame.view.AppViews.MainMenuView;
 import com.yourgame.view.AppViews.SignupMenuView;
-
 
 import java.sql.SQLException;
 
@@ -18,6 +18,7 @@ public class Main extends Game {
     private static Main main;
     private static SpriteBatch batch;
     private ClientConnectionManager connectionManager;
+    private GameNetworkHandler networkHandler;
 
     @Override
     public void create() {
@@ -33,7 +34,7 @@ public class Main extends Game {
         batch = new SpriteBatch();
         // --- Start Client Connection ---
         connectionManager = new ClientConnectionManager();
-        connectionManager.startConnection("localhost", 8080); // Connect to the server
+        connectionManager.startConnection("localhost", 8080, networkHandler); // Connect to the server
         // -----------------------------
 
         main.setScreen(new MainMenuView());
@@ -47,6 +48,9 @@ public class Main extends Game {
     @Override
     public void dispose() {
         batch.dispose();
+        if (connectionManager != null) {
+            connectionManager.disconnect();
+        }
     }
 
     public static Main getMain() {
@@ -56,4 +60,13 @@ public class Main extends Game {
     public static SpriteBatch getBatch() {
         return batch;
     }
+
+    public ClientConnectionManager getConnectionManager() {
+        return connectionManager;
+    }
+
+    public void setConnectionManager(ClientConnectionManager connectionManager) {
+        this.connectionManager = connectionManager;
+    }
+
 }

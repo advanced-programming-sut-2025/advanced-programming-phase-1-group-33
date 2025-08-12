@@ -6,6 +6,7 @@ import com.yourgame.model.Result;
 import com.yourgame.model.UserInfo.HandleStayedLoggedIn;
 import com.yourgame.model.UserInfo.User;
 import com.yourgame.model.enums.Commands.MenuTypes;
+import com.yourgame.network.protocol.Auth.ForgotPasswordRequest;
 import com.yourgame.persistence.UserDAO;
 import com.yourgame.view.AppViews.LoginMenuView;
 import com.yourgame.view.AppViews.MainMenuView;
@@ -63,20 +64,25 @@ public class LoginMenuController extends Controller {
         if(username.isEmpty()){
             return new Result(false, "Username is required!");
         }
+        ForgotPasswordRequest request = new ForgotPasswordRequest(username);
+        Main.getMain().getConnectionManager().sendDataToServer(request);
+        
+        // TODO: this should be done. 
+        return new Result(true, "TODO"); 
 
-        UserDAO userDAO = App.getUserDAO();
-        try {
-            User user = userDAO.loadUser(username);
-            if(user == null){
-                return new Result(false, "User not found!");
-            }
-            else{
-                loggedInUser = user;
-                return new Result(true, user.getSecurityQuestion().getQuestion());
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+        // try {
+        //     User user = userDAO.loadUser(username);
+        //     if(user == null){
+        //         return new Result(false, "User not found!");
+        //     }
+        //     else{
+        //         loggedInUser = user;
+        //         return new Result(true, user.getSecurityQuestion().getQuestion());
+        //     }
+        // } catch (SQLException e) {
+        //     throw new RuntimeException(e);
+        // }
+
     }
 
     public Result handleFindButton(String answer){

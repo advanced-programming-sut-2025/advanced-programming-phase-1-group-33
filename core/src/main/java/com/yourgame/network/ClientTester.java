@@ -5,31 +5,35 @@ import com.yourgame.model.UserInfo.Player;
 
 public class ClientTester {
     public static void main(String[] args) {
-        String serverIp = "localhost"; // IP address of the server
-        int serverPort = 8080; // Port the server is listening on
+        String serverIp = "localhost";
+        int serverPort = 8080;
 
         System.out.println("Starting client tester...");
+        // ساخت یک Listener ساده برای تست که فقط پیام‌ها را چاپ می‌کند
+        NetworkListener testListener = new NetworkListener() {
+            @Override
+            public void received(Object object) {
+                System.out.println("Test Listener Received: " + object.toString());
+            }
+        };
+
         ClientConnectionManager connectionManager = new ClientConnectionManager();
-        connectionManager.startConnection(serverIp, serverPort);
+        // پاس دادن listener به متد startConnection
+        connectionManager.startConnection(serverIp, serverPort, testListener);
 
         try {
-            // Simulate some time to allow the client thread to connect and run
-            Thread.sleep(5000);
+            Thread.sleep(2000); // زمان برای برقراری اتصال
 
+            // ارسال یک آبجکت Player برای تست
             Player testPlayer = Player.guest();
-            // You can add logic to send a test message here
             connectionManager.sendDataToServer(testPlayer);
-            System.out.println("sent data");
-            connectionManager.sendDataToServer("Hello from test client!");
+            System.out.println("Sent test player data.");
 
-            // Allow more time for communication
             Thread.sleep(2000);
 
         } catch (InterruptedException e) {
             e.printStackTrace();
-        }  
-        finally {
-            // Disconnect the client
+        } finally {
             connectionManager.disconnect();
             System.out.println("Client tester finished.");
         }
