@@ -17,6 +17,10 @@ public class SkillMenuView extends Window {
         setMovable(false);
         pad(20f);
 
+        TooltipManager tooltipManager = TooltipManager.getInstance();
+        tooltipManager.initialTime = 0.2f;
+        tooltipManager.subsequentTime = 0.1f;
+
         Label farmingSkill = new Label("Farming Skill  :    ", skin , "Bold");
         Label miningSkill = new Label("Mining Skill  :    ", skin , "Bold");
         Label foragingSkill = new Label("Foraging Skill  :    ", skin , "Bold");
@@ -32,6 +36,22 @@ public class SkillMenuView extends Window {
         Image miningIcon = new Image(GameAssetManager.getInstance().getSkillMenuIcons("mining"));
         Image foragingIcon = new Image(GameAssetManager.getInstance().getSkillMenuIcons("foraging"));
         Image fishingIcon = new Image(GameAssetManager.getInstance().getSkillMenuIcons("fishing"));
+
+        farmingIcon.addListener(new TextTooltip(
+                "Levels are gained by harvesting crops and caring for animals.\nEach level grants +1 hoe and watering can proficiency.",
+                skin));
+
+        miningIcon.addListener(new TextTooltip(
+                "Mining skill is increased by breaking rocks with a Pickaxe.\nEach level grants +1 pickaxe proficiency.",
+                skin));
+
+        foragingIcon.addListener(new TextTooltip(
+                "Foraging skill includes gathered goods and wood from chopped trees.\nEach level grants +1 axe proficiency.",
+                skin));
+
+        fishingIcon.addListener(new TextTooltip(
+                "Fishing skill increases by catching fish or completing the fishing mini-game.\nEach level grants +1 fishing rod proficiency.",
+                skin));
 
         TextButton backButton = GameAssetManager.getInstance().getButton("Back");
 
