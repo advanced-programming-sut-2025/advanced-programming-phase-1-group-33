@@ -23,7 +23,7 @@ public class MapManager {
         buildings.put("fish-shop", new Map("fish-shop", "Game/Map/Buildings/fish-shop.tmx"));
         buildings.put("JojaMart", new Map("JojaMart", "Game/Map/Buildings/JojaMart.tmx"));
         buildings.put("marnie-ranch", new Map("marnie-ranch", "Game/Map/Buildings/marnie-ranch.tmx"));
-        buildings.put("pierre-store", new Map("pierre-store", "Game/Map/Buildings/pierre-store.tmx"));
+        buildings.put("pierre-store", new Store("pierre-store", "Game/Map/Buildings/pierre-store.tmx"));
         buildings.put("saloon", new Map("saloon", "Game/Map/Buildings/saloon.tmx"));
 
         farms = new HashMap<>();
