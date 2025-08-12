@@ -74,6 +74,7 @@ public class GameScreen extends GameBaseScreen {
 
         controller = new GameController();
         player = controller.getPlayer();
+        App.getGameState().getGameTime().addHourObserver(player.getBuffManager()); // Toff Mali Khales :(
         stateTime = 0f;
 
         mapRenderer = new OrthogonalTiledMapRenderer(controller.getCurrentMap().getTiledMap());
@@ -211,6 +212,7 @@ public class GameScreen extends GameBaseScreen {
         renderOverlay();
 
         hudManager.updateInventory(player.getBackpack().getInventory());
+        hudManager.updateBuffs(player.getBuffManager().getActiveBuffs());
         super.render(delta);
     }
 

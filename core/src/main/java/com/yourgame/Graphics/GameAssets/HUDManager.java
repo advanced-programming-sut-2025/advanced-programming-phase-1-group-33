@@ -18,6 +18,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.yourgame.Graphics.GameAssetManager;
 import com.yourgame.Graphics.MenuAssetManager;
+import com.yourgame.model.Food.Buff;
 import com.yourgame.model.Item.Inventory.Inventory;
 import com.yourgame.model.Item.Inventory.InventorySlot;
 import com.yourgame.model.Item.Item;
@@ -26,6 +27,7 @@ import com.yourgame.model.UserInfo.Player;
 import com.yourgame.model.WeatherAndTime.TimeObserver;
 
 import java.util.ArrayList;
+import java.util.List;
 
 // --- New HUDManager Class (Conceptual - you'll implement this) ---
 // This class will encapsulate the creation and management of HUD elements.
@@ -36,6 +38,9 @@ public class HUDManager {
     private final Skin skin_Nz = MenuAssetManager.getInstance().getSkin(3);
 
     private Player localPlayer;
+
+    // Buff
+    private final Table buffsTable;
 
     // Energy Bar
     private Texture[] energy_bar_textures;
@@ -74,6 +79,12 @@ public class HUDManager {
         for (int i = 0; i < inventorySlotsUI.length; i++) {
             inventorySlotsUI[i] = new InventorySlotUI(selectionDrawable, font);
         }
+
+        // Initialize the table for buffs
+        this.buffsTable = new Table();
+        buffsTable.setFillParent(true);
+        buffsTable.top().right().padTop(10).padRight(210); // padRight should be width of clock + padding
+        hudStage.addActor(buffsTable);
     }
 
     /**
@@ -134,16 +145,16 @@ public class HUDManager {
 
         timeField = new TextField(App.getGameState().getGameTime().getTimeString(), skin_Nz, "default");
         dateField = new TextField(App.getGameState().getGameTime().getDateToString(), skin_Nz, "default");
-        goldField = new TextField("todo", skin_Nz, "default");
+        //goldField = new TextField("todo", skin_Nz, "default");
 
         timeField.setDisabled(true);
         dateField.setDisabled(true);
-        goldField.setDisabled(true);
+        //goldField.setDisabled(true);
         timeField.setMaxLength(5);
 
         timeInfoTable.add(dateField).padBottom(5).top().right().height(40).padBottom(40).row();
         timeInfoTable.add(timeField).padBottom(5).top().right().height(40).padBottom(40).row();
-        timeInfoTable.add(goldField).top().right().height(40).padBottom(60);
+        //timeInfoTable.add(goldField).top().right().height(40).padBottom(60);
 
         clockAndIndicatorsStack.add(timeInfoTable);
 
@@ -270,5 +281,23 @@ public class HUDManager {
 
     public int getSelectedSlotIndex() {
         return selectedSlotIndex;
+    }
+
+    /**
+     * This method is called every frame to keep the buff display in sync.
+     * @param activeBuffs The current list of active buffs from the BuffManager.
+     */
+    public void updateBuffs(List<Buff> activeBuffs) {
+        // Clear the table to redraw it from scratch
+        buffsTable.clearChildren();
+
+        if (activeBuffs.isEmpty()) {
+            return; // Nothing to show
+        }
+
+        for (Buff buff : activeBuffs) {
+            Image buffIcon = new Image(assetManager.getTexture(buff.getIconPath()));
+            buffsTable.add(buffIcon).padLeft(5);
+        }
     }
 }

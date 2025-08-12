@@ -27,10 +27,10 @@ public class SkillMenuView extends Window {
         Label fishingSkill = new Label("Fishing Skill  :    ", skin , "Bold");
 
         Player player = gameScreen.getPlayer();
-        Label farmingSkillLevel = new Label("Level " + player.getFarmingSkill().level(), skin);
-        Label miningSkillLevel = new Label("Level " + player.getMiningSkill().level(), skin);
-        Label foragingSkillLevel = new Label("Level " + player.getForagingSkill().level(), skin);
-        Label fishingSkillLevel = new Label("Level " + player.getFishingSkill().level(), skin);
+        Label farmingSkillLevel = new Label("Level " + player.getFarmingLevel(), skin);
+        Label miningSkillLevel = new Label("Level " + player.getMiningLevel(), skin);
+        Label foragingSkillLevel = new Label("Level " + player.getForagingLevel(), skin);
+        Label fishingSkillLevel = new Label("Level " + player.getFishingLevel(), skin);
 
         Image farmingIcon = new Image(GameAssetManager.getInstance().getSkillMenuIcons("farming"));
         Image miningIcon = new Image(GameAssetManager.getInstance().getSkillMenuIcons("mining"));

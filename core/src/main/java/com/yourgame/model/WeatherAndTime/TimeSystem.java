@@ -7,7 +7,8 @@ import java.util.Random;
 import java.util.List;
 
 public class TimeSystem {
-    private final List<TimeObserver> observers = new ArrayList<>();
+    private final List<TimeObserver> dayObservers = new ArrayList<>();
+    private final List<TimeObserver> hourObservers = new ArrayList<>();
     private final List<Plant> plants = new ArrayList<>();
 
     private Season season;
@@ -37,16 +38,26 @@ public class TimeSystem {
         plants.remove(plant);
     }
 
-    public void addObserver(TimeObserver observer) {
-        observers.add(observer);
+    public void addDayObserver(TimeObserver observer) {
+        dayObservers.add(observer);
+    }
+    public void removeDayObserver(TimeObserver observer) {
+        dayObservers.remove(observer);
+    }
+    private void notifyDayObservers() {
+        for (TimeObserver observer : dayObservers) {
+            observer.onTimeChanged(this);
+        }
     }
 
-    public void removeObserver(TimeObserver observer) {
-        observers.remove(observer);
+    public void addHourObserver(TimeObserver observer) {
+        hourObservers.add(observer);
     }
-
-    private void notifyObservers() {
-        for (TimeObserver observer : observers) {
+    public void removeHourObserver(TimeObserver observer) {
+        hourObservers.remove(observer);
+    }
+    private void notifyHourObservers() {
+        for (TimeObserver observer : hourObservers) {
             observer.onTimeChanged(this);
         }
     }
@@ -60,8 +71,12 @@ public class TimeSystem {
     public void advanceMinutes(int gameMinutes) {
         this.minutes += gameMinutes;
         if (this.minutes >= 60) {
-            this.hour += this.minutes / 60;
+            int increment = this.minutes / 60;
+            this.hour += increment;
             this.minutes %= 60;
+            for (int i = 0; i < increment; i++) {
+                notifyHourObservers();
+            }
         }
 
         // If it's past midnight
@@ -92,7 +107,7 @@ public class TimeSystem {
             this.nextDayWeather = createNextDayWeather();
 
             notifyPlants();
-            notifyObservers();
+            notifyDayObservers();
         }
     }
 

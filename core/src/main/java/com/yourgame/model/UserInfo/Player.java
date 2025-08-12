@@ -11,6 +11,7 @@ import com.yourgame.model.App;
 import com.yourgame.model.Farming.Fertilizer;
 import com.yourgame.model.Farming.Seeds;
 import com.yourgame.model.Farming.TreeSource;
+import com.yourgame.model.Food.BuffManager;
 import com.yourgame.model.Food.Food;
 import com.yourgame.model.Food.FoodType;
 import com.yourgame.model.Item.Inventory.BackpackType;
@@ -48,6 +49,7 @@ public class Player {
     private Skill.MiningSkill miningSkill;
     private Skill.ForagingSkill foragingSkill;
     private Skill.FishingSkill fishingSkill;
+    private final BuffManager buffManager = new BuffManager();
 
     private int remainingDaysAfterMarriageDenied = 0;
     private boolean isMarried = false;
@@ -132,17 +134,33 @@ public class Player {
     public Skill.FarmingSkill getFarmingSkill() {
         return farmingSkill;
     }
+    public int getFarmingLevel() {
+        return farmingSkill.level() + buffManager.getBuffValue(Skill.SkillType.FARMING);
+    }
 
     public Skill.MiningSkill getMiningSkill() {
         return miningSkill;
+    }
+    public int getMiningLevel() {
+        return miningSkill.level() + buffManager.getBuffValue(Skill.SkillType.MINING);
     }
 
     public Skill.ForagingSkill getForagingSkill() {
         return foragingSkill;
     }
+    public int getForagingLevel() {
+        return foragingSkill.level() + buffManager.getBuffValue(Skill.SkillType.FORAGING);
+    }
 
     public Skill.FishingSkill getFishingSkill() {
         return fishingSkill;
+    }
+    public int getFishingLevel() {
+        return fishingSkill.level() + buffManager.getBuffValue(Skill.SkillType.FISHING);
+    }
+
+    public BuffManager getBuffManager() {
+        return buffManager;
     }
 
     public void faint() {

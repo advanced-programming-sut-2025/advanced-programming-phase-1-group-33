@@ -38,7 +38,7 @@ public class MapManager {
                 new Map(player.getUser().getUsername()+ "-house", "Game/Map/Buildings/farm-house.tmx")
             );
             playersCurrentMap.put(player, farm);
-            App.getGameState().getGameTime().addObserver(farm);
+            App.getGameState().getGameTime().addDayObserver(farm);
         }
     }
 
