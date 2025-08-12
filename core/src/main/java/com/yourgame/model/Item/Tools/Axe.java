@@ -2,16 +2,12 @@ package com.yourgame.model.Item.Tools;
 
 import com.yourgame.Graphics.GameAssetManager;
 import com.yourgame.model.Farming.Tree;
-import com.yourgame.model.Item.Item;
 import com.yourgame.model.Map.Map;
 import com.yourgame.model.Map.MapElement;
 import com.yourgame.model.Map.Tile;
-import com.yourgame.model.Skill.Ability;
+import com.yourgame.model.Skill.Skill;
 import com.yourgame.model.UserInfo.Player;
 import com.yourgame.model.WeatherAndTime.Weather;
-
-import java.awt.*;
-import java.util.List;
 
 public class Axe extends Tool {
     public Axe() {
@@ -22,7 +18,7 @@ public class Axe extends Tool {
     public int getConsumptionEnergy(Player player, Weather weather, boolean success) {
         int energyConsumed = 5 - level;
         if (!success) energyConsumed--;
-        if (player.getAbility().getForagingLevel() == Ability.MAX_LEVEL) energyConsumed--;
+        if (player.getForagingSkill().isMaxLevel()) energyConsumed--;
         return (int) (Math.max(energyConsumed, 0) * weather.energyCoefficient);
     }
 
@@ -31,7 +27,7 @@ public class Axe extends Tool {
         MapElement element = tile.getElement();
         if (element == null) return false;
 
-        int damage = (int) ((1 + 0.3 * player.getAbility().getForagingLevel()) * (1 + 0.4 * level));
+        int damage = (int) ((1 + 0.3 * player.getForagingSkill().level()) * (1 + 0.4 * level));
 
         if (element.getType() == MapElement.ElementType.TREE || element.getType() == MapElement.ElementType.WOOD) {
             if (element.takeDamage(damage)) {

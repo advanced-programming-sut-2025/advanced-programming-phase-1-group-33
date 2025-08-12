@@ -1,16 +1,12 @@
 package com.yourgame.model.Item.Tools;
 
-import com.yourgame.model.Item.Item;
 import com.yourgame.model.Map.Farm;
 import com.yourgame.model.Map.Map;
 import com.yourgame.model.Map.MapElement;
 import com.yourgame.model.Map.Tile;
-import com.yourgame.model.Skill.Ability;
+import com.yourgame.model.Skill.Skill;
 import com.yourgame.model.UserInfo.Player;
 import com.yourgame.model.WeatherAndTime.Weather;
-
-import java.awt.*;
-import java.util.List;
 
 public class Pickaxe extends Tool {
     public Pickaxe() {
@@ -21,7 +17,7 @@ public class Pickaxe extends Tool {
     public int getConsumptionEnergy(Player player, Weather weather, boolean success) {
         int energyConsumed = 5 - level;
         if (!success) energyConsumed--;
-        if (player.getAbility().getForagingLevel() == Ability.MAX_LEVEL) energyConsumed--;
+        if (player.getMiningSkill().isMaxLevel()) energyConsumed--;
         return (int) (Math.max(energyConsumed, 0) * weather.energyCoefficient);
     }
 
@@ -38,7 +34,7 @@ public class Pickaxe extends Tool {
             return false;
         }
 
-        int damage = (int) ((1 + 0.3 * player.getAbility().getMiningLevel()) * (1 + 0.4 * level));
+        int damage = (int) ((1 + 0.3 * player.getMiningSkill().level()) * (1 + 0.4 * level));
 
         if (element.getType() == MapElement.ElementType.ROCK) {
             if (element.takeDamage(damage)) {

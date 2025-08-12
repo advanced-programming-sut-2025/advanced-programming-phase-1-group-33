@@ -5,7 +5,7 @@ import com.yourgame.Graphics.GameAssetManager;
 import com.yourgame.model.Map.Map;
 import com.yourgame.model.Map.Tile;
 import com.yourgame.model.App;
-import com.yourgame.model.Skill.Ability;
+import com.yourgame.model.Skill.Skill;
 import com.yourgame.model.UserInfo.Player;
 import com.yourgame.model.WeatherAndTime.Weather;
 
@@ -28,7 +28,7 @@ public class FishingPole extends Tool {
             default -> 1;
         };
         int consumedEnergy;
-        if (App.getGameState().getCurrentPlayer().getAbility().getFarmingLevel() == Ability.getMaxLevel()) {
+        if (App.getGameState().getCurrentPlayer().getFishingSkill().isMaxLevel()) {
             consumedEnergy = switch (getPoleStage()) {
                 case Training, Bamboo -> 7 * multiple;
                 case Fiberglass -> 5 * multiple;

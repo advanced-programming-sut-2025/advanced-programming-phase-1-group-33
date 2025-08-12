@@ -2,13 +2,11 @@ package com.yourgame.model.UserInfo;
 
 import java.util.*;
 // this is going to be for GSON‌ :(‌)
-import com.google.gson.annotations.Expose;
 //
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
-import com.yourgame.model.Animals.AnimalType;
 import com.yourgame.model.App;
 import com.yourgame.model.Farming.Fertilizer;
 import com.yourgame.model.Farming.Seeds;
@@ -16,19 +14,16 @@ import com.yourgame.model.Farming.TreeSource;
 import com.yourgame.model.Food.Food;
 import com.yourgame.model.Food.FoodType;
 import com.yourgame.model.Item.Inventory.BackpackType;
-import com.yourgame.model.Item.Inventory.TrashCan;
 import com.yourgame.model.Item.Tools.Axe;
 import com.yourgame.model.Item.Tools.Hoe;
 import com.yourgame.model.Item.Tools.Pickaxe;
 import com.yourgame.model.Item.Tools.Scythe;
-import com.yourgame.model.Item.Tools.Tool;
 import com.yourgame.model.Item.Tools.WateringCan;
 import com.yourgame.model.Farming.Wood;
 import com.yourgame.model.Item.Inventory.Backpack;
-import com.yourgame.model.Map.Position;
 import com.yourgame.model.Npc.NPCType;
 import com.yourgame.model.Npc.RelationWithNPC;
-import com.yourgame.model.Skill.Ability;
+import com.yourgame.model.Skill.Skill;
 import com.yourgame.model.enums.Avatar;
 import com.yourgame.model.enums.Gender;
 import com.yourgame.model.enums.SecurityQuestion;
@@ -49,7 +44,10 @@ public class Player {
 
     private final Backpack backpack = new Backpack(BackpackType.Primary);
     private final ArrayList<Notification> notifications = new ArrayList<>();
-    private final Ability ability = new Ability(this);
+    private Skill.FarmingSkill farmingSkill;
+    private Skill.MiningSkill miningSkill;
+    private Skill.ForagingSkill foragingSkill;
+    private Skill.FishingSkill fishingSkill;
 
     private int remainingDaysAfterMarriageDenied = 0;
     private boolean isMarried = false;
@@ -86,6 +84,14 @@ public class Player {
         this.backpack.addItem(new Food(FoodType.Bread), 2);
         this.backpack.getIngredientQuantity().put(new Coin(), 20);
         this.backpack.getIngredientQuantity().put(new Wood(), 100);
+
+        // Skill
+        this.farmingSkill = new Skill.FarmingSkill();
+        this.miningSkill = new Skill.MiningSkill();
+        this.foragingSkill = new Skill.ForagingSkill();
+        this.fishingSkill = new Skill.FishingSkill();
+
+        // Relation
         this.relationWithAbigail = new RelationWithNPC(NPCType.Abigail);
         this.relationWithSebastian = new RelationWithNPC(NPCType.Sebastian);
         this.relationWithHarvey = new RelationWithNPC(NPCType.Harvey);
@@ -123,8 +129,20 @@ public class Player {
         return backpack;
     }
 
-    public Ability getAbility() {
-        return ability;
+    public Skill.FarmingSkill getFarmingSkill() {
+        return farmingSkill;
+    }
+
+    public Skill.MiningSkill getMiningSkill() {
+        return miningSkill;
+    }
+
+    public Skill.ForagingSkill getForagingSkill() {
+        return foragingSkill;
+    }
+
+    public Skill.FishingSkill getFishingSkill() {
+        return fishingSkill;
     }
 
     public void faint() {

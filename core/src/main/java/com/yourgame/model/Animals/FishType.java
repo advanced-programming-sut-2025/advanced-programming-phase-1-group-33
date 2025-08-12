@@ -1,7 +1,7 @@
 package com.yourgame.model.Animals;
 
 import com.yourgame.model.ManuFactor.Ingredient;
-import com.yourgame.model.Skill.Ability;
+import com.yourgame.model.Skill.Skill;
 import com.yourgame.model.WeatherAndTime.Season;
 
 import java.util.ArrayList;
@@ -74,7 +74,7 @@ public enum FishType implements Ingredient {
 
     public static ArrayList<FishType> getFishesBySeason(Season season, int fishingLevel) {
         ArrayList<FishType> fishes = getFishesBySeason(season);
-        if (fishingLevel == Ability.getMaxLevel()) {
+        if (fishingLevel == Skill.MAX_LEVEL) {
             fishes.add(
                     switch (season) {
                         case Spring -> Legend;

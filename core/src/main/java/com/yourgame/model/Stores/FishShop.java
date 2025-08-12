@@ -85,7 +85,7 @@ public class FishShop extends Store {
 
         if (item instanceof FishShopPoleItem) {
 
-            if (((FishShopPoleItem) item).getFishingSkillRequired() < App.getGameState().getCurrentPlayer().getAbility().getFishingLevel()) {
+            if (((FishShopPoleItem) item).getFishingSkillRequired() < App.getGameState().getCurrentPlayer().getFishingSkill().level()) {
                 return new Response(false, "your fishing level must be at least " + ((FishShopPoleItem) item).getFishingSkillRequired());
             }
 

@@ -1,12 +1,9 @@
 package com.yourgame.model.Item.Tools;
 
-import com.badlogic.gdx.Gdx;
-import com.yourgame.model.Farming.Crop;
 import com.yourgame.model.Map.Farm;
 import com.yourgame.model.Map.Map;
 import com.yourgame.model.Map.Tile;
-import com.yourgame.model.App;
-import com.yourgame.model.Skill.Ability;
+import com.yourgame.model.Skill.Skill;
 import com.yourgame.model.UserInfo.Player;
 import com.yourgame.model.WeatherAndTime.Weather;
 
@@ -24,7 +21,7 @@ public class WateringCan extends Tool {
     public int getConsumptionEnergy(Player player, Weather weather, boolean success) {
         int energyConsumed = 5 - level;
         if (!success) energyConsumed--;
-        if (player.getAbility().getFarmingLevel() == Ability.MAX_LEVEL) energyConsumed--;
+        if (player.getFarmingSkill().isMaxLevel()) energyConsumed--;
         return (int) (Math.max(energyConsumed, 0) * weather.energyCoefficient);
     }
 

@@ -5,7 +5,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.yourgame.Graphics.GameAssetManager;
-import com.yourgame.model.Skill.Ability;
+import com.yourgame.model.UserInfo.Player;
 import com.yourgame.view.AppViews.GameScreen;
 
 public class SkillMenuView extends Window {
@@ -26,11 +26,11 @@ public class SkillMenuView extends Window {
         Label foragingSkill = new Label("Foraging Skill  :    ", skin , "Bold");
         Label fishingSkill = new Label("Fishing Skill  :    ", skin , "Bold");
 
-        Ability ability = gameScreen.getPlayer().getAbility();
-        Label farmingSkillLevel = new Label("Level " + ability.getFarmingLevel(), skin);
-        Label miningSkillLevel = new Label("Level " + ability.getMiningLevel(), skin);
-        Label foragingSkillLevel = new Label("Level " + ability.getForagingLevel(), skin);
-        Label fishingSkillLevel = new Label("Level " + ability.getFishingLevel(), skin);
+        Player player = gameScreen.getPlayer();
+        Label farmingSkillLevel = new Label("Level " + player.getFarmingSkill().level(), skin);
+        Label miningSkillLevel = new Label("Level " + player.getMiningSkill().level(), skin);
+        Label foragingSkillLevel = new Label("Level " + player.getForagingSkill().level(), skin);
+        Label fishingSkillLevel = new Label("Level " + player.getFishingSkill().level(), skin);
 
         Image farmingIcon = new Image(GameAssetManager.getInstance().getSkillMenuIcons("farming"));
         Image miningIcon = new Image(GameAssetManager.getInstance().getSkillMenuIcons("mining"));
