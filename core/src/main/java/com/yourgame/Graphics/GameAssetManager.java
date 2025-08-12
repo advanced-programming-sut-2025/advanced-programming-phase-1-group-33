@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.SkinLoader.SkinParameter;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -15,6 +16,7 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreetypeFontLoader;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.yourgame.Graphics.GameAssets.clockUIAssetManager;
+import com.yourgame.model.Food.FoodAnimation;
 import com.yourgame.model.WeatherAndTime.Weather;
 
 import java.util.HashMap;
@@ -57,6 +59,9 @@ public class GameAssetManager extends AssetManager {
 
     // A cache for textures that are loaded dynamically by path.
     private final HashMap<String, Texture> textureCache = new HashMap<>();
+    private final HashMap<String, Sound> soundCache = new HashMap<>();
+
+    private FoodAnimation foodAnimation = null;
 
     private GameAssetManager() {
         this.clockManager = new clockUIAssetManager(WEATHER_CLOCK_SKIN_PATH, CLOCK_ATLAS_PATH, Default_FONT_PATH,
@@ -153,10 +158,38 @@ public class GameAssetManager extends AssetManager {
         }
     }
 
+    public Sound getSound(String path){
+        if(soundCache.containsKey(path)){
+            return soundCache.get(path);
+        }
+
+        if(Gdx.files.internal(path).exists()){
+            Sound sound = Gdx.audio.newSound(Gdx.files.internal(path));
+            soundCache.put(path, sound);
+            return sound;
+        } else {
+            Gdx.app.error("AssetManager", "Sound not found at path: " + path);
+            return null;
+        }
+    }
+
     public void dispose() {
         for (Texture texture : textureCache.values()) {
             texture.dispose();
         }
         textureCache.clear();
+
+        for (Sound sound : soundCache.values()) {
+            sound.dispose();
+        }
+        soundCache.clear();
+    }
+
+    public void setFoodAnimation(FoodAnimation foodAnimation){
+        this.foodAnimation = foodAnimation;
+    }
+
+    public FoodAnimation getFoodAnimation() {
+        return foodAnimation;
     }
 }

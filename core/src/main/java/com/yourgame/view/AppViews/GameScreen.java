@@ -21,6 +21,8 @@ import com.yourgame.Graphics.MenuAssetManager;
 import com.yourgame.Graphics.GameAssets.HUDManager;
 import com.yourgame.Graphics.GameAssets.clockUIAssetManager;
 import com.yourgame.controller.GameController.GameController;
+import com.yourgame.model.Food.Food;
+import com.yourgame.model.Food.FoodAnimation;
 import com.yourgame.model.Map.*;
 import com.yourgame.model.App;
 import com.yourgame.Graphics.GameAssetManager;
@@ -153,6 +155,8 @@ public class GameScreen extends GameBaseScreen {
 
     @Override
     public void render(float delta) {
+        FoodAnimation foodAnimation = GameAssetManager.getInstance().getFoodAnimation();
+
         if (!paused) {
             controller.updateSelectedTile(camera);
             handleInput(delta);
@@ -161,6 +165,13 @@ public class GameScreen extends GameBaseScreen {
             controller.updateDroppedItems(delta);
             updateDayNightCycle();
             thunderManager.update(delta);
+
+            if (foodAnimation != null) {
+                boolean isFinished = foodAnimation.update(delta);
+                if (isFinished) {
+                    GameAssetManager.getInstance().setFoodAnimation(null);
+                }
+            }
 
             //handle pierre's shop menu
             if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
@@ -182,7 +193,7 @@ public class GameScreen extends GameBaseScreen {
         mapRenderer.setView(camera);
         mapRenderer.render();
 
-        // Render On-Map
+        // == Render On-Map ==
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
         // Map Elements
@@ -192,6 +203,8 @@ public class GameScreen extends GameBaseScreen {
         batch.draw(currentFrame, player.playerPosition.x, player.playerPosition.y);
         // Thunder
         thunderManager.render(batch);
+        // Food Animation
+        if (foodAnimation != null) foodAnimation.render(batch);
         batch.end();
 
         // Render Day & Night

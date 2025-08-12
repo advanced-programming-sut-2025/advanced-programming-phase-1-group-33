@@ -7,7 +7,6 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.yourgame.Graphics.GameAssetManager;
-import com.yourgame.controller.GameController.GameController;
 import com.yourgame.model.Map.Farm;
 import com.yourgame.model.Map.Map;
 import com.yourgame.model.Map.MapElement;

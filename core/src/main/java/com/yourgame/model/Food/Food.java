@@ -16,6 +16,10 @@ public class Food extends Item implements Usable {
         this.foodType = foodType;
     }
 
+    public FoodType getFoodType() {
+        return foodType;
+    }
+
     @Override
     public TextureRegion getTextureRegion(GameAssetManager assetManager) {
         String path = "Game/Food/" + foodType.name() + ".png";
@@ -24,11 +28,17 @@ public class Food extends Item implements Usable {
 
     @Override
     public boolean use(Player player, Map map, Tile tile) {
+        // Prevent starting a new animation if one is already playing
+        if (GameAssetManager.getInstance().getFoodAnimation() != null) {
+            return false;
+        }
+
         if (player.getEnergy() < Player.MAX_ENERGY) {
-            player.addEnergy(foodType.getEnergy());
-            player.getBackpack().getInventory().reduceItemQuantity(this, 1);
+            GameAssetManager.getInstance()
+                .setFoodAnimation(new FoodAnimation(this, player, 0.6f));
             return true;
         } else {
+            // TODO: Play an error sound because the player is full
             return false;
         }
         /*
