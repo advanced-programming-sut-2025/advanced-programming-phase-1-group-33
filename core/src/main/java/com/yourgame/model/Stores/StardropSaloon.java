@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 import com.yourgame.model.App;
 import com.yourgame.model.IO.Response;
-import com.yourgame.model.Item.Food;
+import com.yourgame.model.Food.FoodType;
 import com.yourgame.model.ManuFactor.ArtisanGood;
 import com.yourgame.model.ManuFactor.ArtisanGoodType;
 import com.yourgame.model.Recipes.CookingRecipe;
@@ -25,10 +25,10 @@ public class StardropSaloon extends Store {
         inventory = new ArrayList<>();
         inventory.add(new StardopSaloonArtisanGoodItem("Beer", ArtisanGoodType.Beer,400,Integer.MAX_VALUE));
         inventory.add(new StardopSaloonArtisanGoodItem("Coffee", ArtisanGoodType.Coffee,300,Integer.MAX_VALUE));
-        inventory.add(new StardopSaloonFoodItem("Salad", Food.Salad,220,Integer.MAX_VALUE));
-        inventory.add(new StardopSaloonFoodItem("Bread", Food.Bread,120,Integer.MAX_VALUE));
-        inventory.add(new StardopSaloonFoodItem("Spaghetti", Food.Spaghetti,240,Integer.MAX_VALUE));
-        inventory.add(new StardopSaloonFoodItem("Pizza", Food.Pizza,600,Integer.MAX_VALUE));
+        inventory.add(new StardopSaloonFoodItem("Salad", FoodType.Salad,220,Integer.MAX_VALUE));
+        inventory.add(new StardopSaloonFoodItem("Bread", FoodType.Bread,120,Integer.MAX_VALUE));
+        inventory.add(new StardopSaloonFoodItem("Spaghetti", FoodType.Spaghetti,240,Integer.MAX_VALUE));
+        inventory.add(new StardopSaloonFoodItem("Pizza", FoodType.Pizza,600,Integer.MAX_VALUE));
         inventory.add(new StardopSaloonRecipeItem("Hashbrowns", CookingRecipe.HashBrowns,50,1));
         inventory.add(new StardopSaloonRecipeItem("Omelet", CookingRecipe.Omelet,100,1));
         inventory.add(new StardopSaloonRecipeItem("Pancakes", CookingRecipe.Pancakes,100,1));

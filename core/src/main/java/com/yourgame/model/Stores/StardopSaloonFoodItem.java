@@ -1,17 +1,17 @@
 package com.yourgame.model.Stores;
 
 
-import com.yourgame.model.Item.Food;
+import com.yourgame.model.Food.FoodType;
 
 public class StardopSaloonFoodItem extends ShopItem {
-    private final Food food;
+    private final FoodType foodType;
 
-    public StardopSaloonFoodItem(String name, Food food ,int price, int dailyLimit) {
+    public StardopSaloonFoodItem(String name, FoodType foodType, int price, int dailyLimit) {
         super(name, price, dailyLimit);
-        this.food = food;
+        this.foodType = foodType;
     }
 
-    public Food getFood() {
-        return food;
+    public FoodType getFood() {
+        return foodType;
     }
 }

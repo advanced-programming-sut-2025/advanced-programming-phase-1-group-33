@@ -10,7 +10,7 @@ import com.yourgame.model.Item.Tools.PoleStage;
 import com.yourgame.model.Recipes.CraftingRecipes;
 import com.yourgame.model.UserInfo.Coin;
 import com.yourgame.model.enums.SymbolType;
-import com.yourgame.model.Item.Food;
+import com.yourgame.model.Food.FoodType;
 
 public class FishShop extends Store {
 
@@ -102,7 +102,7 @@ public class FishShop extends Store {
             if(App.getGameState().getCurrentPlayer().getBackpack().isInventoryFull()){
                 return new Response(false, "Not enough capacity in your inventory");
             }
-            App.getGameState().getCurrentPlayer().getBackpack().addIngredients(Food.TroutSoup,value);
+            App.getGameState().getCurrentPlayer().getBackpack().addIngredients(FoodType.TroutSoup,value);
             App.getGameState().getCurrentPlayer().getBackpack().addIngredients(new Coin(), (-1) * totalPrice);
             item.decreaseRemainingQuantity(value);
 

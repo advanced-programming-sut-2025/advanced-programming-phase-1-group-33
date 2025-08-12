@@ -1,32 +1,34 @@
 package com.yourgame.model.Item;
 
+import com.yourgame.model.Food.FoodType;
+
 import java.util.HashMap;
 
 public class Refrigerator {
-    private final HashMap<Food, Integer> foodQuantity = new HashMap<>();
+    private final HashMap<FoodType, Integer> foodQuantity = new HashMap<>();
     private final int capacity = 15;
 
-    public void addItem(Food food, int quantity) {
-        int oldQuantity = foodQuantity.getOrDefault(food, 0);
-        foodQuantity.put(food, oldQuantity + quantity);
+    public void addItem(FoodType foodType, int quantity) {
+        int oldQuantity = foodQuantity.getOrDefault(foodType, 0);
+        foodQuantity.put(foodType, oldQuantity + quantity);
     }
 
-    public void removeItem(Food food, int quantity) {
-        int oldQuantity = foodQuantity.getOrDefault(food, 0);
+    public void removeItem(FoodType foodType, int quantity) {
+        int oldQuantity = foodQuantity.getOrDefault(foodType, 0);
         if (oldQuantity == 0)
             return;
         if (oldQuantity == quantity)
-            foodQuantity.remove(food);
+            foodQuantity.remove(foodType);
 
-        foodQuantity.put(food, oldQuantity - quantity);
+        foodQuantity.put(foodType, oldQuantity - quantity);
     }
 
-    public int getQuantity(Food food) {
-        return foodQuantity.getOrDefault(food, 0);
+    public int getQuantity(FoodType foodType) {
+        return foodQuantity.getOrDefault(foodType, 0);
     }
 
-    public boolean containFood(Food food) {
-        return foodQuantity.getOrDefault(food, 0) > 0;
+    public boolean containFood(FoodType foodType) {
+        return foodQuantity.getOrDefault(foodType, 0) > 0;
     }
 
     public boolean hasCapacity() {

@@ -179,6 +179,7 @@ public class GameController {
         } else {
             selectedTile = getTileInFront();
         }
+        if (selectedTile == null) return;
 
         // Harvest Tree or Crop
         MapElement element = selectedTile.getElement();

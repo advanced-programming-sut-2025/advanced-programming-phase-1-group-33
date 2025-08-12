@@ -6,6 +6,7 @@ import com.yourgame.model.Animals.Fish;
 import com.yourgame.model.Animals.Hay;
 import com.yourgame.model.Farming.Crop;
 import com.yourgame.model.Farming.Fruit;
+import com.yourgame.model.Food.FoodType;
 import com.yourgame.model.Item.Tools.Tool;
 import com.yourgame.model.Item.*;
 import com.yourgame.model.ManuFactor.ArtisanMachine;
@@ -91,7 +92,7 @@ public class Backpack {
                 refund = c.getSellPrice() * returnPercentage / 100;
             else if (ingredient instanceof Fruit fr)
                 refund = fr.getSellPrice() * returnPercentage / 100;
-            else if (ingredient instanceof Food fd)
+            else if (ingredient instanceof FoodType fd)
                 refund = fd.getSellPrice() * returnPercentage / 100;
             else if (ingredient instanceof ForagingMineral fm)
                 refund = fm.getSellPrice() * returnPercentage / 100;

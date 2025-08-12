@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 import com.yourgame.model.App;
 import com.yourgame.model.IO.Response;
-import com.yourgame.model.Item.Food;
+import com.yourgame.model.Food.FoodType;
 import com.yourgame.model.Farming.Seeds;
 import com.yourgame.model.UserInfo.Coin;
 import com.yourgame.model.WeatherAndTime.Season;
@@ -141,7 +141,7 @@ public class JojaMart extends Store {
 
         } else {
 
-            App.getGameState().getCurrentPlayer().getBackpack().addIngredients(Food.JojaCola, value);
+            App.getGameState().getCurrentPlayer().getBackpack().addIngredients(FoodType.JojaCola, value);
             App.getGameState().getCurrentPlayer().getBackpack().addIngredients(new Coin(), (-1) * totalPrice);
 
         }

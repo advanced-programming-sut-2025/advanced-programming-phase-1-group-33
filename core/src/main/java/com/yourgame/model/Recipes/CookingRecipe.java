@@ -3,7 +3,7 @@ package com.yourgame.model.Recipes;
 import com.yourgame.model.Animals.AnimalGoodType;
 import com.yourgame.model.Animals.FishType;
 import com.yourgame.model.Farming.CropType;
-import com.yourgame.model.Item.Food;
+import com.yourgame.model.Food.FoodType;
 import com.yourgame.model.Farming.ForagingCrop;
 import com.yourgame.model.Farming.Fruit;
 import com.yourgame.model.ManuFactor.ArtisanGood;
@@ -32,9 +32,9 @@ public enum CookingRecipe implements Ingredient {
     Bread(new HashMap<>(Map.of(CropType.Wheat, 1))),
     SalmonDinner(new HashMap<>(Map.of(FishType.Salmon, 1, CropType.Amaranth, 1, CropType.Kale, 1))),
     VegetableMedley(new HashMap<>(Map.of(CropType.Tomato, 1, CropType.Beet, 1))),
-    FarmersLunch(new HashMap<>(Map.of(Food.Omelet, 1, CropType.Parsnip, 1))),
-    SurvivalBurger(new HashMap<>(Map.of(Food.Bread, 1, CropType.Carrot, 1, CropType.Eggplant, 1))),
-    DishOTheSea(new HashMap<>(Map.of(FishType.Sardine, 2,Food.HashBrowns, 1))),
+    FarmersLunch(new HashMap<>(Map.of(FoodType.Omelet, 1, CropType.Parsnip, 1))),
+    SurvivalBurger(new HashMap<>(Map.of(FoodType.Bread, 1, CropType.Carrot, 1, CropType.Eggplant, 1))),
+    DishOTheSea(new HashMap<>(Map.of(FishType.Sardine, 2, FoodType.HashBrowns, 1))),
     SeaFormPudding(new HashMap<>(Map.of(FishType.Flounder, 1, FishType.MidnightCarp, 1))),
     MinersTreat(new HashMap<>(Map.of(CropType.Carrot, 1, AnimalGoodType.Milk, 1)));
 

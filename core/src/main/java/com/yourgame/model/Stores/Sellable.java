@@ -9,6 +9,7 @@ import com.yourgame.model.App;
 import com.yourgame.model.Farming.Crop;
 import com.yourgame.model.Farming.CropType;
 import com.yourgame.model.Farming.Fruit;
+import com.yourgame.model.Food.FoodType;
 import com.yourgame.model.Item.*;
 import com.yourgame.model.ManuFactor.ArtisanGood;
 import com.yourgame.model.ManuFactor.ArtisanGoodType;
@@ -45,9 +46,9 @@ public interface Sellable {
             return null;
         }
 
-        Food food = Food.getFoodByName(name);
-        if (food != null) {
-            return food;
+        FoodType foodType = FoodType.getFoodByName(name);
+        if (foodType != null) {
+            return foodType;
         }
 
         Fruit fruit = Fruit.getByName(name);
@@ -77,7 +78,7 @@ public interface Sellable {
         return  AnimalGoodType.getAnimalGoodTypeByName(name) != null ||
                 CropType.getCropTypeByName(name) != null ||
                 FishType.getFishTypeByName(name) != null ||
-                Food.getFoodByName(name) != null ||
+                FoodType.getFoodByName(name) != null ||
                 Fruit.getByName(name) != null ||
                 ForagingMineral.getByName(name) != null ||
                 ArtisanGoodType.getByName(name) != null;
@@ -94,7 +95,7 @@ public interface Sellable {
         if (sellable instanceof Fish){
             return ((Fish) sellable).getType().toString();
         }
-        if (sellable instanceof Food){
+        if (sellable instanceof FoodType){
             return sellable.toString();
         }
         if (sellable instanceof Fruit){

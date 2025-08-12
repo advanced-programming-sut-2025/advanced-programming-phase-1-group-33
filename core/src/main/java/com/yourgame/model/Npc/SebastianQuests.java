@@ -2,11 +2,10 @@ package com.yourgame.model.Npc;
 
 
 import com.yourgame.model.App;
-import com.yourgame.model.Item.Food;
+import com.yourgame.model.Food.FoodType;
 import com.yourgame.model.Item.ForagingMineral;
 import com.yourgame.model.Item.Stone;
 import com.yourgame.model.ManuFactor.Ingredient;
-import com.yourgame.model.Map.NpcHome;
 import com.yourgame.model.UserInfo.Coin;
 
 import java.util.ArrayList;
@@ -65,7 +64,7 @@ public class SebastianQuests {
         boolean isPumpkinPieAvailable = false;
 
         for (Ingredient ingredient : App.getGameState().getCurrentPlayer().getBackpack().getIngredientQuantity().keySet()) {
-            if (ingredient.equals(Food.PumpkinPie)) {
+            if (ingredient.equals(FoodType.PumpkinPie)) {
                 int value = App.getGameState().getCurrentPlayer().getBackpack().getIngredientQuantity().getOrDefault(ingredient, 0 );
                 if (value > 0) {
                     App.getGameState().getCurrentPlayer().getBackpack().getIngredientQuantity().put(ingredient,value-1);

@@ -1,12 +1,13 @@
-package com.yourgame.model.Item;
+package com.yourgame.model.Food;
 
 
+import com.yourgame.model.Item.Item;
 import com.yourgame.model.ManuFactor.Ingredient;
 import com.yourgame.model.Stores.Sellable;
 
 import java.util.HashMap;
 
-public enum Food implements Ingredient, Sellable {
+public enum FoodType implements Ingredient, Sellable {
     FriedEgg(50, 35),
     BakedFish(75, 100),
     Salad(113, 110),
@@ -28,22 +29,22 @@ public enum Food implements Ingredient, Sellable {
     FarmersLunch(200, 150),
     SurvivalBurger(125, 180),
     DishOTheSea(150, 220),
-    SeaFormPudding(175, 300),
+    SeafoamPudding(175, 300),
     JojaCola(13,25),
     TroutSoup(100,100),
     MinersTreat(125, 200);
 
     private final int energy;
     private final int sellPrice;
-    private static final HashMap<String, Food> stringToFood = new HashMap<>();
+    private static final HashMap<String, FoodType> stringToFood = new HashMap<>();
 
     static {
-        for (Food values : values()) {
+        for (FoodType values : values()) {
             stringToFood.put(values.name().toLowerCase(), values);
         }
     }
 
-    Food(int energy, int sellPrice) {
+    FoodType(int energy, int sellPrice) {
         this.energy = energy;
         this.sellPrice = sellPrice;
     }
@@ -56,7 +57,12 @@ public enum Food implements Ingredient, Sellable {
         return sellPrice;
     }
 
-    public static Food getFoodByName(String name) {
+    public static FoodType getFoodByName(String name) {
         return stringToFood.getOrDefault(name.toLowerCase(), null);
+    }
+
+    @Override
+    public Item getItem() {
+        return new Food(this);
     }
 }

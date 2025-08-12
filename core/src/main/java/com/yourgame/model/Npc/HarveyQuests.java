@@ -5,7 +5,7 @@ import com.yourgame.model.Animals.Fish;
 import com.yourgame.model.Animals.FishType;
 import com.yourgame.model.Farming.Crop;
 import com.yourgame.model.Farming.CropType;
-import com.yourgame.model.Item.Food;
+import com.yourgame.model.Food.FoodType;
 import com.yourgame.model.Farming.Fruit;
 import com.yourgame.model.ManuFactor.ArtisanGood;
 import com.yourgame.model.ManuFactor.ArtisanGoodType;
@@ -128,11 +128,11 @@ public class HarveyQuests {
             return false;
         }
 
-        App.getGameState().getCurrentPlayer().getBackpack().getIngredientQuantity().put(Food.Salad,
-                App.getGameState().getCurrentPlayer().getBackpack().getIngredientQuantity().getOrDefault(Food.Salad, 0) + 5);
+        App.getGameState().getCurrentPlayer().getBackpack().getIngredientQuantity().put(FoodType.Salad,
+                App.getGameState().getCurrentPlayer().getBackpack().getIngredientQuantity().getOrDefault(FoodType.Salad, 0) + 5);
         if (isRewardTwice) {
-            App.getGameState().getCurrentPlayer().getBackpack().getIngredientQuantity().put(Food.Salad,
-                    App.getGameState().getCurrentPlayer().getBackpack().getIngredientQuantity().getOrDefault(Food.Salad, 0) + 5);
+            App.getGameState().getCurrentPlayer().getBackpack().getIngredientQuantity().put(FoodType.Salad,
+                    App.getGameState().getCurrentPlayer().getBackpack().getIngredientQuantity().getOrDefault(FoodType.Salad, 0) + 5);
         }
 
 //        for (NpcHome home : App.getGameState().getMap().getNpcHomes()) {
