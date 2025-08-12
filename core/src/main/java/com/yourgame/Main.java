@@ -2,28 +2,40 @@ package com.yourgame;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.yourgame.network.ClientConnectionManager;
 import com.yourgame.view.AppViews.GameScreen;
 import com.yourgame.view.AppViews.MainMenuView;
 import com.yourgame.view.AppViews.SignupMenuView;
 
+
 import java.sql.SQLException;
 
-/** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
+/**
+ * {@link com.badlogic.gdx.ApplicationListener} implementation shared by all
+ * platforms.
+ */
 public class Main extends Game {
     private static Main main;
     private static SpriteBatch batch;
+    private ClientConnectionManager connectionManager;
 
     @Override
     public void create() {
-        /* This is from the project.
-        try {
-            (new AppView()).run();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        */
+        /*
+         * This is from the project.
+         * try {
+         * (new AppView()).run();
+         * } catch (SQLException e) {
+         * throw new RuntimeException(e);
+         * }
+         */
         main = this;
         batch = new SpriteBatch();
+        // --- Start Client Connection ---
+        connectionManager = new ClientConnectionManager();
+        connectionManager.startConnection("localhost", 8080); // Connect to the server
+        // -----------------------------
+
         main.setScreen(new MainMenuView());
     }
 
