@@ -3,6 +3,8 @@ package com.yourgame.Graphics;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -10,6 +12,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.yourgame.model.enums.Avatar;
 import com.yourgame.model.enums.Commands.MenuTypes;
 import org.slf4j.Logger;
@@ -64,6 +67,13 @@ public class MenuAssetManager {
     private final TextButton stayLoggedInButton;
 
     private MenuAssetManager() {
+        Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
+        pixmap.setColor(Color.WHITE);
+        pixmap.fill();
+        Texture whiteTexture = new Texture(pixmap);
+        skin_3_Nz.add("white", new TextureRegionDrawable(new TextureRegion(whiteTexture)));
+        pixmap.dispose();
+
         backgrounds = new Image[]{
             new Image(new Texture(Gdx.files.internal("Backgrounds/Background1.jpg"))),
             new Image(new Texture(Gdx.files.internal("Backgrounds/Background2.png"))),
