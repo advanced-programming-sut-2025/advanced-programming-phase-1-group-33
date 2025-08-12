@@ -341,6 +341,11 @@ public class GameScreen extends GameBaseScreen {
 
         if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
             controller.handleInteraction();
+            if (controller.getCurrentMap() instanceof Store store) {
+                if (store.isPlayerInTradeZone(player)) {
+                    Gdx.app.log("Store", "Player is in trade zone");
+                }
+            }
         }
 
         // --- Inventory Selection Input ---
