@@ -1,18 +1,26 @@
 package com.yourgame.view.GameViews;
 
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.yourgame.Graphics.GameAssetManager;
 import com.yourgame.Graphics.MenuAssetManager;
 import com.yourgame.controller.GameController.PierreShopMenuController;
 import com.yourgame.model.App;
+import com.yourgame.model.Map.Store.PierreGeneralStore.PierreGeneralStore;
+import com.yourgame.model.Map.Store.PierreGeneralStore.PierreGeneralStoreBackPackUpgrade;
+import com.yourgame.model.Map.Store.PierreGeneralStore.PierreGeneralStoreSaplingItem;
+import com.yourgame.model.Map.Store.PierreGeneralStore.PierreGeneralStoreSeedsItem;
+import com.yourgame.model.Map.Store.ShopItem;
+import com.yourgame.model.WeatherAndTime.Season;
 import com.yourgame.view.AppViews.GameScreen;
 
-import java.awt.*;
 
 public class PierreShopMenuView extends Window {
     private final PierreShopMenuController controller;
@@ -36,7 +44,7 @@ public class PierreShopMenuView extends Window {
         TextButton buyGoodsButton = new TextButton("Buy", MenuAssetManager.getInstance().getSkin(3));
         TextButton closeButton = new TextButton("Close", MenuAssetManager.getInstance().getSkin(3));
 
-        contentTable.add(createGoodsList()).colspan(2).center().row();
+        contentTable.add(createGoodsList(gameScreen.getController().getMapManager().getPierreStore())).colspan(2).center().row();
         contentTable.add(buyGoodsButton);
         contentTable.add(closeButton);
 
@@ -55,87 +63,93 @@ public class PierreShopMenuView extends Window {
         });
     }
 
-    public ScrollPane createGoodsList(){
+    public ScrollPane createGoodsList(PierreGeneralStore store) {
         Table table = new Table();
         table.top().left();
-        table.add(new Label(App.getGameState().getGameTime().getSeason()+" Products",MenuAssetManager.getInstance().getSkin(3),"Bold")).colspan(4).center().row();
-        table.add(new Label("   Product Name", MenuAssetManager.getInstance().getSkin(3),"Bold")).left().padRight(10);
-        table.add(new Label("Price(InSeason/OutOfSeason)",MenuAssetManager.getInstance().getSkin(3),"Bold")).padRight(30);
+        table.add(new Label(App.getGameState().getGameTime().getSeason()+" Products",MenuAssetManager.getInstance().getSkin(3),"Bold")).colspan(5).center().row();
+        table.add(new Label("",skin));
+        table.add(new Label("Product Name", MenuAssetManager.getInstance().getSkin(3),"Bold")).left().padRight(10);
+        table.add(new Label("PriceInSeason",MenuAssetManager.getInstance().getSkin(3),"Bold")).padRight(30);
+        table.add(new Label("PriceOutOfSeason",MenuAssetManager.getInstance().getSkin(3),"Bold")).padRight(30);
         table.add(new Label("Daily Limit",MenuAssetManager.getInstance().getSkin(3),"Bold")).right().row();
 
+        commonProducts(table, store);
+
         return switch (App.getGameState().getGameTime().getSeason()){
-            case Spring -> spring(table);
-            case Summer -> summer(table);
-            case Fall -> fall(table);
+            case Spring -> spring(table,store);
+            case Summer -> summer(table,store);
+            case Fall -> fall(table,store);
             case Winter -> winter(table);
         };
     }
 
-    private ScrollPane spring(Table table) {
+    private void commonProducts(Table table, PierreGeneralStore store) {
+        for(ShopItem shopItem : store.getInventory()){
+            if(shopItem instanceof PierreGeneralStoreSaplingItem || shopItem instanceof PierreGeneralStoreBackPackUpgrade){
+                addItem(table, shopItem.getTextureRegion(GameAssetManager.getInstance()), shopItem.getName(), shopItem.getDailyLimit(), shopItem.getValue(), -1);
+            }
+        }
+    }
 
-//        addItem(table, "- Parsnip Seeds", "Plant these in the spring. Takes 4 days to mature.","5", 20);
-//        addItem(table, "- Bean Starter", "Plant these in the spring. Takes 10 days to mature, but keeps producing after that.","5", 60);
-//        addItem(table, "- Cauliflower Seeds", "Plant these in the spring. Takes 12 days to produce.", "5",80);
-//        addItem(table, "- Potato Seeds", "Plant these in the spring. Takes 6 days to mature.", "5",50);
-//        addItem(table, "- Tulip Bulb", "Plant in spring. Takes 6 days to produce a flower.", "5",20);
-//        addItem(table, "- Kale Seeds", "Plant these in the spring. Takes 6 days to mature.", "5",70);
-//        addItem(table, "- Jazz Seeds", "Plant in spring. Takes 7 days to produce a blue flower.", "5",30);
-//        addItem(table, "- Garlic Seeds", "Plant these in the spring. Takes 4 days to mature.", "5",40);
-//        addItem(table, "- Rice Shoot", "Plant in spring. Takes 8 days to mature. Faster near water.", "5",40);
-
-
+    private ScrollPane spring(Table table, PierreGeneralStore store) {
+        for(ShopItem shopItem : store.getInventory()){
+            if(shopItem instanceof PierreGeneralStoreSeedsItem){
+                if(((PierreGeneralStoreSeedsItem) shopItem).getSeason() == Season.Spring){
+                    addItem(table, shopItem.getTextureRegion(GameAssetManager.getInstance()), shopItem.getName(), shopItem.getDailyLimit(), shopItem.getValue(), ((PierreGeneralStoreSeedsItem) shopItem).getPriceOutOfSeason());
+                }
+            }
+        }
         return new ScrollPane(table, skin);
     }
 
-    private ScrollPane summer(Table table) {
-        addItem(table, "Melon Seeds", "Plant these in the summer. Takes 12 days to mature.","5", 80);
-        addItem(table, "Tomato Seeds", "Plant in summer. Takes 11 days to mature, produces after harvest.","5", 50);
-        addItem(table, "Blueberry Seeds", "Plant in summer. Takes 13 days to mature, produces after harvest.","5", 80);
-        addItem(table, "Pepper Seeds", "Plant in summer. Takes 5 days to mature, produces after harvest.","5", 40);
-        addItem(table, "Wheat Seeds", "Plant in summer or fall. Takes 4 days to mature.", "5",10);
-        addItem(table, "Radish Seeds", "Plant in summer. Takes 6 days to mature.", "5",40);
-        addItem(table, "Poppy Seeds", "Plant in summer. Produces a red flower in 7 days.", "5",100);
-        addItem(table, "Spangle Seeds", "Plant in summer. Takes 8 days to produce a flower.", "5",50);
-        addItem(table, "Hops Starter", "Plant in summer. Takes 11 days to grow, keeps producing.", "5",60);
-        addItem(table, "Corn Seeds", "Plant in summer or fall. Takes 14 days to mature, produces after harvest.", "5",150);
-        addItem(table, "Sunflower Seeds", "Plant in summer or fall. Takes 8 days to mature.", "5",200);
-        addItem(table, "Red Cabbage Seeds", "Plant in summer. Takes 9 days to mature.", "5",100);
-
+    private ScrollPane summer(Table table, PierreGeneralStore store) {
+        for(ShopItem shopItem : store.getInventory()){
+            if(shopItem instanceof PierreGeneralStoreSeedsItem){
+                if(((PierreGeneralStoreSeedsItem) shopItem).getSeason() == Season.Summer){
+                    addItem(table, shopItem.getTextureRegion(GameAssetManager.getInstance()), shopItem.getName(), shopItem.getDailyLimit(), shopItem.getValue(), ((PierreGeneralStoreSeedsItem) shopItem).getPriceOutOfSeason());
+                }
+            }
+        }
         return new ScrollPane(table, skin);
     }
 
-    private ScrollPane fall(Table table) {
-
-//        addItem(table, "Eggplant Seeds", "Plant in fall. Takes 5 days to mature, produces after harvest.", 20);
-//        addItem(table, "Corn Seeds", "Plant in summer or fall. Takes 14 days to mature, produces after harvest.", 150);
-//        addItem(table, "Pumpkin Seeds", "Plant in fall. Takes 13 days to mature.", 100);
-//        addItem(table, "Bok Choy Seeds", "Plant in fall. Takes 4 days to mature.", 50);
-//        addItem(table, "Yam Seeds", "Plant in fall. Takes 10 days to mature.", 60);
-//        addItem(table, "Cranberry Seeds", "Plant in fall. Takes 7 days to mature, produces after harvest.", 240);
-//        addItem(table, "Sunflower Seeds", "Plant in summer or fall. Takes 8 days to mature.", 200);
-//        addItem(table, "Fairy Seeds", "Plant in fall. Takes 12 days to produce a mysterious flower.", 200);
-//        addItem(table, "Amaranth Seeds", "Plant in fall. Takes 7 days to grow.", 70);
-//        addItem(table, "Grape Starter", "Plant in fall. Takes 10 days to grow, keeps producing.", 60);
-//        addItem(table, "Wheat Seeds", "Plant in summer or fall. Takes 4 days to mature.", 10);
-//        addItem(table, "Artichoke Seeds", "Plant in fall. Takes 8 days to mature.", 30);
-
+    private ScrollPane fall(Table table, PierreGeneralStore store) {
+        for(ShopItem shopItem : store.getInventory()){
+            if(shopItem instanceof PierreGeneralStoreSeedsItem){
+                if(((PierreGeneralStoreSeedsItem) shopItem).getSeason() == Season.Fall){
+                    addItem(table, shopItem.getTextureRegion(GameAssetManager.getInstance()), shopItem.getName(), shopItem.getDailyLimit(), shopItem.getValue(), ((PierreGeneralStoreSeedsItem) shopItem).getPriceOutOfSeason());
+                }
+            }
+        }
         return new ScrollPane(table, skin);
     }
 
-    private ScrollPane winter(Table table){
+    private ScrollPane winter(Table table) {
         return new ScrollPane(table, skin);
     }
 
-    private void addItem(Table table, String name, String description, String dailyLimit, int price) {
+    private void addItem(Table table, TextureRegion textureRegion, String name, int dailyLimit, int price, int priceOut) {
         Label nameLabel = new Label(name, skin);
         Label priceLabel = new Label(price + "g", skin);
-        Label dailyLimitLabel = new Label(dailyLimit, skin);
-        Label addLabel = new Label("+", skin);
 
-        // Tooltip for description
-        Tooltip<Label> tooltip = new Tooltip<>(new Label(description, skin));
-        tooltip.setInstant(true);
-        nameLabel.addListener(tooltip);
+        Label priceOutLabel;
+        if(priceOut != -1){
+            priceOutLabel = new Label(priceOut + "g", skin);
+        }
+        else{
+            priceOutLabel = new Label("-", skin);
+        }
+
+        Label dailyLimitLabel;
+        if(dailyLimit != -1){
+            dailyLimitLabel = new Label(dailyLimit + "", skin);
+        }
+        else{
+            dailyLimitLabel = new Label("Unlimited", skin);
+        }
+
+        Label addLabel = new Label("+", skin);
+        Image icon = new Image(textureRegion);
 
         addLabel.addListener(new ClickListener() {
             @Override
@@ -144,9 +158,11 @@ public class PierreShopMenuView extends Window {
             }
         });
 
-        table.add(nameLabel).left().padRight(20);
+        table.add(icon).padRight(20);
+        table.add(nameLabel).padRight(20);
         table.add(priceLabel).padRight(30);
-        table.add(dailyLimit).padRight(40);
-        table.add(addLabel).right().row();
+        table.add(priceOutLabel).padRight(30);
+        table.add(dailyLimitLabel).padRight(40);
+        table.add(addLabel).right().padRight(10).padLeft(20).row();
     }
 }

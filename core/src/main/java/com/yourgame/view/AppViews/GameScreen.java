@@ -502,4 +502,8 @@ public class GameScreen extends GameBaseScreen {
     public Player getPlayer() {
         return player;
     }
+
+    public GameController getController() {
+        return controller;
+    }
 }

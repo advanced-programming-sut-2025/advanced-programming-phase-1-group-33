@@ -5,7 +5,7 @@ import com.yourgame.Graphics.GameAssetManager;
 import com.yourgame.model.Item.Item;
 
 public class ShopItem extends Item {
-    private final Integer dailyLimit;
+    private final int dailyLimit;
     private Integer remainingQuantity;
     private final String filePath;
 
@@ -17,7 +17,7 @@ public class ShopItem extends Item {
         this.filePath = filePath;
     }
 
-    public Integer getDailyLimit() {
+    public int getDailyLimit() {
         return dailyLimit;
     }
 
