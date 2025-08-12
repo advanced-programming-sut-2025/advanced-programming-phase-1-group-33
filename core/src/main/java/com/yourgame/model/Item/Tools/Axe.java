@@ -1,5 +1,7 @@
 package com.yourgame.model.Item.Tools;
 
+import com.yourgame.Graphics.GameAssetManager;
+import com.yourgame.model.Farming.Tree;
 import com.yourgame.model.Item.Item;
 import com.yourgame.model.Map.Map;
 import com.yourgame.model.Map.MapElement;
@@ -34,6 +36,13 @@ public class Axe extends Tool {
         if (element.getType() == MapElement.ElementType.TREE || element.getType() == MapElement.ElementType.WOOD) {
             if (element.takeDamage(damage)) {
                 dropElement(map, element);
+                if (element instanceof Tree tree && tree.isMature()) {
+                    GameAssetManager.getInstance().getSound("Sounds/treecrack.wav").play();
+                } else {
+                    GameAssetManager.getInstance().getSound("Sounds/log_break.wav").play();
+                }
+            } else {
+                GameAssetManager.getInstance().getSound("Sounds/axe_chop.wav").play();
             }
             return true;
         }

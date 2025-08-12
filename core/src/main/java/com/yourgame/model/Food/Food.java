@@ -38,7 +38,7 @@ public class Food extends Item implements Usable {
                 .setFoodAnimation(new FoodAnimation(this, player, 0.6f));
             return true;
         } else {
-            // TODO: Play an error sound because the player is full
+            GameAssetManager.getInstance().getSound("Sounds/food_error.mp3").play();
             return false;
         }
         /*
