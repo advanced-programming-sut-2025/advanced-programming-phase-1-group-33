@@ -3,7 +3,9 @@ package com.yourgame.model.Farming;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.yourgame.Graphics.GameAssetManager;
+import com.yourgame.model.App;
 import com.yourgame.model.Item.Item;
+import com.yourgame.model.Map.Map;
 import com.yourgame.model.Map.MapElement;
 import com.yourgame.model.Map.Tile;
 import com.yourgame.model.WeatherAndTime.Season;
@@ -15,19 +17,12 @@ import java.util.List;
 
 public class Tree extends Plant {
     private final TreeType treeType;
-    private final int numberOfDaysCanBeAliveWithoutWater;
+    private final Map map;
 
-    public Tree(TreeType treeType, Fertilizer fertilizer, int worldX, int worldY) {
-        super(ElementType.TREE, new Rectangle(worldX, worldY, 48, 80), 6, fertilizer);
+    public Tree(Map map, TreeType treeType, Fertilizer fertilizer, int worldX, int worldY) {
+        super(ElementType.TREE, new Rectangle(worldX, worldY, 16, 16), 6, fertilizer);
         this.treeType = treeType;
-
-        if (treeType == TreeType.OakTree || treeType == TreeType.MapleTree || treeType == TreeType.PineTree) {
-            numberOfDaysCanBeAliveWithoutWater = Integer.MAX_VALUE;
-        } else if (fertilizer == Fertilizer.Water_Fertilizer) {
-            numberOfDaysCanBeAliveWithoutWater = 3;
-        } else {
-            numberOfDaysCanBeAliveWithoutWater = 2;
-        }
+        this.map = map;
     }
 
     public TreeType getTreeType() {
@@ -91,7 +86,7 @@ public class Tree extends Plant {
     @Override
     public MapElement clone(int tileX, int tileY) {
         int scale = Tile.TILE_SIZE;
-        Tree tree = new Tree(treeType, fertilizer, tileX * scale, tileY * scale);
+        Tree tree = new Tree(map, treeType, fertilizer, tileX * scale, tileY * scale);
         tree.daysSinceLastHarvest = daysSinceLastHarvest;
         tree.daysSinceLastStage = daysSinceLastStage;
         tree.currentStage = currentStage;
@@ -109,25 +104,43 @@ public class Tree extends Plant {
     public List<Item> drop() {
         List<Item> items = new ArrayList<>();
         for (int i = 0; i < 5; i++) items.add(new Wood.WoodItem());
+        items.add(new TreeSource.TreeSourceItem(treeType.getSource()));
         return items;
     }
 
     @Override
     public void onTimeChanged(TimeSystem timeSystem) {
-        if (isMature()) {
-            if (hasProduct) return;
-            daysSinceLastHarvest++;
-            if (daysSinceLastHarvest >= treeType.getHarvestCycle()) {
-                hasProduct = true;
-                daysSinceLastHarvest = 0;
-            }
-        } else if (wateredToday) {
+        if (health <= 0) return;
+        boolean wasMature = isMature();
+
+        // Handle Growth Logic First
+        if (!isMature() && wateredToday) {
             daysSinceLastStage++;
             if (daysSinceLastStage >= treeType.getStages().get(currentStage)) {
                 currentStage++;
                 daysSinceLastStage = 0;
             }
+            wateredToday = false;
         }
-        wateredToday = false;
+
+        if (isMature()) {
+            if (treeType.getSeason() == App.getGameState().getGameTime().getSeason()) {
+                daysSinceLastHarvest++;
+                if (daysSinceLastHarvest >= treeType.getHarvestCycle()) {
+                    hasProduct = true;
+                    daysSinceLastHarvest = 0;
+                }
+            } else {
+                hasProduct = false;
+            }
+        }
+
+        if (!wasMature && isMature()) {
+            // The tree has just grown up. Update its collision bounds.
+            if (map != null) {
+                // Tell the map to update our bounds from 1x1 to 3x5
+                map.updateElementBounds(this,  3, 5);
+            }
+        }
     }
 }

@@ -27,19 +27,19 @@ import java.util.Random;
 public class Map {
     // Spawning elements
     private static final Random rand = new Random();
-    private static final Tree oakPrototype;
-    private static final Tree pinePrototype;
-    private static final Tree maplePrototype;
-    static {
-        oakPrototype = new Tree(TreeType.OakTree, null, 0, 0);
-        oakPrototype.setMature();
-
-        pinePrototype = new Tree(TreeType.PineTree, null, 0, 0);
-        pinePrototype.setMature();
-
-        maplePrototype = new Tree(TreeType.MapleTree, null, 0, 0);
-        maplePrototype.setMature();
-    }
+//    private static final Tree oakPrototype;
+//    private static final Tree pinePrototype;
+//    private static final Tree maplePrototype;
+//    static {
+//        oakPrototype = new Tree(TreeType.OakTree, null, 0, 0);
+//        oakPrototype.setMature();
+//
+//        pinePrototype = new Tree(TreeType.PineTree, null, 0, 0);
+//        pinePrototype.setMature();
+//
+//        maplePrototype = new Tree(TreeType.MapleTree, null, 0, 0);
+//        maplePrototype.setMature();
+//    }
 
     protected final String name;
     protected final TiledMap tiledMap;
@@ -260,6 +260,66 @@ public class Map {
         }
     }
 
+    /**
+     * Clears the tiles previously occupied by a MapElement.
+     * @param element The element whose tiles should be cleared.
+     */
+    private void clearElementFromTiles(MapElement element) {
+        java.awt.Rectangle bounds = element.getTileBounds();
+        for (int y = bounds.y; y < bounds.y + bounds.height; y++) {
+            for (int x = bounds.x; x < bounds.x + bounds.width; x++) {
+                if (isInBounds(x, y, mapWidth, mapHeight)) {
+                    Tile tile = tileStates[x][y];
+                    if (tile.getElement() == element) {
+                        tile.setElement(null);
+                        tile.setWalkable(true);
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Applies a new collision footprint for a MapElement.
+     * @param element The element to update.
+     */
+    private void applyElementToTiles(MapElement element) {
+        java.awt.Rectangle bounds = element.getTileBounds();
+        for (int y = bounds.y; y < bounds.y + bounds.height; y++) {
+            for (int x = bounds.x; x < bounds.x + bounds.width; x++) {
+                if (isInBounds(x, y, mapWidth, mapHeight)) {
+                    Tile tile = tileStates[x][y];
+                    tile.setElement(element);
+                    tile.setWalkable(false);
+                }
+            }
+        }
+    }
+
+    /**
+     * Updates the physical size and collision footprint of an element on the map.
+     */
+    public void updateElementBounds(MapElement element, int newTileWidth, int newTileHeight) {
+        // 1. Clear the old, smaller footprint
+        clearElementFromTiles(element);
+
+        // 2. Update the element's internal bounds to the new, larger size
+        element.getPixelBounds().width = newTileWidth * Tile.TILE_SIZE;
+        element.getPixelBounds().height = newTileHeight * Tile.TILE_SIZE;
+        element.getTileBounds().width = newTileWidth;
+        element.getTileBounds().height = newTileHeight;
+
+        int dx = newTileWidth / 2;
+        int dy = newTileHeight / 2;
+        element.getPixelBounds().x -= dx * Tile.TILE_SIZE;
+        element.getPixelBounds().y -= dy * Tile.TILE_SIZE;
+        element.getTileBounds().x -= dx;
+        element.getTileBounds().y -= dy;
+
+        // 3. Apply the new, larger footprint to the tiles
+        applyElementToTiles(element);
+    }
+
     public void spawnRandomElements(Season season) {
         spawnRandomTrees();
         spawnRandomWoods();
@@ -277,14 +337,14 @@ public class Map {
     }
 
     public void spawnRandomTrees() {
-        int oakNumber = 10 + rand.nextInt(10);
-        spawnObject(oakPrototype, oakNumber);
-
-        int mapleNumber = 10 + rand.nextInt(10);
-        spawnObject(maplePrototype, mapleNumber);
-
-        int pineNumber = 10 + rand.nextInt(10);
-        spawnObject(pinePrototype, pineNumber);
+//        int oakNumber = 10 + rand.nextInt(10);
+//        spawnObject(oakPrototype, oakNumber);
+//
+//        int mapleNumber = 10 + rand.nextInt(10);
+//        spawnObject(maplePrototype, mapleNumber);
+//
+//        int pineNumber = 10 + rand.nextInt(10);
+//        spawnObject(pinePrototype, pineNumber);
     }
 
     public void spawnRandomWoods() {

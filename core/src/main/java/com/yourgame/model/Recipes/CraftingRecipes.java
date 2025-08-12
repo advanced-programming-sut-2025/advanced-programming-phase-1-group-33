@@ -76,10 +76,10 @@ public enum CraftingRecipes{
             new ArtisanGood(ArtisanGoodType.IronBar), 3,
             ForagingMineral.Coal, 10))),
     MysticTreeSeed(new HashMap<>(Map.of(
-            TreeSource.Acorns, 5,
-            TreeSource.MapleSeeds, 5,
-            TreeSource.PineCones, 5,
-            TreeSource.MahoganySeeds, 5)));
+            TreeSource.Acorn, 5,
+            TreeSource.Maple_Seed, 5,
+            TreeSource.Pine_Cone, 5,
+            TreeSource.Mahogany_Seed, 5)));
 
     private final HashMap<Ingredient, Integer> ingredients;
     private final static HashMap<String, CraftingRecipes> stringToRecipes = new HashMap<>();

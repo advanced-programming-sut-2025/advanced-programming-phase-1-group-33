@@ -34,17 +34,17 @@ public class PierreGeneralStore extends Store {
         inventory.add(new PierreGeneralStoreBackPackUpgrade("Deluxe Pack", BackpackType.Deluxe, 10000, 1));
 
         //Saplings
-        inventory.add(new PierreGeneralStoreSaplingItem("Apple Sapling", TreeSource.AppleSapling, 4000,
+        inventory.add(new PierreGeneralStoreSaplingItem("Apple Sapling", TreeSource.Apple_Sapling, 4000,
                 Integer.MAX_VALUE));
-        inventory.add(new PierreGeneralStoreSaplingItem("Apricot Sapling", TreeSource.AppleSapling, 2000,
+        inventory.add(new PierreGeneralStoreSaplingItem("Apricot Sapling", TreeSource.Apple_Sapling, 2000,
                 Integer.MAX_VALUE));
-        inventory.add(new PierreGeneralStoreSaplingItem("Cherry Sapling", TreeSource.AppleSapling, 3400,
+        inventory.add(new PierreGeneralStoreSaplingItem("Cherry Sapling", TreeSource.Apple_Sapling, 3400,
                 Integer.MAX_VALUE));
-        inventory.add(new PierreGeneralStoreSaplingItem("Orange Sapling", TreeSource.AppleSapling, 4000,
+        inventory.add(new PierreGeneralStoreSaplingItem("Orange Sapling", TreeSource.Apple_Sapling, 4000,
                 Integer.MAX_VALUE));
-        inventory.add(new PierreGeneralStoreSaplingItem("Peach Sapling", TreeSource.AppleSapling, 6000,
+        inventory.add(new PierreGeneralStoreSaplingItem("Peach Sapling", TreeSource.Apple_Sapling, 6000,
                 Integer.MAX_VALUE));
-        inventory.add(new PierreGeneralStoreSaplingItem("Pomegranate Sapling", TreeSource.AppleSapling, 6000,
+        inventory.add(new PierreGeneralStoreSaplingItem("Pomegranate Sapling", TreeSource.Apple_Sapling, 6000,
                 Integer.MAX_VALUE));
 
         //Spring Seeds

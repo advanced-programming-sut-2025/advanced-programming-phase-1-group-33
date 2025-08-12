@@ -9,6 +9,7 @@
 # Ignore specific files
 Phase1.pdf
 TODO.md
+StardewValley.db
 
 *.db
 

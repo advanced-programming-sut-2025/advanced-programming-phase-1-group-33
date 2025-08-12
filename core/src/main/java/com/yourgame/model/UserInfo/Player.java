@@ -3,7 +3,7 @@ package com.yourgame.model.UserInfo;
 import java.util.*;
 // this is going to be for GSON‌ :(‌)
 import com.google.gson.annotations.Expose;
-// 
+//
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -12,6 +12,7 @@ import com.yourgame.model.Animals.AnimalType;
 import com.yourgame.model.App;
 import com.yourgame.model.Farming.Fertilizer;
 import com.yourgame.model.Farming.Seeds;
+import com.yourgame.model.Farming.TreeSource;
 import com.yourgame.model.Item.Inventory.BackpackType;
 import com.yourgame.model.Item.Inventory.TrashCan;
 import com.yourgame.model.Item.Tools.Axe;
@@ -79,6 +80,7 @@ public class Player {
         this.backpack.addItem(new Seeds.SeedItem(Seeds.Garlic_Seeds), 5);
         this.backpack.addItem(new Fertilizer.FertilizerItem(Fertilizer.Growth_Fertilizer), 2);
         this.backpack.addItem(new Fertilizer.FertilizerItem(Fertilizer.Water_Fertilizer), 2);
+        this.backpack.addItem(new TreeSource.TreeSourceItem(TreeSource.Apple_Sapling), 2);
         this.backpack.getIngredientQuantity().put(new Coin(), 20);
         this.backpack.getIngredientQuantity().put(new Wood(), 100);
         this.relationWithAbigail = new RelationWithNPC(NPCType.Abigail);

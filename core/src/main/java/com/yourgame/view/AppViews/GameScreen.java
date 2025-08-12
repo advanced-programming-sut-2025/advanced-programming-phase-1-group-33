@@ -25,7 +25,6 @@ import com.yourgame.model.App;
 import com.yourgame.Graphics.GameAssetManager;
 import com.yourgame.model.UserInfo.Player;
 import com.yourgame.model.WeatherAndTime.ThunderManager;
-import com.yourgame.model.WeatherAndTime.Weather;
 import com.yourgame.view.GameViews.JournalMenuView;
 import com.yourgame.view.GameViews.MainMenuView;
 import com.yourgame.view.GameViews.MapMenuView;
@@ -432,7 +431,7 @@ public class GameScreen extends GameBaseScreen {
         // Example: Update season (cycle through enums with 'R' key)
         if (Gdx.input.isKeyJustPressed(Input.Keys.T)) {
             // TODO: need the cheat Code Be implemented
-            App.getGameState().getGameTime().advanceMinutes(40);
+            App.getGameState().getGameTime().advanceDay(1);
             // HUDManager.seasonTypeButton[] seasons = HUDManager.seasonTypeButton.values();
             // int nextIndex = (currentSeason.ordinal() + 1) % seasons.length;
             // currentSeason = seasons[nextIndex];

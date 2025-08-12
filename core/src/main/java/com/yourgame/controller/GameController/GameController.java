@@ -12,6 +12,7 @@ import com.yourgame.model.App;
 import com.yourgame.model.Farming.ForagingCrop;
 import com.yourgame.model.Farming.ForagingCropElement;
 import com.yourgame.model.Farming.Plant;
+import com.yourgame.model.Item.Inventory.Inventory;
 import com.yourgame.model.Item.Item;
 import com.yourgame.model.Item.Tools.Tool;
 import com.yourgame.model.Item.Usable;
@@ -92,19 +93,20 @@ public class GameController {
     }
 
     public void updateDroppedItems(float delta) {
-        if (player.getBackpack().isInventoryFull()) return;
+        Inventory inventory = player.getBackpack().getInventory();
 
         // Use an iterator to safely remove items from the list while looping through it
         Iterator<DroppedItem> iterator = currentMap.getDroppedItems().iterator();
         while (iterator.hasNext()) {
             DroppedItem droppedItem = iterator.next();
+            if (inventory.isInventoryFull() && inventory.getItemQuantity(droppedItem.getItem()) <= 0) continue;
 
             float distance = player.playerPosition.dst(droppedItem.getPosition());
 
             // 1. Check for immediate pickup
             if (distance < ITEM_PICKUP_RADIUS) {
                 // Try to add the item to the player's inventory
-                if (player.getBackpack().getInventory().addItem(droppedItem.getItem(), 1)) {
+                if (inventory.addItem(droppedItem.getItem(), 1)) {
                     // If adding was successful, remove the item from the map
                     iterator.remove();
                     popUpSound.play();
@@ -125,7 +127,6 @@ public class GameController {
         }
     }
 
-    @Deprecated
     public Tile getTileInFront() {
         // Calculate the center of the player's collision box
         float playerCenterX = player.playerPosition.x + (PLAYER_WIDTH / 2f);
@@ -169,36 +170,44 @@ public class GameController {
      * This method is called when the player hits the left mouse button.
      * */
     public void handleInteraction() {
-        if (selectedTile == null) return;
+        // We just select the tile with the mouse for Hoe & WateringCan
+        Tile selectedTile;
+        Item item = player.getBackpack().getInventory().getSelectedItem();
+        if (item instanceof Tool tool &&
+            (tool.getToolType() == Tool.ToolType.Hoe || tool.getToolType() == Tool.ToolType.WateringCan)) {
+            selectedTile = this.selectedTile;
+        } else {
+            selectedTile = getTileInFront();
+        }
 
         // Harvest Tree or Crop
         MapElement element = selectedTile.getElement();
         if (element instanceof Plant plant && plant.hasProduct()) {
             List<Item> harvestedItems = plant.harvest();
             if (harvestedItems != null && !harvestedItems.isEmpty()) {
-                for (Item item : harvestedItems) {
-                    currentMap.spawnDroppedItem(item, selectedTile.tileX * TILE_SIZE, selectedTile.tileY * TILE_SIZE);
+                for (Item harvest : harvestedItems) {
+                    currentMap.spawnDroppedItem(harvest, selectedTile.tileX * TILE_SIZE, selectedTile.tileY * TILE_SIZE);
                 }
                 // If the plant is single-harvest, it will be destroyed.
                 if (plant.getHealth() <= 0) {
                     currentMap.removeElement(plant);
                     App.getGameState().getGameTime().removePlant(plant);
                 }
+                plant.setHasProduct(false);
                 return;
             }
         }
         // Harvest Foraging
         if (element instanceof ForagingCropElement foraging) {
             List<Item> dropped = foraging.drop();
-            for (Item item : dropped) {
-                currentMap.spawnDroppedItem(item, selectedTile.tileX * TILE_SIZE, selectedTile.tileY * TILE_SIZE);
+            for (Item drop : dropped) {
+                currentMap.spawnDroppedItem(drop, selectedTile.tileX * TILE_SIZE, selectedTile.tileY * TILE_SIZE);
             }
             currentMap.removeElement(foraging);
             return;
         }
 
         // Use item
-        Item item = player.getBackpack().getInventory().getSelectedItem();
         if (item instanceof Usable usable) {
             boolean success = usable.use(player, currentMap, selectedTile);
             if (item instanceof Tool tool)
