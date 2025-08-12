@@ -1,8 +1,7 @@
 package com.yourgame.model.Map;
 
 import com.yourgame.model.App;
-import com.yourgame.model.Map.Store.PierreGeneralStore;
-import com.yourgame.model.Map.Store.Store;
+import com.yourgame.model.Map.Store.PierreGeneralStore.PierreGeneralStore;
 import com.yourgame.model.UserInfo.Player;
 import com.yourgame.model.WeatherAndTime.Season;
 

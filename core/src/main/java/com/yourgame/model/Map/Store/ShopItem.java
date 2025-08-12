@@ -1,0 +1,36 @@
+package com.yourgame.model.Map.Store;
+
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.yourgame.Graphics.GameAssetManager;
+import com.yourgame.model.Item.Item;
+
+public class ShopItem extends Item {
+    private final Integer dailyLimit;
+    private Integer remainingQuantity;
+    private final String filePath;
+
+    public ShopItem(String name, ItemType itemType, int value, boolean isStackable, Integer dailyLimit, String filePath) {
+        super(name, itemType, value, isStackable);
+
+        this.dailyLimit = dailyLimit;
+        this.remainingQuantity = dailyLimit;
+        this.filePath = filePath;
+    }
+
+    public Integer getDailyLimit() {
+        return dailyLimit;
+    }
+
+    public Integer getRemainingQuantity() {
+        return remainingQuantity;
+    }
+
+    public void setRemainingQuantity() {
+        remainingQuantity--;
+    }
+
+    @Override
+    public TextureRegion getTextureRegion(GameAssetManager assetManager) {
+        return new TextureRegion(assetManager.getTexture(filePath));
+    }
+}
