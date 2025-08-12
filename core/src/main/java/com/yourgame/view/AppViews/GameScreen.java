@@ -474,4 +474,8 @@ public class GameScreen extends GameBaseScreen {
         // Set the alpha (transparency) of our color object
         ambientLightColor.a = alpha;
     }
+
+    public Player getPlayer() {
+        return player;
+    }
 }
