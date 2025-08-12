@@ -2,10 +2,7 @@ package com.yourgame.view.GameViews;
 
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.Window;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.yourgame.Graphics.GameAssetManager;
 import com.yourgame.model.Skill.Ability;
@@ -31,21 +28,30 @@ public class SkillMenuView extends Window {
         Label foragingSkillLevel = new Label("Level " + ability.getForagingLevel(), skin);
         Label fishingSkillLevel = new Label("Level " + ability.getFishingLevel(), skin);
 
+        Image farmingIcon = new Image(GameAssetManager.getInstance().getSkillMenuIcons("farming"));
+        Image miningIcon = new Image(GameAssetManager.getInstance().getSkillMenuIcons("mining"));
+        Image foragingIcon = new Image(GameAssetManager.getInstance().getSkillMenuIcons("foraging"));
+        Image fishingIcon = new Image(GameAssetManager.getInstance().getSkillMenuIcons("fishing"));
+
         TextButton backButton = GameAssetManager.getInstance().getButton("Back");
 
+        add(farmingIcon).padRight(10);
         add(farmingSkill);
         add(farmingSkillLevel);
         row().padTop(20);
+        add(miningIcon).padRight(10);
         add(miningSkill);
         add(miningSkillLevel);
         row().padTop(20);
+        add(foragingIcon).padRight(10);
         add(foragingSkill);
         add(foragingSkillLevel);
         row().padTop(20);
+        add(fishingIcon).padRight(10);
         add(fishingSkill);
         add(fishingSkillLevel);
         row().padTop(20);
-        add(backButton).colspan(2).center().padTop(50).row(); // Added .colspan(2) and .center(), and .row() for good measure
+        add(backButton).colspan(3).center().padTop(50).row();
 
         setPosition((stage.getWidth() - getWidth())/2f, (stage.getHeight() - getHeight())/2f);
 
