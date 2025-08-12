@@ -5,6 +5,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.*;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
@@ -28,6 +29,9 @@ import com.yourgame.model.WeatherAndTime.ThunderManager;
 import com.yourgame.view.GameViews.JournalMenuView;
 import com.yourgame.view.GameViews.MainMenuView;
 import com.yourgame.view.GameViews.MapMenuView;
+import com.yourgame.view.GameViews.PierreShopMenuView;
+
+import java.awt.*;
 
 import static com.yourgame.model.UserInfo.Player.*;
 
@@ -52,11 +56,14 @@ public class GameScreen extends GameBaseScreen {
     // MENUS
     private Image menuIcon;
     public boolean paused = false;
-    private MainMenuView mainMenuView;
 
     // Fields for Day/Night Cycle
     private Texture nightOverlayTexture;
     private Color ambientLightColor;
+
+    // Pierre's shop
+    private PierreShopMenuView pierreShopMenuView;
+
 
     private final ThunderManager thunderManager;
 
@@ -103,7 +110,7 @@ public class GameScreen extends GameBaseScreen {
         menuIcon.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                openMenu();
+                openMenu("main");
             }
         });
 
@@ -154,6 +161,11 @@ public class GameScreen extends GameBaseScreen {
             controller.updateDroppedItems(delta);
             updateDayNightCycle();
             thunderManager.update(delta);
+
+            //handle pierre's shop menu
+            if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+                openMenu("pierreShop");
+            }
 
             // Update animation timer
             stateTime += delta;
@@ -280,7 +292,7 @@ public class GameScreen extends GameBaseScreen {
             hudManager.selectSlot(11);
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
             if (paused == false) {
-                openMenu();
+                openMenu("main");
             } else {
                 closeMenu();
             }
@@ -444,10 +456,17 @@ public class GameScreen extends GameBaseScreen {
         hudManager.updateEnergyBar();
     }
 
-    private void openMenu() {
+    private void openMenu(String name) {
         paused = true;
         Gdx.input.setInputProcessor(new InputMultiplexer(HUDStage, menuStage));
-        menuStage.addActor(mainMenuView = new MainMenuView(MenuAssetManager.getInstance().getSkin(3), menuStage, this));
+
+        switch (name) {
+            case "main" -> menuStage.addActor(new MainMenuView(MenuAssetManager.getInstance().getSkin(3),
+                menuStage, this));
+            case "pierreShop" -> menuStage.addActor(new PierreShopMenuView(MenuAssetManager.getInstance().getSkin(3),
+                menuStage, this));
+
+        }
     }
 
     public void closeMenu() {
