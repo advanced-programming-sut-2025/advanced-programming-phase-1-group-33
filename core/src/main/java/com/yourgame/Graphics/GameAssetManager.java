@@ -38,7 +38,11 @@ public class GameAssetManager extends AssetManager {
 
     private Music backgroundMusic;
 
-    private Texture menuIcon;
+    private final Texture menuIcon;
+    private final Texture farmingSkillIcon;
+    private final Texture fishingSkillIcon;
+    private final Texture foragingSkillIcon;
+    private final Texture miningSkillIcon;
 
     private final TextButton closeButton;
     private final TextButton inventoryMenuButton;
@@ -61,6 +65,10 @@ public class GameAssetManager extends AssetManager {
         backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("Musics/02. Cloud Country.mp3"));
 
         menuIcon = new Texture(Gdx.files.internal("Game/Game Menu/menu-icon.png"));
+        farmingSkillIcon = new Texture(Gdx.files.internal("Game/Game Menu/Skills Menu/FarmingSkillIcon.png"));
+        fishingSkillIcon = new Texture(Gdx.files.internal("Game/Game Menu/Skills Menu/FishingSkillIcon.png"));
+        miningSkillIcon = new Texture(Gdx.files.internal("Game/Game Menu/Skills Menu/MiningSkillIcon.png"));
+        foragingSkillIcon = new Texture(Gdx.files.internal("Game/Game Menu/Skills Menu/ForagingSkillIcon.png"));
 
         closeButton = new TextButton("Close" , MenuAssetManager.getInstance().getSkin(3));
         inventoryMenuButton = new TextButton("Inventory" , MenuAssetManager.getInstance().getSkin(3));
@@ -87,6 +95,16 @@ public class GameAssetManager extends AssetManager {
 
     public Texture getMenuIcon() {
         return menuIcon;
+    }
+
+    public Texture getSkillMenuIcons(String name) {
+        return switch (name) {
+            case "farming" -> farmingSkillIcon;
+            case "fishing" -> fishingSkillIcon;
+            case "foraging" -> foragingSkillIcon;
+            case "mining" -> miningSkillIcon;
+            default -> null;
+        };
     }
 
     public TextButton getButton(String name) {
