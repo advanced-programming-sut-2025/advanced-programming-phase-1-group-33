@@ -17,6 +17,7 @@ public class FoodAnimation {
     private final float duration;
     private boolean effectApplied;
     private final Sound eatingSound;
+    private final Sound buffSound;
 
     public final Vector2 position = new Vector2();
 
@@ -29,6 +30,7 @@ public class FoodAnimation {
         this.timer = 0;
         this.effectApplied = false;
         this.eatingSound = GameAssetManager.getInstance().getSound("Sounds/eat.wav");
+        this.buffSound = GameAssetManager.getInstance().getSound("Sounds/powerup.wav");
     }
 
     /**
@@ -56,6 +58,12 @@ public class FoodAnimation {
             player.addEnergy(foodItem.getFoodType().getEnergy());
             player.getBackpack().getInventory().reduceItemQuantity(foodItem, 1);
             effectApplied = true;
+
+            Buff buff = foodItem.getFoodType().getBuff();
+            if (buff != null) {
+                player.getBuffManager().addBuff(buff);
+                buffSound.play();
+            }
         }
 
         // The animation is finished when the timer runs out.

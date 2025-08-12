@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BuffManager implements TimeObserver {
+    private final List<Buff> buffs = new ArrayList<>();
+
     private Buff miningBuff;
     private Buff fishingBuff;
     private Buff farmingBuff;
@@ -38,7 +40,7 @@ public class BuffManager implements TimeObserver {
     }
 
     public List<Buff> getActiveBuffs() {
-        List<Buff> buffs = new ArrayList<>();
+        buffs.clear();
         if (miningBuff != null) buffs.add(miningBuff);
         if (fishingBuff != null) buffs.add(fishingBuff);
         if (farmingBuff != null) buffs.add(farmingBuff);

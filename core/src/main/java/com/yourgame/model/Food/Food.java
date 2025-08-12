@@ -33,7 +33,7 @@ public class Food extends Item implements Usable {
             return false;
         }
 
-        if (player.getEnergy() < Player.MAX_ENERGY) {
+        if (player.getEnergy() < player.getMaxEnergy()) {
             GameAssetManager.getInstance()
                 .setFoodAnimation(new FoodAnimation(this, player, 0.6f));
             return true;
@@ -41,9 +41,5 @@ public class Food extends Item implements Usable {
             GameAssetManager.getInstance().getSound("Sounds/food_error.mp3").play();
             return false;
         }
-        /*
-        * TODO
-        * food animation, applying buff, error sound when player is full
-        * */
     }
 }

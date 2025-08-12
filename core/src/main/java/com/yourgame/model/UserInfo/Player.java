@@ -34,7 +34,7 @@ public class Player {
     public static final int PLAYER_WIDTH = 16;
     public static final int PLAYER_HEIGHT = 32;
     public static final float SPEED = 150f;
-    public static final int MAX_ENERGY = 300;
+    private static final int MAX_ENERGY = 300;
 
     private final User user;
     private int energy;
@@ -82,7 +82,7 @@ public class Player {
         this.backpack.addItem(new Seeds.SeedItem(Seeds.Garlic_Seeds), 5);
         this.backpack.addItem(new Fertilizer.FertilizerItem(Fertilizer.Growth_Fertilizer), 2);
         this.backpack.addItem(new Fertilizer.FertilizerItem(Fertilizer.Water_Fertilizer), 2);
-        this.backpack.addItem(new TreeSource.TreeSourceItem(TreeSource.Apple_Sapling), 2);
+        this.backpack.addItem(new Food(FoodType.RedPlate), 1);
         this.backpack.addItem(new Food(FoodType.Bread), 2);
         this.backpack.getIngredientQuantity().put(new Coin(), 20);
         this.backpack.getIngredientQuantity().put(new Wood(), 100);
@@ -125,6 +125,10 @@ public class Player {
             this.energy += energy;
             this.energy = Math.min(this.energy, MAX_ENERGY);
         }
+    }
+
+    public int getMaxEnergy() {
+        return MAX_ENERGY + buffManager.getBuffValue(null);
     }
 
     public Backpack getBackpack() {

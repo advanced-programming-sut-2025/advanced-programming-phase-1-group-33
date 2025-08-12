@@ -211,8 +211,6 @@ public class GameScreen extends GameBaseScreen {
         // Render Day & Night
         renderOverlay();
 
-        hudManager.updateInventory(player.getBackpack().getInventory());
-        hudManager.updateBuffs(player.getBuffManager().getActiveBuffs());
         super.render(delta);
     }
 
@@ -470,6 +468,12 @@ public class GameScreen extends GameBaseScreen {
             // hudManager.updateSeason(currentSeason);
         }
 
+        if (Gdx.input.isKeyJustPressed(Input.Keys.Y)) {
+            App.getGameState().getGameTime().advanceMinutes(60);
+        }
+
+        hudManager.updateInventory(player.getBackpack().getInventory());
+        hudManager.updateBuffs(player.getBuffManager().getActiveBuffs());
         hudManager.updateTime(delta);
         hudManager.updateWeather();
         hudManager.updateSeason();

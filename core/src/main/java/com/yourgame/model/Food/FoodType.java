@@ -3,6 +3,7 @@ package com.yourgame.model.Food;
 
 import com.yourgame.model.Item.Item;
 import com.yourgame.model.ManuFactor.Ingredient;
+import com.yourgame.model.Skill.Skill;
 import com.yourgame.model.Stores.Sellable;
 
 import java.util.HashMap;
@@ -59,6 +60,20 @@ public enum FoodType implements Ingredient, Sellable {
 
     public static FoodType getFoodByName(String name) {
         return stringToFood.getOrDefault(name.toLowerCase(), null);
+    }
+
+    public Buff getBuff() {
+        return switch (this) {
+            case TripleShotEspresso -> new Buff(null, 100, 5);
+            case RedPlate -> new Buff(null, 50, 3);
+            case Pancakes -> new Buff(Skill.SkillType.FORAGING, 1, 11);
+            case HashBrowns, FarmersLunch -> new Buff(Skill.SkillType.FARMING, 1, 5);
+            case SurvivalBurger -> new Buff(Skill.SkillType.FORAGING, 1, 5);
+            case DishOTheSea -> new Buff(Skill.SkillType.FISHING, 1, 5);
+            case SeafoamPudding -> new Buff(Skill.SkillType.FISHING, 1, 10);
+            case MinersTreat -> new Buff(Skill.SkillType.MINING, 1, 5);
+            default -> null;
+        };
     }
 
     @Override
