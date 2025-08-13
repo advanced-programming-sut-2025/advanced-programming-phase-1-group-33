@@ -120,7 +120,13 @@ public class SignUpMenuController {
                 answer,
                 Avatar.Sam.getName() // Assuming avatar.getName() returns the name string
         );
-        Main.getMain().getConnectionManager().sendDataToServer(RequestType.SIGNUP, signupRequest);
+        try{
+
+            System.out.println(Main.getMain().getConnectionManager().sendRequestAndWaitForResponse(RequestType.SIGNUP, signupRequest, 1000));
+        }
+        catch(Exception e){
+            System.out.println(e);
+        }
 
         // UserDAO userDAO = App.getUserDAO();
         // User newUser = new User(username, password, email, nickname, gender, question, answer, Avatar.Abigail);

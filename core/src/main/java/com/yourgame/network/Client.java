@@ -20,15 +20,17 @@ public class Client implements Runnable {
     private PrintWriter out;
     private BufferedReader in; // ADDED: To read messages from the server
     private final NetworkListener listener; // ADDED: To notify the game of events
+    private final ResponseHolder responseHolder;
 
     private final Gson gson = new Gson();
 
     // UPDATED: The constructor now accepts the NetworkListener
-    public Client(String serverIp, int serverPort, NetworkListener listener) {
+    public Client(String serverIp, int serverPort, NetworkListener listener, ResponseHolder responseHolder) {
         this.serverIp = serverIp;
         this.serverPort = serverPort;
         this.listener = listener;
-    }
+        this.responseHolder = responseHolder;
+    }   
 
     @Override
     public void run() {

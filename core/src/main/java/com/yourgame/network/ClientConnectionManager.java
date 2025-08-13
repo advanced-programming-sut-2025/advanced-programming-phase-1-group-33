@@ -20,7 +20,8 @@ public class ClientConnectionManager {
         if (clientThread != null && clientThread.isAlive()) {
             return; // Already connected
         }
-        client = new Client(serverIp, serverPort, listener);
+
+        client = new Client(serverIp, serverPort, listener, this.responseHolder);
         clientThread = new Thread(client);
         clientThread.start();
     }
@@ -65,5 +66,23 @@ public class ClientConnectionManager {
             System.err.println("Unsupported request type: " + data.getClass().getName());
         }
     }
+
+    public Object sendRequestAndWaitForResponse(RequestType type, Object data, long timeoutMillis) throws InterruptedException {
+        if (client == null) {
+            System.err.println("Client is not connected. Cannot send request.");
+            return null;
+        }
+
+        if (type == null) {
+            System.err.println("Request type cannot be null.");
+            return null;
+        }
+
+        String payload = gson.toJson(data);
+        RequestWrapper wrapper = new RequestWrapper(type, payload);
+        client.sendData(wrapper);
+
+        return responseHolder.getResponse(timeoutMillis);
+     }
 
 }
