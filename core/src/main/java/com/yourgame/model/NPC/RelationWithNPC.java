@@ -54,7 +54,7 @@ public class RelationWithNPC {
     }
 
     private void checkUnlockingThirdQuest() {
-        if (this.type.equals(NPCType.Abigail)) {
+        if (this.type.equals(NPCType.Pierre)) {
             if (this.numOfDaysAfterUnlockingSecondQuest >= 100) {this.isThirdQuestLocked = false;}
         } else if (this.type.equals(NPCType.Harvey)) {
             if (this.numOfDaysAfterUnlockingSecondQuest >= 120) {this.isThirdQuestLocked = false;}

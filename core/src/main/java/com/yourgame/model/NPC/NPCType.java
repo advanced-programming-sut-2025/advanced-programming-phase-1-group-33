@@ -6,13 +6,14 @@ import com.yourgame.model.WeatherAndTime.Weather;
 import java.util.List;
 
 public enum NPCType {
-    Abigail("Gamer",
+    Pierre("Shopman",
     List.of(
-        new Dialogue("Dad wants me to help at the store again... I'd rather be out enjoying the flowers.", List.of(Season.Summer), List.of(Weather.Sunny), 0, false),
+        new Dialogue("I've got summer seeds available! You'd better stock up.", List.of(Season.Summer), List.of(Weather.Sunny), 0, false),
         new Dialogue("Rain makes everything feel so dramatic. I kind of like it.", List.of(), List.of(Weather.Rainy), 0, false),
-        new Dialogue("Days like this make me want to grab my sword and find adventure...", List.of(Season.Spring), List.of(Weather.Sunny), 0, false),
-        new Dialogue("I found a place near the river that looks magical at night... want me to show you sometime?", List.of(), List.of(), 4, false),
-        new Dialogue("Oh hey! Wanna hang out for a bit?")
+        new Dialogue("I've heard the flowers are in bloom and the air smells great...", List.of(Season.Spring), List.of(Weather.Sunny), 0, false),
+        new Dialogue("You know, I used to be a pretty good boxer back in the day... my right hook was the stuff of legend!", List.of(), List.of(), 4, false),
+        new Dialogue("Welcome! If you're looking for seeds, you've come to the right place!"),
+        new Dialogue("Hi there. Is your farm doing well? Maybe a few of my seeds will spruce things up.")
     )),
     Sebastian("Freelancer",
     List.of(
@@ -53,6 +54,7 @@ public enum NPCType {
 
     private final String job;
     private final List<Dialogue> dialogues;
+    private Schedule schedule;
 
     NPCType(String job, List<Dialogue> dialogues) {
         this.job = job;
@@ -69,6 +71,10 @@ public enum NPCType {
 
     public List<Dialogue> getDialogues() {
         return dialogues;
+    }
+
+    public Schedule getSchedule() {
+        return schedule;
     }
 
     public int getMaxFriendShipLevel() {

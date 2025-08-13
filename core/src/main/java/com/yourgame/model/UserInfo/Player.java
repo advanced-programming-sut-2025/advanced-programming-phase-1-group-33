@@ -98,7 +98,7 @@ public class Player implements TimeObserver {
         this.fishingSkill = new Skill.FishingSkill();
 
         // Relation
-        this.relationWithAbigail = new RelationWithNPC(NPCType.Abigail);
+        this.relationWithAbigail = new RelationWithNPC(NPCType.Pierre);
         this.relationWithSebastian = new RelationWithNPC(NPCType.Sebastian);
         this.relationWithHarvey = new RelationWithNPC(NPCType.Harvey);
         this.relationWithLeah = new RelationWithNPC(NPCType.Leah);

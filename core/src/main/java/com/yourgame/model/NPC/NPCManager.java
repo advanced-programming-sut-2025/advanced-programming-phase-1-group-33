@@ -1,7 +1,7 @@
 package com.yourgame.model.NPC;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.yourgame.Graphics.GameAssetManager;
+import com.yourgame.model.Map.Map;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,22 +16,22 @@ public class NPCManager {
 
     private void spawnNPCs() {
         // Create instances of your five NPCs at their starting locations
-        npcs.add(new NPC(NPCType.Abigail, 500, 500)); // Example coordinates
+        npcs.add(new NPC(NPCType.Pierre, 500, 500)); // Example coordinates
         npcs.add(new NPC(NPCType.Sebastian, 600, 600));
         npcs.add(new NPC(NPCType.Harvey, 700, 700));
         npcs.add(new NPC(NPCType.Leah, 800, 800));
         npcs.add(new NPC(NPCType.Robin, 900, 900));
     }
 
-    public void update(float delta) {
+    public void update(float delta, Map map) {
         for (NPC npc : npcs) {
-            npc.update(delta);
+            npc.update(delta, map);
         }
     }
 
-    public void render(SpriteBatch batch, GameAssetManager assetManager) {
+    public void render(SpriteBatch batch) {
         for (NPC npc : npcs) {
-            batch.draw(npc.getTexture(assetManager), npc.position.x, npc.position.y);
+            batch.draw(npc.getTextureFrame(), npc.position.x, npc.position.y);
         }
     }
 
