@@ -4,6 +4,7 @@ package com.yourgame.network;
 import com.google.gson.Gson;
 import com.yourgame.network.protocol.RequestType;
 import com.yourgame.network.protocol.RequestWrapper;
+import com.yourgame.network.protocol.Auth.SignupRequest;
 
 public class ClientConnectionManager {
     private Client client;
@@ -33,13 +34,35 @@ public class ClientConnectionManager {
         }
     }
 
-    public void sendDataToServer(RequestType type  , Object data) {
+    public void sendDataToServer(RequestType type, Object data) {
         if (client != null) {
 
             String payload = gson.toJson(data);
 
             RequestWrapper wrapper = new RequestWrapper(type, payload);
-            client.sendData(wrapper); 
+            client.sendData(wrapper);
+        }
+    }
+
+    public void sendRequest(Object data) {
+        if (client == null) {
+            System.err.println("Client is not connected. Cannot send request.");
+            return;
+        }
+
+        RequestType type = null;
+        if (data instanceof SignupRequest) {
+            type = RequestType.SIGNUP;
+        }
+        // Add more 'if' or 'else if' statements for other request types like
+        // LoginRequest, etc.
+
+        if (type != null) {
+            String payload = gson.toJson(data);
+            RequestWrapper wrapper = new RequestWrapper(type, payload);
+            client.sendData(wrapper);
+        } else {
+            System.err.println("Unsupported request type: " + data.getClass().getName());
         }
     }
 

@@ -3,9 +3,12 @@ package com.yourgame.server;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.sql.SQLException;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
+
+import com.yourgame.persistence.DatabaseManager;
 
 public class Server {
 
@@ -38,10 +41,16 @@ public class Server {
         clients.remove(clientHandler);
         System.out.println("Client disconnected. Active clients: " + clients.size());
     }
-
     public static void main(String[] args) {
         int port = 8080;
-        Server server = new Server(port);
-        server.start();
+        try {
+            // CORRECTED: Initialize the DatabaseManager before starting the server.
+            DatabaseManager.initialize();
+            Server server = new Server(port);
+            server.start();
+        } catch (SQLException e) {
+            System.err.println("Failed to initialize database: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 }

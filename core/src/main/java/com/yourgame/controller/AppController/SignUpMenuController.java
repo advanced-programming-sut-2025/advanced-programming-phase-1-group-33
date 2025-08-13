@@ -7,6 +7,8 @@ import com.yourgame.model.UserInfo.User;
 import com.yourgame.model.UserInfo.UserInfoChecking;
 import com.yourgame.model.enums.Avatar;
 import com.yourgame.model.enums.Commands.MenuTypes;
+import com.yourgame.network.protocol.RequestType;
+import com.yourgame.network.protocol.Auth.SignupRequest;
 import com.yourgame.model.enums.Gender;
 import com.yourgame.model.enums.SecurityQuestion;
 import com.yourgame.persistence.UserDAO;
@@ -30,7 +32,6 @@ public class SignUpMenuController {
     private static final String SPECIALS = "?><,\"';:\\/[]{}|=+()-*&^%$#!";
     private static final String ALL = LOWERCASE + UPPERCASE + NUMBERS + SPECIALS;
 
-
     public void setView(SignupMenuView view) {
         this.view = view;
     }
@@ -49,24 +50,25 @@ public class SignUpMenuController {
         String nickname = view.getUserInfo("nickname");
         Gender gender = view.getGender();
 
-        if (username.isEmpty()){
-            return new Result(false, "Username field is empty!");}
-        else if (password.isEmpty()){
-            return new Result(false, "Password field is empty!");}
-        else if (confirmPassword.isEmpty()){
-            return new Result(false, "Password confirming field is empty!");}
-        else if (email.isEmpty()){
-            return new Result(false, "Email field is empty!");}
-        else if (nickname.isEmpty()){
-            return new Result(false, "Nickname field is empty!");}
-        else if (!UserInfoChecking.ValidName.matcher(username)){
-            return new Result(false, "Username is not valid!");}
-        else if (!UserInfoChecking.StrongPassword.matcher(password)){
-            return new Result(false, validatePassword(password));}
-        else if (!password.equals(confirmPassword)){
-            return new Result(false, "Passwords do not match!");}
-        else if(!UserInfoChecking.ValidEmail.matcher(email)){
-            return new Result(false, "Email is invalid!");}
+        if (username.isEmpty()) {
+            return new Result(false, "Username field is empty!");
+        } else if (password.isEmpty()) {
+            return new Result(false, "Password field is empty!");
+        } else if (confirmPassword.isEmpty()) {
+            return new Result(false, "Password confirming field is empty!");
+        } else if (email.isEmpty()) {
+            return new Result(false, "Email field is empty!");
+        } else if (nickname.isEmpty()) {
+            return new Result(false, "Nickname field is empty!");
+        } else if (!UserInfoChecking.ValidName.matcher(username)) {
+            return new Result(false, "Username is not valid!");
+        } else if (!UserInfoChecking.StrongPassword.matcher(password)) {
+            return new Result(false, validatePassword(password));
+        } else if (!password.equals(confirmPassword)) {
+            return new Result(false, "Passwords do not match!");
+        } else if (!UserInfoChecking.ValidEmail.matcher(email)) {
+            return new Result(false, "Email is invalid!");
+        }
 
         UserDAO userDAO = App.getUserDAO();
         User existingUser = null;
@@ -77,21 +79,21 @@ public class SignUpMenuController {
         }
 
         if (existingUser != null) {
-            try{
-                while(true){
-                    if(username.length() == 8)
-                        username = username.substring(0,7);
+            try {
+                while (true) {
+                    if (username.length() == 8)
+                        username = username.substring(0, 7);
                     username = username + NUMBERS.charAt(random.nextInt(NUMBERS.length()));
-                    if(userDAO.loadUser(username) == null)
+                    if (userDAO.loadUser(username) == null)
                         return new Result(false, "There exists a user with that username!\n"
-                            + "you can use : " + username);
+                                + "you can use : " + username);
                 }
-            } catch (SQLException e){
+            } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
         }
 
-        return new Result(true,"");
+        return new Result(true, "");
     }
 
     public Result handleSecurityAnswer() {
@@ -102,19 +104,33 @@ public class SignUpMenuController {
         String nickname = view.getUserInfo("nickname");
         SecurityQuestion question = view.getSecurityQuestion();
         Gender gender = view.getGender();
+        // Avatar avatar = view.getAvatar(); // Assuming you have a getAvatar() method in your view
 
-        if (answer.isEmpty()){
-            return new Result(false, "Security answer field is empty!");}
-
-        UserDAO userDAO = App.getUserDAO();
-        User newUser = new User(username,password,email,nickname,gender,question,answer, Avatar.Abigail);
-
-        // Save to database
-        try {
-            userDAO.saveUser(newUser);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+        if (answer.isEmpty()) {
+            return new Result(false, "Security answer field is empty!");
         }
+
+        SignupRequest signupRequest = new SignupRequest(
+                username,
+                password,
+                email,
+                nickname,
+                gender.name(), // Assuming gender.name() returns the string representation
+                question.getQuestion(), // Use getQuestion() to get the question string
+                answer,
+                Avatar.Sam.getName() // Assuming avatar.getName() returns the name string
+        );
+        Main.getMain().getConnectionManager().sendDataToServer(RequestType.SIGNUP, signupRequest);
+
+        // UserDAO userDAO = App.getUserDAO();
+        // User newUser = new User(username, password, email, nickname, gender, question, answer, Avatar.Abigail);
+
+        // // Save to database
+        // try {
+        //     userDAO.saveUser(newUser);
+        // } catch (SQLException e) {
+        //     throw new RuntimeException(e);
+        // }
 
         App.setCurrentMenu(MenuTypes.MainMenu);
         Main.getMain().getScreen().dispose();

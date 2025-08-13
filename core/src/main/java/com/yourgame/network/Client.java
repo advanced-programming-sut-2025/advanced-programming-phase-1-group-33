@@ -21,9 +21,7 @@ public class Client implements Runnable {
     private BufferedReader in; // ADDED: To read messages from the server
     private final NetworkListener listener; // ADDED: To notify the game of events
 
-    private final Gson gson = new GsonBuilder()
-            .excludeFieldsWithoutExposeAnnotation()
-            .create();
+    private final Gson gson = new Gson();
 
     // UPDATED: The constructor now accepts the NetworkListener
     public Client(String serverIp, int serverPort, NetworkListener listener) {
