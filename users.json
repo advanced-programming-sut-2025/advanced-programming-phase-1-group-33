@@ -1,10 +1,10 @@
 [ {
   "answer" : "Tehran",
-  "nickname" : "Sepi",
-  "password" : "Sepehr#2006",
-  "username" : "SepiMoti",
+  "gender" : "Male",
   "email" : "asd@fsdd.com",
   "avatar" : "Abigail",
-  "gender" : "Male",
+  "password" : "Sepehr#2006",
+  "nickname" : "Sepi",
+  "username" : "SepiMoti",
   "securityQuestion" : "BornCity"
 } ]

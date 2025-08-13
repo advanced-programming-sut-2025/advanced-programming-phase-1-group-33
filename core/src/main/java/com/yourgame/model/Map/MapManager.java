@@ -1,6 +1,7 @@
 package com.yourgame.model.Map;
 
 import com.yourgame.model.App;
+import com.yourgame.model.Map.Store.PierreGeneralStore.PierreGeneralStore;
 import com.yourgame.model.UserInfo.Player;
 import com.yourgame.model.WeatherAndTime.Season;
 
@@ -14,6 +15,8 @@ public class MapManager {
     private final HashMap<Player, Map> houses;
     private final HashMap<Player, Map> playersCurrentMap;
 
+    private final PierreGeneralStore pierreGeneralStore;
+
     public MapManager(List<Player> players) {
         town = new Map("town", "Game/Map/town.tmx");
 
@@ -23,7 +26,7 @@ public class MapManager {
         buildings.put("fish-shop", new Map("fish-shop", "Game/Map/Buildings/fish-shop.tmx"));
         buildings.put("JojaMart", new Map("JojaMart", "Game/Map/Buildings/JojaMart.tmx"));
         buildings.put("marnie-ranch", new Map("marnie-ranch", "Game/Map/Buildings/marnie-ranch.tmx"));
-        buildings.put("pierre-store", new Store("pierre-store", "Game/Map/Buildings/pierre-store.tmx"));
+        buildings.put("pierre-store", pierreGeneralStore = new PierreGeneralStore("pierre-store", "Game/Map/Buildings/pierre-store.tmx",9,17));
         buildings.put("saloon", new Map("saloon", "Game/Map/Buildings/saloon.tmx"));
 
         farms = new HashMap<>();
@@ -82,8 +85,8 @@ public class MapManager {
         return buildings.get("marnie-ranch");
     }
 
-    public Map getPierreStore() {
-        return buildings.get("pierre-store");
+    public PierreGeneralStore getPierreStore() {
+        return pierreGeneralStore;
     }
 
     public Map getSaloon() {
