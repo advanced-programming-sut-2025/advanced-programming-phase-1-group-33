@@ -179,11 +179,6 @@ public class GameScreen extends GameBaseScreen {
                 }
             }
 
-            //handle pierre's shop menu
-            if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
-                openMenu("pierreShop");
-            }
-
             // Update animation timer
             stateTime += delta;
         }
@@ -216,9 +211,9 @@ public class GameScreen extends GameBaseScreen {
         // Render Day & Night
         renderOverlay();
 
-        if(Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
-            openMenu("pierreShop");
-        }
+//        if(Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
+//            openMenu("pierreShop");
+//        }
 
         hudManager.updateInventory(player.getBackpack().getInventory());
         super.render(delta);
@@ -357,11 +352,13 @@ public class GameScreen extends GameBaseScreen {
             }
         }
 
-        if (Gdx.input.isButtonJustPressed(Input.Keys.SPACE)) {
+        if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
             controller.handleInteraction();
             if (controller.getCurrentMap() instanceof Store store) {
-                if (store.isPlayerInTradeZone(player)) {
-                    Gdx.app.exit();
+                if (store.isPlayerInBuyZone(player)) {
+                    openMenu("pierreShop");
+                }
+                else if (store.isPlayerInSellZone(player)) {
                     openMenu("pierreShop");
                 }
             } else if (controller.getCurrentMap().getName().contains("house")) {
