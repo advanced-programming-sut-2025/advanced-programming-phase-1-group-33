@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="112" height="120" tilewidth="16" tileheight="16" infinite="0" nextlayerid="6" nextobjectid="95">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="112" height="120" tilewidth="16" tileheight="16" infinite="0" nextlayerid="11" nextobjectid="138">
  <tileset firstgid="1" source="outdoors-spring.tsx"/>
  <tileset firstgid="4265" source="pelican-town.tsx"/>
  <tileset firstgid="7121" source="pelican-town-spring.tsx"/>
@@ -362,6 +362,142 @@
   <object id="75" name="river-bottom" x="1360" y="1728" width="80" height="32"/>
   <object id="94" name="clint-desk" x="1760" y="624">
    <polygon points="0,0 0,-48 -16,-48 -16,-16 -32,-16 -32,-48 -64,-48 -64,0"/>
+  </object>
+ </objectgroup>
+ <objectgroup id="6" name="PierreSchedule">
+  <object id="95" name="600" x="256.25" y="1375.75">
+   <point/>
+  </object>
+  <object id="96" name="615" x="486" y="1382">
+   <point/>
+  </object>
+  <object id="97" name="645" x="415.333" y="841.333">
+   <point/>
+  </object>
+  <object id="98" name="700" x="394.667" y="370">
+   <point/>
+  </object>
+  <object id="99" name="800" x="1292.67" y="448">
+   <point/>
+  </object>
+  <object id="100" name="900" x="543.25" y="842.5">
+   <point/>
+  </object>
+  <object id="110" name="1800" x="552" y="1230.5">
+   <point/>
+  </object>
+  <object id="111" name="2300" x="542" y="854">
+   <point/>
+  </object>
+ </objectgroup>
+ <objectgroup id="8" name="SebastianSchedule">
+  <object id="112" name="600" x="794.5" y="933.5">
+   <point/>
+  </object>
+  <object id="113" name="700" x="1257.5" y="787">
+   <point/>
+  </object>
+  <object id="114" name="745" x="1313" y="320.5">
+   <point/>
+  </object>
+  <object id="115" name="830" x="1690.5" y="805.5">
+   <point/>
+  </object>
+  <object id="116" name="1000" x="1505.5" y="1441">
+   <point/>
+  </object>
+  <object id="117" name="1300" x="1234.5" y="1872">
+   <point/>
+  </object>
+  <object id="118" name="1430" x="272" y="1735">
+   <point/>
+  </object>
+  <object id="119" name="1900" x="676.5" y="1117.5">
+   <point/>
+  </object>
+  <object id="120" name="2300" x="826.5" y="923">
+   <point/>
+  </object>
+ </objectgroup>
+ <objectgroup id="9" name="HarveySchedule">
+  <object id="121" name="600" x="1571" y="1731">
+   <point/>
+  </object>
+  <object id="123" name="800" x="1499.33" y="1433.33">
+   <point/>
+  </object>
+  <object id="124" name="900" x="1440" y="310">
+   <point/>
+  </object>
+  <object id="125" name="1200" x="417.333" y="257.333">
+   <point/>
+  </object>
+  <object id="126" name="1900" x="616.25" y="1202.5">
+   <point/>
+  </object>
+  <object id="127" name="2300" x="1721" y="1713">
+   <point/>
+  </object>
+ </objectgroup>
+ <objectgroup id="10" name="LeahShedule">
+  <object id="128" name="600" x="896.75" y="1230">
+   <point/>
+  </object>
+  <object id="129" name="630" x="857.333" y="1441.33">
+   <point/>
+  </object>
+  <object id="130" name="800" x="1153.33" y="1884.67">
+   <point/>
+  </object>
+  <object id="131" name="900" x="73.3333" y="1672">
+   <point/>
+  </object>
+  <object id="132" name="1000" x="277.333" y="334">
+   <point/>
+  </object>
+  <object id="133" name="1200" x="556.667" y="387.333">
+   <point/>
+  </object>
+  <object id="134" name="1300" x="907" y="1237.5">
+   <point/>
+  </object>
+  <object id="135" name="1800" x="1498.73" y="1437.82">
+   <point/>
+  </object>
+  <object id="136" name="2100" x="591" y="1227.5">
+   <point/>
+  </object>
+  <object id="137" name="2300" x="887" y="1227.25">
+   <point/>
+  </object>
+ </objectgroup>
+ <objectgroup id="7" name="RobinSchedule">
+  <object id="101" name="600" x="976.667" y="528">
+   <point/>
+  </object>
+  <object id="102" name="630" x="548.667" y="257.333">
+   <point/>
+  </object>
+  <object id="103" name="710" x="243.333" y="341.333">
+   <point/>
+  </object>
+  <object id="104" name="800" x="153" y="1658.5">
+   <point/>
+  </object>
+  <object id="105" name="900" x="920" y="412">
+   <point/>
+  </object>
+  <object id="106" name="1700" x="1681.5" y="1732">
+   <point/>
+  </object>
+  <object id="107" name="1800" x="880" y="1267.5">
+   <point/>
+  </object>
+  <object id="108" name="2000" x="658.5" y="1222">
+   <point/>
+  </object>
+  <object id="109" name="2300" x="919" y="412">
+   <point/>
   </object>
  </objectgroup>
  <objectgroup id="4" name="SpawnPoints">

@@ -27,6 +27,7 @@ import com.yourgame.model.Map.*;
 import com.yourgame.model.App;
 import com.yourgame.Graphics.GameAssetManager;
 import com.yourgame.model.Map.Store.Store;
+import com.yourgame.model.NPC.NPCManager;
 import com.yourgame.model.UserInfo.Player;
 import com.yourgame.model.UserInfo.PlayerState;
 import com.yourgame.model.WeatherAndTime.ThunderManager;
@@ -48,6 +49,7 @@ public class GameScreen extends GameBaseScreen {
     private final Player player;
     private float stateTime;
     private float faintingTimer;
+    private final NPCManager npcManager;
 
     private OrthogonalTiledMapRenderer mapRenderer;
     private OrthographicCamera camera;
@@ -74,6 +76,7 @@ public class GameScreen extends GameBaseScreen {
         player = controller.getPlayer();
         player.addPlayerStuffToObserver(); // Toff Mali Khales :(
         stateTime = 0f;
+        npcManager = new NPCManager(controller.getMapManager());
 
         mapRenderer = new OrthogonalTiledMapRenderer(controller.getCurrentMap().getTiledMap());
 
@@ -190,6 +193,8 @@ public class GameScreen extends GameBaseScreen {
                 }
 
                 stateTime += delta;
+
+                npcManager.update(delta, controller.getMapManager().getTown());
             }
         }
 
@@ -215,6 +220,7 @@ public class GameScreen extends GameBaseScreen {
         thunderManager.render(batch);
         // Food Animation
         if (foodAnimation != null) foodAnimation.render(batch);
+        if (controller.getCurrentMap().getName().equals("town")) npcManager.render(batch);
         batch.end();
 
         //check for fainting

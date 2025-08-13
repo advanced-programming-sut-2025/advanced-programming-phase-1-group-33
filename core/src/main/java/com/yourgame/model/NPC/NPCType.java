@@ -59,10 +59,7 @@ public enum NPCType {
     NPCType(String job, List<Dialogue> dialogues) {
         this.job = job;
         this.dialogues = dialogues;
-    }
-
-    public String getName() {
-        return name();
+        schedule = new Schedule();
     }
 
     public String getJob() {
@@ -71,6 +68,10 @@ public enum NPCType {
 
     public List<Dialogue> getDialogues() {
         return dialogues;
+    }
+
+    public void setSchedule(Schedule schedule) {
+        this.schedule = schedule;
     }
 
     public Schedule getSchedule() {

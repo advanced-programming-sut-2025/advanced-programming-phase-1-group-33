@@ -33,16 +33,16 @@ public class NPC {
     private final Animation<TextureRegion>[] walkAnimations;
     private float stateTime;
 
-    public NPC(NPCType type, float startX, float startY) {
+    public NPC(NPCType type, Vector2 startPosition) {
         this.type = type;
-        this.position = new Vector2(startX, startY);
+        this.position = startPosition;
         this.state = NPCState.IDLE;
         this.direction = 0;
         this.friendshipLevel = 0;
         this.activeQuest = null;
 
         // Load NPC-specific walking animations
-        Texture texture = GameAssetManager.getInstance().getTexture("Game/NPC/" + type.getName() + ".png");
+        Texture texture = GameAssetManager.getInstance().getTexture("Game/NPC/" + type.name() + ".png");
         TextureRegion[][] frames = TextureRegion.split(texture, 16, 32);
         this.walkAnimations = new Animation[4];
         walkAnimations[0] = new Animation<>(0.2f, frames[0]); // Down

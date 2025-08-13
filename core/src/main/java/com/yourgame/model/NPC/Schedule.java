@@ -1,14 +1,16 @@
 package com.yourgame.model.NPC;
 
 import com.badlogic.gdx.math.Vector2;
+import com.yourgame.model.Map.Tile;
+
 import java.util.TreeMap;
 
 public class Schedule {
     // Key: Time of day (e.g., 900 for 9:00 AM). Value: Destination coordinates.
     private final TreeMap<Integer, Vector2> schedulePoints = new TreeMap<>();
 
-    public Schedule add(int time, int tileX, int tileY) {
-        schedulePoints.put(time, new Vector2(tileX * 16, tileY * 16));
+    public Schedule add(int time, Vector2 point) {
+        schedulePoints.put(time, point);
         return this;
     }
 

@@ -1,7 +1,11 @@
 package com.yourgame.model.NPC;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.maps.MapObject;
+import com.badlogic.gdx.maps.MapObjects;
+import com.badlogic.gdx.maps.objects.PointMapObject;
 import com.yourgame.model.Map.Map;
+import com.yourgame.model.Map.MapManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,18 +13,30 @@ import java.util.List;
 public class NPCManager {
     private final List<NPC> npcs;
 
-    public NPCManager() {
+    public NPCManager(MapManager manager) {
         this.npcs = new ArrayList<>();
-        spawnNPCs();
+        spawnNPCs(manager.getTown());
     }
 
-    private void spawnNPCs() {
-        // Create instances of your five NPCs at their starting locations
-        npcs.add(new NPC(NPCType.Pierre, 500, 500)); // Example coordinates
-        npcs.add(new NPC(NPCType.Sebastian, 600, 600));
-        npcs.add(new NPC(NPCType.Harvey, 700, 700));
-        npcs.add(new NPC(NPCType.Leah, 800, 800));
-        npcs.add(new NPC(NPCType.Robin, 900, 900));
+    private void spawnNPCs(Map town) {
+        for (NPCType type : NPCType.values()) {
+            Schedule schedule = new Schedule();
+
+            try {
+                MapObjects objects = town.getTiledMap().getLayers().get(type.name() + "Schedule").getObjects();
+                for (MapObject object : objects) {
+                    if (object instanceof PointMapObject pointObject) {
+                        schedule.add(Integer.parseInt(pointObject.getName()), pointObject.getPoint());
+                    }
+                }
+
+                type.setSchedule(schedule);
+                npcs.add(new NPC(type, schedule.getDestination(600)));
+            } catch (Exception e) {
+                e.printStackTrace();
+                System.out.println(type.name() + " has no schedule. Skipping...");
+            }
+        }
     }
 
     public void update(float delta, Map map) {
