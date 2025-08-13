@@ -10,6 +10,9 @@ import java.net.SocketException;
 import com.google.gson.Gson;
 import com.yourgame.model.UserInfo.User;
 import com.yourgame.network.protocol.RequestWrapper;
+import com.yourgame.network.protocol.ResponseType;
+import com.yourgame.network.protocol.ResponseWrapper;
+
 import com.yourgame.network.protocol.Auth.ForgotPasswordRequest;
 import com.yourgame.network.protocol.Auth.ForgotPasswordResponse;
 import com.yourgame.network.protocol.Auth.LoginRequest;
@@ -70,7 +73,7 @@ public class ClientHandler implements Runnable {
                     handleLoginRequest(loginRequest);
                     break;
                 case USER_EXIST:
-                    break; 
+                    break;
                 case SIGNUP:
                     SignupRequest signupRequest = gson.fromJson(payload, SignupRequest.class);
                     new SignUpRequestHandler().handle(this, signupRequest);
@@ -88,6 +91,8 @@ public class ClientHandler implements Runnable {
 
                 default:
                     System.err.println("Unknown request type received: " + wrapper.getType());
+                    sendResponse(ResponseType.FAILURE, "Unknown Respones");
+
             }
         } catch (Exception e) {
             System.err.println("Error dispatching request: " + e.getMessage());
@@ -96,6 +101,8 @@ public class ClientHandler implements Runnable {
 
     private void handleLoginRequest(LoginRequest request) {
         User user = userService.loginUser(request.getUsername(), request.getPassword());
+        ResponseType responseType = ResponseType.FAILURE; 
+
 
         LoginResponse response;
         if (user != null) {
@@ -109,40 +116,48 @@ public class ClientHandler implements Runnable {
                     user.getSecurityQuestion().getQuestion(),
                     user.getAnswer());
             response = new LoginResponse(true, "Login successful!", userInfo);
+            responseType = ResponseType.SUCCESSFUL; 
         } else {
             response = new LoginResponse(false, "Invalid username or password.", null);
         }
 
-        sendResponse(response);
+        sendResponse(responseType, response);
     }
 
     private void handleForgotPasswordRequest(ForgotPasswordRequest request) {
         User user = userService.findUserForPasswordRecovery(request.getUsername());
         ForgotPasswordResponse response;
+
+        ResponseType responseType = ResponseType.FAILURE; 
+
         if (user != null) {
             response = new ForgotPasswordResponse(true, user.getSecurityQuestion().getQuestion());
+            responseType = ResponseType.USER_EXIST; 
         } else {
             response = new ForgotPasswordResponse(false, "User not found!");
         }
-        sendResponse(response);
+        sendResponse(responseType, response);
     }
 
     private void handleSecurityAnswerRequest(SecurityAnswerRequest request) {
         boolean isAnswerCorrect = userService.verifySecurityAnswer(request.getUsername(), request.getAnswer());
         SecurityAnswerResponse response;
+        ResponseType responseType = ResponseType.FAILURE; 
         if (isAnswerCorrect) {
-
             User user = userService.findUserForPasswordRecovery(request.getUsername());
             response = new SecurityAnswerResponse(true, user.getPassword());
+            responseType = ResponseType.SUCCESSFUL; 
         } else {
             response = new SecurityAnswerResponse(false, "Wrong answer!");
         }
-        sendResponse(response);
+        sendResponse(responseType, response);
     }
 
-    public void sendResponse(Object data) {
+    public void sendResponse(ResponseType type, Object data) {
         if (out != null) {
-            String jsonResponse = gson.toJson(data);
+            String payload = gson.toJson(data);
+            ResponseWrapper wrapper = new ResponseWrapper(type, payload);
+            String jsonResponse = gson.toJson(wrapper);
             out.println(jsonResponse);
             System.out.println("Sent to client: " + jsonResponse);
         }

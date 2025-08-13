@@ -1,9 +1,11 @@
 package com.yourgame.server.services.AuthHandler;
 
+import com.yourgame.model.IO.Response;
 import com.yourgame.model.UserInfo.User;
 import com.yourgame.model.enums.Avatar;
 import com.yourgame.model.enums.Gender;
 import com.yourgame.model.enums.SecurityQuestion;
+import com.yourgame.network.protocol.ResponseType;
 import com.yourgame.network.protocol.Auth.SignupRequest;
 import com.yourgame.network.protocol.Auth.SignupResponse;
 import com.yourgame.server.ClientHandler;
@@ -28,9 +30,10 @@ public class SignUpRequestHandler implements RequestHandler<SignupRequest> {
                 Avatar.fromString(request.getAvatarName()));
         String message = userService.registerUser(newUser);
         SignupResponse response;
+        ResponseType responseType = ResponseType.FAILURE; 
 
         if (message.startsWith("Success")) {
-            // Registration was successful.
+            responseType = ResponseType.SUCCESSFUL; 
             response = new SignupResponse(true, message);
         } else {
             // Registration failed.
@@ -38,6 +41,7 @@ public class SignUpRequestHandler implements RequestHandler<SignupRequest> {
         }
 
         // Send the final response back to the client.
-        client.sendResponse(response);
+        client.sendResponse(responseType, response);
+
     }
 }
