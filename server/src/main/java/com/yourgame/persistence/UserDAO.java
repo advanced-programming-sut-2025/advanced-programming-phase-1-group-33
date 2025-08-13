@@ -13,18 +13,17 @@ public class UserDAO {
 
     public void saveUser(User user) throws SQLException {
         String sql = "INSERT INTO users(username, password, email, nickname, gender, securityQuestion, answer, avatar) VALUES (?,?,?,?,?,?,?,?)";
-        // This 'try-with-resources' gets a connection from the pool and automatically returns it when done.
+
         try (Connection conn = DatabaseManager.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, user.getUsername());
-            // The password from the User object is saved directly.
-            stmt.setString(2, user.getPassword()); 
+            stmt.setString(2, user.getPassword()); // ensure the password is already hashed
             stmt.setString(3, user.getEmail());
             stmt.setString(4, user.getNickname());
             stmt.setString(5, user.getGender());
-            stmt.setString(6, user.getSecurityQuestion().getQuestion());
-            stmt.setString(7, user.getAnswer());
-            stmt.setString(8, user.getAvatar().getName());
+            stmt.setString(6,user.getSecurityQuestion().getQuestion());
+            stmt.setString(7,user.getAnswer());
+            stmt.setString(8,user.getAvatar().getName());
             stmt.executeUpdate();
         }
     }
