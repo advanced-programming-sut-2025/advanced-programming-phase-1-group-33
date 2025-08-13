@@ -378,7 +378,7 @@ public class GameScreen extends GameBaseScreen {
                     openMenu("pierreShop");
                 }
                 else if (store.isPlayerInSellZone(player)) {
-                    openMenu("pierreShop");
+                    openMenu("sell");
                 }
             } else if (controller.getCurrentMap().getName().contains("house")) {
                 MapObject obj = controller.getCurrentMap().getTiledMap().getLayers().get("Interactables")
@@ -538,6 +538,8 @@ public class GameScreen extends GameBaseScreen {
             case "pierreShop" -> menuStage.addActor(new PierreShopMenuView(MenuAssetManager.getInstance().getSkin(3),
                 menuStage, this));
             case "refrigerator" -> menuStage.addActor(refrigeratorView);
+            case "sell" -> menuStage.addActor(new PierreShopSellMenuView(MenuAssetManager.getInstance().getSkin(3),
+                menuStage, this));
         }
     }
 
