@@ -34,6 +34,10 @@ public class PierreShopMenuView extends Window {
     private final TextButton buyGoodsButton;
     private final TextButton closeButton;
 
+    private final Table purchasePreviewTable = new Table();
+    private ShopItem currentSelectedItem = null;
+    private int currentSelectedQuantity = 0;
+
     public PierreShopMenuView(Skin skin, Stage stage, GameScreen gameScreen) {
         super("Pierre General Store Menu", skin);
         this.skin = skin;
@@ -114,7 +118,7 @@ public class PierreShopMenuView extends Window {
         table.top().left();
 
         // Header
-        table.add(new Label(App.getGameState().getGameTime().getSeason() + " Products",
+        table.add(new Label("Common Products",
                 MenuAssetManager.getInstance().getSkin(3), "Bold")).colspan(5).center().row();
 
         // Column headers
@@ -123,6 +127,7 @@ public class PierreShopMenuView extends Window {
         table.add(new Label("PriceInSeason", MenuAssetManager.getInstance().getSkin(3), "Bold")).padRight(30);
         table.add(new Label("PriceOutOfSeason", MenuAssetManager.getInstance().getSkin(3), "Bold")).padRight(30);
         table.add(new Label("Daily Limit", MenuAssetManager.getInstance().getSkin(3), "Bold")).right().row();
+        table.add(new Label("", skin)).colspan(5).row();
 
         // Add items by category & season
         for (ShopItem shopItem : items) {
@@ -131,18 +136,27 @@ public class PierreShopMenuView extends Window {
                 addItem(table, shopItem.getTextureRegion(GameAssetManager.getInstance()),
                         shopItem.getName(), shopItem.getRemainingQuantity(),
                         shopItem.getValue(), -1, shopItem);
-            } else if (shopItem instanceof PierreGeneralStoreSeedsItem) {
-                Season season = ((PierreGeneralStoreSeedsItem) shopItem).getSeason();
-                if (season == App.getGameState().getGameTime().getSeason()) {
-                    addItem(table, shopItem.getTextureRegion(GameAssetManager.getInstance()),
-                            shopItem.getName(), shopItem.getRemainingQuantity(),
-                            shopItem.getValue(),
-                            ((PierreGeneralStoreSeedsItem) shopItem).getPriceOutOfSeason(),
-                            shopItem);
-                }
             }
         }
 
+        for(Season season : Season.values()){
+            // Header
+            table.add(new Label(season + " Products",
+                    MenuAssetManager.getInstance().getSkin(3), "Bold")).colspan(5).center().row();
+            table.add(new Label("", skin)).colspan(5).row();
+
+            for(ShopItem shopItem : items){
+                if(shopItem instanceof PierreGeneralStoreSeedsItem){
+                    if(((PierreGeneralStoreSeedsItem) shopItem).getSeason() == season){
+                        addItem(table, shopItem.getTextureRegion(GameAssetManager.getInstance()),
+                                shopItem.getName(), shopItem.getRemainingQuantity(),
+                                shopItem.getValue(),
+                                ((PierreGeneralStoreSeedsItem) shopItem).getPriceOutOfSeason(),
+                                shopItem);
+                    }
+                }
+            }
+        }
         return new ScrollPane(table, skin);
     }
 
@@ -168,7 +182,7 @@ public class PierreShopMenuView extends Window {
                 } else {
                     gameScreen.playGameSFX("popUp");
 
-                    if(shopItem.getRemainingQuantity() != -1){
+                    if (shopItem.getRemainingQuantity() != -1) {
                         shopItem.setRemainingQuantity();
                     }
 
@@ -184,6 +198,17 @@ public class PierreShopMenuView extends Window {
                     } else if (newQty != -1) {
                         remainingQuantityLabel.setText(String.valueOf(newQty));
                     }
+
+                    // Update preview table for this product
+                    currentSelectedItem = shopItem;
+                    currentSelectedQuantity++;
+
+                    updatePurchasePreview(
+                            textureRegion,
+                            shopItem.getName(),
+                            currentSelectedQuantity,
+                            price
+                    );
                 }
             }
         });
@@ -195,4 +220,16 @@ public class PierreShopMenuView extends Window {
         table.add(remainingQuantityLabel).padRight(70);
         table.add(addLabel).center().padRight(10).padLeft(20).row();
     }
+
+    private void updatePurchasePreview(TextureRegion iconTexture, String name, int quantity, int pricePerUnit) {
+        purchasePreviewTable.clear();
+        purchasePreviewTable.add(new Image(iconTexture)).padRight(10);
+        purchasePreviewTable.add(new Label(name, skin, "Impact")).padRight(20);
+        purchasePreviewTable.add(new Label("x" + quantity, skin, "Impact")).padRight(20);
+        purchasePreviewTable.add(new Label(pricePerUnit + "g each", skin, "Impact")).padRight(20);
+
+        int totalPrice = pricePerUnit * quantity;
+        purchasePreviewTable.add(new Label("Total: " + totalPrice + "g", skin, "Impact"));
+    }
+
 }
