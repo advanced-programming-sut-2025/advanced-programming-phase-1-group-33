@@ -13,8 +13,7 @@ public class DatabaseManager {
 
     public static void initialize() throws SQLException {
         HikariConfig config = new HikariConfig();
-        // This creates a database file named 'yourgame_server.db' in the directory where you run the server
-        config.setJdbcUrl("jdbc:sqlite:yourgame_server.db"); 
+        config.setJdbcUrl("jdbc:sqlite:StardewValley.db"); 
 
         dataSource = new HikariDataSource(config);
 
