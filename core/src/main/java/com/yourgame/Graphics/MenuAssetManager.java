@@ -13,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.Array;
 import com.yourgame.model.enums.Avatar;
 import com.yourgame.model.enums.Commands.MenuTypes;
 import org.slf4j.Logger;
@@ -38,6 +39,7 @@ public class MenuAssetManager {
     private final Texture[] avatarSpriteSheets;
     private final TextureRegion[][][] frames;
     private final Animation[][] walkAnimations;
+    private final Animation<TextureRegion>[] faintAnimations;
 
     private final Sound[] sounds;
     private final Music music;
@@ -153,6 +155,13 @@ public class MenuAssetManager {
             }
         };
 
+        faintAnimations = new Animation[] {
+            new Animation<>(0.4f, new Array<>(new TextureRegion[] {
+                frames[0][0][0],
+                frames[0][6][0],
+                frames[0][6][1],
+                frames[0][13][1]})) //Abigail
+        };
 
         sounds = new Sound[]{
             Gdx.audio.newSound(Gdx.files.internal("Sounds/UI Click 36.wav")),
@@ -240,6 +249,10 @@ public class MenuAssetManager {
             case Robin -> walkAnimations[3];
             case Sam -> walkAnimations[4];
         };
+    }
+
+    public Animation<TextureRegion> getFaintAnimation() {
+        return faintAnimations[0];
     }
 
     public TextButton getButtons(String name) {

@@ -14,6 +14,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
@@ -34,6 +35,8 @@ import com.yourgame.view.GameViews.*;
 import com.yourgame.view.GameViews.MainMenuView;
 import com.yourgame.view.GameViews.*;
 
+
+import java.awt.*;
 
 import static com.yourgame.model.UserInfo.Player.*;
 
@@ -64,9 +67,8 @@ public class GameScreen extends GameBaseScreen {
     private Texture nightOverlayTexture;
     private Color ambientLightColor;
 
-    // Pierre's shop
-    private PierreShopMenuView pierreShopMenuView;
-    private PierreGeneralStore pierreGeneralStore;
+    //Faint
+    private boolean isFainting = false;
 
     private final ThunderManager thunderManager;
 
@@ -196,24 +198,41 @@ public class GameScreen extends GameBaseScreen {
 
         // == Render On-Map ==
         batch.setProjectionMatrix(camera.combined);
+
         batch.begin();
+
         // Map Elements
         controller.renderMapObjects(assetManager, batch);
-        // Player
-        TextureRegion currentFrame = player.walkAnimations[player.direction].getKeyFrame(stateTime, true);
+
+        // Render player
+        TextureRegion currentFrame;
+        if (!isFainting) {
+            currentFrame = player.walkAnimations[player.direction].getKeyFrame(stateTime, true);
+        } else {
+            currentFrame = MenuAssetManager.getInstance().getFaintAnimation().getKeyFrame(stateTime, false);
+            if (MenuAssetManager.getInstance().getFaintAnimation().isAnimationFinished(stateTime)) {
+                isFainting = false;
+                stateTime = 0f;
+                changeMap(controller.getMapManager().getHouse(player), "spawn-bed");
+                resetPlayerSituation();
+            }
+        }
         batch.draw(currentFrame, player.playerPosition.x, player.playerPosition.y);
+
         // Thunder
         thunderManager.render(batch);
+
         // Food Animation
         if (foodAnimation != null) foodAnimation.render(batch);
+
         batch.end();
+
+        //check for fainting
+        checkFainting();
+
 
         // Render Day & Night
         renderOverlay();
-
-//        if(Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
-//            openMenu("pierreShop");
-//        }
 
         hudManager.updateInventory(player.getBackpack().getInventory());
         super.render(delta);
@@ -493,6 +512,20 @@ public class GameScreen extends GameBaseScreen {
         hudManager.updateWeather();
         hudManager.updateSeason();
         hudManager.updateEnergyBar();
+    }
+
+    private void checkFainting() {
+        if (player.getEnergy() <= 0) {
+            isFainting = true;
+        }
+
+        if (App.getGameState().getGameTime().getHour() >= 8) {
+            isFainting = true;
+        }
+    }
+
+    private void resetPlayerSituation(){
+        //TODO
     }
 
     private void openMenu(String name) {
