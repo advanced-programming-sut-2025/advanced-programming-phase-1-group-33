@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="22" height="18" tilewidth="16" tileheight="16" infinite="0" nextlayerid="6" nextobjectid="20">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="22" height="18" tilewidth="16" tileheight="16" infinite="0" nextlayerid="6" nextobjectid="25">
  <tileset firstgid="1" source="pierre-general-store.tsx"/>
  <layer id="1" name="Base" width="22" height="18">
   <data encoding="csv">
@@ -44,6 +44,7 @@
  </objectgroup>
  <objectgroup id="5" name="Trade">
   <object id="19" name="buy" x="32" y="80" width="96" height="32"/>
+  <object id="24" name="sell" x="272" y="224" width="48" height="64"/>
  </objectgroup>
  <objectgroup id="3" name="SpawnPoints">
   <object id="15" name="spawn" x="95.5227" y="215.364">
