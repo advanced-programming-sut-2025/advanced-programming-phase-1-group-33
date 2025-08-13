@@ -34,7 +34,7 @@ public class CookingRecipeManager {
         // Fried Egg: 1 Egg
         cookingRecipes.add(new CookingRecipe(
             new ArrayList<>() {{
-                add(new Ingredient(new AnimalProduct(AnimalProductType.Egg, Animal.Chicken), 1));
+                add(new Ingredient(new AnimalProduct(AnimalProductType.Egg,Animal.Chicken), 1));
             }},
             new Food(FoodType.FriedEgg),
             new CookingRecipeSource(0,0,0,0,true,false, false)

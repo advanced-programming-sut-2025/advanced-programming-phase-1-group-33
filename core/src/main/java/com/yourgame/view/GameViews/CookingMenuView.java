@@ -1,6 +1,5 @@
 package com.yourgame.view.GameViews;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
@@ -8,7 +7,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.yourgame.Graphics.GameAssetManager;
 import com.yourgame.model.Food.Cooking.CookingRecipe;
 import com.yourgame.model.Food.Cooking.CookingRecipeSource;
-import com.yourgame.model.Food.FoodType;
+import com.yourgame.model.Food.Cooking.Ingredient;
+import com.yourgame.model.Item.Inventory.InventorySlot;
 import com.yourgame.model.UserInfo.Player;
 import com.yourgame.view.AppViews.GameScreen;
 
@@ -64,7 +64,7 @@ public class CookingMenuView extends Window {
         });
     }
 
-    private Table initTable(Table recipeTable) {
+    private void initTable(Table recipeTable) {
         // Add headers
         recipeTable.add(new Label("Icon", skin, "Bold")).pad(10);
         recipeTable.add(new Label("Food", skin, "Bold")).pad(10);
@@ -99,8 +99,19 @@ public class CookingMenuView extends Window {
                         gameScreen.showMessage("error","Recipe is locked!",skin,0,200,stage);
                     }
                     if (available) {
-                        //recipe.cook(gameScreen.getPlayer());
-                        // refresh UI or update inventory
+                        if(haveEnoughIngredients(recipe,gameScreen.getPlayer())){
+                            if(gameScreen.getPlayer().getBackpack().getInventory().addItem(recipe.getResult(), 1)){
+                                gameScreen.showMessage("popUp",recipe.getResult().getName() + " cooked successfully!",skin,0,200,stage);
+                                updateInventory(recipe,gameScreen.getPlayer());
+                            }
+                            else{
+                                gameScreen.showMessage("error","Not enough space!",skin,0,200,stage);
+
+                            }
+                        }
+                        else{
+                            gameScreen.showMessage("error","Not enough ingredients!",skin,0,200,stage);
+                        }
                     }
                 }
             });
@@ -113,8 +124,6 @@ public class CookingMenuView extends Window {
             recipeTable.add(cookLabel).padRight(20);
             recipeTable.row();
         }
-
-        return recipeTable;
     }
 
     private boolean isAvailable(CookingRecipeSource source, Player player){
@@ -131,5 +140,36 @@ public class CookingMenuView extends Window {
                 return true;
         }
         return false;
+    }
+
+    private boolean haveEnoughIngredients(CookingRecipe recipe, Player player){
+        for(Ingredient ingredient : recipe.getIngredients()){
+            boolean found = false;
+            for(InventorySlot slot : player.getBackpack().getInventory().getSlots()){
+                if(ingredient.getItem().getName().equals(slot.item().getName())){
+                    found = true;
+                    if(ingredient.getQuantity() > slot.quantity()){
+                        return false;
+                    }
+                }
+            }
+            if(!found){
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private void updateInventory(CookingRecipe recipe,Player player){
+        for(Ingredient ingredient : recipe.getIngredients()){
+            for(InventorySlot slot : player.getBackpack().getInventory().getSlots()){
+                if(ingredient.getItem().getName().equals(slot.item().getName())){
+                    slot.reduceQuantity(ingredient.getQuantity());
+                    if(slot.quantity() == 0){
+                        player.getBackpack().getInventory().getSlots().remove(slot);
+                    }
+                }
+            }
+        }
     }
 }
