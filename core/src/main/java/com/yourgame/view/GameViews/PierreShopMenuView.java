@@ -1,6 +1,5 @@
 package com.yourgame.view.GameViews;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -11,7 +10,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.yourgame.Graphics.GameAssetManager;
 import com.yourgame.Graphics.MenuAssetManager;
-import com.yourgame.controller.GameController.PierreShopMenuController;
 import com.yourgame.model.App;
 import com.yourgame.model.Map.Store.PierreGeneralStore.*;
 import com.yourgame.model.Map.Store.ShopItem;
@@ -22,7 +20,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PierreShopMenuView extends Window {
-    private final PierreShopMenuController controller;
     private final Skin skin;
     private final GameScreen gameScreen;
     private final Stage stage;
@@ -45,9 +42,6 @@ public class PierreShopMenuView extends Window {
         this.skin = skin;
         this.stage = stage;
         this.gameScreen = gameScreen;
-
-        controller = new PierreShopMenuController();
-        controller.setView(this);
 
         setSize(1400, 800);
         setModal(true);
