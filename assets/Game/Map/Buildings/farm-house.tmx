@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="17" height="19" tilewidth="16" tileheight="16" infinite="0" nextlayerid="6" nextobjectid="17">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="17" height="19" tilewidth="16" tileheight="16" infinite="0" nextlayerid="6" nextobjectid="18">
  <tileset firstgid="1" source="farm-house-simple.tsx"/>
  <layer id="1" name="Base" width="17" height="19">
   <data encoding="csv">
@@ -32,6 +32,7 @@
   <object id="9" name="walls" x="91.8182" y="304.182">
    <polygon points="0,0 -0.181818,-35.8182 167.636,-34.9091 176.545,-44 178.545,-44.7273 178.182,-207.091 152.545,-207.091 -79.0909,-207.455 -79.0909,-45.8182 -67.0909,-34.5455 -27.6364,-34.9091 -27.2727,-0.909091 -91.8182,-0.545455 -91.6364,-303.455 179.818,-303.818 180.182,-0.181818"/>
   </object>
+  <object id="17" name="fridge" x="160" y="96" width="32" height="16"/>
  </objectgroup>
  <objectgroup id="3" name="SpawnPoints">
   <object id="10" name="spawn" x="78.3333" y="257.346">

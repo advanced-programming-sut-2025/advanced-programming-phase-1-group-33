@@ -1,8 +1,6 @@
 package com.yourgame.model.UserInfo;
 
 import java.util.*;
-// this is going to be for GSON‌ :(‌)
-//
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -22,21 +20,24 @@ import com.yourgame.model.Item.Inventory.Backpack;
 import com.yourgame.model.Npc.NPCType;
 import com.yourgame.model.Npc.RelationWithNPC;
 import com.yourgame.model.Skill.Skill;
+import com.yourgame.model.WeatherAndTime.TimeObserver;
+import com.yourgame.model.WeatherAndTime.TimeSystem;
 import com.yourgame.model.enums.Avatar;
 import com.yourgame.model.enums.Gender;
 import com.yourgame.model.enums.SecurityQuestion;
 import com.yourgame.model.notification.Notification;
+import com.yourgame.model.Map.Map;
 
-public class Player {
+public class Player implements TimeObserver {
     public static final int PLAYER_WIDTH = 16;
     public static final int PLAYER_HEIGHT = 32;
     public static final float SPEED = 150f;
     private static final int MAX_ENERGY = 300;
 
     private final User user;
+    private PlayerState playerState;
     private int energy;
     private boolean isFaintedToday = false;
-    private boolean isInfinite = false;
     private int consumedEnergyInThisTurn = 0;
     private boolean unlimitedEnergy = false;
 
@@ -47,6 +48,9 @@ public class Player {
     private Skill.ForagingSkill foragingSkill;
     private Skill.FishingSkill fishingSkill;
     private final BuffManager buffManager = new BuffManager();
+    private boolean addedToObserver = false;
+
+    private Map farmHouse;
 
     private int remainingDaysAfterMarriageDenied = 0;
     private boolean isMarried = false;
@@ -72,6 +76,7 @@ public class Player {
 
     public Player(User currentUser) {
         this.user = currentUser;
+        this.playerState = PlayerState.IDLE;
         this.energy = MAX_ENERGY;
         this.backpack.addTool(new Hoe());
         this.backpack.addTool(new Pickaxe());
@@ -115,15 +120,27 @@ public class Player {
         direction = 0;
     }
 
+    public void addPlayerStuffToObserver() {
+        if (addedToObserver) return;
+        App.getGameState().getGameTime().addDayObserver(this);
+        App.getGameState().getGameTime().addDayObserver(buffManager);
+        addedToObserver = true;
+    }
+
     public User getUser() {
         return user;
     }
 
-    public void addEnergy(int energy) {
-        if (!isInfinite) {
-            this.energy += energy;
-            this.energy = Math.min(this.energy, MAX_ENERGY);
-        }
+    public PlayerState getPlayerState() {
+        return playerState;
+    }
+
+    public void setPlayerState(PlayerState playerState) {
+        this.playerState = playerState;
+    }
+
+    public void addEnergy(int amount) {
+        energy = Math.min(energy + amount, getMaxEnergy());
     }
 
     public int getMaxEnergy() {
@@ -132,6 +149,14 @@ public class Player {
 
     public Backpack getBackpack() {
         return backpack;
+    }
+
+    public void setFarmHouse(Map farmHouse) {
+        this.farmHouse = farmHouse;
+    }
+
+    public Map getFarmHouse() {
+        return farmHouse;
     }
 
     public Skill.FarmingSkill getFarmingSkill() {
@@ -168,13 +193,12 @@ public class Player {
 
     public void faint() {
         isFaintedToday = true;
-        App.getGameState().nextPlayerTurn();
     }
 
     public int getEnergyPhase() {
         if (energy <= 0)
             return 0;
-        float energyPercentage = (float) energy / MAX_ENERGY;
+        float energyPercentage = (float) energy / getMaxEnergy();
         if (energyPercentage > 0.75f)
             return 4;
         if (energyPercentage > 0.50f)
@@ -189,9 +213,6 @@ public class Player {
     }
 
     public void consumeEnergy(int energy) {
-        if (isInfinite) {
-            return ;
-        }
         this.energy -= energy;
 
         if (this.energy < 0) {
@@ -298,5 +319,11 @@ public class Player {
 
     public void setGold(int gold) {
         this.gold = gold;
+    }
+
+    @Override
+    public void onTimeChanged(TimeSystem timeSystem) {
+        energy = isFaintedToday ? getMaxEnergy() / 2 : getMaxEnergy();
+        isFaintedToday = false;
     }
 }

@@ -14,7 +14,7 @@ public class TimeSystem {
     private Season season;
     private DaysOfTheWeek dayOfWeek;
     private int day;
-    private int minutes = 0;
+    private int minutes;
 
     private int hour;
     private Weather weather;
@@ -95,6 +95,8 @@ public class TimeSystem {
     public void advanceDay(int d) {
         for (int i = 0; i < d; i++) {
             this.day++;
+            this.minutes = 0;
+            this.hour = 6;
             if (this.day > 28) {
                 this.day = 1;
                 advanceSeason();

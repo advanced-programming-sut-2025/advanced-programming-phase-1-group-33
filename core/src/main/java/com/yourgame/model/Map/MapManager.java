@@ -36,10 +36,11 @@ public class MapManager {
             Farm farm = new Farm(player.getUser().getUsername() + "-farm", "Game/Map/standard-farm.tmx");
             farm.spawnRandomElements(Season.Spring);
             farms.put(player, farm);
-            houses.put(
-                player,
-                new Map(player.getUser().getUsername()+ "-house", "Game/Map/Buildings/farm-house.tmx")
-            );
+
+            Map farmHouse = new Map(player.getUser().getUsername()+ "-farm-house", "Game/Map/Buildings/farm-house.tmx");
+            player.setFarmHouse(farmHouse);
+            houses.put(player, farmHouse);
+
             playersCurrentMap.put(player, farm);
             App.getGameState().getGameTime().addDayObserver(farm);
         }
