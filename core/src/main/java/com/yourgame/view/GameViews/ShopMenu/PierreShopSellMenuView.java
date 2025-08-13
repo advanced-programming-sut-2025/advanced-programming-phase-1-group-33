@@ -1,6 +1,5 @@
-package com.yourgame.view.GameViews;
+package com.yourgame.view.GameViews.ShopMenu;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;

@@ -1,4 +1,4 @@
-package com.yourgame.view.GameViews;
+package com.yourgame.view.GameViews.ShopMenu;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;

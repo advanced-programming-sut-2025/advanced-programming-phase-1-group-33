@@ -106,7 +106,7 @@ public abstract class GameBaseScreen implements Screen {
         }
     }
 
-    protected void showMessage(String soundName,String message, Skin skin, float x, float y, Stage stage) {
+    public void showMessage(String soundName,String message, Skin skin, float x, float y, Stage stage) {
         playGameSFX(soundName);
         Dialog dialog = new Dialog("", skin);
         dialog.text(message);

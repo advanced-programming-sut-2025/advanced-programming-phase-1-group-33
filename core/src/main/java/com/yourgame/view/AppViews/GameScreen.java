@@ -16,27 +16,24 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.yourgame.Graphics.MenuAssetManager;
 import com.yourgame.Graphics.GameAssets.HUDManager;
 import com.yourgame.Graphics.GameAssets.clockUIAssetManager;
 import com.yourgame.controller.GameController.GameController;
-import com.yourgame.model.Food.Food;
 import com.yourgame.model.Food.FoodAnimation;
 import com.yourgame.model.Map.*;
 import com.yourgame.model.App;
 import com.yourgame.Graphics.GameAssetManager;
 import com.yourgame.model.Map.Store.Store;
-import com.yourgame.model.Map.Store.PierreGeneralStore.PierreGeneralStore;
 import com.yourgame.model.UserInfo.Player;
 import com.yourgame.model.WeatherAndTime.ThunderManager;
 import com.yourgame.view.GameViews.*;
 import com.yourgame.view.GameViews.MainMenuView;
-import com.yourgame.view.GameViews.*;
+import com.yourgame.view.GameViews.ShopMenu.PierreShopMenuView;
+import com.yourgame.view.GameViews.ShopMenu.PierreShopSellMenuView;
+import com.yourgame.view.GameViews.ShopMenu.StardropSaloonMenuView;
 
-
-import java.awt.*;
 
 import static com.yourgame.model.UserInfo.Player.*;
 
@@ -179,6 +176,10 @@ public class GameScreen extends GameBaseScreen {
                 if (isFinished) {
                     GameAssetManager.getInstance().setFoodAnimation(null);
                 }
+            }
+
+            if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+                openMenu("stardrop");
             }
 
             // Update animation timer
@@ -541,6 +542,8 @@ public class GameScreen extends GameBaseScreen {
             case "refrigerator" -> menuStage.addActor(refrigeratorView);
             case "sell" -> menuStage.addActor(new PierreShopSellMenuView(MenuAssetManager.getInstance().getSkin(3),
                 menuStage, this));
+            case "stardrop" -> menuStage.addActor(new StardropSaloonMenuView(MenuAssetManager.getInstance().getSkin(3),
+                menuStage,this));
         }
     }
 
