@@ -162,6 +162,10 @@ public class Map {
         return x >= 0 && x < width && y >= 0 && y < height;
     }
 
+    public String getName() {
+        return name;
+    }
+
     public TiledMap getTiledMap() {
         return tiledMap;
     }

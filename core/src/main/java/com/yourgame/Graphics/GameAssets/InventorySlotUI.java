@@ -1,6 +1,8 @@
 package com.yourgame.Graphics.GameAssets;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -22,13 +24,13 @@ public class InventorySlotUI extends Stack {
     private final Image itemImage;
     private final Label quantityLabel;
 
-    public InventorySlotUI(Drawable selectionDrawable, BitmapFont font) {
+    public InventorySlotUI(BitmapFont font) {
         // The item's image
         this.itemImage = new Image();
         this.itemImage.setAlign(Align.center);
 
         // The highlight image shown when selected
-        this.selectionImage = new Image(selectionDrawable);
+        this.selectionImage = new Image(createSelectionHighlight());
         this.selectionImage.setVisible(false); // Hidden by default
 
         // The label for the item quantity
@@ -41,6 +43,19 @@ public class InventorySlotUI extends Stack {
         this.add(itemImage);      // Bottom layer
         this.add(selectionImage); // Middle layer
         this.add(quantityLabel);  // Top layer, aligned to bottom right
+    }
+
+    /**
+     * Creates a simple drawable that will be used to highlight the selected
+     * inventory slot.
+     */
+    private Drawable createSelectionHighlight() {
+        Pixmap pixmap = new Pixmap(56, 56, Pixmap.Format.RGBA8888);
+        pixmap.setColor(new Color(1, 1, 0, 0.4f)); // Semi-transparent yellow
+        pixmap.fill();
+        TextureRegionDrawable drawable = new TextureRegionDrawable(new Texture(pixmap));
+        pixmap.dispose();
+        return drawable;
     }
 
     /**

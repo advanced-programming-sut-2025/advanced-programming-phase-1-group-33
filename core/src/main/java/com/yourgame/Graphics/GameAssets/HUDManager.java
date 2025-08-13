@@ -54,9 +54,8 @@ public class HUDManager {
     private TextField timeField, dateField, goldField;
 
     // Inventory Bar
-    private final InventorySlotUI[] inventorySlotsUI; // Array of our new UI slots
+    private final InventorySlotUI[] inventorySlotsUI;
     private int selectedSlotIndex = 0;
-    private final Drawable selectionDrawable;
     private final BitmapFont font;
 
     // Testing the Time
@@ -74,10 +73,9 @@ public class HUDManager {
         this.energy_bar_textures = clockUI.getEnergyBarMode();
         this.inventorySlotsUI = new InventorySlotUI[12];
         this.font = MenuAssetManager.getInstance().getSkin(3).getFont("Text");
-        this.selectionDrawable = createSelectionHighlight();
         // Initialize the UI slots array
         for (int i = 0; i < inventorySlotsUI.length; i++) {
-            inventorySlotsUI[i] = new InventorySlotUI(selectionDrawable, font);
+            inventorySlotsUI[i] = new InventorySlotUI(font);
         }
 
         // Initialize the table for buffs
@@ -85,19 +83,6 @@ public class HUDManager {
         buffsTable.setFillParent(true);
         buffsTable.top().right().padTop(10).padRight(210); // padRight should be width of clock + padding
         hudStage.addActor(buffsTable);
-    }
-
-    /**
-     * Creates a simple drawable that will be used to highlight the selected
-     * inventory slot.
-     */
-    private Drawable createSelectionHighlight() {
-        Pixmap pixmap = new Pixmap(56, 56, Pixmap.Format.RGBA8888);
-        pixmap.setColor(new Color(1, 1, 0, 0.4f)); // Semi-transparent yellow
-        pixmap.fill();
-        TextureRegionDrawable drawable = new TextureRegionDrawable(new Texture(pixmap));
-        pixmap.dispose();
-        return drawable;
     }
 
     // Method to create and add the info bar (clock, weather, season) and energy bar

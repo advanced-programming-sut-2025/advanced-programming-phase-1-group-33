@@ -8,14 +8,14 @@ import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.yourgame.Graphics.MenuAssetManager;
 import com.yourgame.Graphics.GameAssets.HUDManager;
@@ -28,12 +28,9 @@ import com.yourgame.model.App;
 import com.yourgame.Graphics.GameAssetManager;
 import com.yourgame.model.UserInfo.Player;
 import com.yourgame.model.WeatherAndTime.ThunderManager;
-import com.yourgame.view.GameViews.JournalMenuView;
+import com.yourgame.view.GameViews.*;
 import com.yourgame.view.GameViews.MainMenuView;
-import com.yourgame.view.GameViews.MapMenuView;
-import com.yourgame.view.GameViews.PierreShopMenuView;
 
-import java.awt.*;
 
 import static com.yourgame.model.UserInfo.Player.*;
 
@@ -58,6 +55,7 @@ public class GameScreen extends GameBaseScreen {
     // MENUS
     private Image menuIcon;
     public boolean paused = false;
+    private InputMultiplexer multiplexer;
 
     // Fields for Day/Night Cycle
     private Texture nightOverlayTexture;
@@ -66,8 +64,9 @@ public class GameScreen extends GameBaseScreen {
     // Pierre's shop
     private PierreShopMenuView pierreShopMenuView;
 
-
     private final ThunderManager thunderManager;
+
+    private RefrigeratorView refrigeratorView;
 
     public GameScreen() {
         super();
@@ -89,6 +88,8 @@ public class GameScreen extends GameBaseScreen {
 
         menuIcon = new Image(new TextureRegion(assetManager.getMenuIcon()));
         menuStage = new Stage(new ScreenViewport());
+
+        refrigeratorView = new RefrigeratorView(player, this);
     }
 
     @Override
@@ -129,7 +130,7 @@ public class GameScreen extends GameBaseScreen {
         // This color object will be modified to change the overlay's transparency
         ambientLightColor = new Color(0, 0, 0, 0);
 
-        InputMultiplexer multiplexer = new InputMultiplexer();
+        this.multiplexer = new InputMultiplexer();
         multiplexer.addProcessor(HUDStage);
         multiplexer.addProcessor(new InputAdapter() {
             @Override
@@ -370,6 +371,12 @@ public class GameScreen extends GameBaseScreen {
                 if (store.isPlayerInTradeZone(player)) {
                     Gdx.app.log("Store", "Player is in trade zone");
                 }
+            } else if (controller.getCurrentMap().getName().contains("house")) {
+                MapObject obj = controller.getCurrentMap().getTiledMap().getLayers().get("Interactables")
+                    .getObjects().get("fridge");
+                if (obj != null) {
+                    openMenu("refrigerator");
+                }
             }
         }
 
@@ -489,13 +496,13 @@ public class GameScreen extends GameBaseScreen {
                 menuStage, this));
             case "pierreShop" -> menuStage.addActor(new PierreShopMenuView(MenuAssetManager.getInstance().getSkin(3),
                 menuStage, this));
-
+            case "refrigerator" -> menuStage.addActor(refrigeratorView);
         }
     }
 
     public void closeMenu() {
         paused = false;
-        Gdx.input.setInputProcessor(HUDStage);
+        Gdx.input.setInputProcessor(multiplexer);
     }
 
     private void updateDayNightCycle() {

@@ -22,11 +22,11 @@ import java.util.HashSet;
 public class Backpack {
     private BackpackType type;
     private final Inventory inventory;
+    private final Inventory refrigerator;
     private final Hay hay = new Hay();
     private final HashSet<CookingRecipe> cookingRecipes = new HashSet<>();
     private final HashSet<CraftingRecipes> craftingRecipes = new HashSet<>();
     private final ArrayList<ArtisanMachine> artisanMachines = new ArrayList<>();
-    private final Refrigerator refrigerator = new Refrigerator();
     private final TrashCan trashCan = new TrashCan();
     private final ArrayList<Animal> animals = new ArrayList<>();
 
@@ -35,6 +35,7 @@ public class Backpack {
     public Backpack(BackpackType type) {
         this.type = type;
         this.inventory = new Inventory(type.capacity);
+        this.refrigerator = new Inventory(36);
     }
 
     public boolean changeType(BackpackType type) {
@@ -47,6 +48,10 @@ public class Backpack {
 
     public Inventory getInventory() {
         return inventory;
+    }
+
+    public Inventory getRefrigeratorInventory() {
+        return refrigerator;
     }
 
     public boolean isInventoryFull() {
@@ -173,10 +178,6 @@ public class Backpack {
             }
         }
         return null;
-    }
-
-    public Refrigerator getRefrigerator() {
-        return refrigerator;
     }
 
     public void increaseHay(int number) {

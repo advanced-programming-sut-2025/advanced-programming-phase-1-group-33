@@ -92,6 +92,11 @@ public class Inventory {
         return slots;
     }
 
+    public InventorySlot getSlot(int index) {
+        if (index < 0 || index >= slots.size()) return null;
+        return slots.get(index);
+    }
+
     public int getCapacity() {
         return capacity;
     }
