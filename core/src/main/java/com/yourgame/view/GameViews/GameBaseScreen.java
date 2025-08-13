@@ -1,4 +1,4 @@
-package com.yourgame.view.AppViews;
+package com.yourgame.view.GameViews;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -8,7 +8,10 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Cursor;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.yourgame.Graphics.GameAssetManager;
 import com.yourgame.Graphics.MenuAssetManager;
@@ -18,6 +21,7 @@ public abstract class GameBaseScreen implements Screen {
     protected Stage menuStage;
     protected Sound clickSound;
     protected Sound popUpSound;
+    protected Sound errorSound;
     protected Music backgroundMusic;
     protected Image cursor;
     protected SpriteBatch batch;
@@ -31,6 +35,8 @@ public abstract class GameBaseScreen implements Screen {
         //Setting the SFXs needed in the game
         clickSound = MenuAssetManager.getInstance().getSounds("click");
         popUpSound = MenuAssetManager.getInstance().getSounds("popUp");
+        errorSound = MenuAssetManager.getInstance().getSounds("error");
+
 
         //Setting the musix playing in the background
         backgroundMusic = GameAssetManager.getInstance().getBackgroundMusic();
@@ -96,6 +102,19 @@ public abstract class GameBaseScreen implements Screen {
         switch (string) {
             case "click" -> clickSound.play();
             case "popUp" -> popUpSound.play();
+            case "error" -> errorSound.play(2f);
         }
+    }
+
+    protected void showMessage(String soundName,String message, Skin skin, float x, float y, Stage stage) {
+        playGameSFX(soundName);
+        Dialog dialog = new Dialog("", skin);
+        dialog.text(message);
+        dialog.show(stage);
+        dialog.setPosition((stage.getWidth()-dialog.getWidth())/2f + x, y);
+        Timer.schedule(new Timer.Task() {
+            @Override
+            public void run() {dialog.hide();}
+        }, 2);
     }
 }

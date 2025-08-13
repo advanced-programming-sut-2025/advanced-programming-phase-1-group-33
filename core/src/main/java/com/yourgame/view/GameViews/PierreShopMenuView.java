@@ -1,7 +1,6 @@
 package com.yourgame.view.GameViews;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -11,7 +10,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.yourgame.Graphics.GameAssetManager;
 import com.yourgame.Graphics.MenuAssetManager;
 import com.yourgame.controller.GameController.PierreShopMenuController;
@@ -24,12 +22,19 @@ import com.yourgame.model.Map.Store.ShopItem;
 import com.yourgame.model.WeatherAndTime.Season;
 import com.yourgame.view.AppViews.GameScreen;
 
+import java.util.ArrayList;
+
 
 public class PierreShopMenuView extends Window {
     private final PierreShopMenuController controller;
     private final Skin skin;
+    GameScreen gameScreen;
+    Stage stage;
+
     private java.util.List<ShopItem> originalInventoryOrder;
     private boolean isSorted = false;
+
+    private java.util.List<ShopItem> orderedItems = new ArrayList<ShopItem>();
 
     public PierreShopMenuView(Skin skin, Stage stage, GameScreen gameScreen) {
         super("Pierre General Store Menu", skin);
@@ -37,8 +42,8 @@ public class PierreShopMenuView extends Window {
         controller.setView(this);
 
         this.skin = skin;
-
-        originalInventoryOrder = new java.util.ArrayList<>(gameScreen.getController().getMapManager().getPierreStore().getInventory());
+        this.gameScreen = gameScreen;
+        this.stage = stage;
 
         setSize(1200, 800);
         setModal(true);
@@ -75,11 +80,12 @@ public class PierreShopMenuView extends Window {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 PierreGeneralStore store = gameScreen.getController().getMapManager().getPierreStore();
+                originalInventoryOrder = new java.util.ArrayList<>(store.getInventory());
 
                 if (!isSorted) {
                     java.util.List<ShopItem> filtered = new java.util.ArrayList<>();
                     for (ShopItem item : originalInventoryOrder) {
-                        if (item.getDailyLimit() != 0) {
+                        if (item.getRemainingQuantity() != 0) {
                             filtered.add(item);
                         }
                     }
@@ -133,7 +139,7 @@ public class PierreShopMenuView extends Window {
     private void commonProducts(Table table, PierreGeneralStore store) {
         for(ShopItem shopItem : store.getInventory()){
             if(shopItem instanceof PierreGeneralStoreSaplingItem || shopItem instanceof PierreGeneralStoreBackPackUpgrade){
-                addItem(table, shopItem.getTextureRegion(GameAssetManager.getInstance()), shopItem.getName(), shopItem.getDailyLimit(), shopItem.getValue(), -1);
+                addItem(table, shopItem.getTextureRegion(GameAssetManager.getInstance()), shopItem.getName(), shopItem.getRemainingQuantity(), shopItem.getValue(), -1, shopItem);
             }
         }
     }
@@ -142,7 +148,7 @@ public class PierreShopMenuView extends Window {
         for(ShopItem shopItem : store.getInventory()){
             if(shopItem instanceof PierreGeneralStoreSeedsItem){
                 if(((PierreGeneralStoreSeedsItem) shopItem).getSeason() == Season.Spring){
-                    addItem(table, shopItem.getTextureRegion(GameAssetManager.getInstance()), shopItem.getName(), shopItem.getDailyLimit(), shopItem.getValue(), ((PierreGeneralStoreSeedsItem) shopItem).getPriceOutOfSeason());
+                    addItem(table, shopItem.getTextureRegion(GameAssetManager.getInstance()), shopItem.getName(), shopItem.getRemainingQuantity(), shopItem.getValue(), ((PierreGeneralStoreSeedsItem) shopItem).getPriceOutOfSeason(), shopItem);
                 }
             }
         }
@@ -153,7 +159,7 @@ public class PierreShopMenuView extends Window {
         for(ShopItem shopItem : store.getInventory()){
             if(shopItem instanceof PierreGeneralStoreSeedsItem){
                 if(((PierreGeneralStoreSeedsItem) shopItem).getSeason() == Season.Summer){
-                    addItem(table, shopItem.getTextureRegion(GameAssetManager.getInstance()), shopItem.getName(), shopItem.getDailyLimit(), shopItem.getValue(), ((PierreGeneralStoreSeedsItem) shopItem).getPriceOutOfSeason());
+                    addItem(table, shopItem.getTextureRegion(GameAssetManager.getInstance()), shopItem.getName(), shopItem.getRemainingQuantity(), shopItem.getValue(), ((PierreGeneralStoreSeedsItem) shopItem).getPriceOutOfSeason(), shopItem);
                 }
             }
         }
@@ -164,7 +170,7 @@ public class PierreShopMenuView extends Window {
         for(ShopItem shopItem : store.getInventory()){
             if(shopItem instanceof PierreGeneralStoreSeedsItem){
                 if(((PierreGeneralStoreSeedsItem) shopItem).getSeason() == Season.Fall){
-                    addItem(table, shopItem.getTextureRegion(GameAssetManager.getInstance()), shopItem.getName(), shopItem.getDailyLimit(), shopItem.getValue(), ((PierreGeneralStoreSeedsItem) shopItem).getPriceOutOfSeason());
+                    addItem(table, shopItem.getTextureRegion(GameAssetManager.getInstance()), shopItem.getName(), shopItem.getRemainingQuantity(), shopItem.getValue(), ((PierreGeneralStoreSeedsItem) shopItem).getPriceOutOfSeason(), shopItem);
                 }
             }
         }
@@ -175,20 +181,40 @@ public class PierreShopMenuView extends Window {
         return new ScrollPane(table, skin);
     }
 
-    private void addItem(Table table, TextureRegion textureRegion, String name, int dailyLimit, int price, int priceOut) {
-        String style = (dailyLimit == 0) ? "default" : "Impact";
+    private void addItem(Table table, TextureRegion textureRegion, String name, int remainingQuantity, int price, int priceOut, ShopItem shopItem) {
+        String style = (remainingQuantity == 0) ? "default" : "Impact";
 
         Image icon = new Image(textureRegion);
         Label nameLabel = new Label(name, skin, style);
         Label priceLabel = new Label(price + "g", skin, style);
         Label priceOutLabel = new Label(priceOut != -1 ? priceOut + "g" : "-", skin, style);
-        Label dailyLimitLabel = new Label(dailyLimit != -1 ? String.valueOf(dailyLimit) : "Unlimited", skin, style);
-        Label addLabel = new Label(dailyLimit != 0 ? "Add +" : "Unavailable", skin, style);
+        Label remainingQuantityLabel = new Label(remainingQuantity != -1 ? String.valueOf(remainingQuantity) : "Unlimited", skin, style);
+        Label addLabel = new Label(remainingQuantity != 0 ? "Add +" : "Unavailable", skin, style);
 
         addLabel.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                // controller.buyItem(name, price);
+                if(shopItem.getRemainingQuantity() == 0){
+                    gameScreen.showMessage("error","Product Unavailable",skin,0,200,stage);
+                }
+                else{
+                    gameScreen.playGameSFX("popUp");
+                    if(shopItem.getRemainingQuantity() == 1){
+                        shopItem.setRemainingQuantity();
+                        remainingQuantityLabel.setText("-");
+                        addLabel.setText("Unavailable");
+
+                        nameLabel.setStyle(skin.get("default", Label.LabelStyle.class));
+                        priceLabel.setStyle(skin.get("default", Label.LabelStyle.class));
+                        priceOutLabel.setStyle(skin.get("default", Label.LabelStyle.class));
+                        remainingQuantityLabel.setStyle(skin.get("default", Label.LabelStyle.class));
+                        addLabel.setStyle(skin.get("default", Label.LabelStyle.class));
+                    }
+                    else if(shopItem.getRemainingQuantity() != -1){
+                        shopItem.setRemainingQuantity();
+                        remainingQuantityLabel.setText(shopItem.getRemainingQuantity());
+                    }
+                }
             }
         });
 
@@ -196,8 +222,11 @@ public class PierreShopMenuView extends Window {
         table.add(nameLabel).padRight(20);
         table.add(priceLabel).padRight(30);
         table.add(priceOutLabel).padRight(30);
-        table.add(dailyLimitLabel).padRight(70);
+        table.add(remainingQuantityLabel).padRight(70);
         table.add(addLabel).center().padRight(10).padLeft(20).row();
     }
 
+    private void addToCart(){
+
+    };
 }

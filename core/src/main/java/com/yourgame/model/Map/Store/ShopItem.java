@@ -6,7 +6,7 @@ import com.yourgame.model.Item.Item;
 
 public class ShopItem extends Item {
     private final int dailyLimit;
-    private Integer remainingQuantity;
+    private int remainingQuantity;
     private final String filePath;
 
     public ShopItem(String name, ItemType itemType, int value, boolean isStackable, Integer dailyLimit, String filePath) {
@@ -21,7 +21,7 @@ public class ShopItem extends Item {
         return dailyLimit;
     }
 
-    public Integer getRemainingQuantity() {
+    public int getRemainingQuantity() {
         return remainingQuantity;
     }
 

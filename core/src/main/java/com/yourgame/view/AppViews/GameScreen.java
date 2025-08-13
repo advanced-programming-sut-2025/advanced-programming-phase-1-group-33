@@ -28,10 +28,8 @@ import com.yourgame.model.Map.Store.Store;
 import com.yourgame.model.Map.Store.PierreGeneralStore.PierreGeneralStore;
 import com.yourgame.model.UserInfo.Player;
 import com.yourgame.model.WeatherAndTime.ThunderManager;
-import com.yourgame.view.GameViews.JournalMenuView;
+import com.yourgame.view.GameViews.*;
 import com.yourgame.view.GameViews.MainMenuView;
-import com.yourgame.view.GameViews.MapMenuView;
-import com.yourgame.view.GameViews.PierreShopMenuView;
 
 import static com.yourgame.model.UserInfo.Player.*;
 
