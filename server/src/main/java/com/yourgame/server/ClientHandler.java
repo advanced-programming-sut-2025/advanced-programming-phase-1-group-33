@@ -72,7 +72,7 @@ public class ClientHandler implements Runnable {
 
                 case SIGNUP:
                     SignupRequest signupRequest = gson.fromJson(payload, SignupRequest.class);
-                    handleSignupRequest(signupRequest);
+                    new SignUpRequestHandler().handle(this, signupRequest);
                     break;
 
                 case FORGOT_PASSWORD:
@@ -93,21 +93,20 @@ public class ClientHandler implements Runnable {
         }
     }
 
-    private void handleSignupRequest(SignupRequest signupRequest) {
-        SignUpRequestHandler.handle(signupRequest);
-	}
-
-	private void handleLoginRequest(LoginRequest request) {
+    private void handleLoginRequest(LoginRequest request) {
         User user = userService.loginUser(request.getUsername(), request.getPassword());
 
         LoginResponse response;
         if (user != null) {
             UserInfoDTO userInfo = new UserInfoDTO(
                     user.getUsername(),
-                    user.getNickname(),
+                    user.getPassword(),
                     user.getEmail(),
-                    user.getGender(), 
-                    user.getAvatar().getName());
+                    user.getGender(),
+                    user.getGender(),
+                    user.getAvatar().getName(),
+                    user.getSecurityQuestion().getQuestion(),
+                    user.getAnswer());
             response = new LoginResponse(true, "Login successful!", userInfo);
         } else {
             response = new LoginResponse(false, "Invalid username or password.", null);
@@ -140,7 +139,7 @@ public class ClientHandler implements Runnable {
         sendResponse(response);
     }
 
-    private void sendResponse(Object data) {
+    public void sendResponse(Object data) {
         if (out != null) {
             String jsonResponse = gson.toJson(data);
             out.println(jsonResponse);

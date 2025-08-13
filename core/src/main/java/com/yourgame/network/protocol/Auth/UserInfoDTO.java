@@ -8,11 +8,12 @@ public class UserInfoDTO {
     private final String email;
     private final String gender;
     private final String question;
+    private final String answer;
 
     private final String avatarName;
 
     public UserInfoDTO(String username, String password, String nickname, String email, String gender,
-            String avatarName, String question) {
+            String avatarName, String question, String answer) {
         this.username = username;
         this.password = password;
         this.nickname = nickname;
@@ -20,6 +21,7 @@ public class UserInfoDTO {
         this.gender = gender;
         this.avatarName = avatarName;
         this.question = question;
+        this.answer = answer;
     }
 
     // Getters for all fields...
@@ -50,4 +52,9 @@ public class UserInfoDTO {
     public String getAvatarName() {
         return avatarName;
     }
+
+    public String getAnswer() {
+        return answer;
+    }
+
 }
