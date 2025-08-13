@@ -10,6 +10,8 @@ import java.io.PrintWriter;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
+import com.yourgame.network.protocol.ResponseType;
+import com.yourgame.network.protocol.ResponseWrapper;
 import com.yourgame.network.protocol.Auth.LoginResponse;
 import com.yourgame.network.protocol.Auth.SignupResponse;
 
@@ -30,7 +32,7 @@ public class Client implements Runnable {
         this.serverPort = serverPort;
         this.listener = listener;
         this.responseHolder = responseHolder;
-    }   
+    }
 
     @Override
     public void run() {
@@ -67,16 +69,25 @@ public class Client implements Runnable {
             return;
 
         try {
-            // This is a simple way to guess the response type. A more robust system
-            // might have a 'type' field in every JSON object.
-            if (jsonResponse.contains("UserInfoDTO")) { // Heuristic for LoginResponse
-                LoginResponse response = gson.fromJson(jsonResponse, LoginResponse.class);
-                listener.received(response);
-            } else if (jsonResponse.contains("signup")) { // A different heuristic
-                SignupResponse response = gson.fromJson(jsonResponse, SignupResponse.class);
-                listener.received(response);
+
+            ResponseWrapper wrapper = gson.fromJson(jsonResponse, ResponseWrapper.class);
+            Object response = null;
+
+            switch (wrapper.getType()) {
+                case LOGIN_SUCCESS:
+                case LOGIN_FAILURE:
+                case USER_EXIST_SIGNUP: 
+                case SIGNUP_SUCCESS:
+                    response = gson.fromJson(wrapper.getPayload(), getResponseType(wrapper.getType()));
+                    responseHolder.setResponse(response);
+                    break;
+                case SIGNUP_FAILURE:
+                    response = gson.fromJson(wrapper.getPayload(), getResponseType(wrapper.getType()));
+                    responseHolder.setResponse(response);
+                    break;
+                default:
+                    break;
             }
-            // ... add more 'else if' blocks for other response types
 
         } catch (JsonSyntaxException e) {
             System.err.println("Error parsing JSON from server: " + e.getMessage());
@@ -104,6 +115,23 @@ public class Client implements Runnable {
             }
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    private Class<?> getResponseType(ResponseType type) {
+        switch (type) {
+
+            case LOGIN_SUCCESS:
+            case LOGIN_FAILURE:
+                return LoginResponse.class;
+            case USER_EXIST_SIGNUP:
+            case USER_NOTEXIST_SIGNUP:
+            case SIGNUP_SUCCESS:
+            case SIGNUP_FAILURE:
+                return SignupResponse.class;
+
+            default:
+                return null;
         }
     }
 }

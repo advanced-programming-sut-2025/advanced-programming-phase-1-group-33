@@ -30,4 +30,6 @@ public class ResponseHolder {
     public void clear() {
         this.response = null;
     }
+
+    
 }
