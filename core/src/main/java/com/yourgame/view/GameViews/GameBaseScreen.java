@@ -102,7 +102,7 @@ public abstract class GameBaseScreen implements Screen {
         switch (string) {
             case "click" -> clickSound.play();
             case "popUp" -> popUpSound.play();
-            case "error" -> errorSound.play(2f);
+            case "error" -> errorSound.play(5f);
         }
     }
 
