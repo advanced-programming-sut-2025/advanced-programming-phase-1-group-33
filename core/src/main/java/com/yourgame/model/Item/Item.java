@@ -4,7 +4,7 @@ import com.yourgame.Graphics.GameAssetManager;
 
 public abstract class Item {
     public enum ItemType {
-        FOOD, TOOL, CROP, INGREDIENT, RESOURCE, TREASURE, QUEST_ITEM, MACHINE, BACKPACK
+        FOOD, TOOL, CROP, INGREDIENT, RESOURCE, TREASURE, QUEST_ITEM, MACHINE, BACKPACK, FISH, MILL, ANIMAL_PRODUCT, ARTISAN
     }
 
     protected final String name;

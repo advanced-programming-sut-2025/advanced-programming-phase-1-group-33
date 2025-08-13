@@ -22,8 +22,7 @@ public enum AnimalGoodType implements Ingredient {
     private final int price;
     private static final HashMap<String, AnimalGoodType> stringToAnimalGoodType = new HashMap<>();
 
-    static {
-        for (AnimalGoodType value : AnimalGoodType.values()) {
+    static {        for (AnimalGoodType value : AnimalGoodType.values()) {
             stringToAnimalGoodType.put(value.name().toLowerCase(), value);
         }
     }
