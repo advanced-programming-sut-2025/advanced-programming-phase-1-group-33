@@ -4,6 +4,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.yourgame.network.ClientConnectionManager;
 import com.yourgame.network.GameNetworkHandler;
+import com.yourgame.network.ResponseHolder;
 import com.yourgame.view.AppViews.GameScreen;
 import com.yourgame.view.AppViews.MainMenuView;
 import com.yourgame.view.AppViews.SignupMenuView;
@@ -18,9 +19,10 @@ public class Main extends Game {
     private static Main main;
     private static SpriteBatch batch;
     private ClientConnectionManager connectionManager;
-    private GameNetworkHandler networkHandler;
+    private final ResponseHolder responseHolder = new ResponseHolder();
 
-    @Override
+
+	@Override
     public void create() {
         /*
          * This is from the project.
@@ -32,10 +34,11 @@ public class Main extends Game {
          */
         main = this;
         batch = new SpriteBatch();
-        // --- Start Client Connection ---
-        connectionManager = new ClientConnectionManager();
-        connectionManager.startConnection("localhost", 8080, networkHandler); // Connect to the server
-        // -----------------------------
+
+        GameNetworkHandler networkHandler = new GameNetworkHandler(responseHolder); 
+        connectionManager = new ClientConnectionManager(responseHolder); 
+        connectionManager.startConnection("localhost", 8080, networkHandler);
+
 
         main.setScreen(new MainMenuView());
     }
@@ -68,5 +71,9 @@ public class Main extends Game {
     public void setConnectionManager(ClientConnectionManager connectionManager) {
         this.connectionManager = connectionManager;
     }
+    
 
+    public ResponseHolder getResponseHolder() {
+		return responseHolder;
+	}
 }

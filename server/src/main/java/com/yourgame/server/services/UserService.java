@@ -24,7 +24,8 @@ public class UserService {
                 return "Error: Username already exists.";
             }
 
-            // DANGER: Saving the user object directly, which contains the plain text password.
+            // DANGER: Saving the user object directly, which contains the plain text
+            // password.
             userDAO.saveUser(user);
             return "Success: User registered successfully!";
 
@@ -34,21 +35,40 @@ public class UserService {
         }
     }
 
-    /**
-     * DANGER: This method compares passwords in plain text. This is extremely insecure.
-     * Do NOT use this in a real application.
-     */
+
     public User loginUser(String username, String plainTextPassword) {
         try {
             User user = userDAO.loadUser(username);
 
-            // DANGER: A simple, insecure string comparison.
             if (user != null && plainTextPassword.equals(user.getPassword())) {
                 return user; // Login successful
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return null; // Login failed
+        return null; 
+    }
+
+    public User findUserForPasswordRecovery(String username) {
+        try {
+            return userDAO.loadUser(username);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+
+    public boolean verifySecurityAnswer(String username, String answer) {
+        try {
+            User user = userDAO.loadUser(username);
+
+            if (user != null) {
+                return user.getAnswer().equals(answer);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 }

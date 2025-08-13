@@ -1,9 +1,19 @@
 // core/src/main/java/com/yourgame/network/ClientConnectionManager.java
 package com.yourgame.network;
 
+import com.google.gson.Gson;
+import com.yourgame.network.protocol.RequestType;
+import com.yourgame.network.protocol.RequestWrapper;
+
 public class ClientConnectionManager {
     private Client client;
     private Thread clientThread;
+    private final ResponseHolder responseHolder;
+    private final Gson gson = new Gson();
+
+    public ClientConnectionManager(ResponseHolder responseHolder) {
+        this.responseHolder = responseHolder;
+    }
 
     public void startConnection(String serverIp, int serverPort, NetworkListener listener) {
         if (clientThread != null && clientThread.isAlive()) {
@@ -23,9 +33,13 @@ public class ClientConnectionManager {
         }
     }
 
-    public void sendDataToServer(Object data) {
+    public void sendDataToServer(RequestType type  , Object data) {
         if (client != null) {
-            client.sendData(data);
+
+            String payload = gson.toJson(data);
+
+            RequestWrapper wrapper = new RequestWrapper(type, payload);
+            client.sendData(wrapper); 
         }
     }
 

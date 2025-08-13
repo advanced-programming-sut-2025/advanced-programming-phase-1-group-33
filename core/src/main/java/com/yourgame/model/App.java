@@ -1,6 +1,10 @@
 package com.yourgame.model;
+
 import com.yourgame.model.UserInfo.User;
 import com.yourgame.model.enums.Commands.MenuTypes;
+import com.yourgame.network.protocol.Auth.UserInfoDTO;
+import com.yourgame.model.enums.Avatar;
+import com.yourgame.model.enums.Gender;
 import com.yourgame.model.enums.SecurityQuestion;
 import com.yourgame.persistence.UserDAO;
 
@@ -10,7 +14,7 @@ import java.util.List;
 
 public class App {
     private static MenuTypes currentMenuTypes = MenuTypes.MainMenu;
-    private static User currentUser =  null ; //new User("","","","", Gender.Male,SecurityQuestion.BirthDate,"");
+    private static User currentUser = null; // new User("","","","", Gender.Male,SecurityQuestion.BirthDate,"");
     public static ArrayList<SecurityQuestion> securityQuestions = new ArrayList<>();
     private static List<User> users;
     private static UserDAO userDAO;
@@ -24,6 +28,24 @@ public class App {
             e.printStackTrace();
             throw new RuntimeException("Failed to initialize UserDAO", e);
         }
+    }
+
+    public static void setCurrentUserFromDTO(UserInfoDTO dto) {
+        if (dto == null) {
+            currentUser = null;
+            return;
+        }
+
+
+        currentUser = new User(
+                dto.getUsername(),
+                "", // پسورد در کلاینت ذخیره نمی‌شود
+                dto.getEmail(),
+                dto.getNickname(),
+                Gender.valueOf(dto.getGender()),
+                SecurityQuestion.BirthDate, // یک مقدار پیش‌فرض، چون در کلاینت مهم نیست
+                "", // جواب امنیتی در کلاینت ذخیره نمی‌شود
+                Avatar.fromString(dto.getAvatarName()));
     }
 
     public static GameState getGameState() {

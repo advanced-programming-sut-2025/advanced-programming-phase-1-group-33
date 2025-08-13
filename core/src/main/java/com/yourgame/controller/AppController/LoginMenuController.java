@@ -6,7 +6,14 @@ import com.yourgame.model.Result;
 import com.yourgame.model.UserInfo.HandleStayedLoggedIn;
 import com.yourgame.model.UserInfo.User;
 import com.yourgame.model.enums.Commands.MenuTypes;
+import com.yourgame.network.ResponseHolder;
+import com.yourgame.network.protocol.RequestType;
 import com.yourgame.network.protocol.Auth.ForgotPasswordRequest;
+import com.yourgame.network.protocol.Auth.ForgotPasswordResponse;
+import com.yourgame.network.protocol.Auth.LoginRequest;
+import com.yourgame.network.protocol.Auth.LoginResponse;
+import com.yourgame.network.protocol.Auth.SecurityAnswerRequest;
+import com.yourgame.network.protocol.Auth.SecurityAnswerResponse;
 import com.yourgame.persistence.UserDAO;
 import com.yourgame.view.AppViews.LoginMenuView;
 import com.yourgame.view.AppViews.MainMenuView;
@@ -22,80 +29,108 @@ public class LoginMenuController extends Controller {
         this.view = view;
     }
 
-    public void handleBackButton(){
+    public void handleBackButton() {
         App.setCurrentMenu(MenuTypes.MainMenu);
         Main.getMain().getScreen().dispose();
         Main.getMain().setScreen(new MainMenuView());
     }
 
-    public Result handleLoginButton(boolean isStayLoggedInActive){
+    public Result handleLoginButton(boolean isStayLoggedInActive) {
+
         String username = view.getUserInfo("username");
         String password = view.getUserInfo("password");
 
-        if(username.isEmpty())
+        if (username.isEmpty())
             return new Result(false, "Username is required!");
-        else if(password.isEmpty())
+        if (password.isEmpty())
             return new Result(false, "Password is required!");
 
+        LoginRequest request = new LoginRequest(username, password);
+        Main.getMain().getConnectionManager().sendDataToServer(RequestType.LOGIN, request);
+
         try {
-            User user = App.getUserDAO().loadUser(username);
-            if(user == null)
-                return new Result(false, "User not found!");
-            else{
-                if(isStayLoggedInActive) {
-                    try {
-                        HandleStayedLoggedIn.getInstance().addUser(user);
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    }
-                }
-                App.setCurrentUser(user);
-                App.setCurrentMenu(MenuTypes.MainMenu);
-                Main.getMain().getScreen().dispose();
-                Main.getMain().setScreen(new MainMenuView());
-                return new Result(true, "Login successful!");
+
+            ResponseHolder holder = Main.getMain().getResponseHolder();
+            Object responseObject = holder.getResponse(10000); // ۱۰ ثانیه مهلت
+
+            // ۳. پردازش پاسخ
+            if (responseObject == null) {
+                return new Result(false, "Error: No response from server (Timeout).");
             }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+
+            if (responseObject instanceof LoginResponse) {
+                LoginResponse response = (LoginResponse) responseObject;
+                if (response.isSuccess()) {
+                    // موفقیت‌آمیز
+                    App.setCurrentUserFromDTO(response.getUser());
+                    if (isStayLoggedInActive) {
+                        try {
+
+                            
+                            HandleStayedLoggedIn.getInstance().addUser(App.getCurrentUser());
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    App.setCurrentMenu(MenuTypes.MainMenu);
+                    Main.getMain().getScreen().dispose();
+                    Main.getMain().setScreen(new MainMenuView());
+                }
+                return new Result(response.isSuccess(), response.getMessage());
+            } else {
+                return new Result(false, "Error: Received an unknown response from server.");
+            }
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            return new Result(false, "Error: Login process was interrupted.");
         }
+
     }
 
-    public Result handleForgetPasswordButton(String username){
-        if(username.isEmpty()){
-            return new Result(false, "Username is required!");
-        }
+    public Result handleForgetPasswordButton() {
+        String username = view.getUserInfo("username");
+        if (username.isEmpty()) return new Result(false, "Username is required!");
+
         ForgotPasswordRequest request = new ForgotPasswordRequest(username);
-        Main.getMain().getConnectionManager().sendDataToServer(request);
-        
-        // TODO: this should be done. 
-        return new Result(true, "TODO"); 
+        Main.getMain().getConnectionManager().sendDataToServer(RequestType.FORGOT_PASSWORD, request);
 
-        // try {
-        //     User user = userDAO.loadUser(username);
-        //     if(user == null){
-        //         return new Result(false, "User not found!");
-        //     }
-        //     else{
-        //         loggedInUser = user;
-        //         return new Result(true, user.getSecurityQuestion().getQuestion());
-        //     }
-        // } catch (SQLException e) {
-        //     throw new RuntimeException(e);
-        // }
+        try {
+            ResponseHolder holder = Main.getMain().getResponseHolder();
+            Object responseObject = holder.getResponse(5000); 
+            
+            if (responseObject instanceof ForgotPasswordResponse) {
+                ForgotPasswordResponse response = (ForgotPasswordResponse) responseObject;
 
+                return new Result(response.isSuccess(), response.getMessage());
+            } else {
+                return new Result(false, "Error: Did not receive a valid response for password recovery.");
+            }
+        } catch (InterruptedException e) {
+            return new Result(false, "Error: Process interrupted.");
+        }
     }
 
-    public Result handleFindButton(String answer){
-        if(answer.isEmpty()){
-            return new Result(false, "Answer field is empty!");
-        }
 
-        else if(!loggedInUser.getAnswer().equals(answer)){
-            return new Result(false, "Wrong answer!");
-        }
+    public Result handleFindButton(String answer) {
+        if (answer.isEmpty()) return new Result(false, "Answer field is empty!");
+        String username = view.getUserInfo("username"); 
 
-        else {
-            return new Result(true, loggedInUser.getPassword());
+        SecurityAnswerRequest request = new SecurityAnswerRequest(username, answer);
+        Main.getMain().getConnectionManager().sendDataToServer(RequestType.SECURITY_ANSWER ,request);
+
+        try {
+            ResponseHolder holder = Main.getMain().getResponseHolder();
+            Object responseObject = holder.getResponse(5000);
+
+            if (responseObject instanceof SecurityAnswerResponse) {
+                SecurityAnswerResponse response = (SecurityAnswerResponse) responseObject;
+
+                return new Result(response.isSuccess(), response.getMessage());
+            } else {
+                return new Result(false, "Error: Did not receive a valid response for the security answer.");
+            }
+        } catch (InterruptedException e) {
+            return new Result(false, "Error: Process interrupted.");
         }
     }
 }
