@@ -1,13 +1,12 @@
 package com.yourgame.network.protocol.Auth;
 
-// Sent when a user submits the signup form.
-// It contains all the fields needed to create a new user.
+
 public class SignupRequest {
     private final String username;
     private final String password;
     private final String email;
     private final String nickname;
-    private final String gender; // Send as String to keep it simple
+    private final String gender; 
     private final String securityQuestion;
     private final String securityAnswer;
     private final String avatarName;

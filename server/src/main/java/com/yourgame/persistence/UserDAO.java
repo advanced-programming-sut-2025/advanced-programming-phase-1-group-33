@@ -13,6 +13,15 @@ import java.util.List;
 
 public class UserDAO {
 
+    public void updateUsername(String oldUsername, String newUsername) throws SQLException {
+        String sql = "UPDATE users SET username = ? WHERE username = ?";
+        try (PreparedStatement stmt = DatabaseManager.getConnection().prepareStatement(sql)) {
+            stmt.setString(1, newUsername);
+            stmt.setString(2, oldUsername);
+            stmt.executeUpdate();
+        }
+    }
+
     public void saveUser(User user) throws SQLException {
         String sql = "INSERT INTO users(username, password, email, nickname, gender, securityQuestion, answer, avatar) VALUES (?,?,?,?,?,?,?,?)";
 
@@ -70,6 +79,25 @@ public class UserDAO {
             }
         }
         return users;
+    }
+
+    public void updateUserById(String username, User updatedUser) throws SQLException {
+        String sql = """
+                    UPDATE users
+                    SET password = ?, email = ?, nickname = ?, gender = ?, securityQuestion = ?, answer = ?, avatar = ?
+                    WHERE username = ?
+                """;
+        try (PreparedStatement stmt = DatabaseManager.getConnection().prepareStatement(sql)) {
+            stmt.setString(1, updatedUser.getPassword());
+            stmt.setString(2, updatedUser.getEmail());
+            stmt.setString(3, updatedUser.getNickname());
+            stmt.setString(4, updatedUser.getGender());
+            stmt.setString(5, updatedUser.getSecurityQuestion().getQuestion());
+            stmt.setString(6, updatedUser.getAnswer());
+            stmt.setString(7, updatedUser.getAvatar().getName());
+            stmt.setString(8, username);
+            stmt.executeUpdate();
+        }
     }
 
     public boolean userExists(String username) throws SQLException {

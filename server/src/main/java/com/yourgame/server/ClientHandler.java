@@ -16,8 +16,10 @@ import com.yourgame.network.protocol.Auth.LoginRequest;
 import com.yourgame.network.protocol.Auth.LoginResponse;
 import com.yourgame.network.protocol.Auth.SecurityAnswerRequest;
 import com.yourgame.network.protocol.Auth.SecurityAnswerResponse;
+import com.yourgame.network.protocol.Auth.SignupRequest;
 import com.yourgame.network.protocol.Auth.UserInfoDTO;
 import com.yourgame.server.services.UserService;
+import com.yourgame.server.services.AuthHandler.SignUpRequestHandler;
 
 // This class handles communication for a single client in a dedicated thread.
 public class ClientHandler implements Runnable {
@@ -69,8 +71,9 @@ public class ClientHandler implements Runnable {
                     break;
 
                 case SIGNUP:
-
-                break;
+                    SignupRequest signupRequest = gson.fromJson(payload, SignupRequest.class);
+                    handleSignupRequest(signupRequest);
+                    break;
 
                 case FORGOT_PASSWORD:
                     ForgotPasswordRequest forgotRequest = gson.fromJson(payload, ForgotPasswordRequest.class);
@@ -90,22 +93,23 @@ public class ClientHandler implements Runnable {
         }
     }
 
-    private void handleLoginRequest(LoginRequest request) {
+    private void handleSignupRequest(SignupRequest signupRequest) {
+        SignUpRequestHandler.handle(signupRequest);
+	}
+
+	private void handleLoginRequest(LoginRequest request) {
         User user = userService.loginUser(request.getUsername(), request.getPassword());
 
         LoginResponse response;
         if (user != null) {
-            // لاگین موفق بود
-            // حالا DTO را با اطلاعات کامل‌تر می‌سازیم
             UserInfoDTO userInfo = new UserInfoDTO(
                     user.getUsername(),
                     user.getNickname(),
                     user.getEmail(),
-                    user.getGender(), // ارسال جنسیت
+                    user.getGender(), 
                     user.getAvatar().getName());
             response = new LoginResponse(true, "Login successful!", userInfo);
         } else {
-            // لاگین ناموفق بود
             response = new LoginResponse(false, "Invalid username or password.", null);
         }
 

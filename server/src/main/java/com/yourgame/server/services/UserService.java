@@ -1,9 +1,9 @@
+
 // server/src/main/java/com/yourgame/server/services/UserService.java
 package com.yourgame.server.services;
 
 import com.yourgame.model.UserInfo.User;
 import com.yourgame.persistence.UserDAO;
-// The BCrypt import is removed
 import java.sql.SQLException;
 
 public class UserService {
@@ -14,18 +14,13 @@ public class UserService {
         this.userDAO = new UserDAO();
     }
 
-    /**
-     * DANGER: This method stores a plain text password. This is extremely insecure.
-     * Do NOT use this in a real application.
-     */
+
     public String registerUser(User user) {
         try {
             if (userDAO.userExists(user.getUsername())) {
                 return "Error: Username already exists.";
             }
 
-            // DANGER: Saving the user object directly, which contains the plain text
-            // password.
             userDAO.saveUser(user);
             return "Success: User registered successfully!";
 
