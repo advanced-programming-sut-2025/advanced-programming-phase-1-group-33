@@ -1,6 +1,6 @@
 package com.yourgame.network.protocol;
 
-public enum RequestType {
+public enum ResponseType {
     LOGIN,
     USER_EXIST, 
     SIGNUP,

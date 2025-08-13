@@ -69,7 +69,8 @@ public class ClientHandler implements Runnable {
                     LoginRequest loginRequest = gson.fromJson(payload, LoginRequest.class);
                     handleLoginRequest(loginRequest);
                     break;
-
+                case USER_EXIST:
+                    break; 
                 case SIGNUP:
                     SignupRequest signupRequest = gson.fromJson(payload, SignupRequest.class);
                     new SignUpRequestHandler().handle(this, signupRequest);

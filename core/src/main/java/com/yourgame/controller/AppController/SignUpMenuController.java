@@ -8,6 +8,7 @@ import com.yourgame.model.UserInfo.UserInfoChecking;
 import com.yourgame.model.enums.Avatar;
 import com.yourgame.model.enums.Commands.MenuTypes;
 import com.yourgame.network.protocol.RequestType;
+import com.yourgame.network.protocol.Auth.ForgotPasswordRequest;
 import com.yourgame.network.protocol.Auth.SignupRequest;
 import com.yourgame.model.enums.Gender;
 import com.yourgame.model.enums.SecurityQuestion;
@@ -72,6 +73,9 @@ public class SignUpMenuController {
 
         UserDAO userDAO = App.getUserDAO();
         User existingUser = null;
+
+        ForgotPasswordRequest request = new ForgotPasswordRequest(username); 
+
         try {
             existingUser = userDAO.loadUser(username);
         } catch (SQLException e) {
@@ -121,7 +125,6 @@ public class SignUpMenuController {
                 Avatar.Sam.getName() // Assuming avatar.getName() returns the name string
         );
         try{
-
             System.out.println(Main.getMain().getConnectionManager().sendRequestAndWaitForResponse(RequestType.SIGNUP, signupRequest, 1000));
         }
         catch(Exception e){
