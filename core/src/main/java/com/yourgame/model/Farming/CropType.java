@@ -136,7 +136,7 @@ public enum CropType implements Ingredient {
             new ArrayList<>(Arrays.asList(2, 2, 2, 2)),
             8, false, 4, 70, true, 63,
             new ArrayList<>(List.of(Season.Fall)), false),
-    Cranberries(Seeds.Cranberry_Seeds,
+    Cranberry(Seeds.Cranberry_Seeds,
             new ArrayList<>(Arrays.asList(1, 2, 1, 1, 2)),
             7, false, 5, 75, true, 38,
             new ArrayList<>(List.of(Season.Fall)), false),

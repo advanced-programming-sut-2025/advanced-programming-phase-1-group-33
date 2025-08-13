@@ -88,8 +88,12 @@ public enum Seeds implements Ingredient {
         private final Seeds seed;
 
         public SeedItem(Seeds seed) {
-            super(seed.name(), ItemType.INGREDIENT, 5, true);
+            super(seed.name(), ItemType.INGREDIENT, 20, true);
             this.seed = seed;
+        }
+
+        public Seeds getSeedType() {
+            return seed;
         }
 
         @Override

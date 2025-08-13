@@ -13,6 +13,9 @@ import com.yourgame.Graphics.GameAssetManager;
 import com.yourgame.Graphics.MenuAssetManager;
 import com.yourgame.controller.GameController.PierreShopMenuController;
 import com.yourgame.model.App;
+import com.yourgame.model.Farming.Seeds;
+import com.yourgame.model.Farming.TreeSource;
+import com.yourgame.model.Item.Item;
 import com.yourgame.model.Map.Store.PierreGeneralStore.*;
 import com.yourgame.model.Map.Store.ShopItem;
 import com.yourgame.model.WeatherAndTime.Season;
@@ -141,11 +144,12 @@ public class PierreShopMenuView extends Window {
 
         // Add items by category & season
         for (ShopItem shopItem : items) {
-            if (shopItem instanceof PierreGeneralStoreSaplingItem ||
-                    shopItem instanceof PierreGeneralStoreBackPackUpgrade) {
-                addItem(table, shopItem.getTextureRegion(GameAssetManager.getInstance()),
-                        shopItem.getName(), shopItem.getRemainingQuantity(),
-                        shopItem.getValue(), -1, shopItem);
+            if (shopItem.getItem() instanceof TreeSource.TreeSourceItem
+                // || shopItem instanceof PierreGeneralStoreBackPackUpgrade
+            ) {
+                addItem(table, shopItem.getItem().getTextureRegion(GameAssetManager.getInstance()),
+                        shopItem.getItem().getName(), shopItem.getRemainingQuantity(),
+                        shopItem.getItem().getValue(), -1, shopItem);
             }
         }
 
@@ -156,12 +160,13 @@ public class PierreShopMenuView extends Window {
             table.add(new Label("", skin)).colspan(5).row();
 
             for(ShopItem shopItem : items){
-                if(shopItem instanceof PierreGeneralStoreSeedsItem){
-                    if(((PierreGeneralStoreSeedsItem) shopItem).getSeason() == season){
-                        addItem(table, shopItem.getTextureRegion(GameAssetManager.getInstance()),
-                                shopItem.getName(), shopItem.getRemainingQuantity(),
-                                shopItem.getValue(),
-                                ((PierreGeneralStoreSeedsItem) shopItem).getPriceOutOfSeason(),
+                Item item = shopItem.getItem();
+                if(item instanceof Seeds.SeedItem seed){
+                    if(seed.getSeedType().getSeason() == season){
+                        addItem(table, item.getTextureRegion(GameAssetManager.getInstance()),
+                                item.getName(), shopItem.getRemainingQuantity(),
+                                item.getValue(),
+                                shopItem.getPriceOutOfSeason(),
                                 shopItem);
                     }
                 }
@@ -215,12 +220,12 @@ public class PierreShopMenuView extends Window {
 
                     updatePurchasePreview(
                             textureRegion,
-                            shopItem.getName(),
+                            shopItem.getItem().getName(),
                             currentSelectedQuantity,
                             price,
                             priceOut,
-                            (shopItem instanceof PierreGeneralStoreSeedsItem) &&
-                                    ((PierreGeneralStoreSeedsItem) shopItem).getSeason() == App.getGameState().getGameTime().getSeason()
+                            (shopItem.getItem() instanceof Seeds.SeedItem seed) &&
+                                    seed.getSeedType().getSeason() == App.getGameState().getGameTime().getSeason()
                     );
 
                 }
@@ -293,7 +298,7 @@ public class PierreShopMenuView extends Window {
             return;
         }
 
-        if(!gameScreen.getPlayer().getBackpack().getInventory().addItem(currentSelectedItem,currentSelectedQuantity)) {
+        if(!gameScreen.getPlayer().getBackpack().getInventory().addItem(currentSelectedItem.getItem(),currentSelectedQuantity)) {
             gameScreen.showMessage("error", "Not enough space in your backpack", skin, 0, 200, stage);
             return;
         }
@@ -302,7 +307,7 @@ public class PierreShopMenuView extends Window {
         gameScreen.getPlayer().setGold(gameScreen.getPlayer().getGold()-currentSelectedPrice);
 
         // Show Confirmation
-        gameScreen.showMessage("popUp", "Purchased " + currentSelectedQuantity + " x " + currentSelectedItem.getName(),
+        gameScreen.showMessage("popUp", "Purchased " + currentSelectedQuantity + " x " + currentSelectedItem.getItem().getName(),
                 skin, 0, 200, stage);
 
         // Reset preview
