@@ -1,5 +1,6 @@
 package com.yourgame.view.GameViews;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -37,6 +38,7 @@ public class PierreShopMenuView extends Window {
     private final Table purchasePreviewTable = new Table();
     private ShopItem currentSelectedItem = null;
     private int currentSelectedQuantity = 0;
+    private int currentSelectedPrice = 0;
 
     public PierreShopMenuView(Skin skin, Stage stage, GameScreen gameScreen) {
         super("Pierre General Store Menu", skin);
@@ -47,7 +49,7 @@ public class PierreShopMenuView extends Window {
         controller = new PierreShopMenuController();
         controller.setView(this);
 
-        setSize(1200, 800);
+        setSize(1400, 800);
         setModal(true);
         setMovable(false);
         center();
@@ -87,12 +89,20 @@ public class PierreShopMenuView extends Window {
                 refreshGoodsList();
             }
         });
+
+        buyGoodsButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                purchaseSelectedItem();
+            }
+        });
     }
 
     /** Refreshes the UI with the current filter state */
     private void refreshGoodsList() {
         contentTable.clearChildren();
         contentTable.add(createGoodsListFromItems(getFilteredList())).colspan(3).center().row();
+        contentTable.add(purchasePreviewTable).colspan(3).expand().center().row();
         contentTable.add(buyGoodsButton);
         contentTable.add(filterButton);
         contentTable.add(closeButton);
@@ -188,7 +198,7 @@ public class PierreShopMenuView extends Window {
 
                     int newQty = shopItem.getRemainingQuantity();
                     if (newQty == 0) {
-                        remainingQuantityLabel.setText("-");
+                        remainingQuantityLabel.setText("0");
                         addLabel.setText("Unavailable");
                         nameLabel.setStyle(skin.get("default", Label.LabelStyle.class));
                         priceLabel.setStyle(skin.get("default", Label.LabelStyle.class));
@@ -207,8 +217,12 @@ public class PierreShopMenuView extends Window {
                             textureRegion,
                             shopItem.getName(),
                             currentSelectedQuantity,
-                            price
+                            price,
+                            priceOut,
+                            (shopItem instanceof PierreGeneralStoreSeedsItem) &&
+                                    ((PierreGeneralStoreSeedsItem) shopItem).getSeason() == App.getGameState().getGameTime().getSeason()
                     );
+
                 }
             }
         });
@@ -221,15 +235,83 @@ public class PierreShopMenuView extends Window {
         table.add(addLabel).center().padRight(10).padLeft(20).row();
     }
 
-    private void updatePurchasePreview(TextureRegion iconTexture, String name, int quantity, int pricePerUnit) {
+    private void updatePurchasePreview(TextureRegion iconTexture, String name, int quantity, int pricePerUnit, int priceOutOfSeason, boolean inSeason) {
         purchasePreviewTable.clear();
-        purchasePreviewTable.add(new Image(iconTexture)).padRight(10);
-        purchasePreviewTable.add(new Label(name, skin, "Impact")).padRight(20);
-        purchasePreviewTable.add(new Label("x" + quantity, skin, "Impact")).padRight(20);
-        purchasePreviewTable.add(new Label(pricePerUnit + "g each", skin, "Impact")).padRight(20);
 
-        int totalPrice = pricePerUnit * quantity;
-        purchasePreviewTable.add(new Label("Total: " + totalPrice + "g", skin, "Impact"));
+        purchasePreviewTable.add(new Image(iconTexture)).padRight(10);
+        purchasePreviewTable.add(new Label(name, skin, "Bold")).padRight(20);
+        purchasePreviewTable.add(new Label("x" + quantity, skin, "Bold")).padRight(20);
+
+        int unitPrice = inSeason ? pricePerUnit : (priceOutOfSeason != -1 ? priceOutOfSeason : pricePerUnit);
+        purchasePreviewTable.add(new Label(unitPrice + "g (each)", skin, "Bold")).padRight(20);
+
+        // Total price
+        int totalPrice = unitPrice * quantity;
+        currentSelectedPrice = totalPrice;
+        purchasePreviewTable.add(new Label("Total: " + totalPrice + "g", skin, "Bold")).padRight(20);
+
+        // Minus label
+        Label minusLabel = new Label("Reduce(-)", skin, "BoldImpact");
+        minusLabel.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                if (currentSelectedQuantity > 1) {
+                    currentSelectedQuantity--;
+
+                    // Return the item to the item list (restore remaining quantity)
+                    if (currentSelectedItem.getRemainingQuantity() != -1) {
+                        currentSelectedItem.addRemainingQuantity();
+                    }
+
+                    updatePurchasePreview(iconTexture, name, currentSelectedQuantity, pricePerUnit, priceOutOfSeason, inSeason);
+                } else {
+                    // Remove completely
+                    if (currentSelectedItem.getRemainingQuantity() != -1) {
+                        currentSelectedItem.addRemainingQuantity();
+                    }
+                    currentSelectedQuantity = 0;
+                    currentSelectedItem = null;
+                    purchasePreviewTable.clear();
+                }
+
+                // Refresh goods list so the returned product is visible again
+                refreshGoodsList();
+            }
+        });
+        purchasePreviewTable.add(minusLabel).padLeft(10);
     }
 
+    private void purchaseSelectedItem() {
+        if (currentSelectedItem == null || currentSelectedQuantity <= 0) {
+            gameScreen.showMessage("error", "No product selected", skin, 0, 200, stage);
+            return;
+        }
+
+        // Check if player has enough money
+        if (gameScreen.getPlayer().getGold() < currentSelectedPrice) {
+            gameScreen.showMessage("error", "Not enough gold", skin, 0, 200, stage);
+            return;
+        }
+
+        if(!gameScreen.getPlayer().getBackpack().getInventory().addItem(currentSelectedItem,currentSelectedQuantity)) {
+            gameScreen.showMessage("error", "Not enough space in your backpack", skin, 0, 200, stage);
+            return;
+        }
+
+        // Deduct money
+        gameScreen.getPlayer().setGold(gameScreen.getPlayer().getGold()-currentSelectedPrice);
+
+        // Show Confirmation
+        gameScreen.showMessage("popUp", "Purchased " + currentSelectedQuantity + " x " + currentSelectedItem.getName(),
+                skin, 0, 200, stage);
+
+        // Reset preview
+        currentSelectedQuantity = 0;
+        currentSelectedItem = null;
+        currentSelectedPrice = 0;
+        purchasePreviewTable.clear();
+
+        // Refresh goods list to update availability
+        refreshGoodsList();
+    }
 }

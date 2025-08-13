@@ -29,6 +29,10 @@ public class ShopItem extends Item {
         remainingQuantity--;
     }
 
+    public void addRemainingQuantity() {
+        remainingQuantity++;
+    }
+
     @Override
     public TextureRegion getTextureRegion(GameAssetManager assetManager) {
         return new TextureRegion(assetManager.getTexture(filePath));

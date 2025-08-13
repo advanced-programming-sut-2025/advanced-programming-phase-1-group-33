@@ -57,6 +57,8 @@ public class Player {
     private RelationWithNPC relationWithLeah;
     private RelationWithNPC relationWithRobin;
 
+    private int gold = 5000;
+
     // Graphic fields
     private final Texture playerSheet;
     public final Animation<TextureRegion>[] walkAnimations;
@@ -248,5 +250,13 @@ public class Player {
 
     public void setMarried(boolean married) {
         isMarried = married;
+    }
+
+    public int getGold() {
+        return gold;
+    }
+
+    public void setGold(int gold) {
+        this.gold = gold;
     }
 }
