@@ -10,6 +10,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.yourgame.model.App;
 import com.yourgame.model.Farming.*;
 import com.yourgame.model.Food.BuffManager;
+import com.yourgame.model.Food.Cooking.CookingRecipeManager;
 import com.yourgame.model.Food.Food;
 import com.yourgame.model.Food.FoodType;
 import com.yourgame.model.Item.Inventory.BackpackType;
@@ -56,6 +57,8 @@ public class Player {
     private RelationWithNPC relationWithLeah;
     private RelationWithNPC relationWithRobin;
 
+    private CookingRecipeManager cookingRecipeManager;
+
     private int gold = 5000;
 
     // Graphic fields
@@ -91,6 +94,9 @@ public class Player {
         this.miningSkill = new Skill.MiningSkill();
         this.foragingSkill = new Skill.ForagingSkill();
         this.fishingSkill = new Skill.FishingSkill();
+
+        // Cooking
+        this.cookingRecipeManager = CookingRecipeManager.getInstance();
 
         // Relation
         this.relationWithAbigail = new RelationWithNPC(NPCType.Abigail);
@@ -298,5 +304,9 @@ public class Player {
 
     public void setGold(int gold) {
         this.gold = gold;
+    }
+
+    public CookingRecipeManager getCookingRecipeManager() {
+        return cookingRecipeManager;
     }
 }
