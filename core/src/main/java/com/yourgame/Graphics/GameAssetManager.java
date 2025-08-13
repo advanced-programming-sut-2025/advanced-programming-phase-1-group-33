@@ -37,6 +37,7 @@ public class GameAssetManager extends AssetManager {
     public final String InventoryBarDirectoryPath = "Game/Clock/Inventory/";
 
     private clockUIAssetManager clockManager;
+    private Texture coinTexture;
 
     private Music backgroundMusic;
 
@@ -85,6 +86,8 @@ public class GameAssetManager extends AssetManager {
         skillButton = new TextButton("Skills", MenuAssetManager.getInstance().getSkin(3));
         craftingButton = new TextButton("Crafting", MenuAssetManager.getInstance().getSkin(3));
         backButton = new TextButton("Back", MenuAssetManager.getInstance().getSkin(3));
+
+        coinTexture = new Texture(Gdx.files.internal("Game/Clock/Gold.png"));
     }
 
     public clockUIAssetManager getClockManager() {
@@ -191,5 +194,9 @@ public class GameAssetManager extends AssetManager {
 
     public FoodAnimation getFoodAnimation() {
         return foodAnimation;
+    }
+
+    public Texture getCoinTexture() {
+        return coinTexture;
     }
 }

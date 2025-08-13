@@ -7,12 +7,7 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Stack;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextField;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
@@ -41,6 +36,9 @@ public class HUDManager {
 
     // Buff
     private final Table buffsTable;
+
+    // Coin
+    private Label coinLabel;
 
     // Energy Bar
     private Texture[] energy_bar_textures;
@@ -91,6 +89,7 @@ public class HUDManager {
         hudStage.addActor(createClockBarTable());
         hudStage.addActor(createEnergyBarTable());
         hudStage.addActor(createInventoryBarTable());
+        hudStage.addActor(createCoinTable());
     }
 
     public Table createClockBarTable() {
@@ -174,6 +173,17 @@ public class HUDManager {
         return inventoryContainerTable;
     }
 
+    public Table createCoinTable() {
+        Table coinTable = new Table();
+        coinTable.setFillParent(true);
+        coinTable.top().right().padRight(10).padTop(200);
+
+        coinLabel = new Label(localPlayer.getGold()+"",skin_Nz,"Bold");
+        coinTable.add(coinLabel);
+        coinTable.add(new Image(assetManager.getCoinTexture())).size(64,64).row();
+
+        return coinTable;
+    }
     /**
      * This is the core method to keep the UI in sync with the player's data.
      * Call this whenever the inventory changes, or every frame.
@@ -284,5 +294,9 @@ public class HUDManager {
             Image buffIcon = new Image(assetManager.getTexture(buff.getIconPath()));
             buffsTable.add(buffIcon).padLeft(5);
         }
+    }
+
+    public void updateCoin() {
+        coinLabel.setText(localPlayer.getGold()+ "");
     }
 }

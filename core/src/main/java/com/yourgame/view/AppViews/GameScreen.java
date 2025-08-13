@@ -512,6 +512,7 @@ public class GameScreen extends GameBaseScreen {
         hudManager.updateWeather();
         hudManager.updateSeason();
         hudManager.updateEnergyBar();
+        hudManager.updateCoin();
     }
 
     private void checkFainting() {
