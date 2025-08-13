@@ -132,7 +132,8 @@ public class ClientHandler implements Runnable {
 
         if (user != null) {
             response = new ForgotPasswordResponse(true, user.getSecurityQuestion().getQuestion());
-            responseType = ResponseType.USER_EXIST; 
+            responseType = ResponseType.FAILURE; 
+            
         } else {
             response = new ForgotPasswordResponse(false, "User not found!");
         }

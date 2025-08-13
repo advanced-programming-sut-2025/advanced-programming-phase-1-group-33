@@ -77,8 +77,9 @@ public class SignUpMenuController {
         ForgotPasswordRequest request = new ForgotPasswordRequest(username); 
 
         try {
+            Main.getMain().getConnectionManager().sendRequestAndWaitForResponse(RequestType.USER_EXIST, request, 1000); 
             existingUser = userDAO.loadUser(username);
-        } catch (SQLException e) {
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
 
