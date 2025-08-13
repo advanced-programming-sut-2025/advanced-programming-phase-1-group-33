@@ -10,10 +10,7 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.yourgame.model.Farming.ForagingCrop;
-import com.yourgame.model.Farming.ForagingCropElement;
-import com.yourgame.model.Farming.Tree;
-import com.yourgame.model.Farming.TreeType;
+import com.yourgame.model.Farming.*;
 import com.yourgame.model.Item.Item;
 import com.yourgame.model.Map.Elements.DroppedItem;
 import com.yourgame.model.Map.Elements.Rock;
@@ -25,21 +22,7 @@ import java.util.List;
 import java.util.Random;
 
 public class Map {
-    // Spawning elements
     private static final Random rand = new Random();
-//    private static final Tree oakPrototype;
-//    private static final Tree pinePrototype;
-//    private static final Tree maplePrototype;
-//    static {
-//        oakPrototype = new Tree(TreeType.OakTree, null, 0, 0);
-//        oakPrototype.setMature();
-//
-//        pinePrototype = new Tree(TreeType.PineTree, null, 0, 0);
-//        pinePrototype.setMature();
-//
-//        maplePrototype = new Tree(TreeType.MapleTree, null, 0, 0);
-//        maplePrototype.setMature();
-//    }
 
     protected final String name;
     protected final TiledMap tiledMap;
@@ -341,14 +324,10 @@ public class Map {
     }
 
     public void spawnRandomTrees() {
-//        int oakNumber = 10 + rand.nextInt(10);
-//        spawnObject(oakPrototype, oakNumber);
-//
-//        int mapleNumber = 10 + rand.nextInt(10);
-//        spawnObject(maplePrototype, mapleNumber);
-//
-//        int pineNumber = 10 + rand.nextInt(10);
-//        spawnObject(pinePrototype, pineNumber);
+        int number = 20 + rand.nextInt(10);
+        for (int i = 0; i < number; i++) {
+            spawnObject(ForagingTree.getRandomForaging(), 1);
+        }
     }
 
     public void spawnRandomWoods() {
