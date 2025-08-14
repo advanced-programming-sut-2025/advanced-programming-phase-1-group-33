@@ -9,7 +9,6 @@ This project is a custom implementation inspired by **Stardew Valley**, the popu
 - **Aeen Karimian** – Student ID: `403171146`
 - **Seyyed Sepehr Motevallian** – Student ID: `403106613`  
 - **Amirhossein Mollazeinal** – Student ID: `403106721`
-- **Matin Fadavi** – Student ID: `403106392`
 
 ## 🚀 About the Project
 
