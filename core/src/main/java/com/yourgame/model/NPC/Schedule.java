@@ -1,7 +1,6 @@
 package com.yourgame.model.NPC;
 
 import com.badlogic.gdx.math.Vector2;
-import com.yourgame.model.Map.Tile;
 
 import java.util.TreeMap;
 

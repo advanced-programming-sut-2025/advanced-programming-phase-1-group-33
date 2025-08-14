@@ -24,12 +24,12 @@ import com.yourgame.Graphics.GameAssets.HUDManager;
 import com.yourgame.Graphics.GameAssets.clockUIAssetManager;
 import com.yourgame.controller.GameController.GameController;
 import com.yourgame.model.Food.FoodAnimation;
+import com.yourgame.model.Item.Inventory.Inventory;
 import com.yourgame.model.Map.*;
 import com.yourgame.model.App;
 import com.yourgame.Graphics.GameAssetManager;
 import com.yourgame.model.Map.Store.Store;
-import com.yourgame.model.NPC.NPC;
-import com.yourgame.model.NPC.NPCManager;
+import com.yourgame.model.NPC.*;
 import com.yourgame.model.UserInfo.Player;
 import com.yourgame.model.UserInfo.PlayerState;
 import com.yourgame.model.WeatherAndTime.ThunderManager;
@@ -296,19 +296,14 @@ public class GameScreen extends GameBaseScreen {
         batch.draw(currentFrame, player.playerPosition.x, player.playerPosition.y);
     }
 
-    public void showDialogue(NPC npc) {
+    public void showDialogue(NPC npc, Dialogue dialogue) {
         if (dialogueView != null && dialogueView.hasParent()) {
             return;
         }
 
         paused = true;
 
-        String text = npc.getDialogue(
-            App.getGameState().getGameTime().getSeason(),
-            App.getGameState().getGameTime().getWeather()
-        );
-
-        dialogueView = new DialogueView(npc, text, this);
+        dialogueView = new DialogueView(npc, dialogue.text(), this);
         dialogueView.setPosition(Gdx.graphics.getWidth() / 2f, 100, Align.center);
 
         menuStage.addActor(dialogueView);
@@ -417,8 +412,8 @@ public class GameScreen extends GameBaseScreen {
         if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
             NPC clickedNpc = npcManager.getNpcAt(camera);
             if (clickedNpc != null && clickedNpc.isPlayerInRange()) {
-                showDialogue(clickedNpc);
-                return;
+                Dialogue dialogue = clickedNpc.getDialogue(player);
+                showDialogue(clickedNpc, dialogue);
             }
 
             controller.handleInteraction();
@@ -456,6 +451,12 @@ public class GameScreen extends GameBaseScreen {
             menuStage.addActor(new MapMenuView(MenuAssetManager.getInstance().getSkin(3), menuStage, this));
         }
 
+        handleCheatCode();
+
+        handleInventoryInput();
+    }
+
+    public void handleCheatCode() {
         if (Gdx.input.isKeyJustPressed(Input.Keys.E)) {
             player.consumeEnergy(10);
         }
@@ -480,12 +481,13 @@ public class GameScreen extends GameBaseScreen {
             App.getGameState().getGameTime().advanceMinutes(60);
         }
 
+        // Energy
+        if (Gdx.input.isKeyJustPressed(Input.Keys.P)) {
+            player.setEnergy(player.getMaxEnergy());
+        }
         if (Gdx.input.isKeyJustPressed(Input.Keys.U)) {
             player.faint();
         }
-
-        // --- Inventory Selection Input ---
-        handleInventoryInput();
     }
 
     public void changeMap(Map newMap, String spawnName) {

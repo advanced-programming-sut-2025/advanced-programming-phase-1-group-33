@@ -18,6 +18,7 @@ import com.yourgame.model.Item.Tools.Scythe;
 import com.yourgame.model.Item.Tools.WateringCan;
 import com.yourgame.model.Item.Inventory.Backpack;
 import com.yourgame.model.NPC.NPCType;
+import com.yourgame.model.NPC.QuestManager;
 import com.yourgame.model.NPC.RelationWithNPC;
 import com.yourgame.model.Skill.Skill;
 import com.yourgame.model.WeatherAndTime.TimeObserver;
@@ -52,6 +53,7 @@ public class Player implements TimeObserver {
 
     private Map farmHouse;
 
+    private final QuestManager questManager;
     private int remainingDaysAfterMarriageDenied = 0;
     private boolean isMarried = false;
     private RelationWithNPC relationWithAbigail;
@@ -98,6 +100,7 @@ public class Player implements TimeObserver {
         this.fishingSkill = new Skill.FishingSkill();
 
         // Relation
+        this.questManager = new QuestManager();
         this.relationWithAbigail = new RelationWithNPC(NPCType.Pierre);
         this.relationWithSebastian = new RelationWithNPC(NPCType.Sebastian);
         this.relationWithHarvey = new RelationWithNPC(NPCType.Harvey);
@@ -189,6 +192,10 @@ public class Player implements TimeObserver {
 
     public BuffManager getBuffManager() {
         return buffManager;
+    }
+
+    public QuestManager getQuestManager() {
+        return questManager;
     }
 
     public void faint() {

@@ -11,4 +11,8 @@ public record Dialogue(
     public Dialogue(String text) {
         this(text, List.of(), List.of(), 0, false);
     }
+
+    public Dialogue(String text, boolean isQuestDialogue) {
+        this(text, List.of(), List.of(), 0, isQuestDialogue);
+    }
 }

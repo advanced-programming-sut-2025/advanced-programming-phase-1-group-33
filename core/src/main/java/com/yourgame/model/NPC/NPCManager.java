@@ -16,10 +16,8 @@ import com.yourgame.model.UserInfo.Player;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.yourgame.model.Map.Tile.TILE_SIZE;
-
 public class NPCManager {
-    private static final float INTERACTION_RADIUS = 48f; // 3 tiles
+    private static final float INTERACTION_RADIUS = 32f;
 
     private final List<NPC> npcs;
     private final Texture dialogueReadyEmote;

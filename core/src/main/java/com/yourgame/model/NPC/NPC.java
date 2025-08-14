@@ -7,7 +7,9 @@ import com.badlogic.gdx.math.Vector2;
 import com.yourgame.Graphics.GameAssetManager;
 import com.yourgame.controller.GameController.PathFinder;
 import com.yourgame.model.App;
+import com.yourgame.model.Item.Inventory.Inventory;
 import com.yourgame.model.Map.Map;
+import com.yourgame.model.UserInfo.Player;
 import com.yourgame.model.WeatherAndTime.Season;
 import com.yourgame.model.WeatherAndTime.Weather;
 
@@ -114,11 +116,47 @@ public class NPC {
         }
     }
 
-    /**
-     * The core logic for selecting the most appropriate dialogue.
-     * It iterates through all possible dialogues and picks the best match.
-     */
-    public String getDialogue(Season currentSeason, Weather currentWeather) {
+    public Dialogue getDialogue(Player player) {
+        QuestManager questManager = player.getQuestManager();
+        Inventory playerInventory = player.getBackpack().getInventory();
+
+        // 1. Check if the player can COMPLETE an active quest for this NPC.
+        Quest activeQuest = questManager.getActiveQuestByGiver(this.type);
+        if (activeQuest != null && questManager.canCompleteQuest(activeQuest, playerInventory)) {
+            questManager.completeQuest(activeQuest, playerInventory);
+            return activeQuest.endDialogue();
+        }
+
+        // 2. Check if this NPC has a new quest to offer the player.
+        Quest potentialQuest = findAvailableQuestForPlayer(player);
+        if (potentialQuest != null) {
+            questManager.acceptQuest(potentialQuest);
+            return potentialQuest.startDialogue();
+        }
+
+        // 3. If no quest dialogue, find the best regular dialogue.
+        return findBestRegularDialogue(player);
+    }
+
+    private Quest findAvailableQuestForPlayer(Player player) {
+        for (Quest quest : QuestDatabase.QUESTS.values()) {
+            // Check if this NPC is the giver and the player hasn't started or finished it
+            if (quest.questGiver() == this.type &&
+                !player.getQuestManager().isQuestActive(quest.questId()) &&
+                !player.getQuestManager().isQuestCompleted(quest.questId())) {
+
+                // TODO: Add more conditions here, e.g.:
+                // if (player.getFriendshipWith(this.type) >= quest.minFriendship())
+                return quest;
+            }
+        }
+        return null;
+    }
+
+    private Dialogue findBestRegularDialogue(Player player) {
+        Season currentSeason = App.getGameState().getGameTime().getSeason();
+        Weather currentWeather = App.getGameState().getGameTime().getWeather();
+
         List<Dialogue> possibleDialogues = type.getDialogues();
         Dialogue bestMatch = null;
 
@@ -135,7 +173,7 @@ public class NPC {
             }
         }
 
-        return bestMatch != null ? bestMatch.text() : "...";
+        return bestMatch != null ? bestMatch : new Dialogue("...");
     }
 
     // Getters and Setters

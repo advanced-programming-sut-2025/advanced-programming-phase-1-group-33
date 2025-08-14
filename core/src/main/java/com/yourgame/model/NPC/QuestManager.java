@@ -46,4 +46,17 @@ public class QuestManager {
     public boolean isQuestActive(String questId) {
         return activeQuests.containsKey(questId);
     }
+
+    public boolean isQuestCompleted(String questId) {
+        return completedQuests.containsKey(questId);
+    }
+
+    public Quest getActiveQuestByGiver(NPCType npcType) {
+        for (Quest quest : activeQuests.values()) {
+            if (quest.questGiver() == npcType) {
+                return quest;
+            }
+        }
+        return null;
+    }
 }
