@@ -17,4 +17,8 @@ public class CraftedItem extends Item {
         String path = "Game/Craft/" + type.getName() + ".png";
         return new TextureRegion(assetManager.getTexture(path));
     }
+
+    public CraftedItemType getType() {
+        return type;
+    }
 }

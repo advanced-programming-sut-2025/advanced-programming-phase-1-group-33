@@ -2,30 +2,58 @@ package com.yourgame.view.GameViews;
 
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.Window;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.yourgame.Graphics.GameAssetManager;
+import com.yourgame.model.Crafting.CraftingRecipe;
+import com.yourgame.model.Crafting.CraftingRecipeSource;
+import com.yourgame.model.Food.Cooking.Ingredient;
+import com.yourgame.model.Item.Inventory.InventorySlot;
+import com.yourgame.model.UserInfo.Player;
 import com.yourgame.view.AppViews.GameScreen;
 
+import java.util.ArrayList;
+
 public class CraftingMenuView extends Window {
+    private final ArrayList<CraftingRecipe> craftingRecipes;
+    private final Skin skin;
+    private final GameScreen gameScreen;
+    private final Stage stage;
+
     public CraftingMenuView(Skin skin, Stage stage, GameScreen gameScreen) {
         super("Crafting", skin);
+        craftingRecipes = gameScreen.getPlayer().getCraftingRecipeManager().getCraftingRecipes();
+        this.stage = stage;
+        this.gameScreen = gameScreen;
+        this.skin = skin;
 
-        setSize(1200, 900);
+        setSize(1400, 900);
         setModal(true);
         setMovable(false);
         pad(20f);
 
-        Label label = new Label("Your Craftings Go Here", skin);
+        Table table = new Table();
+        table.defaults().pad(20f);
+
         TextButton backButton = GameAssetManager.getInstance().getButton("Back");
 
-        add(label).row();
-        add(backButton).row();
+        // Create a Table for the scroll pane content
+        Table recipeTable = new Table();
+        recipeTable.top().center();
+        initTable(recipeTable);
 
-        setPosition((stage.getWidth() - getWidth())/2f, (stage.getHeight() - getHeight())/2f);
+
+        // Scroll pane
+        ScrollPane scrollPane = new ScrollPane(recipeTable, skin);
+        scrollPane.setFadeScrollBars(false);
+        scrollPane.setScrollingDisabled(true, false);
+
+        table.add(scrollPane).expandX().fillX().row();
+        table.add(backButton).colspan(5).center();
+
+        add(table);
+
+        setPosition((stage.getWidth() - getWidth()) / 2f, (stage.getHeight() - getHeight()) / 2f);
 
         backButton.addListener(new ClickListener() {
             @Override
@@ -34,5 +62,111 @@ public class CraftingMenuView extends Window {
                 stage.addActor(new MainMenuView(skin, stage, gameScreen));
             }
         });
+    }
+
+    private void initTable(Table recipeTable) {
+        // Add headers
+        recipeTable.add(new Label("Icon", skin, "Bold")).pad(10);
+        recipeTable.add(new Label("Item", skin, "Bold")).pad(10);
+        recipeTable.add(new Label("Ingredients", skin, "Bold")).pad(10);
+        recipeTable.add(new Label("Available", skin, "Bold")).pad(10);
+        recipeTable.add(new Label("Action", skin,"Bold")).pad(10);
+        recipeTable.row();
+
+        for (CraftingRecipe recipe : craftingRecipes) {
+            Image itemIcon = new Image(recipe.getResult().getTextureRegion(GameAssetManager.getInstance()));
+
+            Label itemName = new Label(recipe.getResult().getType().getName(), skin);
+
+            StringBuilder ingredientText = new StringBuilder();
+            recipe.getIngredients().forEach(ingredient ->
+                ingredientText.append(ingredient.getItem().getName())
+                    .append(" x")
+                    .append(ingredient.getQuantity())
+                    .append("\n")
+            );
+            Label ingredientsLabel = new Label(ingredientText.toString(), skin);
+
+            boolean available = isAvailable(recipe.getSource(),gameScreen.getPlayer());
+            Label availabilityLabel = new Label(available ? "Available" : "Locked", skin);
+
+            Label cookLabel = new Label("Craft", skin, "BoldImpact");
+            cookLabel.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    if(!available) {
+                        gameScreen.showMessage("error","Recipe is locked!",skin,0,200,stage);
+                    }
+                    if (available) {
+                        if(haveEnoughIngredients(recipe,gameScreen.getPlayer())){
+                            if(gameScreen.getPlayer().getBackpack().getInventory().addItem(recipe.getResult(), 1)){
+                                gameScreen.showMessage("popUp",recipe.getResult().getName() + " crafted successfully!",skin,0,200,stage);
+                                updateInventory(recipe,gameScreen.getPlayer());
+                            }
+                            else{
+                                gameScreen.showMessage("error","Not enough space!",skin,0,200,stage);
+
+                            }
+                        }
+                        else{
+                            gameScreen.showMessage("error","Not enough ingredients!",skin,0,200,stage);
+                        }
+                    }
+                }
+            });
+
+            // Add row to table
+            recipeTable.add(itemIcon).size(48, 64).padLeft(20);
+            recipeTable.add(itemName).pad(5);
+            recipeTable.add(ingredientsLabel).pad(5);
+            recipeTable.add(availabilityLabel).pad(5);
+            recipeTable.add(cookLabel).padRight(20);
+            recipeTable.row();
+        }
+    }
+
+    private boolean isAvailable(CraftingRecipeSource source, Player player){
+        if(source.isStarter())
+            return true;
+        if(source.isBought())
+            return true;
+        if((source.getFarmingSkillLevelNeeded() > 0) || (source.getMiningSkillLevelNeeded() > 0) || (source.getForagingSkillLevelNeeded() > 0)) {
+            if ((player.getFarmingLevel() >= source.getFarmingSkillLevelNeeded())
+                && (player.getMiningLevel() >= source.getMiningSkillLevelNeeded())
+                && (player.getForagingLevel() >= source.getForagingSkillLevelNeeded()))
+                return true;
+        }
+        return false;
+    }
+
+    private boolean haveEnoughIngredients(CraftingRecipe recipe, Player player){
+        for(Ingredient ingredient : recipe.getIngredients()){
+            boolean found = false;
+            for(InventorySlot slot : player.getBackpack().getInventory().getSlots()){
+                if(ingredient.getItem().getName().equals(slot.item().getName())){
+                    found = true;
+                    if(ingredient.getQuantity() > slot.quantity()){
+                        return false;
+                    }
+                }
+            }
+            if(!found){
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private void updateInventory(CraftingRecipe recipe,Player player){
+        for(Ingredient ingredient : recipe.getIngredients()){
+            for(InventorySlot slot : player.getBackpack().getInventory().getSlots()){
+                if(ingredient.getItem().getName().equals(slot.item().getName())){
+                    slot.reduceQuantity(ingredient.getQuantity());
+                    if(slot.quantity() == 0){
+                        player.getBackpack().getInventory().getSlots().remove(slot);
+                    }
+                }
+            }
+        }
     }
 }
