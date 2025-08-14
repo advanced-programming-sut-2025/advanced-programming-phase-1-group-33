@@ -458,7 +458,7 @@ public class GameScreen extends GameBaseScreen {
         if (Gdx.input.isKeyJustPressed(Input.Keys.M)) {
             paused = true;
             Gdx.input.setInputProcessor(new InputMultiplexer(HUDStage, menuStage));
-            menuStage.addActor(new MapMenuView(MenuAssetManager.getInstance().getSkin(3), menuStage, this));
+            menuStage.addActor(new MapMenuView(menuStage, this, player, controller.getCurrentMap()));
         }
 
         handleCheatCode();
@@ -631,5 +631,9 @@ public class GameScreen extends GameBaseScreen {
 
     public HUDManager getHUDManager() {
         return hudManager;
+    }
+
+    public GameController getGameController() {
+        return controller;
     }
 }

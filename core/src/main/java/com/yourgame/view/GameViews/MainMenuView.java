@@ -98,7 +98,7 @@ public class MainMenuView extends Window {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 stage.clear();
-                stage.addActor(new MapMenuView(MenuAssetManager.getInstance().getSkin(3), stage, gameScreen));
+                stage.addActor(new MapMenuView(stage, gameScreen, gameScreen.getPlayer(), gameScreen.getController().getCurrentMap()));
             }
         });
 
