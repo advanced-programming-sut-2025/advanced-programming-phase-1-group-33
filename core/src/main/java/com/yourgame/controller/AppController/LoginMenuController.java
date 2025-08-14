@@ -77,7 +77,6 @@ public class LoginMenuController extends Controller {
         return new Result(true, "Login successful!");
     }
 
-
     public Result handleForgetPasswordButton() {
         String username = view.getUserInfo("username");
         if (username.isEmpty())
@@ -86,6 +85,15 @@ public class LoginMenuController extends Controller {
         ForgotPasswordRequest request = new ForgotPasswordRequest(username);
         Main.getMain().getConnectionManager().sendDataToServer(RequestType.FORGOT_PASSWORD, request);
 
+        if (!user_exist(username)){
+            return new Result(false, "User not Exist"); 
+
+        }
+
+
+        loggedInUser = getUser(username); 
+
+        
         try {
             ResponseHolder holder = Main.getMain().getResponseHolder();
             Object responseObject = holder.getResponse(5000);
@@ -103,8 +111,10 @@ public class LoginMenuController extends Controller {
     }
 
     public Result handleFindButton(String answer) {
-        if (answer.isEmpty())
+        if (answer.isEmpty()) {
+
             return new Result(false, "Answer field is empty!");
+        }
         String username = view.getUserInfo("username");
 
         SecurityAnswerRequest request = new SecurityAnswerRequest(username, answer);
@@ -126,6 +136,19 @@ public class LoginMenuController extends Controller {
         }
     }
 
+    // public Result handleFindButton(String answer){
+    // if(answer.isEmpty()){
+    // return new Result(false, "Answer field is empty!");
+    // }
+
+    // else if(!loggedInUser.getAnswer().equals(answer)){
+    // return new Result(false, "Wrong answer!");
+    // }
+
+    // else {
+    // return new Result(true, loggedInUser.getPassword());
+    // }
+    // }
     private User getUser(String username) {
         LoginRequest request = new LoginRequest(username, "pass");
         Object response = null;
