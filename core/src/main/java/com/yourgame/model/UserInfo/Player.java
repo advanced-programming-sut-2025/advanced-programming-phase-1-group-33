@@ -13,6 +13,7 @@ import com.yourgame.model.Food.Cooking.CookingRecipeManager;
 import com.yourgame.model.Food.Food;
 import com.yourgame.model.Food.FoodType;
 import com.yourgame.model.Item.Inventory.BackpackType;
+import com.yourgame.model.Item.Resource;
 import com.yourgame.model.Item.Tools.Axe;
 import com.yourgame.model.Item.Tools.Hoe;
 import com.yourgame.model.Item.Tools.Pickaxe;
@@ -20,6 +21,7 @@ import com.yourgame.model.Item.Tools.Scythe;
 import com.yourgame.model.Item.Tools.WateringCan;
 import com.yourgame.model.Item.Inventory.Backpack;
 import com.yourgame.model.NPC.QuestManager;
+import com.yourgame.model.Resource.Fiber;
 import com.yourgame.model.Skill.Skill;
 import com.yourgame.model.WeatherAndTime.TimeObserver;
 import com.yourgame.model.WeatherAndTime.TimeSystem;
@@ -93,6 +95,7 @@ public class Player implements TimeObserver {
         this.backpack.addItem(new MixedSeed(), 3);
         this.backpack.addItem(new Food(FoodType.RedPlate), 1);
         this.backpack.addItem(new Food(FoodType.Bread), 2);
+        this.backpack.addItem(new Fiber(),10);
 
         // Skill
         this.farmingSkill = new Skill.FarmingSkill();

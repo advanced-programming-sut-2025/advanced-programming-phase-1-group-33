@@ -23,12 +23,12 @@ public class StardropSaloon extends Store implements TimeObserver {
     @Override
     public void loadInventory() {
         inventory = new ArrayList<>();
-        //inventory.add(new InventorySlot(new ArtisanProduct(ArtisanProductType.Beer),-1));
+        inventory.add(new InventorySlot(new ArtisanProduct(ArtisanProductType.Beer),-1));
         inventory.add(new InventorySlot(new Food(FoodType.Salad),-1));
         inventory.add(new InventorySlot(new Food(FoodType.Bread),-1));
         inventory.add(new InventorySlot(new Food(FoodType.Spaghetti),-1));
         inventory.add(new InventorySlot(new Food(FoodType.Pizza),-1));
-        //inventory.add(new InventorySlot(new ArtisanProduct(ArtisanProductType.Coffee),-1));
+        inventory.add(new InventorySlot(new ArtisanProduct(ArtisanProductType.Coffee),-1));
         inventory.add(new InventorySlot(new StardropSaloonItem("HashBrowns Recipe", Item.ItemType.RECIPE
         ,50,false),1));
         inventory.add(new InventorySlot(new StardropSaloonItem("Omelet Recipe", Item.ItemType.RECIPE

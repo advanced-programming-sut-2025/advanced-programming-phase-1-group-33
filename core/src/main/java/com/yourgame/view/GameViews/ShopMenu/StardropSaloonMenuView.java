@@ -67,9 +67,11 @@ public class StardropSaloonMenuView extends Window {
         closeButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                stage.clear();
-                gameScreen.closeMenu();
-                remove();
+                if(currentSelectedItem == null) {
+                    stage.clear();
+                    gameScreen.closeMenu();
+                    remove();
+                }
             }
         });
 

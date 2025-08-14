@@ -4,7 +4,10 @@ import java.util.ArrayList;
 
 import com.yourgame.model.Farming.Seeds;
 import com.yourgame.model.Farming.TreeSource;
+import com.yourgame.model.Item.Inventory.InventorySlot;
+import com.yourgame.model.Item.Item;
 import com.yourgame.model.Map.Store.ShopItem;
+import com.yourgame.model.Map.Store.StardropSaloon.StardropSaloonItem;
 import com.yourgame.model.Map.Store.Store;
 import com.yourgame.model.WeatherAndTime.TimeObserver;
 import com.yourgame.model.WeatherAndTime.TimeSystem;
@@ -28,6 +31,10 @@ public class PierreGeneralStore extends Store implements TimeObserver {
 //        inventory.add(new PierreGeneralStoreBackPackUpgrade(
 //            "Deluxe Pack", Item.ItemType.BACKPACK, 10000, true, 1, "Game/Map/Buildings/PierreGeneralStore/36_Backpack.png", BackpackType.Deluxe
 //        ));
+
+        // Recipes
+        inventory.add(new ShopItem(new PierreGeneralStoreItem("Dehydrator Recipe", Item.ItemType.RECIPE, 10000, false), 1));
+        inventory.add(new ShopItem(new PierreGeneralStoreItem("GrassStarter Recipe", Item.ItemType.RECIPE, 1000, false), 1));
 
         // Saplings
         inventory.add(new ShopItem(new TreeSource.TreeSourceItem(TreeSource.Apple_Sapling), -1));

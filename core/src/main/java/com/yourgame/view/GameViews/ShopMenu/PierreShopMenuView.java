@@ -11,11 +11,14 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.yourgame.Graphics.GameAssetManager;
 import com.yourgame.Graphics.MenuAssetManager;
 import com.yourgame.model.App;
+import com.yourgame.model.Crafting.CraftingRecipe;
 import com.yourgame.model.Farming.Seeds;
 import com.yourgame.model.Farming.TreeSource;
+import com.yourgame.model.Food.Cooking.CookingRecipe;
 import com.yourgame.model.Item.Item;
 import com.yourgame.model.Map.Store.PierreGeneralStore.*;
 import com.yourgame.model.Map.Store.ShopItem;
+import com.yourgame.model.Map.Store.StardropSaloon.StardropSaloonItem;
 import com.yourgame.model.WeatherAndTime.Season;
 import com.yourgame.view.AppViews.GameScreen;
 
@@ -72,9 +75,11 @@ public class PierreShopMenuView extends Window {
         closeButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                stage.clear();
-                gameScreen.closeMenu();
-                remove();
+                if(currentSelectedItem == null) {
+                    stage.clear();
+                    gameScreen.closeMenu();
+                    remove();
+                }
             }
         });
 
@@ -139,8 +144,7 @@ public class PierreShopMenuView extends Window {
         // Add items by category & season
         for (ShopItem shopItem : items) {
             if (shopItem.getItem() instanceof TreeSource.TreeSourceItem
-                // || shopItem instanceof PierreGeneralStoreBackPackUpgrade
-            ) {
+                 || shopItem.getItem() instanceof PierreGeneralStoreItem) {
                 addItem(table, shopItem.getItem().getTextureRegion(GameAssetManager.getInstance()),
                         shopItem.getItem().getName(), shopItem.getRemainingQuantity(),
                         shopItem.getItem().getValue(), -1, shopItem);
@@ -290,6 +294,30 @@ public class PierreShopMenuView extends Window {
         if (gameScreen.getPlayer().getGold() < currentSelectedPrice) {
             gameScreen.showMessage("error", "Not enough gold", skin, 0, 200, stage);
             return;
+        }
+
+        // Check if already have this recipe / Active recipe
+        if (currentSelectedItem.getItem() instanceof PierreGeneralStoreItem){
+            for(CraftingRecipe recipe : gameScreen.getPlayer().getCraftingRecipeManager().getCraftingRecipes()){
+                if((recipe.getResult().getName() + " Recipe").equals(currentSelectedItem.getItem().getName())){
+                    if(recipe.getSource().isBought()){
+                        gameScreen.showMessage("error", "You already have this recipe!", skin, 0, 200, stage);
+                        return;
+                    }
+                    else{
+                        recipe.getSource().setBought(true);
+                        gameScreen.getPlayer().setGold(gameScreen.getPlayer().getGold()-currentSelectedPrice);
+                        gameScreen.getHUDManager().updateCoin();
+                        gameScreen.showMessage("popUp", currentSelectedItem.getItem().getName() + " activated !", skin, 0, 200, stage);
+                        currentSelectedQuantity = 0;
+                        currentSelectedItem = null;
+                        currentSelectedPrice = 0;
+                        purchasePreviewTable.clear();
+                        refreshGoodsList();
+                        return;
+                    }
+                }
+            }
         }
 
         if(!gameScreen.getPlayer().getBackpack().getInventory().addItem(currentSelectedItem.getItem(),currentSelectedQuantity)) {

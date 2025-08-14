@@ -21,4 +21,8 @@ public class CraftedItem extends Item {
     public CraftedItemType getType() {
         return type;
     }
+
+    public void use(){
+
+    }
 }
