@@ -22,6 +22,7 @@ import com.yourgame.network.protocol.Auth.SecurityAnswerResponse;
 import com.yourgame.network.protocol.Auth.SignupRequest;
 import com.yourgame.network.protocol.Auth.UserInfoDTO;
 import com.yourgame.server.services.UserService;
+import com.yourgame.server.services.AuthHandler.LoginRequestHandler;
 import com.yourgame.server.services.AuthHandler.SignUpRequestHandler;
 
 // This class handles communication for a single client in a dedicated thread.
@@ -81,7 +82,9 @@ public class ClientHandler implements Runnable {
                     SignupRequest signupRequest = gson.fromJson(payload, SignupRequest.class);
                     new SignUpRequestHandler().handle(this, signupRequest);
                     break;
-
+                case GET_USER_PASSWORD:
+                    LoginRequest get_PasswordRequest = gson.fromJson(payload, LoginRequest.class);
+                    new LoginRequestHandler().handle(this, get_PasswordRequest);
                 case FORGOT_PASSWORD:
                     ForgotPasswordRequest forgotRequest = gson.fromJson(payload, ForgotPasswordRequest.class);
                     handleForgotPasswordRequest(forgotRequest);

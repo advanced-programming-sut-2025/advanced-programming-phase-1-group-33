@@ -76,6 +76,7 @@ public class Client implements Runnable {
             switch (wrapper.getType()) {
                 case LOGIN_SUCCESS:
                 case LOGIN_FAILURE:
+                    response = gson.fromJson(wrapper.getPayload(), getResponseType(wrapper.getType())); 
                 case USER_EXIST_SIGNUP: 
                 case USER_NOTEXIST_SIGNUP:
                 case SIGNUP_SUCCESS:

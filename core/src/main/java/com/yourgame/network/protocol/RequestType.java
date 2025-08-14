@@ -5,5 +5,6 @@ public enum RequestType {
     USER_EXIST, 
     SIGNUP,
     FORGOT_PASSWORD,
-    SECURITY_ANSWER
+    SECURITY_ANSWER, 
+    GET_USER_PASSWORD
 }

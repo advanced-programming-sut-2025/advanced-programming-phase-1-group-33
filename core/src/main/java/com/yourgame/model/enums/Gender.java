@@ -14,9 +14,9 @@ public enum Gender {
         return gender;
     }
 
-    public Gender getGenderEnum(String string) {
-        for(Gender gender : Gender.values()) {
-            if(gender.getGenderString().equals(string)) {
+    public static Gender getGenderEnum(String string) {
+        for (Gender gender : Gender.values()) {
+            if (gender.getGenderString().equals(string)) {
                 return gender;
             }
         }

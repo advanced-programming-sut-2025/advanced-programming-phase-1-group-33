@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.yourgame.model.enums.Avatar;
 import com.yourgame.model.enums.Gender;
 import com.yourgame.model.enums.SecurityQuestion;
+import com.yourgame.network.protocol.Auth.UserInfoDTO;
 
 public class User {
     private String Username;
@@ -18,9 +19,23 @@ public class User {
 
     private String answer;
 
-    public User(){}
+    public User() {
+    }
 
-    public User(String Username, String Password, String Email, String Nickname, Gender Gender, SecurityQuestion question, String answer, Avatar Avatar) {
+    public User(UserInfoDTO user) {
+        this.Username = user.getUsername();
+        this.Password = user.getPassword();
+        this.Email = user.getEmail();
+        this.Nickname = user.getNickname();
+        this.Gender = Gender.getGenderEnum(user.getGender());
+        this.question = SecurityQuestion.getQuestion(user.getQuestion());
+        this.answer = user.getAnswer();
+        this.Avatar = user.getAvatarENUM();
+
+    }
+
+    public User(String Username, String Password, String Email, String Nickname, Gender Gender,
+            SecurityQuestion question, String answer, Avatar Avatar) {
         this.Username = Username;
         this.Password = Password;
         this.Email = Email;

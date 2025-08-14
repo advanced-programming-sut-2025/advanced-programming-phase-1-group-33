@@ -55,78 +55,28 @@ public class LoginMenuController extends Controller {
         if (user_exist(username) == false) {
             return new Result(false, "User not found!");
         }
-
-        try {
-
-            ResponseHolder holder = Main.getMain().getResponseHolder();
-            Object responseObject = holder.getResponse(10000); // ۱۰ ثانیه مهلت
-
-            if (responseObject == null) {
-                return new Result(false, "Error: No response from server (Timeout).");
-            }
-
-            if (responseObject instanceof LoginResponse) {
-                LoginResponse response = (LoginResponse) responseObject;
-                if (response.isSuccess()) {
-                    // موفقیت‌آمیز
-                    App.setCurrentUserFromDTO(response.getUser());
-                    if (isStayLoggedInActive) {
-                        try {
-
-                            HandleStayedLoggedIn.getInstance().addUser(App.getCurrentUser());
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                    App.setCurrentMenu(MenuTypes.MainMenu);
-                    Main.getMain().getScreen().dispose();
-                    Main.getMain().setScreen(new MainMenuView());
-                }
-                return new Result(response.isSuccess(), response.getMessage());
-            } else {
-                return new Result(false, "Error: Received an unknown response from server.");
-            }
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-            return new Result(false, "Error: Login process was interrupted.");
+        String userPassword = get_user_password(username);
+        System.out.println(userPassword);
+        if (!userPassword.equals(password)) {
+            return new Result(false, "Wrong password!");
         }
 
+        User user = getUser(username);
+        if (isStayLoggedInActive) {
+
+            try {
+                HandleStayedLoggedIn.getInstance().addUser(user);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        App.setCurrentUser(user);
+        App.setCurrentMenu(MenuTypes.MainMenu);
+        Main.getMain().getScreen().dispose();
+        Main.getMain().setScreen(new MainMenuView());
+        return new Result(true, "Login successful!");
     }
 
-    // public Result handleLoginButton(boolean isStayLoggedInActive){
-    // String username = view.getUserInfo("username");
-    // String password = view.getUserInfo("password");
-
-    // if(username.isEmpty())
-    // return new Result(false, "Username is required!");
-    // else if(password.isEmpty())
-    // return new Result(false, "Password is required!");
-
-    // try {
-    // User user = App.getUserDAO().loadUser(username);
-    // if(user == null)
-    // return new Result(false, "User not found!");
-    // else{
-    // if(!user.getPassword().equals(password)){
-    // return new Result(false, "Wrong password!");
-    // }
-    // else if(isStayLoggedInActive) {
-    // try {
-    // HandleStayedLoggedIn.getInstance().addUser(user);
-    // } catch (IOException e) {
-    // throw new RuntimeException(e);
-    // }
-    // }
-    // App.setCurrentUser(user);
-    // App.setCurrentMenu(MenuTypes.MainMenu);
-    // Main.getMain().getScreen().dispose();
-    // Main.getMain().setScreen(new MainMenuView());
-    // return new Result(true, "Login successful!");
-    // }
-    // } catch (SQLException e) {
-    // throw new RuntimeException(e);
-    // }
-    // }
 
     public Result handleForgetPasswordButton() {
         String username = view.getUserInfo("username");
@@ -174,6 +124,110 @@ public class LoginMenuController extends Controller {
         } catch (InterruptedException e) {
             return new Result(false, "Error: Process interrupted.");
         }
+    }
+
+    private User getUser(String username) {
+        LoginRequest request = new LoginRequest(username, "pass");
+        Object response = null;
+
+        try {
+            response = Main.getMain().getConnectionManager()
+                    .sendRequestAndWaitForResponse(RequestType.GET_USER_PASSWORD, request, 1000);
+            if (response instanceof LoginResponse) {
+                LoginResponse loginResponse = (LoginResponse) response;
+
+                if (loginResponse.isSuccess()) {
+                    System.out.println(loginResponse.getUser().getGender());
+                    return new User(loginResponse.getUser());
+                } else {
+                    return null;
+                }
+            }
+
+        } catch (Exception e) {
+            System.out.println(e);
+
+        }
+
+        return null;
+    }
+
+    private String get_user_password(String username) {
+        LoginRequest request = new LoginRequest(username, "pass");
+        Object response = null;
+
+        try {
+            response = Main.getMain().getConnectionManager()
+                    .sendRequestAndWaitForResponse(RequestType.GET_USER_PASSWORD, request, 1000);
+            System.out.println(response);
+            if (response instanceof LoginResponse) {
+                LoginResponse loginResponse = (LoginResponse) response;
+
+                if (loginResponse.isSuccess()) {
+                    return loginResponse.getUser().getPassword();
+                } else {
+                    return loginResponse.getMessage();
+                }
+            }
+
+        } catch (Exception e) {
+            System.out.println(e);
+
+        }
+
+        return null;
+    }
+
+    private String get_user_Answer(String username) {
+        LoginRequest request = new LoginRequest(username, "pass");
+        Object response = null;
+
+        try {
+            response = Main.getMain().getConnectionManager()
+                    .sendRequestAndWaitForResponse(RequestType.GET_USER_PASSWORD, request, 1000);
+            System.out.println(response);
+            if (response instanceof LoginResponse) {
+                LoginResponse loginResponse = (LoginResponse) response;
+
+                if (loginResponse.isSuccess()) {
+                    return loginResponse.getUser().getAnswer();
+                } else {
+                    return loginResponse.getMessage();
+                }
+            }
+
+        } catch (Exception e) {
+            System.out.println(e);
+
+        }
+
+        return null;
+    }
+
+    private String get_user_sequrity(String username) {
+        LoginRequest request = new LoginRequest(username, "pass");
+        Object response = null;
+
+        try {
+            response = Main.getMain().getConnectionManager()
+                    .sendRequestAndWaitForResponse(RequestType.GET_USER_PASSWORD, request, 1000);
+            System.out.println(response);
+            if (response instanceof LoginResponse) {
+                LoginResponse loginResponse = (LoginResponse) response;
+
+                if (loginResponse.isSuccess()) {
+                    return loginResponse.getUser().getQuestion();
+                } else {
+                    return loginResponse.getMessage();
+                }
+            }
+
+        } catch (Exception e) {
+            System.out.println(e);
+
+        }
+
+        return null;
     }
 
     private static boolean user_exist(String username) {

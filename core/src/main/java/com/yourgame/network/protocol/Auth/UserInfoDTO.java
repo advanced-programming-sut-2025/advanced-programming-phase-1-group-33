@@ -1,5 +1,8 @@
 package com.yourgame.network.protocol.Auth;
 
+import com.yourgame.model.UserInfo.User;
+import com.yourgame.model.enums.Avatar;
+
 // A "safe" object to send user data without exposing sensitive info like the password or security answer.
 public class UserInfoDTO {
     private final String username;
@@ -11,6 +14,17 @@ public class UserInfoDTO {
     private final String answer;
 
     private final String avatarName;
+
+    public UserInfoDTO(User user) {
+        this.username = user.getUsername();
+        this.password = user.getPassword();
+        this.nickname = user.getNickname();
+        this.email = user.getEmail();
+        this.gender = user.getGender();
+        this.avatarName = user.getAvatar().getName();
+        this.question = user.getSecurityQuestion().getQuestion();
+        this.answer = user.getAnswer();
+    }
 
     public UserInfoDTO(String username, String password, String nickname, String email, String gender,
             String avatarName, String question, String answer) {
@@ -51,6 +65,10 @@ public class UserInfoDTO {
 
     public String getAvatarName() {
         return avatarName;
+    }
+
+    public Avatar getAvatarENUM() {
+        return Avatar.fromString(this.avatarName);
     }
 
     public String getAnswer() {

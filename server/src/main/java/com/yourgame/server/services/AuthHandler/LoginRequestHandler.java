@@ -1,7 +1,10 @@
 package com.yourgame.server.services.AuthHandler;
 
+import com.yourgame.model.UserInfo.User;
+import com.yourgame.network.protocol.ResponseType;
 import com.yourgame.network.protocol.Auth.LoginRequest;
 import com.yourgame.network.protocol.Auth.LoginResponse;
+import com.yourgame.network.protocol.Auth.UserInfoDTO;
 import com.yourgame.server.ClientHandler;
 import com.yourgame.server.services.RequestHandler;
 import com.yourgame.server.services.UserService;
@@ -11,14 +14,20 @@ public class LoginRequestHandler implements RequestHandler<LoginRequest> {
 
     @Override
     public void handle(ClientHandler client, LoginRequest request) {
-                // boolean success = userService.loginUser(request.getUsername(), request.getPassword());
-                // LoginResponse response;
-                // if (success) {
-                //     // ... create successful response DTO
-                //     response = new LoginResponse(true, "Welcome!", dto);
-                // } else {
-                //     response = new LoginResponse(false, "Invalid credentials.", null);
-                // }
-                // client.sendResponse(response); // Method in ClientHandler to send data back
+
+        User the_user = userService.findUserForPasswordRecovery(request.getUsername());
+
+        ResponseType responseType = ResponseType.FAILURE;
+        LoginResponse response;
+        if (the_user != null) {
+            responseType = ResponseType.LOGIN_SUCCESS;
+            response = new LoginResponse(true, the_user.getPassword(), new UserInfoDTO(the_user));
+        } else {
+            responseType = ResponseType.LOGIN_FAILURE;
+            response = new LoginResponse(false, "", new UserInfoDTO(the_user));
+        }
+
+        client.sendResponse(responseType, response);
+
     }
 }
