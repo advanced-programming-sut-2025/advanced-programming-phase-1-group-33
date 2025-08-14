@@ -151,6 +151,8 @@ public class SignUpMenuController {
             }
         }
 
+        return new Result(true, "Signed up Canceld...");
+
     }
 
     private static String validatePassword(String password) {
