@@ -22,10 +22,11 @@ public class PreGameMenuView extends MenuBaseScreen {
     public void show() {
         Table table = new Table();
         table.setFillParent(true);
+        table.bottom();
 
-        table.add(playButton).width(200).pad(10).center().row();
-        table.add(lobbyButton).width(200).pad(10).center().row();
-        table.add(exitButton).width(200).pad(10).center().row();
+        table.add(playButton).width(200).pad(10);
+        table.add(lobbyButton).width(200).pad(10);
+        table.add(exitButton).width(200).pad(10).row();
 
         playButton.addListener(new ChangeListener() {
             @Override

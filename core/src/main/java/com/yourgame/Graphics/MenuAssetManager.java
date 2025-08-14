@@ -221,7 +221,7 @@ public class MenuAssetManager {
         switch (type) {
             case MainMenu -> {return backgrounds[0];}
             case SignupMenu,LoginMenu,PreGameMenu -> {return backgrounds[1];}
-            case ProfileMenu -> {return backgrounds[2];}
+            case ProfileMenu,LobbyMenu -> {return backgrounds[2];}
             case AvatarMenu -> {return backgrounds[3];}
             default -> {return null;}
         }
