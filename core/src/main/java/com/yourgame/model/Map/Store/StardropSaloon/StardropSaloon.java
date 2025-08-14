@@ -7,10 +7,12 @@ import com.yourgame.model.Item.Item;
 import com.yourgame.model.ManuFactor.Artisan.ArtisanProduct;
 import com.yourgame.model.ManuFactor.Artisan.ArtisanProductType;
 import com.yourgame.model.Map.Store.Store;
+import com.yourgame.model.WeatherAndTime.TimeObserver;
+import com.yourgame.model.WeatherAndTime.TimeSystem;
 
 import java.util.ArrayList;
 
-public class StardropSaloon extends Store {
+public class StardropSaloon extends Store implements TimeObserver {
     private ArrayList<InventorySlot> inventory;
 
     public StardropSaloon(String name, String pathToTmx, int startHour, int endHour) {
@@ -27,7 +29,7 @@ public class StardropSaloon extends Store {
         inventory.add(new InventorySlot(new Food(FoodType.Spaghetti),-1));
         inventory.add(new InventorySlot(new Food(FoodType.Pizza),-1));
         inventory.add(new InventorySlot(new ArtisanProduct(ArtisanProductType.Coffee),-1));
-        inventory.add(new InventorySlot(new StardropSaloonItem("Hashbrowns Recipe", Item.ItemType.RECIPE
+        inventory.add(new InventorySlot(new StardropSaloonItem("HashBrowns Recipe", Item.ItemType.RECIPE
         ,50,false),1));
         inventory.add(new InventorySlot(new StardropSaloonItem("Omelet Recipe", Item.ItemType.RECIPE
             ,100,false),1));
@@ -49,5 +51,11 @@ public class StardropSaloon extends Store {
 
     public ArrayList<InventorySlot> getInventory() {
         return inventory;
+    }
+
+
+    @Override
+    public void onTimeChanged(TimeSystem timeSystem) {
+        loadInventory();
     }
 }

@@ -9,8 +9,10 @@ import com.yourgame.model.Item.Item;
 import com.yourgame.model.Map.Store.ShopItem;
 import com.yourgame.model.Map.Store.Store;
 import com.yourgame.model.WeatherAndTime.Season;
+import com.yourgame.model.WeatherAndTime.TimeObserver;
+import com.yourgame.model.WeatherAndTime.TimeSystem;
 
-public class PierreGeneralStore extends Store {
+public class PierreGeneralStore extends Store implements TimeObserver {
     private ArrayList<ShopItem> inventory;
 
     public PierreGeneralStore(String name, String pathToTmx, int startHour, int endHour) {
@@ -88,5 +90,11 @@ public class PierreGeneralStore extends Store {
 
     public ArrayList<ShopItem> getInventory() {
         return inventory;
+    }
+
+
+    @Override
+    public void onTimeChanged(TimeSystem timeSystem) {
+        loadInventory();
     }
 }

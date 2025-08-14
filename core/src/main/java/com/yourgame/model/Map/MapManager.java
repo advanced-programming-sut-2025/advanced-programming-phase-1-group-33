@@ -31,6 +31,9 @@ public class MapManager {
         buildings.put("pierre-store", pierreGeneralStore = new PierreGeneralStore("pierre-store", "Game/Map/Buildings/pierre-store.tmx",9,17));
         buildings.put("saloon", stardropSaloon = new StardropSaloon("saloon", "Game/Map/Buildings/saloon.tmx", 12, 24));
 
+        App.getGameState().getGameTime().addDayObserver(pierreGeneralStore);
+        App.getGameState().getGameTime().addDayObserver(stardropSaloon);
+
         farms = new HashMap<>();
         houses = new HashMap<>();
         playersCurrentMap = new HashMap<>();

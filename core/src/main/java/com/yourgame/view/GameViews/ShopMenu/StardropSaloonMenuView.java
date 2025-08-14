@@ -1,5 +1,6 @@
 package com.yourgame.view.GameViews.ShopMenu;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -153,39 +154,41 @@ public class StardropSaloonMenuView extends Window {
         addLabel.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                if (inventorySlot.quantity() == 0) {
-                    gameScreen.showMessage("error", "Product Unavailable", skin,
-                        0, 200, stage);
-                } else {
-                    gameScreen.playGameSFX("popUp");
+                if(currentSelectedItem == null || (currentSelectedItem != null && currentSelectedItem.item().getName().equals(name))) {
+                    if (inventorySlot.quantity() == 0) {
+                        gameScreen.showMessage("error", "Product Unavailable", skin,
+                            0, 200, stage);
+                    } else {
+                        gameScreen.playGameSFX("popUp");
 
-                    if (inventorySlot.quantity() != -1) {
-                        inventorySlot.reduceQuantity(1);
+                        if (inventorySlot.quantity() != -1) {
+                            inventorySlot.reduceQuantity(1);
+                        }
+
+                        int newQty = inventorySlot.quantity();
+                        if (newQty == 0) {
+                            remainingQuantityLabel.setText("0");
+                            addLabel.setText("Unavailable");
+                            nameLabel.setStyle(skin.get("default", Label.LabelStyle.class));
+                            priceLabel.setStyle(skin.get("default", Label.LabelStyle.class));
+                            remainingQuantityLabel.setStyle(skin.get("default", Label.LabelStyle.class));
+                            addLabel.setStyle(skin.get("default", Label.LabelStyle.class));
+                        } else if (newQty != -1) {
+                            remainingQuantityLabel.setText(String.valueOf(newQty));
+                        }
+
+                        // Update preview table for this product
+                        currentSelectedItem = inventorySlot;
+                        currentSelectedQuantity++;
+
+                        updatePurchasePreview(
+                            textureRegion,
+                            inventorySlot.item().getName(),
+                            currentSelectedQuantity,
+                            price
+                        );
+
                     }
-
-                    int newQty = inventorySlot.quantity();
-                    if (newQty == 0) {
-                        remainingQuantityLabel.setText("0");
-                        addLabel.setText("Unavailable");
-                        nameLabel.setStyle(skin.get("default", Label.LabelStyle.class));
-                        priceLabel.setStyle(skin.get("default", Label.LabelStyle.class));
-                        remainingQuantityLabel.setStyle(skin.get("default", Label.LabelStyle.class));
-                        addLabel.setStyle(skin.get("default", Label.LabelStyle.class));
-                    } else if (newQty != -1) {
-                        remainingQuantityLabel.setText(String.valueOf(newQty));
-                    }
-
-                    // Update preview table for this product
-                    currentSelectedItem = inventorySlot;
-                    currentSelectedQuantity++;
-
-                    updatePurchasePreview(
-                        textureRegion,
-                        inventorySlot.item().getName(),
-                        currentSelectedQuantity,
-                        price
-                    );
-
                 }
             }
         });
@@ -264,7 +267,12 @@ public class StardropSaloonMenuView extends Window {
                         recipe.getSource().setBought(true);
                         gameScreen.getPlayer().setGold(gameScreen.getPlayer().getGold()-currentSelectedPrice);
                         gameScreen.getHUDManager().updateCoin();
-                        gameScreen.showMessage("popUp", currentSelectedItem.item().getName() + "activated !", skin, 0, 200, stage);
+                        gameScreen.showMessage("popUp", currentSelectedItem.item().getName() + " activated !", skin, 0, 200, stage);
+                        currentSelectedQuantity = 0;
+                        currentSelectedItem = null;
+                        currentSelectedPrice = 0;
+                        purchasePreviewTable.clear();
+                        refreshGoodsList();
                         return;
                     }
                 }
