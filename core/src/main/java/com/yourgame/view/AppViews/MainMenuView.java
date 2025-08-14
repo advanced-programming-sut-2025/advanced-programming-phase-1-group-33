@@ -17,7 +17,7 @@ public class MainMenuView extends MenuBaseScreen {
     private final TextButton loginButton = MenuAssetManager.getInstance().getButtons("login");
     private final TextButton logoutButton = MenuAssetManager.getInstance().getButtons("logout");
     private final TextButton profileButton = MenuAssetManager.getInstance().getButtons("profile");
-    private final TextButton playButton = MenuAssetManager.getInstance().getButtons("play");
+    private final TextButton pregameButton = MenuAssetManager.getInstance().getButtons("pregame");
     private final MainMenuController controller;
 
     public MainMenuView(){
@@ -114,7 +114,7 @@ public class MainMenuView extends MenuBaseScreen {
                     controller.handleGoingToProfileMenu();
                 }
             });
-            playButton.addListener(new ChangeListener() {
+            pregameButton.addListener(new ChangeListener() {
                 @Override
                 public void changed(ChangeEvent changeEvent, Actor actor) {
                     controller.handleGoingToPreGameMenu();
@@ -124,7 +124,7 @@ public class MainMenuView extends MenuBaseScreen {
             table.add(exitButton).padRight(20);
             table.add(logoutButton).padRight(20);
             table.add(profileButton).padRight(20);
-            table.add(playButton).padRight(20);
+            table.add(pregameButton).padRight(20);
         }
         return table;
     }

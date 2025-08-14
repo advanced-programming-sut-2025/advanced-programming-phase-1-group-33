@@ -59,6 +59,7 @@ public class MenuAssetManager {
     private final TextButton backButton;
     private final TextButton submitButton;
     private final TextButton findButton;
+    private final TextButton pregameButton;
     private final TextButton randomPasswordButton;
     private final TextButton forgetPasswordButton;
     private final TextButton changeUsernameButton;
@@ -179,6 +180,7 @@ public class MenuAssetManager {
         strawberryButtonStyle.font = skin_1_Sepehr.getFont("loading");
         signupButton = new TextButton("Signup", strawberryButtonStyle);
         playButton = new TextButton("Play", strawberryButtonStyle);
+        pregameButton = new TextButton("PreGame", strawberryButtonStyle);
 
         TextButton.TextButtonStyle chickenButtonStyle = skin_3_Nz.get("Chicken", TextButton.TextButtonStyle.class);
         chickenButtonStyle.font = skin_1_Sepehr.getFont("loading");
@@ -214,7 +216,7 @@ public class MenuAssetManager {
     public Image getBackgroundImage(MenuTypes type) {
         switch (type) {
             case MainMenu -> {return backgrounds[0];}
-            case SignupMenu,LoginMenu -> {return backgrounds[1];}
+            case SignupMenu,LoginMenu,PreGameMenu -> {return backgrounds[1];}
             case ProfileMenu -> {return backgrounds[2];}
             case AvatarMenu -> {return backgrounds[3];}
             default -> {return null;}
@@ -267,6 +269,7 @@ public class MenuAssetManager {
             case "back" -> {return backButton;}
             case "submit" -> {return submitButton;}
             case "find" -> {return findButton;}
+            case "pregame" -> {return pregameButton;}
             case "random" -> {return randomPasswordButton;}
             case "forget" -> {return forgetPasswordButton;}
             case "changeUsername" -> {return changeUsernameButton;}
