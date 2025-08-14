@@ -57,11 +57,11 @@ public class Player implements TimeObserver {
     private final QuestManager questManager;
     private int remainingDaysAfterMarriageDenied = 0;
     private boolean isMarried = false;
-    private RelationWithNPC relationWithAbigail;
-    private RelationWithNPC relationWithSebastian;
-    private RelationWithNPC relationWithHarvey;
-    private RelationWithNPC relationWithLeah;
-    private RelationWithNPC relationWithRobin;
+    private int relationWithPierre = 1;
+    private int relationWithSebastian = 1;
+    private int relationWithHarvey = 1;
+    private int relationWithLeah = 1;
+    private int relationWithRobin = 1;
 
     private CookingRecipeManager cookingRecipeManager;
 
@@ -107,11 +107,6 @@ public class Player implements TimeObserver {
 
         // Relation
         this.questManager = new QuestManager();
-        this.relationWithAbigail = new RelationWithNPC(NPCType.Pierre);
-        this.relationWithSebastian = new RelationWithNPC(NPCType.Sebastian);
-        this.relationWithHarvey = new RelationWithNPC(NPCType.Harvey);
-        this.relationWithLeah = new RelationWithNPC(NPCType.Leah);
-        this.relationWithRobin = new RelationWithNPC(NPCType.Robin);
 
         // Load player sprite sheet
         playerSheet = new Texture("Game/Player/player.png");
@@ -262,43 +257,43 @@ public class Player implements TimeObserver {
         this.energy = energy;
     }
 
-    public RelationWithNPC getRelationWithAbigail() {
-        return relationWithAbigail;
-    }
-
-    public void setRelationWithAbigail(RelationWithNPC relationWithAbigail) {
-        this.relationWithAbigail = relationWithAbigail;
-    }
-
-    public RelationWithNPC getRelationWithSebastian() {
+    public int getRelationWithSebastian() {
         return relationWithSebastian;
     }
 
-    public void setRelationWithSebastian(RelationWithNPC relationWithSebastian) {
-        this.relationWithSebastian = relationWithSebastian;
+    public int getRelationWithPierre() {
+        return relationWithPierre;
     }
 
-    public RelationWithNPC getRelationWithHarvey() {
+    public int getRelationWithHarvey() {
         return relationWithHarvey;
     }
 
-    public void setRelationWithHarvey(RelationWithNPC relationWithHarvey) {
-        this.relationWithHarvey = relationWithHarvey;
-    }
-
-    public RelationWithNPC getRelationWithLeah() {
+    public int getRelationWithLeah() {
         return relationWithLeah;
     }
 
-    public void setRelationWithLeah(RelationWithNPC relationWithLeah) {
-        this.relationWithLeah = relationWithLeah;
-    }
-
-    public RelationWithNPC getRelationWithRobin() {
+    public int getRelationWithRobin() {
         return relationWithRobin;
     }
 
-    public void setRelationWithRobin(RelationWithNPC relationWithRobin) {
+    public void setRelationWithPierre(int relationWithPierre) {
+        this.relationWithPierre = relationWithPierre;
+    }
+
+    public void setRelationWithSebastian(int relationWithSebastian) {
+        this.relationWithSebastian = relationWithSebastian;
+    }
+
+    public void setRelationWithHarvey(int relationWithHarvey) {
+        this.relationWithHarvey = relationWithHarvey;
+    }
+
+    public void setRelationWithLeah(int relationWithLeah) {
+        this.relationWithLeah = relationWithLeah;
+    }
+
+    public void setRelationWithRobin(int relationWithRobin) {
         this.relationWithRobin = relationWithRobin;
     }
 

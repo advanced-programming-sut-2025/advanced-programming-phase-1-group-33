@@ -2,22 +2,15 @@ package com.yourgame.Graphics;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.assets.loaders.SkinLoader.SkinParameter;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGeneratorLoader;
-import com.badlogic.gdx.graphics.g2d.freetype.FreetypeFontLoader;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.yourgame.Graphics.GameAssets.clockUIAssetManager;
 import com.yourgame.model.Food.FoodAnimation;
-import com.yourgame.model.WeatherAndTime.Weather;
 
 import java.util.HashMap;
 
@@ -37,15 +30,17 @@ public class GameAssetManager extends AssetManager {
     public final String InventoryBarDirectoryPath = "Game/Clock/Inventory/";
 
     private clockUIAssetManager clockManager;
-    private Texture coinTexture;
+    private final Texture coinTexture;
 
-    private Music backgroundMusic;
+    private final Music backgroundMusic;
 
     private final Texture menuIcon;
     private final Texture farmingSkillIcon;
     private final Texture fishingSkillIcon;
     private final Texture foragingSkillIcon;
     private final Texture miningSkillIcon;
+
+    private final Texture[] hearts;
 
     private final TextButton closeButton;
     private final TextButton inventoryMenuButton;
@@ -88,6 +83,14 @@ public class GameAssetManager extends AssetManager {
         backButton = new TextButton("Back", MenuAssetManager.getInstance().getSkin(3));
 
         coinTexture = new Texture(Gdx.files.internal("Game/Clock/Gold.png"));
+
+        hearts = new Texture[] {
+            new Texture(Gdx.files.internal("Game/NPC/Heart/Two_Hearts.png")),
+            new Texture(Gdx.files.internal("Game/NPC/Heart/Four_Hearts.png")),
+            new Texture(Gdx.files.internal("Game/NPC/Heart/Six_Hearts.png")),
+            new Texture(Gdx.files.internal("Game/NPC/Heart/Eight_Hearts.png")),
+            new Texture(Gdx.files.internal("Game/NPC/Heart/Ten_Hearts.png")),
+        };
     }
 
     public clockUIAssetManager getClockManager() {
@@ -198,5 +201,16 @@ public class GameAssetManager extends AssetManager {
 
     public Texture getCoinTexture() {
         return coinTexture;
+    }
+
+    public Texture getHeartImage(int number) {
+        switch (number) {
+            case 1,2 -> {return hearts[0];}
+            case 3,4 -> {return hearts[1];}
+            case 5,6 -> {return hearts[2];}
+            case 7,8 -> {return hearts[3];}
+            case 9,10 -> {return hearts[4];}
+            default -> {return null;}
+        }
     }
 }

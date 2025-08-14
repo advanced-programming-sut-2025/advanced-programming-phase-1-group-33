@@ -71,6 +71,11 @@ public class MenuAssetManager {
     private final TextButton changeAvatarButton;
     private final TextButton stayLoggedInButton;
 
+    private final TextureRegion[][] sebastianTextures;
+    private final Image sebastianCharacter;
+    private final TextureRegion[][] leahTextures;
+    private final Image leahCharacter;
+
     private MenuAssetManager() {
         Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
         pixmap.setColor(Color.WHITE);
@@ -178,6 +183,16 @@ public class MenuAssetManager {
         cursor = new Image(new Texture(Gdx.files.internal("Textures/Cursor.png")));
         redLine = new Image(new Texture(Gdx.files.internal("Textures/RedLine.png")));
 
+        sebastianTextures = TextureRegion.split(
+            new Texture(Gdx.files.internal("Game/NPC/Sebastian.png")), PLAYER_WIDTH, PLAYER_HEIGHT);
+        sebastianCharacter = new Image(sebastianTextures[0][0]);
+        sebastianCharacter.setScale(3f);
+
+        leahTextures = TextureRegion.split(
+            new Texture(Gdx.files.internal("Game/NPC/Leah.png")), PLAYER_WIDTH, PLAYER_HEIGHT);
+        leahCharacter = new Image(leahTextures[0][0]);
+        leahCharacter.setScale(3f);
+
         TextButton.TextButtonStyle strawberryButtonStyle = skin_3_Nz.get("Strawberry", TextButton.TextButtonStyle.class);
         strawberryButtonStyle.font = skin_1_Sepehr.getFont("loading");
         signupButton = new TextButton("Signup", strawberryButtonStyle);
@@ -215,6 +230,7 @@ public class MenuAssetManager {
         changePasswordButton = new TextButton("  Change  ", smallButtonStyle);
         changeEmailButton = new TextButton("  Change  ", smallButtonStyle);
         stayLoggedInButton = new TextButton("  Disabled  ", smallButtonStyle);
+
     }
 
     public Image getBackgroundImage(MenuTypes type) {
@@ -311,4 +327,6 @@ public class MenuAssetManager {
 
     public Image getCursor() {return cursor;}
     public Image getRedLine() {return redLine;}
+    public Image getSebastianCharacter() {return sebastianCharacter;}
+    public Image getLeahCharacter() {return leahCharacter;}
 }

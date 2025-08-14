@@ -50,6 +50,13 @@ public class QuestManager {
         activeQuests.remove(quest.questId());
         completedQuests.put(quest.questId(), quest);
 
+        switch (quest.questGiver()){
+            case Pierre -> player.setRelationWithPierre(player.getRelationWithPierre() + 1);
+            case Sebastian -> player.setRelationWithSebastian(player.getRelationWithSebastian() + 1);
+            case Harvey -> player.setRelationWithHarvey(player.getRelationWithHarvey() + 1);
+            case Leah -> player.setRelationWithLeah(player.getRelationWithLeah() + 1);
+            case Robin -> player.setRelationWithRobin(player.getRelationWithRobin() + 1);
+        }
         // TODO: Give rewards to the player (gold, friendship points)
     }
 
