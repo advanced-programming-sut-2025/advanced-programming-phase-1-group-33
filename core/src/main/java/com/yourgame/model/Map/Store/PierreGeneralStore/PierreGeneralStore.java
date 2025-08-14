@@ -6,12 +6,8 @@ import com.yourgame.model.Farming.Seeds;
 import com.yourgame.model.Farming.TreeSource;
 import com.yourgame.model.Map.Store.ShopItem;
 import com.yourgame.model.Map.Store.Store;
-<<<<<<< HEAD
-import com.yourgame.model.WeatherAndTime.Season;
 import com.yourgame.model.WeatherAndTime.TimeObserver;
 import com.yourgame.model.WeatherAndTime.TimeSystem;
-=======
->>>>>>> 02f48e0ca227dfe367fab0a89b09519eaf2783e3
 
 public class PierreGeneralStore extends Store implements TimeObserver {
     private ArrayList<ShopItem> inventory;

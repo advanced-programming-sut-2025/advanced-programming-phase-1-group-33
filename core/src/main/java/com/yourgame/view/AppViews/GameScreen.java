@@ -32,13 +32,9 @@ import com.yourgame.model.UserInfo.PlayerState;
 import com.yourgame.model.WeatherAndTime.ThunderManager;
 import com.yourgame.view.GameViews.*;
 import com.yourgame.view.GameViews.MainMenuView;
-<<<<<<< HEAD
 import com.yourgame.view.GameViews.ShopMenu.PierreShopMenuView;
 import com.yourgame.view.GameViews.ShopMenu.PierreShopSellMenuView;
 import com.yourgame.view.GameViews.ShopMenu.StardropSaloonMenuView;
-
-=======
->>>>>>> 02f48e0ca227dfe367fab0a89b09519eaf2783e3
 
 import static com.yourgame.model.UserInfo.Player.*;
 
@@ -171,14 +167,13 @@ public class GameScreen extends GameBaseScreen {
                 faintingTimer = 0f; // Start the fainting timer
             }
 
-<<<<<<< HEAD
             if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
                 openMenu("stardrop");
             }
 
             // Update animation timer
-            stateTime += delta;
-=======
+            //stateTime += delta;
+
             if (player.getPlayerState() == PlayerState.FAINTING) {
                 faintingTimer += delta;
                 Animation<TextureRegion> faintAnimation = MenuAssetManager.getInstance().getFaintAnimation();
@@ -206,7 +201,6 @@ public class GameScreen extends GameBaseScreen {
 
                 stateTime += delta;
             }
->>>>>>> 02f48e0ca227dfe367fab0a89b09519eaf2783e3
         }
 
         // Clear screen

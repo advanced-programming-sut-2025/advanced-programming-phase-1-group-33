@@ -2,14 +2,25 @@ package com.yourgame.model.ManuFactor.Artisan;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.yourgame.Graphics.GameAssetManager;
+import com.yourgame.model.Farming.CropItem;
+import com.yourgame.model.Farming.CropType;
 import com.yourgame.model.Item.Item;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class ArtisanProduct extends Item {
     private final ArtisanProductType type;
+    private final boolean isEnergyDependant;
+    private final boolean isPriceDependant;
+    private final boolean isProcessTimeDependant;
 
-    public ArtisanProduct(ArtisanProductType type) {
+    public ArtisanProduct(ArtisanProductType type, boolean isEnergyDependant, boolean isPriceDependant, boolean isProcessTimeDependant) {
         super(type.getName(), ItemType.ARTISAN, type.getSellPrice(), true);
         this.type = type;
+        this.isEnergyDependant = isEnergyDependant;
+        this.isPriceDependant = isPriceDependant;
+        this.isProcessTimeDependant = isProcessTimeDependant;
     }
 
     @Override
@@ -21,4 +32,5 @@ public class ArtisanProduct extends Item {
     public ArtisanProductType getType() {
         return type;
     }
+
 }
