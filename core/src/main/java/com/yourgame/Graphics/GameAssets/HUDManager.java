@@ -50,7 +50,7 @@ public class HUDManager {
     private ImageButton weatherTypeButton;
     private ImageButton seasonButton;
 
-    private Texture InventoryTexture;
+    private Table inventoryBar;
     private TextField timeField, dateField, goldField;
 
     // Inventory Bar
@@ -90,7 +90,8 @@ public class HUDManager {
     public void createHUD() {
         hudStage.addActor(createClockBarTable());
         hudStage.addActor(createEnergyBarTable());
-        hudStage.addActor(createInventoryBarTable());
+        createInventoryBarTable();
+        hudStage.addActor(inventoryBar);
     }
 
     public Table createClockBarTable() {
@@ -152,7 +153,7 @@ public class HUDManager {
      * Uses a Stack to overlay tool icons and a selection highlight on top of the
      * inventory background image.
      */
-    public Table createInventoryBarTable() {
+    public void createInventoryBarTable() {
         Table inventoryContainerTable = new Table();
         inventoryContainerTable.setFillParent(true);
         inventoryContainerTable.bottom().padBottom(10);
@@ -171,7 +172,7 @@ public class HUDManager {
 
         inventoryContainerTable.add(inventoryStack);
         selectSlot(0); // Select the first slot by default
-        return inventoryContainerTable;
+        inventoryBar = inventoryContainerTable;
     }
 
     /**
@@ -190,6 +191,10 @@ public class HUDManager {
                 inventorySlotsUI[i].update(null, assetManager);
             }
         }
+    }
+
+    public void showInventory(boolean show) {
+        inventoryBar.setVisible(show);
     }
 
     /**

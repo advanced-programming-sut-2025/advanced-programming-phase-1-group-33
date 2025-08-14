@@ -22,6 +22,7 @@ public class NPC {
     private Quest activeQuest;
     private NPCState state;
     private int direction; // 0=Down, 1=Right, 2=Up, 3=Left
+    private boolean playerInRange = false;
 
     // Movement and Pathfinding
     private List<Vector2> currentPath;
@@ -143,4 +144,6 @@ public class NPC {
     public void addFriendship(int amount) { this.friendshipLevel += amount; }
     public void setQuest(Quest quest) { this.activeQuest = quest; }
     public Quest getQuest() { return activeQuest; }
+    public void setPlayerInRange(boolean playerInRange) { this.playerInRange = playerInRange; }
+    public boolean isPlayerInRange() { return playerInRange; }
 }

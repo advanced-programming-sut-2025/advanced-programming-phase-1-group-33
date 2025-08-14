@@ -17,6 +17,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.yourgame.Graphics.MenuAssetManager;
 import com.yourgame.Graphics.GameAssets.HUDManager;
@@ -27,6 +28,7 @@ import com.yourgame.model.Map.*;
 import com.yourgame.model.App;
 import com.yourgame.Graphics.GameAssetManager;
 import com.yourgame.model.Map.Store.Store;
+import com.yourgame.model.NPC.NPC;
 import com.yourgame.model.NPC.NPCManager;
 import com.yourgame.model.UserInfo.Player;
 import com.yourgame.model.UserInfo.PlayerState;
@@ -68,6 +70,7 @@ public class GameScreen extends GameBaseScreen {
     private final ThunderManager thunderManager;
 
     private RefrigeratorView refrigeratorView;
+    private DialogueView dialogueView;
 
     public GameScreen() {
         super();
@@ -194,7 +197,7 @@ public class GameScreen extends GameBaseScreen {
 
                 stateTime += delta;
 
-                npcManager.update(delta, controller.getMapManager().getTown());
+                npcManager.update(delta, controller.getMapManager().getTown(), player);
             }
         }
 
@@ -293,6 +296,36 @@ public class GameScreen extends GameBaseScreen {
         batch.draw(currentFrame, player.playerPosition.x, player.playerPosition.y);
     }
 
+    public void showDialogue(NPC npc) {
+        if (dialogueView != null && dialogueView.hasParent()) {
+            return;
+        }
+
+        paused = true;
+
+        String text = npc.getDialogue(
+            App.getGameState().getGameTime().getSeason(),
+            App.getGameState().getGameTime().getWeather()
+        );
+
+        dialogueView = new DialogueView(npc, text, this);
+        dialogueView.setPosition(Gdx.graphics.getWidth() / 2f, 100, Align.center);
+
+        menuStage.addActor(dialogueView);
+        Gdx.input.setInputProcessor(menuStage);
+        hudManager.showInventory(false);
+    }
+
+    public void closeDialogue() {
+        if (dialogueView != null) {
+            dialogueView.remove();
+            dialogueView = null;
+        }
+        paused = false;
+        Gdx.input.setInputProcessor(multiplexer);
+        hudManager.showInventory(true);
+    }
+
     // Methods for music control, similar to MenuBaseScreen
     public void playBackgroundMusic() {
         if (App.isMusicMuted()) {
@@ -382,6 +415,12 @@ public class GameScreen extends GameBaseScreen {
         }
 
         if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
+            NPC clickedNpc = npcManager.getNpcAt(camera);
+            if (clickedNpc != null && clickedNpc.isPlayerInRange()) {
+                showDialogue(clickedNpc);
+                return;
+            }
+
             controller.handleInteraction();
             if (controller.getCurrentMap() instanceof Store store) {
                 if (store.isPlayerInBuyZone(player)) {
