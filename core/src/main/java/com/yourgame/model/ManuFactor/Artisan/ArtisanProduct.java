@@ -11,16 +11,10 @@ import java.util.Arrays;
 
 public class ArtisanProduct extends Item {
     private final ArtisanProductType type;
-    private final boolean isEnergyDependant;
-    private final boolean isPriceDependant;
-    private final boolean isProcessTimeDependant;
 
-    public ArtisanProduct(ArtisanProductType type, boolean isEnergyDependant, boolean isPriceDependant, boolean isProcessTimeDependant) {
+    public ArtisanProduct(ArtisanProductType type) {
         super(type.getName(), ItemType.ARTISAN, type.getSellPrice(), true);
         this.type = type;
-        this.isEnergyDependant = isEnergyDependant;
-        this.isPriceDependant = isPriceDependant;
-        this.isProcessTimeDependant = isProcessTimeDependant;
     }
 
     @Override

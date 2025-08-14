@@ -1,7 +1,6 @@
 package com.yourgame.model.ManuFactor;
 
 import com.yourgame.model.IO.Response;
-import com.yourgame.model.Recipes.CraftingRecipes;
 import com.yourgame.model.UserInfo.Player;
 import com.yourgame.model.WeatherAndTime.TimeFrame;
 import com.yourgame.model.WeatherAndTime.TimeSystem;
@@ -53,25 +52,5 @@ public abstract class ArtisanMachine {
             }
         }
         return new Response(false, "Your product is Not Ready.");
-    }
-
-    public static ArtisanMachine getArtisanMachineByRecipe(CraftingRecipes recipe) {
-        if (recipe == null){
-            return null;
-        }
-        return switch (recipe) {
-            case Furnace -> new Furnace();
-            case CharcoalKiln -> new CharcoalKiln();
-            case CheesePress -> new CheesePress();
-            case BeeHouse -> new BeeHouse();
-            case Loom -> new Loom();
-            case Keg -> new Keg();
-            case OilMaker -> new OilMaker();
-            case MayonnaiseMachine -> new MayonnaiseMachine();
-            case Dehydrator -> new Dehydrator();
-            case FishSmoker -> new FishSmoker();
-            case PreservesJar -> new PreservesJar();
-            default -> null;
-        };
     }
 }

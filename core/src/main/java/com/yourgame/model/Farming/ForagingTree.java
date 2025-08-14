@@ -6,6 +6,7 @@ import com.yourgame.Graphics.GameAssetManager;
 import com.yourgame.model.Item.Item;
 import com.yourgame.model.Map.MapElement;
 import com.yourgame.model.Map.Tile;
+import com.yourgame.model.Resource.Wood;
 import com.yourgame.model.WeatherAndTime.Season;
 
 import java.awt.*;
@@ -59,7 +60,7 @@ public class ForagingTree extends MapElement {
     @Override
     public List<Item> drop() {
         List<Item> items = new ArrayList<>();
-        for (int i = 0; i < 5; i++) items.add(new Wood.WoodItem());
+        for (int i = 0; i < 5; i++) items.add(new Wood());
         items.add(new TreeSource.TreeSourceItem(treeType.getSource()));
         return items;
     }

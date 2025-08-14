@@ -6,13 +6,12 @@ import com.yourgame.model.Animals.Fish;
 import com.yourgame.model.Animals.Hay;
 import com.yourgame.model.Farming.Crop;
 import com.yourgame.model.Farming.Fruit;
+import com.yourgame.model.Food.Cooking.CookingRecipe;
 import com.yourgame.model.Food.FoodType;
 import com.yourgame.model.Item.Tools.Tool;
 import com.yourgame.model.Item.*;
 import com.yourgame.model.ManuFactor.ArtisanMachine;
 import com.yourgame.model.ManuFactor.Ingredient;
-import com.yourgame.model.Recipes.CookingRecipe;
-import com.yourgame.model.Recipes.CraftingRecipes;
 import com.yourgame.model.UserInfo.Coin;
 
 import java.util.ArrayList;
@@ -24,8 +23,6 @@ public class Backpack {
     private final Inventory inventory;
     private final Inventory refrigerator;
     private final Hay hay = new Hay();
-    private final HashSet<CookingRecipe> cookingRecipes = new HashSet<>();
-    private final HashSet<CraftingRecipes> craftingRecipes = new HashSet<>();
     private final ArrayList<ArtisanMachine> artisanMachines = new ArrayList<>();
     private final TrashCan trashCan = new TrashCan();
     private final ArrayList<Animal> animals = new ArrayList<>();
@@ -125,42 +122,6 @@ public class Backpack {
 
     public ArrayList<ArtisanMachine> getArtisanMachines() {
         return artisanMachines;
-    }
-
-    public ArtisanMachine getArtisanMachineByName(String name) {
-        ArtisanMachine machineIns = ArtisanMachine.getArtisanMachineByRecipe(CraftingRecipes.getRecipeByName(name));
-        if (machineIns == null) {
-            return null;
-        }
-        for (ArtisanMachine machine : artisanMachines) {
-            if (machine.getClass() == machineIns.getClass())
-                return machine;
-        }
-        return null;
-    }
-
-    public void addRecipe(CraftingRecipes craftingRecipe) {
-        craftingRecipes.add(craftingRecipe);
-    }
-
-    public HashSet<CraftingRecipes> getCraftingRecipes() {
-        return craftingRecipes;
-    }
-
-    public void addRecipe(CookingRecipe cookingRecipe) {
-        cookingRecipes.add(cookingRecipe);
-    }
-
-    public HashSet<CookingRecipe> getCookingRecipes() {
-        return cookingRecipes;
-    }
-
-    public boolean containRecipe(CookingRecipe recipe) {
-        return cookingRecipes.contains(recipe);
-    }
-
-    public boolean containRecipe(CraftingRecipes recipe) {
-        return craftingRecipes.contains(recipe);
     }
 
     public void addAnimal(Animal animal) {

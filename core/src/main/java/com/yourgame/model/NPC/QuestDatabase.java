@@ -3,7 +3,7 @@ package com.yourgame.model.NPC;
 import com.yourgame.model.Farming.CropItem;
 import com.yourgame.model.Farming.CropType;
 import com.yourgame.model.Farming.ForagingCrop;
-import com.yourgame.model.Farming.Wood;
+import com.yourgame.model.Resource.Wood;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -17,7 +17,7 @@ public class QuestDatabase {
             "Robin's Request",
             "Robin needs wood for a new project.",
             NPCType.Robin,
-            Map.of(new Wood.WoodItem(), 50),
+            Map.of(new Wood(), 50),
             new Dialogue("Hey, I'm running a bit low on wood for my next project. Could you bring me 50 pieces? I'd make it worth your while!", true),
             new Dialogue("Wow, this is perfect! Thanks a bunch. Here's something for your trouble.", true),
             500,

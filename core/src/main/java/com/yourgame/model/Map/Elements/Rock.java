@@ -3,7 +3,7 @@ package com.yourgame.model.Map.Elements;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.yourgame.Graphics.GameAssetManager;
 import com.yourgame.model.Item.Item;
-import com.yourgame.model.Item.Stone;
+import com.yourgame.model.Resource.Stone;
 import com.yourgame.model.Map.MapElement;
 import com.yourgame.model.Map.Tile;
 import com.yourgame.model.WeatherAndTime.Season;
@@ -36,7 +36,7 @@ public class Rock extends MapElement {
         List<Item> items = new ArrayList<>();
         int amount = isSmall ? 1 : 3;
         for (int i = 0; i < amount; i++) {
-            items.add(new Stone.StoneItem());
+            items.add(new Stone());
         }
         return items;
     }

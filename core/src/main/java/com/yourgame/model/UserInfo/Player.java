@@ -18,9 +18,8 @@ import com.yourgame.model.Item.Tools.Pickaxe;
 import com.yourgame.model.Item.Tools.Scythe;
 import com.yourgame.model.Item.Tools.WateringCan;
 import com.yourgame.model.Item.Inventory.Backpack;
-import com.yourgame.model.NPC.NPCType;
 import com.yourgame.model.NPC.QuestManager;
-import com.yourgame.model.NPC.RelationWithNPC;
+import com.yourgame.model.Resource.Wood;
 import com.yourgame.model.Skill.Skill;
 import com.yourgame.model.WeatherAndTime.TimeObserver;
 import com.yourgame.model.WeatherAndTime.TimeSystem;
@@ -93,8 +92,6 @@ public class Player implements TimeObserver {
         this.backpack.addItem(new MixedSeed(), 3);
         this.backpack.addItem(new Food(FoodType.RedPlate), 1);
         this.backpack.addItem(new Food(FoodType.Bread), 2);
-        this.backpack.getIngredientQuantity().put(new Coin(), 20);
-        this.backpack.getIngredientQuantity().put(new Wood(), 100);
 
         // Skill
         this.farmingSkill = new Skill.FarmingSkill();

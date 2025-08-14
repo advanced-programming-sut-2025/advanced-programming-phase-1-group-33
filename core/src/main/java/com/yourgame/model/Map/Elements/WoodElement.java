@@ -2,7 +2,7 @@ package com.yourgame.model.Map.Elements;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.yourgame.Graphics.GameAssetManager;
-import com.yourgame.model.Farming.Wood;
+import com.yourgame.model.Resource.Wood;
 import com.yourgame.model.Item.Item;
 import com.yourgame.model.Map.MapElement;
 import com.yourgame.model.Map.Tile;
@@ -35,6 +35,6 @@ public class WoodElement extends MapElement {
 
     @Override
     public java.util.List<Item> drop() {
-        return List.of(new Wood.WoodItem());
+        return List.of(new Wood());
     }
 }
