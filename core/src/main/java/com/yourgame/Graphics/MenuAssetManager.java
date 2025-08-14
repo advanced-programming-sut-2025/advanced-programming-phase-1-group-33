@@ -60,6 +60,8 @@ public class MenuAssetManager {
     private final TextButton submitButton;
     private final TextButton findButton;
     private final TextButton pregameButton;
+    private final TextButton lobbyButton;
+    private final TextButton exitPreGameButton;
     private final TextButton randomPasswordButton;
     private final TextButton forgetPasswordButton;
     private final TextButton changeUsernameButton;
@@ -190,10 +192,12 @@ public class MenuAssetManager {
         TextButton.TextButtonStyle plantButtonStyle = skin_3_Nz.get("Plant", TextButton.TextButtonStyle.class);
         plantButtonStyle.font = skin_1_Sepehr.getFont("loading");
         exitButton = new TextButton("Exit", plantButtonStyle);
+        exitPreGameButton = new TextButton("Exit", plantButtonStyle);
 
         TextButton.TextButtonStyle earthButtonStyle = skin_3_Nz.get("Earth", TextButton.TextButtonStyle.class);
         earthButtonStyle.font = skin_1_Sepehr.getFont("loading");
         logoutButton = new TextButton("Logout", earthButtonStyle);
+        lobbyButton = new TextButton("Lobby", earthButtonStyle);
 
         TextButton.TextButtonStyle defaultButtonStyle = skin_3_Nz.get("default", TextButton.TextButtonStyle.class);
         defaultButtonStyle.font = skin_1_Sepehr.getFont("loading");
@@ -272,6 +276,8 @@ public class MenuAssetManager {
             case "pregame" -> {return pregameButton;}
             case "random" -> {return randomPasswordButton;}
             case "forget" -> {return forgetPasswordButton;}
+            case "lobby" -> {return lobbyButton;}
+            case "exitPreGame" -> {return exitPreGameButton;}
             case "changeUsername" -> {return changeUsernameButton;}
             case "changeNickname" -> {return changeNicknameButton;}
             case "changePassword" -> {return changePasswordButton;}
