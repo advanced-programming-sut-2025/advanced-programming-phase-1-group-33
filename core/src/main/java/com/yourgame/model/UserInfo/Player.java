@@ -327,14 +327,12 @@ public class Player implements TimeObserver {
         this.gold = gold;
     }
 
-<<<<<<< HEAD
     public CookingRecipeManager getCookingRecipeManager() {
         return cookingRecipeManager;
-=======
+    }
     @Override
     public void onTimeChanged(TimeSystem timeSystem) {
         energy = isFaintedToday ? getMaxEnergy() / 2 : getMaxEnergy();
         isFaintedToday = false;
->>>>>>> 02f48e0ca227dfe367fab0a89b09519eaf2783e3
     }
 }

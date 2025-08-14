@@ -185,7 +185,7 @@ public class PierreShopMenuView extends Window {
         addLabel.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                if(currentSelectedItem == null || (currentSelectedItem.getName().equals(shopItem.getName()))) {
+                if(currentSelectedItem == null || (currentSelectedItem.getItem().getName().equals(shopItem.getItem()))) {
                     if (shopItem.getRemainingQuantity() == 0) {
                         gameScreen.showMessage("error", "Product Unavailable", skin,
                                 0, 200, stage);
@@ -195,37 +195,7 @@ public class PierreShopMenuView extends Window {
                         if (shopItem.getRemainingQuantity() != -1) {
                             shopItem.setRemainingQuantity();
                         }
-
-                        int newQty = shopItem.getRemainingQuantity();
-                        if (newQty == 0) {
-                            remainingQuantityLabel.setText("0");
-                            addLabel.setText("Unavailable");
-                            nameLabel.setStyle(skin.get("default", Label.LabelStyle.class));
-                            priceLabel.setStyle(skin.get("default", Label.LabelStyle.class));
-                            priceOutLabel.setStyle(skin.get("default", Label.LabelStyle.class));
-                            remainingQuantityLabel.setStyle(skin.get("default", Label.LabelStyle.class));
-                            addLabel.setStyle(skin.get("default", Label.LabelStyle.class));
-                        } else if (newQty != -1) {
-                            remainingQuantityLabel.setText(String.valueOf(newQty));
-                        }
-
-                        // Update preview table for this product
-                        currentSelectedItem = shopItem;
-                        currentSelectedQuantity++;
-
-                        updatePurchasePreview(
-                                textureRegion,
-                                shopItem.getName(),
-                                currentSelectedQuantity,
-                                price,
-                                priceOut,
-                                (shopItem instanceof PierreGeneralStoreSeedsItem) &&
-                                        ((PierreGeneralStoreSeedsItem) shopItem).getSeason() == App.getGameState().getGameTime().getSeason()
-                        );
-
                     }
-<<<<<<< HEAD:core/src/main/java/com/yourgame/view/GameViews/ShopMenu/PierreShopMenuView.java
-=======
 
                     int newQty = shopItem.getRemainingQuantity();
                     if (newQty == 0) {
@@ -253,8 +223,6 @@ public class PierreShopMenuView extends Window {
                             (shopItem.getItem() instanceof Seeds.SeedItem seed) &&
                                     seed.getSeedType().getSeason() == App.getGameState().getGameTime().getSeason()
                     );
-
->>>>>>> 02f48e0ca227dfe367fab0a89b09519eaf2783e3:core/src/main/java/com/yourgame/view/GameViews/PierreShopMenuView.java
                 }
             }
         });
