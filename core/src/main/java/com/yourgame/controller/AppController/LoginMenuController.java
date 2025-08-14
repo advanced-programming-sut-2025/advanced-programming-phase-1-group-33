@@ -14,6 +14,7 @@ import com.yourgame.network.protocol.Auth.LoginRequest;
 import com.yourgame.network.protocol.Auth.LoginResponse;
 import com.yourgame.network.protocol.Auth.SecurityAnswerRequest;
 import com.yourgame.network.protocol.Auth.SecurityAnswerResponse;
+import com.yourgame.network.protocol.Auth.SignupResponse;
 import com.yourgame.persistence.UserDAO;
 import com.yourgame.view.AppViews.LoginMenuView;
 import com.yourgame.view.AppViews.MainMenuView;
@@ -40,13 +41,20 @@ public class LoginMenuController extends Controller {
         String username = view.getUserInfo("username");
         String password = view.getUserInfo("password");
 
-        if (username.isEmpty())
+        if (username.isEmpty()) {
             return new Result(false, "Username is required!");
-        if (password.isEmpty())
+        }
+        if (password.isEmpty()) {
             return new Result(false, "Password is required!");
+        }
 
-        LoginRequest request = new LoginRequest(username, password);
-        Main.getMain().getConnectionManager().sendDataToServer(RequestType.LOGIN, request);
+        // LoginRequest request = new LoginRequest(username, password);
+        // Main.getMain().getConnectionManager().sendDataToServer(RequestType.LOGIN,
+        // request);
+
+        if (user_exist(username) == false) {
+            return new Result(false, "User not found!");
+        }
 
         try {
 
@@ -65,7 +73,6 @@ public class LoginMenuController extends Controller {
                     if (isStayLoggedInActive) {
                         try {
 
-                            
                             HandleStayedLoggedIn.getInstance().addUser(App.getCurrentUser());
                         } catch (IOException e) {
                             e.printStackTrace();
@@ -86,17 +93,53 @@ public class LoginMenuController extends Controller {
 
     }
 
+    // public Result handleLoginButton(boolean isStayLoggedInActive){
+    // String username = view.getUserInfo("username");
+    // String password = view.getUserInfo("password");
+
+    // if(username.isEmpty())
+    // return new Result(false, "Username is required!");
+    // else if(password.isEmpty())
+    // return new Result(false, "Password is required!");
+
+    // try {
+    // User user = App.getUserDAO().loadUser(username);
+    // if(user == null)
+    // return new Result(false, "User not found!");
+    // else{
+    // if(!user.getPassword().equals(password)){
+    // return new Result(false, "Wrong password!");
+    // }
+    // else if(isStayLoggedInActive) {
+    // try {
+    // HandleStayedLoggedIn.getInstance().addUser(user);
+    // } catch (IOException e) {
+    // throw new RuntimeException(e);
+    // }
+    // }
+    // App.setCurrentUser(user);
+    // App.setCurrentMenu(MenuTypes.MainMenu);
+    // Main.getMain().getScreen().dispose();
+    // Main.getMain().setScreen(new MainMenuView());
+    // return new Result(true, "Login successful!");
+    // }
+    // } catch (SQLException e) {
+    // throw new RuntimeException(e);
+    // }
+    // }
+
     public Result handleForgetPasswordButton() {
         String username = view.getUserInfo("username");
-        if (username.isEmpty()) return new Result(false, "Username is required!");
+        if (username.isEmpty())
+            return new Result(false, "Username is required!");
 
         ForgotPasswordRequest request = new ForgotPasswordRequest(username);
         Main.getMain().getConnectionManager().sendDataToServer(RequestType.FORGOT_PASSWORD, request);
 
         try {
             ResponseHolder holder = Main.getMain().getResponseHolder();
-            Object responseObject = holder.getResponse(5000); 
-            
+            Object responseObject = holder.getResponse(5000);
+
             if (responseObject instanceof ForgotPasswordResponse) {
                 ForgotPasswordResponse response = (ForgotPasswordResponse) responseObject;
 
@@ -109,13 +152,13 @@ public class LoginMenuController extends Controller {
         }
     }
 
-
     public Result handleFindButton(String answer) {
-        if (answer.isEmpty()) return new Result(false, "Answer field is empty!");
-        String username = view.getUserInfo("username"); 
+        if (answer.isEmpty())
+            return new Result(false, "Answer field is empty!");
+        String username = view.getUserInfo("username");
 
         SecurityAnswerRequest request = new SecurityAnswerRequest(username, answer);
-        Main.getMain().getConnectionManager().sendDataToServer(RequestType.SECURITY_ANSWER ,request);
+        Main.getMain().getConnectionManager().sendDataToServer(RequestType.SECURITY_ANSWER, request);
 
         try {
             ResponseHolder holder = Main.getMain().getResponseHolder();
@@ -132,4 +175,31 @@ public class LoginMenuController extends Controller {
             return new Result(false, "Error: Process interrupted.");
         }
     }
+
+    private static boolean user_exist(String username) {
+
+        ForgotPasswordRequest request = new ForgotPasswordRequest(username);
+        Object response = null;
+
+        try {
+            response = Main.getMain().getConnectionManager()
+                    .sendRequestAndWaitForResponse(RequestType.USER_EXIST, request, 1000);
+            System.out.println(response);
+            if (response instanceof SignupResponse) {
+                SignupResponse signupResponse = (SignupResponse) response;
+
+                if (signupResponse.isSuccess()) {
+                    return true;
+                } else
+                    return false;
+            }
+
+        } catch (Exception e) {
+            System.out.println(e);
+
+        }
+
+        return false;
+    }
+
 }
