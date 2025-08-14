@@ -62,6 +62,7 @@ public class LoginMenuController extends Controller {
         }
 
         User user = getUser(username);
+        System.out.println(user.getUsername());
         if (isStayLoggedInActive) {
 
             try {
