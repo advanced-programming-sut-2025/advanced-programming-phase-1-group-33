@@ -19,7 +19,7 @@ public class ResponseHolder {
         }
 
         if (response == null) {
-            return null; // مهلت به پایان رسیده
+            return null;
         }
 
         Object result = this.response;
@@ -31,5 +31,4 @@ public class ResponseHolder {
         this.response = null;
     }
 
-    
 }

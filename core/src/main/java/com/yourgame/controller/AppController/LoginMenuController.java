@@ -53,7 +53,6 @@ public class LoginMenuController extends Controller {
             ResponseHolder holder = Main.getMain().getResponseHolder();
             Object responseObject = holder.getResponse(10000); // ۱۰ ثانیه مهلت
 
-            // ۳. پردازش پاسخ
             if (responseObject == null) {
                 return new Result(false, "Error: No response from server (Timeout).");
             }

@@ -73,6 +73,9 @@ public class ClientHandler implements Runnable {
                     handleLoginRequest(loginRequest);
                     break;
                 case USER_EXIST:
+                    ForgotPasswordRequest request = gson.fromJson(payload, ForgotPasswordRequest.class);
+
+                    new SignUpRequestHandler().user_exist(this, request);
                     break;
                 case SIGNUP:
                     SignupRequest signupRequest = gson.fromJson(payload, SignupRequest.class);
@@ -101,8 +104,7 @@ public class ClientHandler implements Runnable {
 
     private void handleLoginRequest(LoginRequest request) {
         User user = userService.loginUser(request.getUsername(), request.getPassword());
-        ResponseType responseType = ResponseType.FAILURE; 
-
+        ResponseType responseType = ResponseType.FAILURE;
 
         LoginResponse response;
         if (user != null) {
@@ -116,7 +118,7 @@ public class ClientHandler implements Runnable {
                     user.getSecurityQuestion().getQuestion(),
                     user.getAnswer());
             response = new LoginResponse(true, "Login successful!", userInfo);
-            responseType = ResponseType.SUCCESSFUL; 
+            responseType = ResponseType.SUCCESSFUL;
         } else {
             response = new LoginResponse(false, "Invalid username or password.", null);
         }
@@ -128,12 +130,12 @@ public class ClientHandler implements Runnable {
         User user = userService.findUserForPasswordRecovery(request.getUsername());
         ForgotPasswordResponse response;
 
-        ResponseType responseType = ResponseType.FAILURE; 
+        ResponseType responseType = ResponseType.FAILURE;
 
         if (user != null) {
             response = new ForgotPasswordResponse(true, user.getSecurityQuestion().getQuestion());
-            responseType = ResponseType.FAILURE; 
-            
+            responseType = ResponseType.FAILURE;
+
         } else {
             response = new ForgotPasswordResponse(false, "User not found!");
         }
@@ -143,11 +145,11 @@ public class ClientHandler implements Runnable {
     private void handleSecurityAnswerRequest(SecurityAnswerRequest request) {
         boolean isAnswerCorrect = userService.verifySecurityAnswer(request.getUsername(), request.getAnswer());
         SecurityAnswerResponse response;
-        ResponseType responseType = ResponseType.FAILURE; 
+        ResponseType responseType = ResponseType.FAILURE;
         if (isAnswerCorrect) {
             User user = userService.findUserForPasswordRecovery(request.getUsername());
             response = new SecurityAnswerResponse(true, user.getPassword());
-            responseType = ResponseType.SUCCESSFUL; 
+            responseType = ResponseType.SUCCESSFUL;
         } else {
             response = new SecurityAnswerResponse(false, "Wrong answer!");
         }

@@ -6,6 +6,7 @@ import com.yourgame.model.enums.Avatar;
 import com.yourgame.model.enums.Gender;
 import com.yourgame.model.enums.SecurityQuestion;
 import com.yourgame.network.protocol.ResponseType;
+import com.yourgame.network.protocol.Auth.ForgotPasswordRequest;
 import com.yourgame.network.protocol.Auth.SignupRequest;
 import com.yourgame.network.protocol.Auth.SignupResponse;
 import com.yourgame.server.ClientHandler;
@@ -32,11 +33,12 @@ public class SignUpRequestHandler implements RequestHandler<SignupRequest> {
         SignupResponse response;
         ResponseType responseType = ResponseType.FAILURE; 
 
-        if (message.startsWith("Success")) {
-            responseType = ResponseType.SUCCESSFUL; 
+        if (message.contains("Success")) {
+            responseType = ResponseType.SIGNUP_SUCCESS; 
             response = new SignupResponse(true, message);
         } else {
             // Registration failed.
+            responseType = ResponseType.SIGNUP_FAILURE; 
             response = new SignupResponse(false, message);
         }
 
@@ -44,4 +46,19 @@ public class SignUpRequestHandler implements RequestHandler<SignupRequest> {
         client.sendResponse(responseType, response);
 
     }
+
+    public void user_exist(ClientHandler client, ForgotPasswordRequest request){
+        User existing_user = userService.findUserForPasswordRecovery(request.getUsername());
+        SignupResponse response = new SignupResponse(false, null); 
+        if (existing_user != null)
+        {
+            response = new SignupResponse(true, "user Exist with this name"); 
+            client.sendResponse(ResponseType.USER_EXIST_SIGNUP, response);
+        }
+        else{
+            client.sendResponse(ResponseType.USER_NOTEXIST_SIGNUP, response);            
+        }
+    }
+
+
 }

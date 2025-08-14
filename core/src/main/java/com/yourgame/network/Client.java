@@ -77,6 +77,7 @@ public class Client implements Runnable {
                 case LOGIN_SUCCESS:
                 case LOGIN_FAILURE:
                 case USER_EXIST_SIGNUP: 
+                case USER_NOTEXIST_SIGNUP:
                 case SIGNUP_SUCCESS:
                     response = gson.fromJson(wrapper.getPayload(), getResponseType(wrapper.getType()));
                     responseHolder.setResponse(response);

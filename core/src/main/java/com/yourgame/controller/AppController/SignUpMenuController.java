@@ -1,5 +1,6 @@
 package com.yourgame.controller.AppController;
 
+import com.badlogic.gdx.Gdx;
 import com.yourgame.Main;
 import com.yourgame.model.App;
 import com.yourgame.model.Result;
@@ -8,6 +9,7 @@ import com.yourgame.model.UserInfo.UserInfoChecking;
 import com.yourgame.model.enums.Avatar;
 import com.yourgame.model.enums.Commands.MenuTypes;
 import com.yourgame.network.protocol.RequestType;
+import com.yourgame.network.protocol.ResponseWrapper;
 import com.yourgame.network.protocol.Auth.ForgotPasswordRequest;
 import com.yourgame.network.protocol.Auth.SignupRequest;
 import com.yourgame.network.protocol.Auth.SignupResponse;
@@ -75,27 +77,28 @@ public class SignUpMenuController {
         UserDAO userDAO = App.getUserDAO();
         User existingUser = null;
 
-        ForgotPasswordRequest request = new ForgotPasswordRequest(username);
+        // try {
+        // existingUser = userDAO.loadUser(username);
+        // } catch (Exception e) {
+        // throw new RuntimeException(e);
+        // }
 
-        try {
-            Object response = Main.getMain().getConnectionManager()
-                    .sendRequestAndWaitForResponse(RequestType.USER_EXIST, request, 1000);
-            existingUser = userDAO.loadUser(username);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-
-        if (existingUser != null) {
+        if (user_exist(username)) {
             try {
                 while (true) {
                     if (username.length() == 8)
                         username = username.substring(0, 7);
                     username = username + NUMBERS.charAt(random.nextInt(NUMBERS.length()));
-                    if (userDAO.loadUser(username) == null)
+                    if (user_exist(username) == false) {
                         return new Result(false, "There exists a user with that username!\n"
                                 + "you can use : " + username);
+                    }
                 }
-            } catch (SQLException e) {
+                // if (userDAO.loadUser(username) == null)
+                // return new Result(false, "There exists a user with that username!\n"
+                // + "you can use : " + username);
+                // }
+            } catch (Exception e) {
                 throw new RuntimeException(e);
             }
         }
@@ -133,6 +136,8 @@ public class SignUpMenuController {
         try {
             response = (Main.getMain().getConnectionManager().sendRequestAndWaitForResponse(RequestType.SIGNUP,
                     signupRequest, 1000));
+            // ResponseWrapper wrapper = gson.fromJson(response, ResponseWrapper.class);
+            Gdx.app.log("signpu controlelr", "Response recived ");
         } catch (Exception e) {
             System.out.println(e);
         }
@@ -140,19 +145,48 @@ public class SignUpMenuController {
         if (response instanceof SignupResponse) {
             SignupResponse signupResponse = (SignupResponse) response;
             if (signupResponse.isSuccess()) {
-
-                App.setCurrentMenu(MenuTypes.MainMenu);
-                Main.getMain().getScreen().dispose();
-                Main.getMain().setScreen(new MainMenuView());
-                return new Result(true, "Signed up successfully...");
+                System.out.println(response);
 
             } else {
+                Gdx.app.log("signpu controlelr", "I was not controlled ");
                 return new Result(false, signupResponse.getMessage());
             }
+            Gdx.app.log("signpu controlelr", "hiii I'm I was successful ");
+
+            App.setCurrentMenu(MenuTypes.MainMenu);
+            Main.getMain().getScreen().dispose();
+            Main.getMain().setScreen(new MainMenuView());
+            return new Result(true, "Signed up successfully...");
         }
 
         return new Result(true, "Signed up Canceld...");
 
+    }
+
+    private static boolean user_exist(String username) {
+
+        ForgotPasswordRequest request = new ForgotPasswordRequest(username);
+        Object response = null;
+
+        try {
+            response = Main.getMain().getConnectionManager()
+                    .sendRequestAndWaitForResponse(RequestType.USER_EXIST, request, 1000);
+            System.out.println(response);
+            if (response instanceof SignupResponse) {
+                SignupResponse signupResponse = (SignupResponse) response;
+
+                if (signupResponse.isSuccess()) {
+                    return true;
+                } else
+                    return false;
+            }
+
+        } catch (Exception e) {
+            System.out.println(e);
+
+        }
+
+        return false;
     }
 
     private static String validatePassword(String password) {
