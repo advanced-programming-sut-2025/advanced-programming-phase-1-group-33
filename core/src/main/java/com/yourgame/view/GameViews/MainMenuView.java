@@ -30,6 +30,7 @@ public class MainMenuView extends Window {
         TextButton mapButton = assetManager.getButton("Map");
         TextButton socialButton = assetManager.getButton("Social");
         TextButton craftingButton = assetManager.getButton("Crafting");
+        TextButton infoButton = assetManager.getButton("Info");
 
         row().pad(10);
         add(inventoryButton).width(300).padBottom(10);
@@ -44,7 +45,8 @@ public class MainMenuView extends Window {
         add(journalButton).width(300).padBottom(10);
         add(settingsButton).width(300).padBottom(10);
         row();
-        add(closeButton).width(300);
+        add(infoButton).width(300).padBottom(10);
+        add(closeButton).width(300).padBottom(10);
 
         setPosition((stage.getWidth() - getWidth())/2f, (stage.getHeight() - getHeight())/2f);
 
@@ -126,6 +128,15 @@ public class MainMenuView extends Window {
             public void clicked(InputEvent event, float x, float y) {
                 gameScreen.closeMenu();
                 remove();
+            }
+        });
+
+        // Info button logic
+        infoButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                stage.clear();
+                stage.addActor(new InfoMenuView(MenuAssetManager.getInstance().getSkin(3), stage , gameScreen));
             }
         });
     }

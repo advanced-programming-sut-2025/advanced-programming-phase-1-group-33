@@ -52,6 +52,7 @@ public class GameAssetManager extends AssetManager {
     private final TextButton skillButton;
     private final TextButton craftingButton;
     private final TextButton backButton;
+    private final TextButton infoButton;
 
     // A cache for textures that are loaded dynamically by path.
     private final HashMap<String, Texture> textureCache = new HashMap<>();
@@ -81,6 +82,7 @@ public class GameAssetManager extends AssetManager {
         skillButton = new TextButton("Skills", MenuAssetManager.getInstance().getSkin(3));
         craftingButton = new TextButton("Crafting", MenuAssetManager.getInstance().getSkin(3));
         backButton = new TextButton("Back", MenuAssetManager.getInstance().getSkin(3));
+        infoButton = new TextButton("Info", MenuAssetManager.getInstance().getSkin(3));
 
         coinTexture = new Texture(Gdx.files.internal("Game/Clock/Gold.png"));
 
@@ -130,6 +132,7 @@ public class GameAssetManager extends AssetManager {
             case "Skills" -> skillButton;
             case "Crafting" -> craftingButton;
             case "Back" -> backButton;
+            case "Info" -> infoButton;
             default -> null;
         };
     }
