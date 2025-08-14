@@ -17,16 +17,19 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.yourgame.Graphics.MenuAssetManager;
 import com.yourgame.Graphics.GameAssets.HUDManager;
 import com.yourgame.Graphics.GameAssets.clockUIAssetManager;
 import com.yourgame.controller.GameController.GameController;
 import com.yourgame.model.Food.FoodAnimation;
+import com.yourgame.model.Item.Inventory.Inventory;
 import com.yourgame.model.Map.*;
 import com.yourgame.model.App;
 import com.yourgame.Graphics.GameAssetManager;
 import com.yourgame.model.Map.Store.Store;
+import com.yourgame.model.NPC.*;
 import com.yourgame.model.UserInfo.Player;
 import com.yourgame.model.UserInfo.PlayerState;
 import com.yourgame.model.WeatherAndTime.ThunderManager;
@@ -51,6 +54,7 @@ public class GameScreen extends GameBaseScreen {
     private final Player player;
     private float stateTime;
     private float faintingTimer;
+    private final NPCManager npcManager;
 
     private OrthogonalTiledMapRenderer mapRenderer;
     private OrthographicCamera camera;
@@ -69,6 +73,7 @@ public class GameScreen extends GameBaseScreen {
     private final ThunderManager thunderManager;
 
     private RefrigeratorView refrigeratorView;
+    private DialogueView dialogueView;
 
     public GameScreen() {
         super();
@@ -77,6 +82,7 @@ public class GameScreen extends GameBaseScreen {
         player = controller.getPlayer();
         player.addPlayerStuffToObserver(); // Toff Mali Khales :(
         stateTime = 0f;
+        npcManager = new NPCManager(controller.getMapManager());
 
         mapRenderer = new OrthogonalTiledMapRenderer(controller.getCurrentMap().getTiledMap());
 
@@ -200,6 +206,8 @@ public class GameScreen extends GameBaseScreen {
                 }
 
                 stateTime += delta;
+
+                npcManager.update(delta, controller.getMapManager().getTown(), player);
             }
         }
 
@@ -225,6 +233,7 @@ public class GameScreen extends GameBaseScreen {
         thunderManager.render(batch);
         // Food Animation
         if (foodAnimation != null) foodAnimation.render(batch);
+        if (controller.getCurrentMap().getName().equals("town")) npcManager.render(batch);
         batch.end();
 
         //check for fainting
@@ -295,6 +304,31 @@ public class GameScreen extends GameBaseScreen {
             currentFrame = player.walkAnimations[player.direction].getKeyFrame(stateTime, true);
         }
         batch.draw(currentFrame, player.playerPosition.x, player.playerPosition.y);
+    }
+
+    public void showDialogue(NPC npc, Dialogue dialogue) {
+        if (dialogueView != null && dialogueView.hasParent()) {
+            return;
+        }
+
+        paused = true;
+
+        dialogueView = new DialogueView(npc, dialogue.text(), this);
+        dialogueView.setPosition(Gdx.graphics.getWidth() / 2f, 100, Align.center);
+
+        menuStage.addActor(dialogueView);
+        Gdx.input.setInputProcessor(menuStage);
+        hudManager.showInventory(false);
+    }
+
+    public void closeDialogue() {
+        if (dialogueView != null) {
+            dialogueView.remove();
+            dialogueView = null;
+        }
+        paused = false;
+        Gdx.input.setInputProcessor(multiplexer);
+        hudManager.showInventory(true);
     }
 
     // Methods for music control, similar to MenuBaseScreen
@@ -386,6 +420,12 @@ public class GameScreen extends GameBaseScreen {
         }
 
         if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
+            NPC clickedNpc = npcManager.getNpcAt(camera);
+            if (clickedNpc != null && clickedNpc.isPlayerInRange()) {
+                Dialogue dialogue = clickedNpc.getDialogue(player);
+                showDialogue(clickedNpc, dialogue);
+            }
+
             controller.handleInteraction();
             if (controller.getCurrentMap() instanceof Store store) {
                 if (store.isPlayerInBuyZone(player)) {
@@ -413,7 +453,7 @@ public class GameScreen extends GameBaseScreen {
         if (Gdx.input.isKeyJustPressed(Input.Keys.F)) {
             paused = true;
             Gdx.input.setInputProcessor(new InputMultiplexer(HUDStage, menuStage));
-            menuStage.addActor(new JournalMenuView(MenuAssetManager.getInstance().getSkin(3), menuStage, this));
+            menuStage.addActor(new JournalMenuView(menuStage, this, player));
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.M)) {
             paused = true;
@@ -421,6 +461,12 @@ public class GameScreen extends GameBaseScreen {
             menuStage.addActor(new MapMenuView(MenuAssetManager.getInstance().getSkin(3), menuStage, this));
         }
 
+        handleCheatCode();
+
+        handleInventoryInput();
+    }
+
+    public void handleCheatCode() {
         if (Gdx.input.isKeyJustPressed(Input.Keys.E)) {
             player.consumeEnergy(10);
         }
@@ -445,12 +491,13 @@ public class GameScreen extends GameBaseScreen {
             App.getGameState().getGameTime().advanceMinutes(60);
         }
 
+        // Energy
+        if (Gdx.input.isKeyJustPressed(Input.Keys.P)) {
+            player.setEnergy(player.getMaxEnergy());
+        }
         if (Gdx.input.isKeyJustPressed(Input.Keys.U)) {
             player.faint();
         }
-
-        // --- Inventory Selection Input ---
-        handleInventoryInput();
     }
 
     public void changeMap(Map newMap, String spawnName) {

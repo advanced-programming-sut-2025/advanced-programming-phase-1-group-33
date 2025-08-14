@@ -8,8 +8,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
-import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.yourgame.Graphics.GameAssetManager;
 import com.yourgame.Graphics.MenuAssetManager;
@@ -48,7 +46,7 @@ public class HUDManager {
     private ImageButton weatherTypeButton;
     private ImageButton seasonButton;
 
-    private Texture InventoryTexture;
+    private Table inventoryBar;
     private TextField timeField, dateField, goldField;
 
     // Inventory Bar
@@ -88,7 +86,8 @@ public class HUDManager {
     public void createHUD() {
         hudStage.addActor(createClockBarTable());
         hudStage.addActor(createEnergyBarTable());
-        hudStage.addActor(createInventoryBarTable());
+        createInventoryBarTable();
+        hudStage.addActor(inventoryBar);
         hudStage.addActor(createCoinTable());
     }
 
@@ -151,7 +150,7 @@ public class HUDManager {
      * Uses a Stack to overlay tool icons and a selection highlight on top of the
      * inventory background image.
      */
-    public Table createInventoryBarTable() {
+    public void createInventoryBarTable() {
         Table inventoryContainerTable = new Table();
         inventoryContainerTable.setFillParent(true);
         inventoryContainerTable.bottom().padBottom(10);
@@ -170,7 +169,7 @@ public class HUDManager {
 
         inventoryContainerTable.add(inventoryStack);
         selectSlot(0); // Select the first slot by default
-        return inventoryContainerTable;
+        inventoryBar = inventoryContainerTable;
     }
 
     public Table createCoinTable() {
@@ -200,6 +199,10 @@ public class HUDManager {
                 inventorySlotsUI[i].update(null, assetManager);
             }
         }
+    }
+
+    public void showInventory(boolean show) {
+        inventoryBar.setVisible(show);
     }
 
     /**

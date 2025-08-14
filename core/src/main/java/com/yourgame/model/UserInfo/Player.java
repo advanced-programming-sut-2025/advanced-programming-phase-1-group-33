@@ -18,8 +18,9 @@ import com.yourgame.model.Item.Tools.Pickaxe;
 import com.yourgame.model.Item.Tools.Scythe;
 import com.yourgame.model.Item.Tools.WateringCan;
 import com.yourgame.model.Item.Inventory.Backpack;
-import com.yourgame.model.Npc.NPCType;
-import com.yourgame.model.Npc.RelationWithNPC;
+import com.yourgame.model.NPC.NPCType;
+import com.yourgame.model.NPC.QuestManager;
+import com.yourgame.model.NPC.RelationWithNPC;
 import com.yourgame.model.Skill.Skill;
 import com.yourgame.model.WeatherAndTime.TimeObserver;
 import com.yourgame.model.WeatherAndTime.TimeSystem;
@@ -53,6 +54,7 @@ public class Player implements TimeObserver {
 
     private Map farmHouse;
 
+    private final QuestManager questManager;
     private int remainingDaysAfterMarriageDenied = 0;
     private boolean isMarried = false;
     private RelationWithNPC relationWithAbigail;
@@ -104,7 +106,8 @@ public class Player implements TimeObserver {
         this.cookingRecipeManager = CookingRecipeManager.getInstance();
 
         // Relation
-        this.relationWithAbigail = new RelationWithNPC(NPCType.Abigail);
+        this.questManager = new QuestManager();
+        this.relationWithAbigail = new RelationWithNPC(NPCType.Pierre);
         this.relationWithSebastian = new RelationWithNPC(NPCType.Sebastian);
         this.relationWithHarvey = new RelationWithNPC(NPCType.Harvey);
         this.relationWithLeah = new RelationWithNPC(NPCType.Leah);
@@ -195,6 +198,10 @@ public class Player implements TimeObserver {
 
     public BuffManager getBuffManager() {
         return buffManager;
+    }
+
+    public QuestManager getQuestManager() {
+        return questManager;
     }
 
     public void faint() {

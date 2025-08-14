@@ -61,7 +61,6 @@ public enum ForagingCrop implements Ingredient {
         return name();
     }
 
-
     public int getBaseSellPrice() {
         return baseSellPrice;
     }
