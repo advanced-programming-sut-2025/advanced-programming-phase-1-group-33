@@ -443,7 +443,7 @@ public class GameScreen extends GameBaseScreen {
         if (Gdx.input.isKeyJustPressed(Input.Keys.F)) {
             paused = true;
             Gdx.input.setInputProcessor(new InputMultiplexer(HUDStage, menuStage));
-            menuStage.addActor(new JournalMenuView(MenuAssetManager.getInstance().getSkin(3), menuStage, this));
+            menuStage.addActor(new JournalMenuView(menuStage, this, player));
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.M)) {
             paused = true;

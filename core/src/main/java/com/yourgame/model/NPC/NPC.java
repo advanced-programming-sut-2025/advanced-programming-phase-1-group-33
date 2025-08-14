@@ -123,7 +123,7 @@ public class NPC {
         // 1. Check if the player can COMPLETE an active quest for this NPC.
         Quest activeQuest = questManager.getActiveQuestByGiver(this.type);
         if (activeQuest != null && questManager.canCompleteQuest(activeQuest, playerInventory)) {
-            questManager.completeQuest(activeQuest, playerInventory);
+            questManager.completeQuest(activeQuest, player);
             return activeQuest.endDialogue();
         }
 

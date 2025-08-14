@@ -14,6 +14,7 @@ public class QuestDatabase {
     static {
         QUESTS.put("robin_wood", new Quest(
             "robin_wood",
+            "Robin's Request",
             "Robin needs wood for a new project.",
             NPCType.Robin,
             Map.of(new Wood.WoodItem(), 50),
@@ -25,6 +26,7 @@ public class QuestDatabase {
 
         QUESTS.put("leah_parsnip", new Quest(
             "leah_parsnip",
+            "Delivery",
             "Leah is feeling peckish and would love a fresh parsnip.",
             NPCType.Leah,
             Map.of(new CropItem(CropType.Parsnip), 1),
@@ -36,6 +38,7 @@ public class QuestDatabase {
 
         QUESTS.put("sebastian_spice_berry", new Quest(
             "sebastian_spice_berry",
+            "Sebastian Weird Request",
             "Sebastian is craving a Spice Berry.",
             NPCType.Sebastian,
             Map.of(new ForagingCrop.ForagingCropItem(ForagingCrop.Spice_Berry), 1),
@@ -47,6 +50,7 @@ public class QuestDatabase {
 
         QUESTS.put("harvey_daffodil", new Quest(
             "harvey_daffodil",
+            "Passion Of Science",
             "Harvey is studying spring allergens and needs a daffodil.",
             NPCType.Harvey,
             Map.of(new ForagingCrop.ForagingCropItem(ForagingCrop.Daffodil), 1),
@@ -58,6 +62,7 @@ public class QuestDatabase {
 
         QUESTS.put("pierre_garlic", new Quest(
             "pierre_garlic",
+            "Valley Promotion",
             "Pierre wants to display a high-quality garlic in his shop.",
             NPCType.Pierre,
             Map.of(new CropItem(CropType.Garlic), 1),

@@ -2,13 +2,23 @@ package com.yourgame.model.NPC;
 
 import com.yourgame.model.Item.Inventory.Inventory;
 import com.yourgame.model.Item.Item;
+import com.yourgame.model.UserInfo.Player;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
 public class QuestManager {
     private final Map<String, Quest> activeQuests = new HashMap<>();
     private final Map<String, Quest> completedQuests = new HashMap<>();
+
+    public Collection<Quest> getActiveQuests() {
+        return activeQuests.values();
+    }
+
+    public Collection<Quest> getCompletedQuests() {
+        return completedQuests.values();
+    }
 
     public void acceptQuest(Quest quest) {
         if (quest != null && !activeQuests.containsKey(quest.questId())) {
@@ -28,12 +38,12 @@ public class QuestManager {
         return true;
     }
 
-    public void completeQuest(Quest quest, Inventory playerInventory) {
-        if (!canCompleteQuest(quest, playerInventory)) return;
+    public void completeQuest(Quest quest, Player player) {
+        if (!canCompleteQuest(quest, player.getBackpack().getInventory())) return;
 
         // Remove items from inventory
         for (Map.Entry<Item, Integer> entry : quest.requiredItems().entrySet()) {
-            playerInventory.reduceItemQuantity(entry.getKey(), entry.getValue());
+            player.getBackpack().getInventory().reduceItemQuantity(entry.getKey(), entry.getValue());
         }
 
         // Move quest from active to completed
