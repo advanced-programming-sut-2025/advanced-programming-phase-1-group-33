@@ -41,7 +41,10 @@ public class LoginMenuController extends Controller {
             if(user == null)
                 return new Result(false, "User not found!");
             else{
-                if(isStayLoggedInActive) {
+                if(!user.getPassword().equals(password)){
+                    return new Result(false, "Wrong password!");
+                }
+                else if(isStayLoggedInActive) {
                     try {
                         HandleStayedLoggedIn.getInstance().addUser(user);
                     } catch (IOException e) {

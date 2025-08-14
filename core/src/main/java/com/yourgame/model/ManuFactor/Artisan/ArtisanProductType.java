@@ -4,7 +4,6 @@ import com.yourgame.model.Animals.AnimalPackage.AnimalProduct;
 import com.yourgame.model.Animals.AnimalPackage.AnimalProductType;
 import com.yourgame.model.Farming.CropItem;
 import com.yourgame.model.Farming.CropType;
-import com.yourgame.model.ManuFactor.ArtisanGoodType;
 
 import java.util.ArrayList;
 import java.util.Arrays;
