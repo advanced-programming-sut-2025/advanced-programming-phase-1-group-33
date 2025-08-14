@@ -107,7 +107,7 @@ public class CookingRecipeManager {
         // Triple Shot Espresso: 3 Coffee
         cookingRecipes.add(new CookingRecipe(
             new ArrayList<>() {{
-                //add(new Ingredient(new ArtisanProduct(ArtisanProductType.Coffee),3));
+                add(new Ingredient(new ArtisanProduct(ArtisanProductType.Coffee),3));
             }},
             new Food(FoodType.TripleShotEspresso),
             new CookingRecipeSource(0,0,0,0,false,false, false)

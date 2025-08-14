@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.yourgame.model.App;
+import com.yourgame.model.Crafting.CraftingRecipeManager;
 import com.yourgame.model.Farming.*;
 import com.yourgame.model.Food.BuffManager;
 import com.yourgame.model.Food.Cooking.CookingRecipeManager;
@@ -19,7 +20,6 @@ import com.yourgame.model.Item.Tools.Scythe;
 import com.yourgame.model.Item.Tools.WateringCan;
 import com.yourgame.model.Item.Inventory.Backpack;
 import com.yourgame.model.NPC.QuestManager;
-import com.yourgame.model.Resource.Wood;
 import com.yourgame.model.Skill.Skill;
 import com.yourgame.model.WeatherAndTime.TimeObserver;
 import com.yourgame.model.WeatherAndTime.TimeSystem;
@@ -44,10 +44,10 @@ public class Player implements TimeObserver {
 
     private final Backpack backpack = new Backpack(BackpackType.Primary);
     private final ArrayList<Notification> notifications = new ArrayList<>();
-    private Skill.FarmingSkill farmingSkill;
-    private Skill.MiningSkill miningSkill;
-    private Skill.ForagingSkill foragingSkill;
-    private Skill.FishingSkill fishingSkill;
+    private final Skill.FarmingSkill farmingSkill;
+    private final Skill.MiningSkill miningSkill;
+    private final Skill.ForagingSkill foragingSkill;
+    private final Skill.FishingSkill fishingSkill;
     private final BuffManager buffManager = new BuffManager();
     private boolean addedToObserver = false;
 
@@ -62,7 +62,8 @@ public class Player implements TimeObserver {
     private int relationWithLeah = 1;
     private int relationWithRobin = 1;
 
-    private CookingRecipeManager cookingRecipeManager;
+    private final CookingRecipeManager cookingRecipeManager;
+    private final CraftingRecipeManager craftingRecipeManager;
 
     private int gold = 5000;
 
@@ -101,6 +102,9 @@ public class Player implements TimeObserver {
 
         // Cooking
         this.cookingRecipeManager = CookingRecipeManager.getInstance();
+
+        // Crafting
+        this.craftingRecipeManager = CraftingRecipeManager.getInstance();
 
         // Relation
         this.questManager = new QuestManager();
@@ -328,6 +332,10 @@ public class Player implements TimeObserver {
 
     public CookingRecipeManager getCookingRecipeManager() {
         return cookingRecipeManager;
+    }
+
+    public CraftingRecipeManager getCraftingRecipeManager() {
+        return craftingRecipeManager;
     }
 
     @Override
