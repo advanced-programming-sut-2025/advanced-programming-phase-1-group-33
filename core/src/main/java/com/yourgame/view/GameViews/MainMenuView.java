@@ -53,7 +53,7 @@ public class MainMenuView extends Window {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 stage.clear();
-                stage.addActor(new InventoryMenuView(MenuAssetManager.getInstance().getSkin(3), stage , gameScreen));
+                stage.addActor(new InventoryMenuView(gameScreen.getPlayer(), stage , gameScreen));
             }
         });
 
