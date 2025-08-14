@@ -25,6 +25,7 @@ import com.yourgame.Graphics.GameAssets.clockUIAssetManager;
 import com.yourgame.controller.GameController.GameController;
 import com.yourgame.model.Food.FoodAnimation;
 import com.yourgame.model.Item.Inventory.Inventory;
+import com.yourgame.model.Item.Tools.Tool;
 import com.yourgame.model.Map.*;
 import com.yourgame.model.App;
 import com.yourgame.Graphics.GameAssetManager;
@@ -304,6 +305,11 @@ public class GameScreen extends GameBaseScreen {
             currentFrame = player.walkAnimations[player.direction].getKeyFrame(stateTime, true);
         }
         batch.draw(currentFrame, player.playerPosition.x, player.playerPosition.y);
+
+        // render tool
+        if (player.getBackpack().getInventory().getSelectedItem() instanceof Tool tool) {
+            batch.draw(tool.getTextureRegion(GameAssetManager.getInstance()), player.playerPosition.x + 6, player.playerPosition.y + 7, 16, 16);
+        }
     }
 
     public void showDialogue(NPC npc, Dialogue dialogue) {
