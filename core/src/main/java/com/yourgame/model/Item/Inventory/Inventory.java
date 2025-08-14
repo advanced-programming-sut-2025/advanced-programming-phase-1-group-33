@@ -3,6 +3,7 @@ package com.yourgame.model.Item.Inventory;
 import com.yourgame.model.Item.Item;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 
 public class Inventory {
@@ -117,5 +118,11 @@ public class Inventory {
 
     public boolean isInventoryFull() {
         return !isCapacityUnlimited && (itemCount >= capacity);
+    }
+
+    public void swapSlots(int index1, int index2) {
+        if (index1 >= 0 && index1 < slots.size() && index2 >= 0 && index2 < slots.size()) {
+            Collections.swap(slots, index1, index2);
+        }
     }
 }
