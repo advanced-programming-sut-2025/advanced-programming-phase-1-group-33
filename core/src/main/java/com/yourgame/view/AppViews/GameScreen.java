@@ -6,6 +6,7 @@ import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.MapObject;
@@ -27,13 +28,17 @@ import com.yourgame.model.App;
 import com.yourgame.Graphics.GameAssetManager;
 import com.yourgame.model.Map.Store.Store;
 import com.yourgame.model.UserInfo.Player;
+import com.yourgame.model.UserInfo.PlayerState;
 import com.yourgame.model.WeatherAndTime.ThunderManager;
 import com.yourgame.view.GameViews.*;
 import com.yourgame.view.GameViews.MainMenuView;
+<<<<<<< HEAD
 import com.yourgame.view.GameViews.ShopMenu.PierreShopMenuView;
 import com.yourgame.view.GameViews.ShopMenu.PierreShopSellMenuView;
 import com.yourgame.view.GameViews.ShopMenu.StardropSaloonMenuView;
 
+=======
+>>>>>>> 02f48e0ca227dfe367fab0a89b09519eaf2783e3
 
 import static com.yourgame.model.UserInfo.Player.*;
 
@@ -49,6 +54,7 @@ public class GameScreen extends GameBaseScreen {
     private final GameController controller;
     private final Player player;
     private float stateTime;
+    private float faintingTimer;
 
     private OrthogonalTiledMapRenderer mapRenderer;
     private OrthographicCamera camera;
@@ -64,9 +70,6 @@ public class GameScreen extends GameBaseScreen {
     private Texture nightOverlayTexture;
     private Color ambientLightColor;
 
-    //Faint
-    private boolean isFainting = false;
-
     private final ThunderManager thunderManager;
 
     private RefrigeratorView refrigeratorView;
@@ -76,7 +79,7 @@ public class GameScreen extends GameBaseScreen {
 
         controller = new GameController();
         player = controller.getPlayer();
-        App.getGameState().getGameTime().addHourObserver(player.getBuffManager()); // Toff Mali Khales :(
+        player.addPlayerStuffToObserver(); // Toff Mali Khales :(
         stateTime = 0f;
 
         mapRenderer = new OrthogonalTiledMapRenderer(controller.getCurrentMap().getTiledMap());
@@ -163,27 +166,47 @@ public class GameScreen extends GameBaseScreen {
         FoodAnimation foodAnimation = GameAssetManager.getInstance().getFoodAnimation();
 
         if (!paused) {
-            controller.updateSelectedTile(camera);
-            handleInput(delta);
-            checkForTeleport();
-            handleHudUpdates(delta);
-            controller.updateDroppedItems(delta);
-            updateDayNightCycle();
-            thunderManager.update(delta);
-
-            if (foodAnimation != null) {
-                boolean isFinished = foodAnimation.update(delta);
-                if (isFinished) {
-                    GameAssetManager.getInstance().setFoodAnimation(null);
-                }
+            if (player.isFaintedToday() && player.getPlayerState() != PlayerState.FAINTING) {
+                player.setPlayerState(PlayerState.FAINTING);
+                faintingTimer = 0f; // Start the fainting timer
             }
 
+<<<<<<< HEAD
             if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
                 openMenu("stardrop");
             }
 
             // Update animation timer
             stateTime += delta;
+=======
+            if (player.getPlayerState() == PlayerState.FAINTING) {
+                faintingTimer += delta;
+                Animation<TextureRegion> faintAnimation = MenuAssetManager.getInstance().getFaintAnimation();
+
+                if (faintAnimation.isAnimationFinished(faintingTimer)) {
+                    App.getGameState().getGameTime().advanceDay(1);
+                    changeMap(player.getFarmHouse(), "spawn-bed");
+                    player.setPlayerState(PlayerState.IDLE);
+                }
+            } else {
+                controller.updateSelectedTile(camera);
+                handleInput(delta);
+                checkForTeleport();
+                handleHudUpdates(delta);
+                controller.updateDroppedItems(delta);
+                updateDayNightCycle();
+                thunderManager.update(delta);
+
+                if (foodAnimation != null) {
+                    boolean isFinished = foodAnimation.update(delta);
+                    if (isFinished) {
+                        GameAssetManager.getInstance().setFoodAnimation(null);
+                    }
+                }
+
+                stateTime += delta;
+            }
+>>>>>>> 02f48e0ca227dfe367fab0a89b09519eaf2783e3
         }
 
         // Clear screen
@@ -199,38 +222,19 @@ public class GameScreen extends GameBaseScreen {
 
         // == Render On-Map ==
         batch.setProjectionMatrix(camera.combined);
-
         batch.begin();
-
         // Map Elements
         controller.renderMapObjects(assetManager, batch);
-
         // Render player
-        TextureRegion currentFrame;
-        if (!isFainting) {
-            currentFrame = player.walkAnimations[player.direction].getKeyFrame(stateTime, true);
-        } else {
-            currentFrame = MenuAssetManager.getInstance().getFaintAnimation().getKeyFrame(stateTime, false);
-            if (MenuAssetManager.getInstance().getFaintAnimation().isAnimationFinished(stateTime)) {
-                isFainting = false;
-                stateTime = 0f;
-                changeMap(controller.getMapManager().getHouse(player), "spawn-bed");
-                resetPlayerSituation();
-            }
-        }
-        batch.draw(currentFrame, player.playerPosition.x, player.playerPosition.y);
-
+        renderPlayer();
         // Thunder
         thunderManager.render(batch);
-
         // Food Animation
         if (foodAnimation != null) foodAnimation.render(batch);
-
         batch.end();
 
         //check for fainting
         checkFainting();
-
 
         // Render Day & Night
         renderOverlay();
@@ -289,6 +293,16 @@ public class GameScreen extends GameBaseScreen {
         batch.end();
     }
 
+    public void renderPlayer() {
+        TextureRegion currentFrame;
+        if (player.getPlayerState() == PlayerState.FAINTING) {
+            currentFrame = MenuAssetManager.getInstance().getFaintAnimation().getKeyFrame(faintingTimer, false);
+        } else {
+            currentFrame = player.walkAnimations[player.direction].getKeyFrame(stateTime, true);
+        }
+        batch.draw(currentFrame, player.playerPosition.x, player.playerPosition.y);
+    }
+
     // Methods for music control, similar to MenuBaseScreen
     public void playBackgroundMusic() {
         if (App.isMusicMuted()) {
@@ -331,6 +345,8 @@ public class GameScreen extends GameBaseScreen {
     }
 
     private void handleInput(float delta) {
+        if (player.getPlayerState() == PlayerState.FAINTING) return;
+
         player.playerVelocity.setZero();
 
         float speed = SPEED;
@@ -355,6 +371,7 @@ public class GameScreen extends GameBaseScreen {
 
         if (player.playerVelocity.isZero()) {
             stateTime = 0f; // Pause animation when idle
+            player.setPlayerState(PlayerState.IDLE);
         } else {
             // Store original position
             Vector2 oldPos = new Vector2(player.playerPosition);
@@ -370,6 +387,8 @@ public class GameScreen extends GameBaseScreen {
             if (controller.isBlocked(player.playerPosition.x, player.playerPosition.y)) {
                 player.playerPosition.y = oldPos.y; // Revert if collision
             }
+
+            player.setPlayerState(PlayerState.WALKING);
         }
 
         if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
@@ -406,6 +425,34 @@ public class GameScreen extends GameBaseScreen {
             paused = true;
             Gdx.input.setInputProcessor(new InputMultiplexer(HUDStage, menuStage));
             menuStage.addActor(new MapMenuView(MenuAssetManager.getInstance().getSkin(3), menuStage, this));
+        }
+
+        if (Gdx.input.isKeyJustPressed(Input.Keys.E)) {
+            player.consumeEnergy(10);
+        }
+
+        if (Gdx.input.isKeyJustPressed(Input.Keys.H)) {
+            if (!(controller.getCurrentMap() instanceof Farm)) return;
+            App.getGameState().getThunderManager().triggerThunderStrike(controller.getCurrentMap());
+        }
+
+        // Example: Update weather (cycle through enums with 'W' key)
+        if (Gdx.input.isKeyJustPressed(Input.Keys.Q)) {
+            // TODO: Need the CheatCode Be Implemented
+        }
+
+        // Update day
+        if (Gdx.input.isKeyJustPressed(Input.Keys.T)) {
+            App.getGameState().getGameTime().advanceDay(1);
+        }
+
+        // Update hour
+        if (Gdx.input.isKeyJustPressed(Input.Keys.Y)) {
+            App.getGameState().getGameTime().advanceMinutes(60);
+        }
+
+        if (Gdx.input.isKeyJustPressed(Input.Keys.U)) {
+            player.faint();
         }
 
         // --- Inventory Selection Input ---
@@ -471,42 +518,8 @@ public class GameScreen extends GameBaseScreen {
 
     /**
      * Handles updates to the HUD elements based on game state or input.
-     * This is a good practice to separate HUD logic from main rendering.
      */
     private void handleHudUpdates(float delta) {
-        if (Gdx.input.isKeyJustPressed(Input.Keys.E)) {
-            player.consumeEnergy(10);
-        }
-
-        if (Gdx.input.isKeyJustPressed(Input.Keys.H)) {
-            if (!(controller.getCurrentMap() instanceof Farm)) return;
-            App.getGameState().getThunderManager().triggerThunderStrike(controller.getCurrentMap());
-        }
-
-        // Example: Update weather (cycle through enums with 'W' key)
-        if (Gdx.input.isKeyJustPressed(Input.Keys.Q)) {
-            // TODO: Need the CheetCode Be Implemented
-            // HUDManager.weatherTypeButton[] weathers =
-            // HUDManager.weatherTypeButton.values();
-            // int nextIndex = (currentWeather.ordinal() + 1) % weathers.length;
-            // currentWeather = weathers[nextIndex];
-            // hudManager.updateWeather(currentWeather);
-        }
-
-        // Example: Update season (cycle through enums with 'R' key)
-        if (Gdx.input.isKeyJustPressed(Input.Keys.T)) {
-            // TODO: need the cheat Code Be implemented
-            App.getGameState().getGameTime().advanceDay(1);
-            // HUDManager.seasonTypeButton[] seasons = HUDManager.seasonTypeButton.values();
-            // int nextIndex = (currentSeason.ordinal() + 1) % seasons.length;
-            // currentSeason = seasons[nextIndex];
-            // hudManager.updateSeason(currentSeason);
-        }
-
-        if (Gdx.input.isKeyJustPressed(Input.Keys.Y)) {
-            App.getGameState().getGameTime().advanceMinutes(60);
-        }
-
         hudManager.updateInventory(player.getBackpack().getInventory());
         hudManager.updateBuffs(player.getBuffManager().getActiveBuffs());
         hudManager.updateTime(delta);
@@ -518,16 +531,12 @@ public class GameScreen extends GameBaseScreen {
 
     private void checkFainting() {
         if (player.getEnergy() <= 0) {
-            isFainting = true;
+            player.faint();
         }
 
-        if (App.getGameState().getGameTime().getHour() >= 8) {
-            isFainting = true;
-        }
-    }
-
-    private void resetPlayerSituation(){
-        //TODO
+//        if (App.getGameState().getGameTime().getHour() >= 8) {
+//            isFainting = true;
+//        }
     }
 
     private void openMenu(String name) {

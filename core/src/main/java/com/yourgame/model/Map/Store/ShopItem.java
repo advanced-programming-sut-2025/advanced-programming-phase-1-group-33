@@ -4,17 +4,19 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.yourgame.Graphics.GameAssetManager;
 import com.yourgame.model.Item.Item;
 
-public class ShopItem extends Item {
+public class ShopItem {
+    private final Item item;
     private final int dailyLimit;
     private int remainingQuantity;
-    private final String filePath;
 
-    public ShopItem(String name, ItemType itemType, int value, boolean isStackable, Integer dailyLimit, String filePath) {
-        super(name, itemType, value, isStackable);
-
+    public ShopItem(Item item, Integer dailyLimit) {
+        this.item = item;
         this.dailyLimit = dailyLimit;
         this.remainingQuantity = dailyLimit;
-        this.filePath = filePath;
+    }
+
+    public Item getItem() {
+        return item;
     }
 
     public int getDailyLimit() {
@@ -33,8 +35,7 @@ public class ShopItem extends Item {
         remainingQuantity++;
     }
 
-    @Override
-    public TextureRegion getTextureRegion(GameAssetManager assetManager) {
-        return new TextureRegion(assetManager.getTexture(filePath));
+    public int getPriceOutOfSeason() {
+        return (int) (item.getValue() * 1.5);
     }
 }
