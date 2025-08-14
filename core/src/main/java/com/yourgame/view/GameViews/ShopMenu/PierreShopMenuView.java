@@ -294,6 +294,7 @@ public class PierreShopMenuView extends Window {
 
         // Deduct money
         gameScreen.getPlayer().setGold(gameScreen.getPlayer().getGold()-currentSelectedPrice);
+        gameScreen.getHUDManager().updateCoin();
 
         // Show Confirmation
         gameScreen.showMessage("popUp", "Purchased " + currentSelectedQuantity + " x " + currentSelectedItem.getName(),

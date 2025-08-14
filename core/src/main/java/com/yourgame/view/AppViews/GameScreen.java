@@ -578,4 +578,8 @@ public class GameScreen extends GameBaseScreen {
     public GameController getController() {
         return controller;
     }
+
+    public HUDManager getHUDManager() {
+        return hudManager;
+    }
 }

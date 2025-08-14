@@ -7,7 +7,7 @@ public class CookingRecipeSource {
     private final int farmingSkillLevelNeeded;
     private final boolean isStarter;
     private final boolean isLeahReward;
-    private final boolean isBought;
+    private boolean isBought;
 
     public CookingRecipeSource(int miningSkillLevelNeeded, int foragingSkillLevelNeeded, int fishingSkillLevelNeeded, int farmingSkillLevelNeeded, boolean isStarter, boolean isLeahReward, boolean isBought) {
         this.miningSkillLevelNeeded = miningSkillLevelNeeded;
@@ -45,5 +45,9 @@ public class CookingRecipeSource {
 
     public boolean isBought() {
         return isBought;
+    }
+
+    public void setBought(boolean bought) {
+        isBought = bought;
     }
 }

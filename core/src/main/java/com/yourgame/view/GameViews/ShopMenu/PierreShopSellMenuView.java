@@ -163,6 +163,7 @@ public class PierreShopSellMenuView extends Window {
 
         Player player = gameScreen.getPlayer();
         player.setGold(player.getGold() + selectedItem.item().getValue() * quantitySelected);
+        gameScreen.getHUDManager().updateCoin();
         selectedItem.reduceQuantity(quantitySelected);
         quantitySelected = 0;
 

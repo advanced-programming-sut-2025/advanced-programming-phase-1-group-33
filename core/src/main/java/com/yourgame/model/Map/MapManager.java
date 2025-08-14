@@ -2,6 +2,7 @@ package com.yourgame.model.Map;
 
 import com.yourgame.model.App;
 import com.yourgame.model.Map.Store.PierreGeneralStore.PierreGeneralStore;
+import com.yourgame.model.Map.Store.StardropSaloon.StardropSaloon;
 import com.yourgame.model.UserInfo.Player;
 import com.yourgame.model.WeatherAndTime.Season;
 
@@ -16,6 +17,7 @@ public class MapManager {
     private final HashMap<Player, Map> playersCurrentMap;
 
     private final PierreGeneralStore pierreGeneralStore;
+    private final StardropSaloon stardropSaloon;
 
     public MapManager(List<Player> players) {
         town = new Map("town", "Game/Map/town.tmx");
@@ -27,7 +29,7 @@ public class MapManager {
         buildings.put("JojaMart", new Map("JojaMart", "Game/Map/Buildings/JojaMart.tmx"));
         buildings.put("marnie-ranch", new Map("marnie-ranch", "Game/Map/Buildings/marnie-ranch.tmx"));
         buildings.put("pierre-store", pierreGeneralStore = new PierreGeneralStore("pierre-store", "Game/Map/Buildings/pierre-store.tmx",9,17));
-        buildings.put("saloon", new Map("saloon", "Game/Map/Buildings/saloon.tmx"));
+        buildings.put("saloon", stardropSaloon = new StardropSaloon("saloon", "Game/Map/Buildings/saloon.tmx", 12, 24));
 
         farms = new HashMap<>();
         houses = new HashMap<>();
@@ -89,7 +91,5 @@ public class MapManager {
         return pierreGeneralStore;
     }
 
-    public Map getSaloon() {
-        return buildings.get("saloon");
-    }
+    public StardropSaloon getStardropSaloon() { return stardropSaloon; }
 }

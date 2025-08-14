@@ -9,13 +9,14 @@ import com.yourgame.model.UserInfo.Player;
 import com.badlogic.gdx.math.Rectangle;
 
 public class Store extends Map {
-    private final MapObjects tradeZoneObjects;
+    private MapObjects tradeZoneObjects;
     protected final int startHour;
     protected final int endHour;
 
     public Store(String name, String pathToTmx, int startHour, int endHour) {
         super(name, pathToTmx);
-        this.tradeZoneObjects = tiledMap.getLayers().get("Trade").getObjects();
+        if(name.equals("pierre-store"))
+            this.tradeZoneObjects = tiledMap.getLayers().get("Trade").getObjects();
         this.startHour = startHour;
         this.endHour = endHour;
     }

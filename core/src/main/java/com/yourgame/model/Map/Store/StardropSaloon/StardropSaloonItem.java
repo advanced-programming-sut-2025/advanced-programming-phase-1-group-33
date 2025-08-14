@@ -11,6 +11,6 @@ public class StardropSaloonItem extends Item {
 
     @Override
     public TextureRegion getTextureRegion(GameAssetManager assetManager) {
-        return null;
+       return new TextureRegion(GameAssetManager.getInstance().getTexture("Game/Food/Recipe.png"));
     }
 }
