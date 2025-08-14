@@ -84,9 +84,9 @@ public class LoginMenuView extends MenuBaseScreen{
         loginButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor){
-                // Result result = controller.handleLoginButton(isStayLoggedInActive);
+                Result result = controller.handleLoginButton(isStayLoggedInActive);
                 playMenuSFX("popUp");
-                // showMessage(result.message(), skin_Nz, 0, 20);
+                showMessage(result.message(), skin_Nz, 0, 20);
             }
         });
 
