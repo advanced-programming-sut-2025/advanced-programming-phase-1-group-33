@@ -17,6 +17,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.yourgame.Graphics.GameAssets.clockUIAssetManager;
 import com.yourgame.model.Food.FoodAnimation;
+import com.yourgame.model.ManuFactor.Artisan.EdibleArtisanProduct.EdibleArtisanAnimation;
 import com.yourgame.model.WeatherAndTime.Weather;
 
 import java.util.HashMap;
@@ -63,6 +64,7 @@ public class GameAssetManager extends AssetManager {
     private final HashMap<String, Sound> soundCache = new HashMap<>();
 
     private FoodAnimation foodAnimation = null;
+    private EdibleArtisanAnimation edibleArtisanAnimation = null;
 
     private GameAssetManager() {
         this.clockManager = new clockUIAssetManager(WEATHER_CLOCK_SKIN_PATH, CLOCK_ATLAS_PATH, Default_FONT_PATH,
@@ -194,6 +196,14 @@ public class GameAssetManager extends AssetManager {
 
     public FoodAnimation getFoodAnimation() {
         return foodAnimation;
+    }
+
+    public EdibleArtisanAnimation getEdibleArtisanAnimation() {
+        return edibleArtisanAnimation;
+    }
+
+    public void setEdibleArtisanAnimation(EdibleArtisanAnimation edibleArtisanAnimation) {
+        this.edibleArtisanAnimation = edibleArtisanAnimation;
     }
 
     public Texture getCoinTexture() {

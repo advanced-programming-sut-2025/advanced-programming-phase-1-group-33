@@ -47,6 +47,7 @@ public enum ArtisanProductType {
         return sellPrice;
     }
 
+    @Override
     public int getEnergy() {
         return energy;
     }

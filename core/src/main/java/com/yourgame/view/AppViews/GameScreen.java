@@ -31,6 +31,7 @@ import com.yourgame.model.UserInfo.Player;
 import com.yourgame.model.UserInfo.PlayerState;
 import com.yourgame.model.WeatherAndTime.ThunderManager;
 import com.yourgame.view.GameViews.*;
+import com.yourgame.view.GameViews.ArtisanMenuView.BeeHouseMenuView;
 import com.yourgame.view.GameViews.MainMenuView;
 import com.yourgame.view.GameViews.ShopMenu.PierreShopMenuView;
 import com.yourgame.view.GameViews.ShopMenu.PierreShopSellMenuView;
@@ -167,8 +168,11 @@ public class GameScreen extends GameBaseScreen {
                 faintingTimer = 0f; // Start the fainting timer
             }
 
-            if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+            if(Gdx.input.isKeyJustPressed(Input.Keys.P)) {
                 openMenu("stardrop");
+            }
+            if(Gdx.input.isKeyJustPressed(Input.Keys.O)) {
+                openMenu("beeHouse");
             }
 
             // Update animation timer
@@ -536,17 +540,14 @@ public class GameScreen extends GameBaseScreen {
     private void openMenu(String name) {
         paused = true;
         Gdx.input.setInputProcessor(new InputMultiplexer(HUDStage, menuStage));
-
+        Skin skin = MenuAssetManager.getInstance().getSkin(3);
         switch (name) {
-            case "main" -> menuStage.addActor(new MainMenuView(MenuAssetManager.getInstance().getSkin(3),
-                menuStage, this));
-            case "pierreShop" -> menuStage.addActor(new PierreShopMenuView(MenuAssetManager.getInstance().getSkin(3),
-                menuStage, this));
+            case "main" -> menuStage.addActor(new MainMenuView(skin, menuStage, this));
+            case "pierreShop" -> menuStage.addActor(new PierreShopMenuView(skin, menuStage, this));
             case "refrigerator" -> menuStage.addActor(refrigeratorView);
-            case "sell" -> menuStage.addActor(new PierreShopSellMenuView(MenuAssetManager.getInstance().getSkin(3),
-                menuStage, this));
-            case "stardrop" -> menuStage.addActor(new StardropSaloonMenuView(MenuAssetManager.getInstance().getSkin(3),
-                menuStage,this));
+            case "sell" -> menuStage.addActor(new PierreShopSellMenuView(skin, menuStage, this));
+            case "stardrop" -> menuStage.addActor(new StardropSaloonMenuView(skin, menuStage,this));
+            case "beeHouse" -> menuStage.addActor(new BeeHouseMenuView(skin, menuStage, this ));
         }
     }
 
