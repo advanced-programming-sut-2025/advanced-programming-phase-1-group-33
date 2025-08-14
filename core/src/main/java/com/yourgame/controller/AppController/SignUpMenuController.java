@@ -10,6 +10,7 @@ import com.yourgame.model.enums.Commands.MenuTypes;
 import com.yourgame.network.protocol.RequestType;
 import com.yourgame.network.protocol.Auth.ForgotPasswordRequest;
 import com.yourgame.network.protocol.Auth.SignupRequest;
+import com.yourgame.network.protocol.Auth.SignupResponse;
 import com.yourgame.model.enums.Gender;
 import com.yourgame.model.enums.SecurityQuestion;
 import com.yourgame.persistence.UserDAO;
@@ -74,10 +75,11 @@ public class SignUpMenuController {
         UserDAO userDAO = App.getUserDAO();
         User existingUser = null;
 
-        ForgotPasswordRequest request = new ForgotPasswordRequest(username); 
+        ForgotPasswordRequest request = new ForgotPasswordRequest(username);
 
         try {
-            Main.getMain().getConnectionManager().sendRequestAndWaitForResponse(RequestType.USER_EXIST, request, 1000); 
+            Object response = Main.getMain().getConnectionManager()
+                    .sendRequestAndWaitForResponse(RequestType.USER_EXIST, request, 1000);
             existingUser = userDAO.loadUser(username);
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -109,7 +111,8 @@ public class SignUpMenuController {
         String nickname = view.getUserInfo("nickname");
         SecurityQuestion question = view.getSecurityQuestion();
         Gender gender = view.getGender();
-        // Avatar avatar = view.getAvatar(); // Assuming you have a getAvatar() method in your view
+        // Avatar avatar = view.getAvatar(); // Assuming you have a getAvatar() method
+        // in your view
 
         if (answer.isEmpty()) {
             return new Result(false, "Security answer field is empty!");
@@ -125,28 +128,29 @@ public class SignUpMenuController {
                 answer,
                 Avatar.Sam.getName() // Assuming avatar.getName() returns the name string
         );
-        try{
-            System.out.println(Main.getMain().getConnectionManager().sendRequestAndWaitForResponse(RequestType.SIGNUP, signupRequest, 1000));
-        }
-        catch(Exception e){
+
+        Object response = null;
+        try {
+            response = (Main.getMain().getConnectionManager().sendRequestAndWaitForResponse(RequestType.SIGNUP,
+                    signupRequest, 1000));
+        } catch (Exception e) {
             System.out.println(e);
         }
 
-        // UserDAO userDAO = App.getUserDAO();
-        // User newUser = new User(username, password, email, nickname, gender, question, answer, Avatar.Abigail);
+        if (response instanceof SignupResponse) {
+            SignupResponse signupResponse = (SignupResponse) response;
+            if (signupResponse.isSuccess()) {
 
-        // // Save to database
-        // try {
-        //     userDAO.saveUser(newUser);
-        // } catch (SQLException e) {
-        //     throw new RuntimeException(e);
-        // }
+                App.setCurrentMenu(MenuTypes.MainMenu);
+                Main.getMain().getScreen().dispose();
+                Main.getMain().setScreen(new MainMenuView());
+                return new Result(true, "Signed up successfully...");
 
-        App.setCurrentMenu(MenuTypes.MainMenu);
-        Main.getMain().getScreen().dispose();
-        Main.getMain().setScreen(new MainMenuView());
+            } else {
+                return new Result(false, signupResponse.getMessage());
+            }
+        }
 
-        return new Result(true, "Signed up successfully...");
     }
 
     private static String validatePassword(String password) {
