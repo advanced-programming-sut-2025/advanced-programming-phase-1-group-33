@@ -42,10 +42,7 @@ import com.yourgame.view.GameViews.*;
 import com.yourgame.view.GameViews.ArtisanMenuView.BeeHouseMenuView;
 import com.yourgame.view.GameViews.ArtisanMenuView.CharcoalKilnMenuView;
 import com.yourgame.view.GameViews.MainMenuView;
-import com.yourgame.view.GameViews.ShopMenu.CarpenterMenuView;
-import com.yourgame.view.GameViews.ShopMenu.PierreShopMenuView;
-import com.yourgame.view.GameViews.ShopMenu.PierreShopSellMenuView;
-import com.yourgame.view.GameViews.ShopMenu.StardropSaloonMenuView;
+import com.yourgame.view.GameViews.ShopMenu.*;
 
 import static com.yourgame.model.UserInfo.Player.*;
 
@@ -727,6 +724,7 @@ public class GameScreen extends GameBaseScreen {
             case "stardrop" -> menuStage.addActor(new StardropSaloonMenuView(MenuAssetManager.getInstance().getSkin(3),
                 menuStage,this));
             case "CarpenterShop" -> menuStage.addActor(new CarpenterMenuView(this, menuStage, player));
+            case "MarnieRanch" -> menuStage.addActor(new MarnieShopMenuView(this, menuStage, player));
             case "beeHouse" -> menuStage.addActor(new BeeHouseMenuView(MenuAssetManager.getInstance().getSkin(3),
                 menuStage, this));
             case "charcoalKiln" -> menuStage.addActor(new CharcoalKilnMenuView(MenuAssetManager.getInstance().getSkin(3),

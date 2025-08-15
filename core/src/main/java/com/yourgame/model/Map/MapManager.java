@@ -2,6 +2,7 @@ package com.yourgame.model.Map;
 
 import com.yourgame.model.App;
 import com.yourgame.model.Map.Store.Carpenter;
+import com.yourgame.model.Map.Store.MarnieRanch;
 import com.yourgame.model.Map.Store.PierreGeneralStore.PierreGeneralStore;
 import com.yourgame.model.Map.Store.StardropSaloon.StardropSaloon;
 import com.yourgame.model.UserInfo.Player;
@@ -28,7 +29,7 @@ public class MapManager {
         buildings.put("carpenter", new Carpenter());
         buildings.put("fish-shop", new Map("fish-shop", "Game/Map/Buildings/fish-shop.tmx"));
         buildings.put("JojaMart", new Map("JojaMart", "Game/Map/Buildings/JojaMart.tmx"));
-        buildings.put("marnie-ranch", new Map("marnie-ranch", "Game/Map/Buildings/marnie-ranch.tmx"));
+        buildings.put("marnie-ranch", new MarnieRanch());
         buildings.put("pierre-store", pierreGeneralStore = new PierreGeneralStore("pierre-store", "Game/Map/Buildings/pierre-store.tmx",9,17));
         buildings.put("saloon", stardropSaloon = new StardropSaloon("saloon", "Game/Map/Buildings/saloon.tmx", 12, 24));
 

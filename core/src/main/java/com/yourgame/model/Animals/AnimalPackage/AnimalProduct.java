@@ -16,7 +16,7 @@ public class AnimalProduct extends Item {
 
     @Override
     public TextureRegion getTextureRegion(GameAssetManager assetManager) {
-        String path = "Game/Animal/" + animalProductType.getName() + "/" + animalProductType.getName() + ".png";
+        String path = "Game/Animal/Product/" + animalProductType.getName() + ".png";
         return new TextureRegion(assetManager.getTexture(path));
     }
 

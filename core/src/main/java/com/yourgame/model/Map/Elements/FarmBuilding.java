@@ -2,16 +2,19 @@ package com.yourgame.model.Map.Elements;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.yourgame.Graphics.GameAssetManager;
+import com.yourgame.model.Animals.AnimalPackage.Animal;
+import com.yourgame.model.App;
 import com.yourgame.model.Item.Item;
 import com.yourgame.model.Map.MapElement;
 import com.yourgame.model.WeatherAndTime.Season;
 
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class FarmBuilding extends MapElement {
     private final BuildingType buildingType;
-    // private final List<Animal> animalsInside; // We will add this later
+    private final List<Animal> animalsInside;
 
     public FarmBuilding(BuildingType buildingType, int tileX, int tileY) {
         super(
@@ -25,7 +28,7 @@ public class FarmBuilding extends MapElement {
             Float.MAX_VALUE // Buildings are indestructible
         );
         this.buildingType = buildingType;
-        // this.animalsInside = new ArrayList<>();
+        this.animalsInside = new ArrayList<>();
     }
 
     public BuildingType getBuildingType() {
@@ -45,4 +48,18 @@ public class FarmBuilding extends MapElement {
 
     @Override
     public List<Item> drop() { return List.of(); }
+
+    public boolean addAnimal(Animal animal) {
+        int capacity = 4;
+        if (animalsInside.size() < capacity) {
+            animalsInside.add(animal);
+            App.getGameState().getGameTime().addDayObserver(animal);
+            return true;
+        }
+        return false;
+    }
+
+    public List<Animal> getAnimals() {
+        return animalsInside;
+    }
 }
