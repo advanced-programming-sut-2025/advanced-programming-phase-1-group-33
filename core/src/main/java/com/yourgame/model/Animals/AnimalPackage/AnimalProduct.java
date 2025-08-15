@@ -6,12 +6,12 @@ import com.yourgame.model.Item.Item;
 
 public class AnimalProduct extends Item {
     private final AnimalProductType animalProductType;
-    private final Animal animal;
+    private final AnimalType animalType;
 
-    public AnimalProduct(AnimalProductType animalProductType,Animal animal) {
+    public AnimalProduct(AnimalProductType animalProductType, AnimalType animalType) {
         super(animalProductType.getName(), ItemType.ANIMAL_PRODUCT, animalProductType.getPrice(), true);
         this.animalProductType = animalProductType;
-        this.animal = animal;
+        this.animalType = animalType;
     }
 
     @Override
@@ -24,7 +24,7 @@ public class AnimalProduct extends Item {
         return animalProductType;
     }
 
-    public Animal getAnimal() {
-        return animal;
+    public AnimalType getAnimal() {
+        return animalType;
     }
 }

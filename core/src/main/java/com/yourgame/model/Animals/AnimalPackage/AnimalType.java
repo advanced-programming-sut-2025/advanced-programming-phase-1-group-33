@@ -1,12 +1,12 @@
 package com.yourgame.model.Animals.AnimalPackage;
 
-public enum Animal {
+public enum AnimalType {
     Chicken,
     Duck,
-    Goat,
     Rabbit,
     Dinosaur,
     Pig,
     Cow,
-    Sheep;
+    Sheep,
+    Goat
 }

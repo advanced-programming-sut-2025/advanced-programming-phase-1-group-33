@@ -1,11 +1,8 @@
 package com.yourgame.model.Item.Inventory;
 
-import com.yourgame.model.Animals.Animal;
-import com.yourgame.model.Animals.AnimalGood;
 import com.yourgame.model.Animals.Hay;
 import com.yourgame.model.Farming.Crop;
 import com.yourgame.model.Farming.Fruit;
-import com.yourgame.model.Food.Cooking.CookingRecipe;
 import com.yourgame.model.Food.FoodType;
 import com.yourgame.model.Item.Tools.Tool;
 import com.yourgame.model.Item.*;
@@ -15,7 +12,6 @@ import com.yourgame.model.UserInfo.Coin;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 
 public class Backpack {
     private BackpackType type;
@@ -24,7 +20,6 @@ public class Backpack {
     private final Hay hay = new Hay();
     private final ArrayList<ArtisanMachine> artisanMachines = new ArrayList<>();
     private final TrashCan trashCan = new TrashCan();
-    private final ArrayList<Animal> animals = new ArrayList<>();
 
     private final HashMap<Ingredient, Integer> ingredientQuantity = new HashMap<>();
 
@@ -85,9 +80,7 @@ public class Backpack {
             int returnPercentage = trashCan.getReturnValuePercentage();
 
             int refund = 0;
-            if (ingredient instanceof AnimalGood ag)
-                refund = ag.getSellPrice() * returnPercentage / 100;
-            else if (ingredient instanceof Crop c)
+            if (ingredient instanceof Crop c)
                 refund = c.getSellPrice() * returnPercentage / 100;
             else if (ingredient instanceof Fruit fr)
                 refund = fr.getSellPrice() * returnPercentage / 100;
@@ -119,23 +112,6 @@ public class Backpack {
 
     public ArrayList<ArtisanMachine> getArtisanMachines() {
         return artisanMachines;
-    }
-
-    public void addAnimal(Animal animal) {
-        animals.add(animal);
-    }
-
-    public ArrayList<Animal> getAllAnimals() {
-        return animals;
-    }
-
-    public Animal getAnimalByName(String name) {
-        for (Animal animal : animals) {
-            if (animal.getName().equals(name)) {
-                return animal;
-            }
-        }
-        return null;
     }
 
     public void increaseHay(int number) {

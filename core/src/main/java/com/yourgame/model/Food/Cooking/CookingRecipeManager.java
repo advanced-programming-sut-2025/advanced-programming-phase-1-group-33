@@ -1,6 +1,6 @@
 package com.yourgame.model.Food.Cooking;
 
-import com.yourgame.model.Animals.AnimalPackage.Animal;
+import com.yourgame.model.Animals.AnimalPackage.AnimalType;
 import com.yourgame.model.Animals.AnimalPackage.AnimalProduct;
 import com.yourgame.model.Animals.AnimalPackage.AnimalProductType;
 import com.yourgame.model.Animals.FishPackage.Fish;
@@ -34,7 +34,7 @@ public class CookingRecipeManager {
         // Fried Egg: 1 Egg
         cookingRecipes.add(new CookingRecipe(
             new ArrayList<>() {{
-                add(new Ingredient(new AnimalProduct(AnimalProductType.Egg,Animal.Chicken), 1));
+                add(new Ingredient(new AnimalProduct(AnimalProductType.Egg, AnimalType.Chicken), 1));
             }},
             new Food(FoodType.FriedEgg),
             new CookingRecipeSource(0,0,0,0,true,false, false)
@@ -54,8 +54,8 @@ public class CookingRecipeManager {
         // Omelet: 1 Egg + 1 Milk
         cookingRecipes.add(new CookingRecipe(
             new ArrayList<>() {{
-                add(new Ingredient(new AnimalProduct(AnimalProductType.Egg,Animal.Chicken), 1));
-                add(new Ingredient(new AnimalProduct(AnimalProductType.Milk,Animal.Cow), 1));
+                add(new Ingredient(new AnimalProduct(AnimalProductType.Egg, AnimalType.Chicken), 1));
+                add(new Ingredient(new AnimalProduct(AnimalProductType.Milk, AnimalType.Cow), 1));
             }},
             new Food(FoodType.Omelet),
             new CookingRecipeSource(0,0,0,0,false,false, false)
@@ -65,7 +65,7 @@ public class CookingRecipeManager {
         // Pumpkin Pie: 1 Pumpkin + 1 Wheat Flour + 1 Milk + 1 Sugar
         cookingRecipes.add(new CookingRecipe(
             new ArrayList<>() {{
-                add(new Ingredient(new AnimalProduct(AnimalProductType.Milk,Animal.Cow), 1));
+                add(new Ingredient(new AnimalProduct(AnimalProductType.Milk, AnimalType.Cow), 1));
                 add(new Ingredient(new CropItem(CropType.Pumpkin),1));
                 add(new Ingredient(new MillProduct(MillProductType.WheatFlour),1));
                 add(new Ingredient(new MillProduct(MillProductType.Sugar),1));
@@ -116,7 +116,7 @@ public class CookingRecipeManager {
         // Cookie: 1 Wheat Flour + 1 Sugar + 1 Egg
         cookingRecipes.add(new CookingRecipe(
             new ArrayList<>() {{
-                add(new Ingredient(new AnimalProduct(AnimalProductType.Egg,Animal.Chicken), 1));
+                add(new Ingredient(new AnimalProduct(AnimalProductType.Egg, AnimalType.Chicken), 1));
                 add(new Ingredient(new MillProduct(MillProductType.WheatFlour),1));
                 add(new Ingredient(new MillProduct(MillProductType.Sugar),1));
             }},
@@ -137,7 +137,7 @@ public class CookingRecipeManager {
         // Pancakes: 1 Wheat Flour + 1 Egg
         cookingRecipes.add(new CookingRecipe(
             new ArrayList<>() {{
-                add(new Ingredient(new AnimalProduct(AnimalProductType.Egg,Animal.Chicken), 1));
+                add(new Ingredient(new AnimalProduct(AnimalProductType.Egg, AnimalType.Chicken), 1));
                 add(new Ingredient(new MillProduct(MillProductType.WheatFlour),1));
             }},
             new Food(FoodType.Pancakes),
@@ -230,7 +230,7 @@ public class CookingRecipeManager {
             new ArrayList<>() {{
                 add(new Ingredient(new CropItem(CropType.Carrot), 2));
                 add(new Ingredient(new MillProduct(MillProductType.Sugar), 1));
-                add(new Ingredient(new AnimalProduct(AnimalProductType.Milk,Animal.Cow), 1));
+                add(new Ingredient(new AnimalProduct(AnimalProductType.Milk, AnimalType.Cow), 1));
             }},
             new Food(FoodType.MinersTreat),
             new CookingRecipeSource(1,0,0,0,false,false,false)

@@ -4,8 +4,8 @@ enter pregame
 game new aeen123 matin
 game map 1
 game map 2
-build -a barn -l 4, 8  
-walk -l 105,  80 
+build -a barn -l 4, 8
+walk -l 105,  80
 print map -l 1, 1 -s 30
 build -a barn -l 5, 1
 cheat add 20000 dollars
@@ -14,17 +14,17 @@ cheat add item -n stone -c 1000
 cheat add item -n wood -c 1000
 build -a barn -l 2, 5
 print map -l 1, 1 -s 30
-greenhouse build 
+greenhouse build
 print map -l 1, 1 -s 70
 help reading map
-buy animal -a cow -n morghman
-walk -l 117, 92 
-buy animal -a cow -n gavMan
+buy animalType -a cow -n morghman
+walk -l 117, 92
+buy animalType -a cow -n gavMan
 go to store
 show all products
 show all available products
 purchase Goat -n 1
-exit 
+exit
 pet -n gavMan
 cheat set friendship -n gavMan -c 100
 print map -l 105, 90 -s 30
@@ -33,6 +33,6 @@ collect produce -n gavMan
 cheat add item -n MilkPail -c 10
 tools equip milkpail
 collect produce -n gavMan
-sell animal -n gavMan
+sell animalType -n gavMan
 go back
 exit
