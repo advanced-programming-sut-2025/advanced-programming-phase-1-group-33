@@ -5,8 +5,6 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.yourgame.Graphics.GameAssets.clockUIAssetManager;
@@ -41,7 +39,10 @@ public class GameAssetManager extends AssetManager {
     private final Texture miningSkillIcon;
 
     private final Texture[] hearts;
-    private final Texture[] artisanProducts;
+
+    private final Texture[] fishingStates;
+    private final Texture scrollBar;
+    private final Texture fish;
 
     private final TextButton closeButton;
     private final TextButton inventoryMenuButton;
@@ -95,35 +96,28 @@ public class GameAssetManager extends AssetManager {
             new Texture(Gdx.files.internal("Game/NPC/Heart/Ten_Hearts.png")),
         };
 
-        artisanProducts = new Texture[] {
-            new Texture(Gdx.files.internal("Game/Artisan/Beer.png")),
-            new Texture(Gdx.files.internal("Game/Artisan/Cheese.png")),
-            new Texture(Gdx.files.internal("Game/Artisan/Cloth.png")),
-            new Texture(Gdx.files.internal("Game/Artisan/Coffee.png")),
-            new Texture(Gdx.files.internal("Game/Artisan/CopperBar.png")),
-            new Texture(Gdx.files.internal("Game/Artisan/DinosaurMayonnaise.png")),
-            new Texture(Gdx.files.internal("Game/Artisan/DriedFruit.png")),
-            new Texture(Gdx.files.internal("Game/Artisan/DriedMushrooms.png")),
-            new Texture(Gdx.files.internal("Game/Artisan/DuckMayonnaise.png")),
-            new Texture(Gdx.files.internal("Game/Artisan/GoatCheese.png")),
-            new Texture(Gdx.files.internal("Game/Artisan/Honey.png")),
-            new Texture(Gdx.files.internal("Game/Artisan/IronBar.png")),
-            new Texture(Gdx.files.internal("Game/Artisan/Jelly.png")),
-            new Texture(Gdx.files.internal("Game/Artisan/Juice.png")),
-            new Texture(Gdx.files.internal("Game/Artisan/LargeCheese.png")),
-            new Texture(Gdx.files.internal("Game/Artisan/LargeGoatCheese.png")),
-            new Texture(Gdx.files.internal("Game/Artisan/Mayonnaise.png")),
-            new Texture(Gdx.files.internal("Game/Artisan/Mead.png")),
-            new Texture(Gdx.files.internal("Game/Artisan/Oil.png")),
-            new Texture(Gdx.files.internal("Game/Artisan/PaleAle.png")),
-            new Texture(Gdx.files.internal("Game/Artisan/Pickles.png")),
-            new Texture(Gdx.files.internal("Game/Artisan/Raisins.png")),
-            new Texture(Gdx.files.internal("Game/Artisan/SmokedFish.png")),
-            new Texture(Gdx.files.internal("Game/Artisan/TruffleOil.png")),
-            new Texture(Gdx.files.internal("Game/Artisan/Vinegar.png")),
-            new Texture(Gdx.files.internal("Game/Artisan/Wine.png"))
+        fishingStates = new Texture[]{
+            new Texture(Gdx.files.internal("Game/Fish/Fishing/Pos0.png")),
+            new Texture(Gdx.files.internal("Game/Fish/Fishing/Pos1.png")),
+            new Texture(Gdx.files.internal("Game/Fish/Fishing/Pos2.png")),
+            new Texture(Gdx.files.internal("Game/Fish/Fishing/Pos3.png")),
+            new Texture(Gdx.files.internal("Game/Fish/Fishing/Pos4.png")),
+            new Texture(Gdx.files.internal("Game/Fish/Fishing/Pos5.png")),
+            new Texture(Gdx.files.internal("Game/Fish/Fishing/Pos6.png")),
+            new Texture(Gdx.files.internal("Game/Fish/Fishing/Pos7.png")),
+            new Texture(Gdx.files.internal("Game/Fish/Fishing/Pos8.png")),
+            new Texture(Gdx.files.internal("Game/Fish/Fishing/Pos9.png")),
+            new Texture(Gdx.files.internal("Game/Fish/Fishing/Pos10.png")),
+            new Texture(Gdx.files.internal("Game/Fish/Fishing/Pos11.png")),
+            new Texture(Gdx.files.internal("Game/Fish/Fishing/Pos12.png")),
+            new Texture(Gdx.files.internal("Game/Fish/Fishing/Pos13.png")),
+            new Texture(Gdx.files.internal("Game/Fish/Fishing/Pos14.png")),
+            new Texture(Gdx.files.internal("Game/Fish/Fishing/Pos15.png")),
+            new Texture(Gdx.files.internal("Game/Fish/Fishing/Pos16.png")),
         };
 
+        scrollBar = new Texture(Gdx.files.internal("Game/Fish/Fishing/Scroll.png"));
+        fish = new Texture(Gdx.files.internal("Game/Fish/Fishing/Fish.png"));
     }
 
     public clockUIAssetManager getClockManager() {
@@ -280,4 +274,11 @@ public class GameAssetManager extends AssetManager {
         }
     }
 
+    public Texture getFishingState(int index){
+        return fishingStates[index];
+    }
+
+    public Texture getFish() {return fish;}
+
+    public Texture getScrollBar() {return scrollBar;}
 }
