@@ -186,13 +186,21 @@ public class GameScreen extends GameBaseScreen {
                 openMenu("stardrop");
             }
 
-            if(Gdx.input.isKeyJustPressed(Input.Keys.L)) {
-                openMenu("beeHouse");
+            if(Gdx.input.isButtonPressed(Input.Buttons.RIGHT)) {
+                if(player.playerPosition.x > 850 && player.playerPosition.x < 880
+                && player.playerPosition.y > 1080 && player.playerPosition.y < 1090) {
+                    playGameSFX("popUp");
+                    openMenu("beeHouse");
+                }
+
+                else if(player.playerPosition.x > 1460 && player.playerPosition.x < 1480
+                    && player.playerPosition.y > 860 && player.playerPosition.y < 870) {
+                    playGameSFX("popUp");
+                    openMenu("charcoalKiln");
+                }
             }
 
-            if(Gdx.input.isKeyJustPressed(Input.Keys.K)) {
-                openMenu("charcoalKiln");
-            }
+            Gdx.app.log(player.playerPosition.x + " ", player.playerPosition.y + "");
 
             // Update animation timer
             //stateTime += delta;

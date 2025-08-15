@@ -23,6 +23,7 @@ import com.yourgame.model.NPC.NPCType;
 import com.yourgame.model.ManuFactor.Artisan.ArtisanMachineManager;
 import com.yourgame.model.NPC.QuestManager;
 import com.yourgame.model.Resource.Fiber;
+import com.yourgame.model.Resource.Wood;
 import com.yourgame.model.Skill.Skill;
 import com.yourgame.model.WeatherAndTime.TimeObserver;
 import com.yourgame.model.WeatherAndTime.TimeSystem;
@@ -359,14 +360,14 @@ public class Player implements TimeObserver {
     public ArtisanMachineManager getArtisanMachineManager() {return artisanMachineManager;}
 
     public boolean areGreenhouseRequirementsMet() {
-        return  (gold >= 1000) && (backpack.getInventory().getItemQuantity(new Wood.WoodItem()) >= 500);
+        return  (gold >= 1000) && (backpack.getInventory().getItemQuantity(new Wood()) >= 500);
     }
 
     public void buildGreenhouse() {
         if (greenhouse != null) return;
         if (!areGreenhouseRequirementsMet()) return;
         gold -= 1000;
-        backpack.getInventory().reduceItemQuantity(new Wood.WoodItem(), 500);
+        backpack.getInventory().reduceItemQuantity(new Wood(), 500);
         greenhouse = new Farm(user.getUsername() + "-greenhouse", "Game/Map/greenhouse.tmx");
         farm.setGreenHouseLayerVisible(true);
     }

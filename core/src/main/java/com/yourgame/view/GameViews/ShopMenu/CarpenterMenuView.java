@@ -8,10 +8,9 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.yourgame.Graphics.GameAssetManager;
 import com.yourgame.Graphics.MenuAssetManager;
-import com.yourgame.model.Farming.Wood;
+import com.yourgame.model.Resource.Wood;
 import com.yourgame.model.UserInfo.Player;
 import com.yourgame.view.AppViews.GameScreen;
-import com.yourgame.view.GameViews.MainMenuView;
 
 public class CarpenterMenuView extends Window {
     public CarpenterMenuView(GameScreen gameScreen, Stage stage, Player player) {
@@ -59,7 +58,7 @@ public class CarpenterMenuView extends Window {
         Table requirementsTable = new Table();
 
         // Wood Requirement
-        requirementsTable.add(new Image(new Wood.WoodItem().getTextureRegion(GameAssetManager.getInstance()))).size(32, 32).padRight(10);
+        requirementsTable.add(new Image(new Wood().getTextureRegion(GameAssetManager.getInstance()))).size(32, 32).padRight(10);
         Label woodLabel = new Label("500 Wood", skin);
         requirementsTable.add(woodLabel).align(Align.left);
 
