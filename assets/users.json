@@ -1,10 +1,10 @@
 [ {
   "answer" : "Kerman",
-  "username" : "aeen",
-  "password" : "|g!7xIk%0Ak",
-  "email" : "Ak@gmail.com",
   "nickname" : "aeen",
-  "gender" : "Male",
+  "password" : "|g!7xIk%0Ak",
+  "username" : "aeen",
+  "email" : "Ak@gmail.com",
   "avatar" : "Abigail",
+  "gender" : "Male",
   "securityQuestion" : "Location"
 } ]

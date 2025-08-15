@@ -18,6 +18,8 @@ import com.yourgame.model.Food.FoodType;
 import com.yourgame.model.Item.Inventory.BackpackType;
 import com.yourgame.model.Item.Tools.*;
 import com.yourgame.model.Item.Inventory.Backpack;
+import com.yourgame.model.ManuFactor.Artisan.InEdibleArtisanProduct.InEdibleArtisanProductType;
+import com.yourgame.model.ManuFactor.Artisan.InEdibleArtisanProduct.Products.Coal;
 import com.yourgame.model.Map.Farm;
 import com.yourgame.model.NPC.NPCType;
 import com.yourgame.model.ManuFactor.Artisan.ArtisanMachineManager;
@@ -93,14 +95,14 @@ public class Player implements TimeObserver {
         this.backpack.addTool(new Hoe());
         this.backpack.addTool(new Pickaxe());
         this.backpack.addTool(new Axe());
-        this.backpack.addTool(new WateringCan());
         this.backpack.addTool(new Scythe());
-        this.backpack.addItem(new Seeds.SeedItem(Seeds.Garlic_Seeds), 5);
         this.backpack.addItem(new Fertilizer.FertilizerItem(Fertilizer.Growth_Fertilizer), 2);
         this.backpack.addItem(new MixedSeed(), 3);
         this.backpack.addItem(new Food(FoodType.RedPlate), 1);
-        this.backpack.addItem(new Food(FoodType.Bread), 2);
         this.backpack.addItem(new Wood(),500);
+        this.backpack.addItem(new Fiber(),500);
+        this.backpack.addItem(new Coal(InEdibleArtisanProductType.Coal),500);
+        this.backpack.addTool(new FishingPole(PoleStage.Fiberglass));
 
 
         // Skill

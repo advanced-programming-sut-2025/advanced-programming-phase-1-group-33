@@ -157,16 +157,22 @@ public class CraftingMenuView extends Window {
         return true;
     }
 
-    private void updateInventory(CraftingRecipe recipe,Player player){
-        for(Ingredient ingredient : recipe.getIngredients()){
-            for(InventorySlot slot : player.getBackpack().getInventory().getSlots()){
-                if(ingredient.getItem().getName().equals(slot.item().getName())){
+    private void updateInventory(CraftingRecipe recipe, Player player) {
+        var slots = player.getBackpack().getInventory().getSlots();
+        ArrayList<InventorySlot> toRemove = new ArrayList<>();
+
+        for (Ingredient ingredient : recipe.getIngredients()) {
+            for (InventorySlot slot : slots) {
+                if (ingredient.getItem().getName().equals(slot.item().getName())) {
                     slot.reduceQuantity(ingredient.getQuantity());
-                    if(slot.quantity() == 0){
-                        player.getBackpack().getInventory().getSlots().remove(slot);
+                    if (slot.quantity() == 0) {
+                        toRemove.add(slot);
                     }
                 }
             }
         }
+
+        slots.removeAll(toRemove);
     }
+
 }
