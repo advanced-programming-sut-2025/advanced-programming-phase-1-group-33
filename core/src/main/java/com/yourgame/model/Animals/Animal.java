@@ -11,10 +11,9 @@ public class Animal {
     private TimeSystem lastFeedTime;
     private TimeSystem lastProductTime;
     private boolean isOutOfHabitat;
-    private Habitat habitat;
     private final static int maxFriendShip = 1000;
 
-    public Animal(AnimalType type, String name, Habitat habitat) {
+    public Animal(AnimalType type, String name) {
         this.type = type;
         this.name = name;
         this.friendShip = 0;
@@ -22,7 +21,6 @@ public class Animal {
         this.lastFeedTime = App.getGameState().getGameTime().clone();
         this.lastProductTime = App.getGameState().getGameTime().clone();
         isOutOfHabitat = false;
-        this.habitat = habitat;
     }
 
     public AnimalType getType() {
@@ -103,14 +101,6 @@ public class Animal {
         Quality quality = Quality.getQualityByValue(qualityValue);
 
         return new AnimalGood(type.getAnimalGoods().get(whichProduct), quality);
-    }
-
-    public Habitat getHabitat() {
-        return habitat;
-    }
-
-    public void setHabitat(Habitat habitat) {
-        this.habitat = habitat;
     }
 
     public boolean isOutOfHabitat() {

@@ -9,9 +9,14 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Rectangle;
 import com.yourgame.model.App;
+import com.yourgame.model.Map.Elements.FarmBuilding;
+import com.yourgame.model.UserInfo.Player;
 import com.yourgame.model.WeatherAndTime.TimeObserver;
 import com.yourgame.model.WeatherAndTime.TimeSystem;
 import com.yourgame.model.WeatherAndTime.Weather;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Farm extends Map implements TimeObserver {
     private final TiledMapTileLayer farmingLayer;
@@ -22,6 +27,7 @@ public class Farm extends Map implements TimeObserver {
     private final TiledMapTile plowedWaterTile;
     private final TiledMapTile wateredGrowthTile;
     private final TiledMapTile wateredWaterTile;
+    private final List<FarmBuilding> buildings = new ArrayList<>();
 
     public Farm(String name, String pathToTmx) {
         super(name, pathToTmx);
@@ -143,5 +149,18 @@ public class Farm extends Map implements TimeObserver {
 
     public void setGreenHouseLayerVisible(boolean visible) {
         greenHouseLayer.setVisible(visible);
+    }
+
+    public void addBuilding(FarmBuilding building, Player player) {
+        if (!isElementPlaceable(building)) return;
+        switch (building.getBuildingType()) {
+            case COOP -> player.setCoop(building);
+            case BARN -> player.setBarn(building);
+            default -> {
+                return;
+            }
+        }
+        buildings.add(building);
+        addElement(building);
     }
 }

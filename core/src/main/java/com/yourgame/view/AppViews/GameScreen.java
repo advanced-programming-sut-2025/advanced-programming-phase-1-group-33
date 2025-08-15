@@ -12,6 +12,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
@@ -30,6 +31,8 @@ import com.yourgame.model.Item.Tools.Tool;
 import com.yourgame.model.Map.*;
 import com.yourgame.model.App;
 import com.yourgame.Graphics.GameAssetManager;
+import com.yourgame.model.Map.Elements.BuildingType;
+import com.yourgame.model.Map.Elements.FarmBuilding;
 import com.yourgame.model.Map.Store.Store;
 import com.yourgame.model.NPC.*;
 import com.yourgame.model.UserInfo.Player;
@@ -79,6 +82,13 @@ public class GameScreen extends GameBaseScreen {
 
     private RefrigeratorView refrigeratorView;
     private DialogueView dialogueView;
+
+    // --- State Management ---
+    public enum GameMode {PLAYING, MENU, BUILDING_PLACEMENT}
+    private GameMode currentMode = GameMode.PLAYING;
+    private BuildingType buildingToPlace;
+    private Texture buildingPreviewTexture;
+    private boolean isPlacementValid = false;
 
     public GameScreen() {
         super();
@@ -176,7 +186,7 @@ public class GameScreen extends GameBaseScreen {
     public void render(float delta) {
         FoodAnimation foodAnimation = GameAssetManager.getInstance().getFoodAnimation();
 
-        if (!paused) {
+        if (currentMode == GameMode.PLAYING && !paused) {
             if (player.isFaintedToday() && player.getPlayerState() != PlayerState.FAINTING) {
                 player.setPlayerState(PlayerState.FAINTING);
                 faintingTimer = 0f; // Start the fainting timer
@@ -232,6 +242,9 @@ public class GameScreen extends GameBaseScreen {
 
                 npcManager.update(delta, controller.getMapManager().getTown(), player);
             }
+        } else if (currentMode == GameMode.BUILDING_PLACEMENT) {
+            handlePlacementInput();
+            handleWalking(delta);
         }
 
         handleHudUpdates(delta);
@@ -260,6 +273,7 @@ public class GameScreen extends GameBaseScreen {
         // Food Animation
         if (foodAnimation != null) foodAnimation.render(batch);
         if (controller.getCurrentMap().getName().equals("town")) npcManager.render(batch);
+        if (currentMode == GameMode.BUILDING_PLACEMENT) renderBuildingPreview();
         batch.end();
 
         //check for fainting
@@ -362,6 +376,60 @@ public class GameScreen extends GameBaseScreen {
         hudManager.showInventory(true);
     }
 
+    private void handlePlacementInput() {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE) || Gdx.input.isButtonJustPressed(Input.Buttons.RIGHT)) {
+            exitPlacementMode();
+            return;
+        }
+
+        // Left-click to place the building
+        if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
+            if (isPlacementValid) {
+                // Get the tile coordinates from the mouse
+                Vector3 worldPos = camera.unproject(new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0));
+                int tileX = (int) (worldPos.x / Tile.TILE_SIZE);
+                int tileY = (int) (worldPos.y / Tile.TILE_SIZE);
+
+                // Create and place the building
+                FarmBuilding newBuilding = new FarmBuilding(buildingToPlace, tileX, tileY);
+                Farm playerFarm = player.getFarm();
+                playerFarm.addBuilding(newBuilding, player);
+
+                // TODO: Deduct resources from the player here, as the build is now confirmed.
+
+                exitPlacementMode();
+            } else {
+                // TODO: Play an error sound (e.g., "thud")
+            }
+        }
+    }
+
+    private void renderBuildingPreview() {
+        if (buildingPreviewTexture == null) return;
+
+        // Get the tile coordinates under the mouse
+        Vector3 worldPos = camera.unproject(new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0));
+        int tileX = (int) (worldPos.x / Tile.TILE_SIZE);
+        int tileY = (int) (worldPos.y / Tile.TILE_SIZE);
+
+        // Check if this is a valid location
+        Farm playerFarm = player.getFarm();
+        isPlacementValid = playerFarm.isAreaBuildable(tileX, tileY, buildingToPlace.getTileWidth(), buildingToPlace.getTileHeight());
+
+        // Set the color tint based on validity (green for valid, red for invalid)
+        if (isPlacementValid) {
+            batch.setColor(0, 1, 0, 0.7f); // Semi-transparent green
+        } else {
+            batch.setColor(1, 0, 0, 0.7f); // Semi-transparent red
+        }
+
+        // Draw the preview texture snapped to the grid
+        batch.draw(buildingPreviewTexture, tileX * Tile.TILE_SIZE, tileY * Tile.TILE_SIZE);
+
+        // IMPORTANT: Reset the batch color
+        batch.setColor(Color.WHITE);
+    }
+
     public void stopBackgroundMusic() {
         backgroundMusic.stop();
     }
@@ -396,49 +464,7 @@ public class GameScreen extends GameBaseScreen {
     private void handleInput(float delta) {
         if (player.getPlayerState() == PlayerState.FAINTING) return;
 
-        player.playerVelocity.setZero();
-
-        float speed = SPEED;
-        if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT))
-            speed *= 1.5f;
-
-        if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-            player.playerVelocity.x = -speed;
-            player.direction = 3;
-        } else if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-            player.playerVelocity.x = speed;
-            player.direction = 1;
-        }
-
-        if (Gdx.input.isKeyPressed(Input.Keys.W)) {
-            player.playerVelocity.y = speed;
-            player.direction = 2;
-        } else if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-            player.playerVelocity.y = -speed;
-            player.direction = 0;
-        }
-
-        if (player.playerVelocity.isZero()) {
-            stateTime = 0f; // Pause animation when idle
-            player.setPlayerState(PlayerState.IDLE);
-        } else {
-            // Store original position
-            Vector2 oldPos = new Vector2(player.playerPosition);
-
-            // Move on X axis and check for collisions
-            player.playerPosition.x += player.playerVelocity.x * delta;
-            if (controller.isBlocked(player.playerPosition.x, oldPos.y)) {
-                player.playerPosition.x = oldPos.x; // Revert if collision
-            }
-
-            // Move on Y axis and check for collisions
-            player.playerPosition.y += player.playerVelocity.y * delta;
-            if (controller.isBlocked(player.playerPosition.x, player.playerPosition.y)) {
-                player.playerPosition.y = oldPos.y; // Revert if collision
-            }
-
-            player.setPlayerState(PlayerState.WALKING);
-        }
+        handleWalking(delta);
 
         if(Gdx.input.isKeyPressed(Input.Keys.G)) {
             NPC clickedNpc = npcManager.getNpcAt(camera);
@@ -496,6 +522,52 @@ public class GameScreen extends GameBaseScreen {
         handleCheatCode();
 
         handleInventoryInput();
+    }
+
+    private void handleWalking(float delta) {
+        player.playerVelocity.setZero();
+
+        float speed = SPEED;
+        if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT))
+            speed *= 1.5f;
+
+        if (Gdx.input.isKeyPressed(Input.Keys.A)) {
+            player.playerVelocity.x = -speed;
+            player.direction = 3;
+        } else if (Gdx.input.isKeyPressed(Input.Keys.D)) {
+            player.playerVelocity.x = speed;
+            player.direction = 1;
+        }
+
+        if (Gdx.input.isKeyPressed(Input.Keys.W)) {
+            player.playerVelocity.y = speed;
+            player.direction = 2;
+        } else if (Gdx.input.isKeyPressed(Input.Keys.S)) {
+            player.playerVelocity.y = -speed;
+            player.direction = 0;
+        }
+
+        if (player.playerVelocity.isZero()) {
+            stateTime = 0f; // Pause animation when idle
+            player.setPlayerState(PlayerState.IDLE);
+        } else {
+            // Store original position
+            Vector2 oldPos = new Vector2(player.playerPosition);
+
+            // Move on X axis and check for collisions
+            player.playerPosition.x += player.playerVelocity.x * delta;
+            if (controller.isBlocked(player.playerPosition.x, oldPos.y)) {
+                player.playerPosition.x = oldPos.x; // Revert if collision
+            }
+
+            // Move on Y axis and check for collisions
+            player.playerPosition.y += player.playerVelocity.y * delta;
+            if (controller.isBlocked(player.playerPosition.x, player.playerPosition.y)) {
+                player.playerPosition.y = oldPos.y; // Revert if collision
+            }
+
+            player.setPlayerState(PlayerState.WALKING);
+        }
     }
 
     public void handleCheatCode() {
@@ -684,6 +756,26 @@ public class GameScreen extends GameBaseScreen {
 
         // Set the alpha (transparency) of our color object
         ambientLightColor.a = alpha;
+    }
+
+    public void enterPlacementMode(BuildingType buildingType) {
+        this.buildingToPlace = buildingType;
+        this.currentMode = GameMode.BUILDING_PLACEMENT;
+        this.paused = false; // Unpause the game world to see the farm
+        Gdx.input.setInputProcessor(multiplexer); // Ensure game input is active
+
+        // Load the texture for the preview
+        String path = "Game/Animal/" + buildingType.getName() + ".png";
+        this.buildingPreviewTexture = assetManager.getTexture(path);
+
+        changeMap(player.getFarm(), "spawn-up");
+    }
+
+    private void exitPlacementMode() {
+        this.currentMode = GameMode.PLAYING;
+        this.buildingToPlace = null;
+        this.buildingPreviewTexture = null;
+        changeMap(controller.getMapManager().getCarpenter(), "spawn");
     }
 
     public Player getPlayer() {

@@ -223,12 +223,26 @@ public class Map {
         return true;
     }
 
-    private boolean isElementPlaceable(MapElement element) {
+    protected boolean isElementPlaceable(MapElement element) {
         if (element == null) return false;
         java.awt.Rectangle bounds = element.getTileBounds();
         for (int y = bounds.y; y < bounds.y + bounds.height; y++) {
             for (int x = bounds.x; x < bounds.x + bounds.width; x++) {
                 Tile tile = tileStates[x][y];
+                if (tile == null || !tile.isSpawnable()) return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean isAreaBuildable(int startX, int startY, int widthInTiles, int heightInTiles) {
+        if (startX < 0 || startY < 0 || startX + widthInTiles > getMapWidth() || startY + heightInTiles > getMapHeight()) {
+            return false;
+        }
+
+        for (int y = startY; y < startY + heightInTiles; y++) {
+            for (int x = startX; x < startX + widthInTiles; x++) {
+                Tile tile = getTile(x, y);
                 if (tile == null || !tile.isSpawnable()) return false;
             }
         }

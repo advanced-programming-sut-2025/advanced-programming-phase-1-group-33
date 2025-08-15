@@ -5,9 +5,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
-import com.yourgame.model.Animals.AnimalPackage.Animal;
-import com.yourgame.model.Animals.AnimalPackage.AnimalProduct;
-import com.yourgame.model.Animals.AnimalPackage.AnimalProductType;
 import com.yourgame.model.App;
 import com.yourgame.model.Crafting.CraftingRecipeManager;
 import com.yourgame.model.Farming.*;
@@ -20,8 +17,8 @@ import com.yourgame.model.Item.Tools.*;
 import com.yourgame.model.Item.Inventory.Backpack;
 import com.yourgame.model.ManuFactor.Artisan.InEdibleArtisanProduct.InEdibleArtisanProductType;
 import com.yourgame.model.ManuFactor.Artisan.InEdibleArtisanProduct.Products.Coal;
+import com.yourgame.model.Map.Elements.FarmBuilding;
 import com.yourgame.model.Map.Farm;
-import com.yourgame.model.NPC.NPCType;
 import com.yourgame.model.ManuFactor.Artisan.ArtisanMachineManager;
 import com.yourgame.model.NPC.QuestManager;
 import com.yourgame.model.Resource.Fiber;
@@ -82,6 +79,9 @@ public class Player implements TimeObserver {
     public Vector2 playerPosition;
     public Vector2 playerVelocity;
     public int direction; // 0=Down, 1=Right, 2=Up, 3=Left
+
+    private FarmBuilding coop;
+    private FarmBuilding barn;
 
     public static Player guest() {
         return new Player(
@@ -361,6 +361,11 @@ public class Player implements TimeObserver {
     }
 
     public ArtisanMachineManager getArtisanMachineManager() {return artisanMachineManager;}
+
+    public FarmBuilding getCoop() {return coop;}
+    public void setCoop(FarmBuilding coop) {this.coop = coop;}
+    public FarmBuilding getBarn() {return barn;}
+    public void setBarn(FarmBuilding barn) {this.barn = barn;}
 
     public boolean areGreenhouseRequirementsMet() {
         return  (gold >= 1000) && (backpack.getInventory().getItemQuantity(new Wood()) >= 500);
