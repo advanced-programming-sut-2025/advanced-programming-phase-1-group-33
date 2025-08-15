@@ -13,6 +13,7 @@ import com.yourgame.model.Farming.ForagingCropElement;
 import com.yourgame.model.Farming.Plant;
 import com.yourgame.model.Item.Inventory.Inventory;
 import com.yourgame.model.Item.Item;
+import com.yourgame.model.Item.Tools.FishingPole;
 import com.yourgame.model.Item.Tools.Tool;
 import com.yourgame.model.Item.Usable;
 import com.yourgame.model.Map.*;
@@ -211,6 +212,9 @@ public class GameController {
         // Use item
         if (item instanceof Usable usable) {
             boolean success = usable.use(player, currentMap, selectedTile);
+            if(item instanceof FishingPole && success) {
+                Gdx.app.exit();
+            }
             if (item instanceof Tool tool)
                 player.consumeEnergy(tool.getConsumptionEnergy(player, Weather.Sunny, success));
         }

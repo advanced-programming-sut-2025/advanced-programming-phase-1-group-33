@@ -33,7 +33,8 @@ public class FishingPole extends Tool {
         Season season = App.getGameState().getGameTime().getSeason();
         List<Fish> fishes = Fish.getFishesBySeason(season);
         Fish randomFish = fishes.get(random.nextInt(fishes.size()));
-        map.spawnDroppedItem(new FishItem(randomFish), tile.tileX * Tile.TILE_SIZE, tile.tileY * Tile.TILE_SIZE);
+        //map.spawnDroppedItem(new FishItem(randomFish), tile.tileX * Tile.TILE_SIZE, tile.tileY * Tile.TILE_SIZE);
+
         return true;
     }
 

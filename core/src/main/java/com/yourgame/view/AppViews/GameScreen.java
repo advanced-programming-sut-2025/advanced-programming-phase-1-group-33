@@ -465,7 +465,8 @@ public class GameScreen extends GameBaseScreen {
                 else if (store.isPlayerInSellZone(player)) {
                     openMenu("sell");
                 }
-            } else if (controller.getCurrentMap().getName().contains("-house")) {
+            }
+            else if (controller.getCurrentMap().getName().contains("-house")) {
                 MapObject obj = controller.getCurrentMap().getTiledMap().getLayers().get("Interactables")
                     .getObjects().get("fridge");
                 if (obj != null) {
