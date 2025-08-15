@@ -17,6 +17,7 @@ import java.util.Random;
 
 public class FishingPole extends Tool {
     private final static Random random = new Random();
+    public static Fish selectedFish = null;
 
     public FishingPole(PoleStage type) {
         super(ToolType.FishingPole, 3);
@@ -32,7 +33,7 @@ public class FishingPole extends Tool {
         if (!tile.isFishable()) return false;
         Season season = App.getGameState().getGameTime().getSeason();
         List<Fish> fishes = Fish.getFishesBySeason(season);
-        Fish randomFish = fishes.get(random.nextInt(fishes.size()));
+        selectedFish = fishes.get(random.nextInt(fishes.size()));
         //map.spawnDroppedItem(new FishItem(randomFish), tile.tileX * Tile.TILE_SIZE, tile.tileY * Tile.TILE_SIZE);
 
         return true;

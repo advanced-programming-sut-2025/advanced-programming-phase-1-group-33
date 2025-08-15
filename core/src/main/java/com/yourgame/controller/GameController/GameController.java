@@ -22,6 +22,7 @@ import com.yourgame.model.NPC.NPCManager;
 import com.yourgame.model.UserInfo.Player;
 import com.yourgame.model.WeatherAndTime.Season;
 import com.yourgame.model.WeatherAndTime.Weather;
+import com.yourgame.view.AppViews.GameScreen;
 
 import java.util.Iterator;
 import java.util.List;
@@ -39,6 +40,7 @@ public class GameController {
     private Player player;
     private Map currentMap;
     private Tile selectedTile;
+    private GameScreen view;
 
     private Sound popUpSound;
 
@@ -50,6 +52,9 @@ public class GameController {
         selectedTile = null;
 
         popUpSound = MenuAssetManager.getInstance().getSounds("popUp");
+    }
+    public void setView(GameScreen view) {
+        this.view = view;
     }
 
     public MapManager getMapManager() {
@@ -213,7 +218,7 @@ public class GameController {
         if (item instanceof Usable usable) {
             boolean success = usable.use(player, currentMap, selectedTile);
             if(item instanceof FishingPole && success) {
-                Gdx.app.exit();
+                view.startFishingGame(FishingPole.selectedFish,((FishingPole) item).getPoleStage());
             }
             if (item instanceof Tool tool)
                 player.consumeEnergy(tool.getConsumptionEnergy(player, Weather.Sunny, success));

@@ -23,8 +23,10 @@ import com.yourgame.Graphics.MenuAssetManager;
 import com.yourgame.Graphics.GameAssets.HUDManager;
 import com.yourgame.Graphics.GameAssets.clockUIAssetManager;
 import com.yourgame.controller.GameController.GameController;
+import com.yourgame.model.Animals.FishPackage.Fish;
 import com.yourgame.model.Food.FoodAnimation;
 import com.yourgame.model.Item.Inventory.Inventory;
+import com.yourgame.model.Item.Tools.PoleStage;
 import com.yourgame.model.ManuFactor.Artisan.ArtisanMachine;
 import com.yourgame.model.Item.Tools.Tool;
 import com.yourgame.model.Map.*;
@@ -84,6 +86,7 @@ public class GameScreen extends GameBaseScreen {
         super();
 
         controller = new GameController();
+        controller.setView(this);
         player = controller.getPlayer();
         player.addPlayerStuffToObserver(); // Toff Mali Khales :(
         stateTime = 0f;
@@ -660,6 +663,14 @@ public class GameScreen extends GameBaseScreen {
             case "charcoalKiln" -> menuStage.addActor(new CharcoalKilnMenuView(MenuAssetManager.getInstance().getSkin(3),
                 menuStage, this));
         }
+    }
+
+    public void startFishingGame(Fish fish, PoleStage fishingPole){
+        paused = true;
+        Gdx.input.setInputProcessor(new InputMultiplexer(HUDStage, menuStage));
+
+        menuStage.addActor(new FishingGameMenuView(MenuAssetManager.getInstance().getSkin(3),menuStage,this,
+        fish,fishingPole));
     }
 
     public void closeMenu() {
