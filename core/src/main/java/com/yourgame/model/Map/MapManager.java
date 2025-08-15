@@ -1,6 +1,7 @@
 package com.yourgame.model.Map;
 
 import com.yourgame.model.App;
+import com.yourgame.model.Map.Store.Carpenter;
 import com.yourgame.model.Map.Store.PierreGeneralStore.PierreGeneralStore;
 import com.yourgame.model.Map.Store.StardropSaloon.StardropSaloon;
 import com.yourgame.model.UserInfo.Player;
@@ -12,7 +13,7 @@ import java.util.List;
 public class MapManager {
     private final Map town;
     private final HashMap<String, Map> buildings;
-    private final HashMap<Player, Map> farms;
+    private final HashMap<Player, Farm> farms;
     private final HashMap<Player, Map> houses;
     private final HashMap<Player, Map> playersCurrentMap;
 
@@ -24,7 +25,7 @@ public class MapManager {
 
         buildings = new HashMap<>();
         buildings.put("blacksmith", new Map("blacksmith", "Game/Map/Buildings/blacksmith.tmx"));
-        buildings.put("carpenter", new Map("carpenter", "Game/Map/Buildings/carpenter.tmx"));
+        buildings.put("carpenter", new Carpenter());
         buildings.put("fish-shop", new Map("fish-shop", "Game/Map/Buildings/fish-shop.tmx"));
         buildings.put("JojaMart", new Map("JojaMart", "Game/Map/Buildings/JojaMart.tmx"));
         buildings.put("marnie-ranch", new Map("marnie-ranch", "Game/Map/Buildings/marnie-ranch.tmx"));
@@ -40,6 +41,7 @@ public class MapManager {
         for (Player player : players) {
             Farm farm = new Farm(player.getUser().getUsername() + "-farm", "Game/Map/standard-farm.tmx");
             farm.spawnRandomElements(Season.Spring);
+            player.setFarm(farm);
             farms.put(player, farm);
 
             Map farmHouse = new Map(player.getUser().getUsername()+ "-farm-house", "Game/Map/Buildings/farm-house.tmx");
@@ -55,7 +57,7 @@ public class MapManager {
         return town;
     }
 
-    public Map getFarm(Player player) {
+    public Farm getFarm(Player player) {
         return farms.get(player);
     }
 

@@ -13,6 +13,7 @@ import com.yourgame.model.WeatherAndTime.Weather;
 
 public class Farm extends Map implements TimeObserver {
     private final TiledMapTileLayer farmingLayer;
+    private final TiledMapTileLayer greenHouseLayer;
     private final TiledMapTile plowedTile;
     private final TiledMapTile wateredTile;
     private final TiledMapTile plowedGrowthTile;
@@ -23,6 +24,7 @@ public class Farm extends Map implements TimeObserver {
     public Farm(String name, String pathToTmx) {
         super(name, pathToTmx);
         this.farmingLayer = (TiledMapTileLayer) tiledMap.getLayers().get("Farming");
+        this.greenHouseLayer = (TiledMapTileLayer) tiledMap.getLayers().get("GreenHouse");
         this.plowedTile = tiledMap.getTileSets().getTileSet("outdoors-spring").getTile(786);
         this.wateredTile = tiledMap.getTileSets().getTileSet("outdoors-spring").getTile(2161);
         this.plowedGrowthTile = tiledMap.getTileSets().getTileSet("outdoors-spring").getTile(929);
@@ -90,5 +92,9 @@ public class Farm extends Map implements TimeObserver {
         if (timeSystem.getWeather() == Weather.Stormy) {
             App.getGameState().getThunderManager().triggerThunderStrike(this);
         }
+    }
+
+    public void setGreenHouseLayerVisible(boolean visible) {
+        greenHouseLayer.setVisible(visible);
     }
 }

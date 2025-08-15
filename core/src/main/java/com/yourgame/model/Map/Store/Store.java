@@ -15,8 +15,7 @@ public class Store extends Map {
 
     public Store(String name, String pathToTmx, int startHour, int endHour) {
         super(name, pathToTmx);
-        if(name.equals("pierre-store"))
-            this.tradeZoneObjects = tiledMap.getLayers().get("Trade").getObjects();
+        this.tradeZoneObjects = tiledMap.getLayers().get("Trade").getObjects();
         this.startHour = startHour;
         this.endHour = endHour;
     }

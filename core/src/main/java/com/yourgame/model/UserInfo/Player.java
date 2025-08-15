@@ -5,6 +5,9 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
+import com.yourgame.model.Animals.AnimalPackage.Animal;
+import com.yourgame.model.Animals.AnimalPackage.AnimalProduct;
+import com.yourgame.model.Animals.AnimalPackage.AnimalProductType;
 import com.yourgame.model.App;
 import com.yourgame.model.Crafting.CraftingRecipeManager;
 import com.yourgame.model.Farming.*;
@@ -13,12 +16,10 @@ import com.yourgame.model.Food.Cooking.CookingRecipeManager;
 import com.yourgame.model.Food.Food;
 import com.yourgame.model.Food.FoodType;
 import com.yourgame.model.Item.Inventory.BackpackType;
-import com.yourgame.model.Item.Tools.Axe;
-import com.yourgame.model.Item.Tools.Hoe;
-import com.yourgame.model.Item.Tools.Pickaxe;
-import com.yourgame.model.Item.Tools.Scythe;
-import com.yourgame.model.Item.Tools.WateringCan;
+import com.yourgame.model.Item.Tools.*;
 import com.yourgame.model.Item.Inventory.Backpack;
+import com.yourgame.model.Map.Farm;
+import com.yourgame.model.NPC.NPCType;
 import com.yourgame.model.ManuFactor.Artisan.ArtisanMachineManager;
 import com.yourgame.model.NPC.QuestManager;
 import com.yourgame.model.Resource.Fiber;
@@ -54,6 +55,8 @@ public class Player implements TimeObserver {
     private boolean addedToObserver = false;
 
     private Map farmHouse;
+    private Farm farm;
+    private Farm greenhouse;
 
     private final QuestManager questManager;
     private int remainingDaysAfterMarriageDenied = 0;
@@ -169,6 +172,14 @@ public class Player implements TimeObserver {
 
     public Map getFarmHouse() {
         return farmHouse;
+    }
+
+    public void setFarm(Farm farm) {
+        this.farm = farm;
+    }
+
+    public Farm getFarm() {
+        return farm;
     }
 
     public Skill.FarmingSkill getFarmingSkill() {
@@ -346,6 +357,23 @@ public class Player implements TimeObserver {
     }
 
     public ArtisanMachineManager getArtisanMachineManager() {return artisanMachineManager;}
+
+    public boolean areGreenhouseRequirementsMet() {
+        return  (gold >= 1000) && (backpack.getInventory().getItemQuantity(new Wood.WoodItem()) >= 500);
+    }
+
+    public void buildGreenhouse() {
+        if (greenhouse != null) return;
+        if (!areGreenhouseRequirementsMet()) return;
+        gold -= 1000;
+        backpack.getInventory().reduceItemQuantity(new Wood.WoodItem(), 500);
+        greenhouse = new Farm(user.getUsername() + "-greenhouse", "Game/Map/greenhouse.tmx");
+        farm.setGreenHouseLayerVisible(true);
+    }
+
+    public Farm getGreenhouse() {
+        return greenhouse;
+    }
 
     @Override
     public void onTimeChanged(TimeSystem timeSystem) {
