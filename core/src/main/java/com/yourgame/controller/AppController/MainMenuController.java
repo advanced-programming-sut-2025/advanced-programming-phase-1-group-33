@@ -33,12 +33,12 @@ public class MainMenuController {
     }
 
     public void handleGoingToPreGameMenu(){
-        //App.setCurrentMenu(MenuTypes.PreGameMenu);
-        view.stopBackgroundMusic();
-        Player player = new Player(App.getCurrentUser());
-        App.setGameState(new GameState(List.of(player)));
+        App.setCurrentMenu(MenuTypes.PreGameMenu);
+        //view.stopBackgroundMusic();
+        //Player player = new Player(App.getCurrentUser());
+        //App.setGameState(new GameState(List.of(player)));
         Main.getMain().getScreen().dispose();
-        Main.getMain().setScreen(new GameScreen());
+        Main.getMain().setScreen(new PreGameMenuView());
     }
 
     public void handleGoingToProfileMenu(){

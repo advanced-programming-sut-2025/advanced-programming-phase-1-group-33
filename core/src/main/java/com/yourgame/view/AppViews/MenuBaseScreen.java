@@ -20,7 +20,7 @@ public abstract class MenuBaseScreen implements Screen {
     protected Stage stage;
     protected Image backgroundImage;
     protected Image cursor;
-    //protected Skin skin;
+    // protected Skin skin;
     protected Sound clickSound;
     protected Sound popUpSound;
     protected Sound avatarChooseSound;
@@ -31,26 +31,30 @@ public abstract class MenuBaseScreen implements Screen {
         this.stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
 
-        //Setting background according to the menu we are in
+        // Setting background according to the menu we are in
         backgroundImage = MenuAssetManager.getInstance().getBackgroundImage(App.getCurrentMenu());
-        backgroundImage.setFillParent(true);
-        stage.addActor(backgroundImage);
-
-        //setting up the background music
+        if (backgroundImage != null) {
+            backgroundImage.setFillParent(true);
+            stage.addActor(backgroundImage);
+        }
+        else{
+            
+        }
+        // setting up the background music
         backgroundMusic = MenuAssetManager.getInstance().getMusic();
-        if(!isMusicInitialized) {
+        if (!isMusicInitialized) {
             playBackgroundMusic();
             isMusicInitialized = true;
         }
 
-        //setting up the common SFXs for menus
+        // setting up the common SFXs for menus
         clickSound = MenuAssetManager.getInstance().getSounds("click");
         popUpSound = MenuAssetManager.getInstance().getSounds("popUp");
         avatarChooseSound = MenuAssetManager.getInstance().getSounds("avatarChoose");
 
-        //Setting custom cursor for the game
+        // Setting custom cursor for the game
         cursor = MenuAssetManager.getInstance().getCursor();
-        cursor.setSize(32,45);
+        cursor.setSize(32, 45);
         stage.addActor(cursor);
         cursor.setTouchable(com.badlogic.gdx.scenes.scene2d.Touchable.disabled);
         cursor.toFront();
@@ -71,7 +75,7 @@ public abstract class MenuBaseScreen implements Screen {
         float mouseY = Gdx.graphics.getHeight() - Gdx.input.getY();
         cursor.setPosition(mouseX - cursor.getWidth() / 2f, mouseY - cursor.getHeight() / 2f);
 
-        if(Gdx.input.isButtonJustPressed(Input.Buttons.LEFT))
+        if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT))
             playMenuSFX("click");
 
         cursor.toFront();
@@ -88,12 +92,20 @@ public abstract class MenuBaseScreen implements Screen {
         stage.dispose();
     }
 
-    @Override public void hide() {}
-    @Override public void pause() {}
-    @Override public void resume() {}
+    @Override
+    public void hide() {
+    }
+
+    @Override
+    public void pause() {
+    }
+
+    @Override
+    public void resume() {
+    }
 
     public void playBackgroundMusic() {
-        if(App.isMusicMuted()) {
+        if (App.isMusicMuted()) {
             return;
         }
 
@@ -105,7 +117,7 @@ public abstract class MenuBaseScreen implements Screen {
         backgroundMusic.stop();
     }
 
-    public void playMenuSFX(String string){
+    public void playMenuSFX(String string) {
         switch (string) {
             case "click" -> clickSound.play();
             case "popUp" -> popUpSound.play();
@@ -118,10 +130,12 @@ public abstract class MenuBaseScreen implements Screen {
         Dialog dialog = new Dialog("", skin);
         dialog.text(message);
         dialog.show(stage);
-        dialog.setPosition((stage.getWidth()-dialog.getWidth())/2f + x, y);
+        dialog.setPosition((stage.getWidth() - dialog.getWidth()) / 2f + x, y);
         Timer.schedule(new Timer.Task() {
             @Override
-            public void run() {dialog.hide();}
+            public void run() {
+                dialog.hide();
+            }
         }, 2);
     }
 }

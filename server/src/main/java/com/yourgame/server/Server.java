@@ -8,12 +8,16 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.google.gson.Gson;
+import com.yourgame.network.protocol.ResponseType;
+import com.yourgame.network.protocol.ResponseWrapper;
 import com.yourgame.persistence.DatabaseManager;
 
 public class Server {
 
     private final int port;
     private final Set<ClientHandler> clients = Collections.synchronizedSet(new HashSet<>());
+    private final LobbyManager lobbyManager = new LobbyManager();
 
     public Server(int port) {
         this.port = port;
@@ -26,8 +30,8 @@ public class Server {
             while (true) {
                 Socket clientSocket = serverSocket.accept();
                 System.out.println("New client connected: " + clientSocket.getInetAddress().getHostAddress());
-                
-                ClientHandler clientHandler = new ClientHandler(clientSocket, this);
+
+                ClientHandler clientHandler = new ClientHandler(clientSocket, this, lobbyManager);
                 clients.add(clientHandler);
                 new Thread(clientHandler).start();
             }
@@ -41,6 +45,7 @@ public class Server {
         clients.remove(clientHandler);
         System.out.println("Client disconnected. Active clients: " + clients.size());
     }
+
     public static void main(String[] args) {
         int port = 8080;
         try {
@@ -53,4 +58,18 @@ public class Server {
             e.printStackTrace();
         }
     }
+
+    public void broadcastToLobby(String lobbyId, ResponseType type, Object data) {
+        String payload = new Gson().toJson(data);
+        ResponseWrapper wrapper = new ResponseWrapper(type, payload);
+        String jsonResponse = new Gson().toJson(wrapper);
+
+        for (ClientHandler client : clients) {
+            // اطمینان حاصل کنید که هر clientHandler به لابی مورد نظر تعلق دارد
+            if (client.getCurrentLobby() != null && client.getCurrentLobby().getId().equals(lobbyId)) {
+                client.sendResponse(type, data);
+            }
+        }
+    }
+
 }

@@ -3,6 +3,8 @@ package com.yourgame.Graphics;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -10,6 +12,8 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.Array;
 import com.yourgame.model.enums.Avatar;
 import com.yourgame.model.enums.Commands.MenuTypes;
 import org.slf4j.Logger;
@@ -35,6 +39,7 @@ public class MenuAssetManager {
     private final Texture[] avatarSpriteSheets;
     private final TextureRegion[][][] frames;
     private final Animation[][] walkAnimations;
+    private final Animation<TextureRegion>[] faintAnimations;
 
     private final Sound[] sounds;
     private final Music music;
@@ -54,6 +59,9 @@ public class MenuAssetManager {
     private final TextButton backButton;
     private final TextButton submitButton;
     private final TextButton findButton;
+    private final TextButton pregameButton;
+    private final TextButton lobbyButton;
+    private final TextButton exitPreGameButton;
     private final TextButton randomPasswordButton;
     private final TextButton forgetPasswordButton;
     private final TextButton changeUsernameButton;
@@ -64,6 +72,13 @@ public class MenuAssetManager {
     private final TextButton stayLoggedInButton;
 
     private MenuAssetManager() {
+        Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
+        pixmap.setColor(Color.WHITE);
+        pixmap.fill();
+        Texture whiteTexture = new Texture(pixmap);
+        skin_3_Nz.add("white", new TextureRegionDrawable(new TextureRegion(whiteTexture)));
+        pixmap.dispose();
+
         backgrounds = new Image[]{
             new Image(new Texture(Gdx.files.internal("Backgrounds/Background1.jpg"))),
             new Image(new Texture(Gdx.files.internal("Backgrounds/Background2.png"))),
@@ -143,6 +158,13 @@ public class MenuAssetManager {
             }
         };
 
+        faintAnimations = new Animation[] {
+            new Animation<>(0.4f, new Array<>(new TextureRegion[] {
+                frames[0][0][0],
+                frames[0][6][0],
+                frames[0][6][1],
+                frames[0][13][1]})) //Abigail
+        };
 
         sounds = new Sound[]{
             Gdx.audio.newSound(Gdx.files.internal("Sounds/UI Click 36.wav")),
@@ -159,6 +181,7 @@ public class MenuAssetManager {
         strawberryButtonStyle.font = skin_1_Sepehr.getFont("loading");
         signupButton = new TextButton("Signup", strawberryButtonStyle);
         playButton = new TextButton("Play", strawberryButtonStyle);
+        pregameButton = new TextButton("PreGame", strawberryButtonStyle);
 
         TextButton.TextButtonStyle chickenButtonStyle = skin_3_Nz.get("Chicken", TextButton.TextButtonStyle.class);
         chickenButtonStyle.font = skin_1_Sepehr.getFont("loading");
@@ -168,10 +191,12 @@ public class MenuAssetManager {
         TextButton.TextButtonStyle plantButtonStyle = skin_3_Nz.get("Plant", TextButton.TextButtonStyle.class);
         plantButtonStyle.font = skin_1_Sepehr.getFont("loading");
         exitButton = new TextButton("Exit", plantButtonStyle);
+        exitPreGameButton = new TextButton("Exit", plantButtonStyle);
 
         TextButton.TextButtonStyle earthButtonStyle = skin_3_Nz.get("Earth", TextButton.TextButtonStyle.class);
         earthButtonStyle.font = skin_1_Sepehr.getFont("loading");
         logoutButton = new TextButton("Logout", earthButtonStyle);
+        lobbyButton = new TextButton("Lobby", earthButtonStyle);
 
         TextButton.TextButtonStyle defaultButtonStyle = skin_3_Nz.get("default", TextButton.TextButtonStyle.class);
         defaultButtonStyle.font = skin_1_Sepehr.getFont("loading");
@@ -194,9 +219,9 @@ public class MenuAssetManager {
     public Image getBackgroundImage(MenuTypes type) {
         switch (type) {
             case MainMenu -> {return backgrounds[0];}
-            case SignupMenu,LoginMenu -> {return backgrounds[1];}
+            case SignupMenu,LoginMenu, PreGameMenu -> {return backgrounds[1];}
             case ProfileMenu -> {return backgrounds[2];}
-            case AvatarMenu -> {return backgrounds[3];}
+            case AvatarMenu, LobbyMenu -> {return backgrounds[3];}
             default -> {return null;}
         }
     }
@@ -231,6 +256,10 @@ public class MenuAssetManager {
         };
     }
 
+    public Animation<TextureRegion> getFaintAnimation() {
+        return faintAnimations[0];
+    }
+
     public TextButton getButtons(String name) {
         switch (name) {
             case "signup" -> {return signupButton;}
@@ -243,8 +272,11 @@ public class MenuAssetManager {
             case "back" -> {return backButton;}
             case "submit" -> {return submitButton;}
             case "find" -> {return findButton;}
+            case "pregame" -> {return pregameButton;}
             case "random" -> {return randomPasswordButton;}
             case "forget" -> {return forgetPasswordButton;}
+            case "lobby" -> {return lobbyButton;}
+            case "exitPreGame" -> {return exitPreGameButton;}
             case "changeUsername" -> {return changeUsernameButton;}
             case "changeNickname" -> {return changeNicknameButton;}
             case "changePassword" -> {return changePasswordButton;}
@@ -262,6 +294,7 @@ public class MenuAssetManager {
             case "click" -> {return sounds[0];}
             case "popUp" -> {return sounds[1];}
             case "avatarChoose" -> {return sounds[2];}
+            case "error" -> {return sounds[3];}
             default -> {return null;}
         }
     }
