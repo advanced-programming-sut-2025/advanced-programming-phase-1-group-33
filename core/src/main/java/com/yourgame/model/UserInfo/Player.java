@@ -9,6 +9,7 @@ import com.yourgame.model.Animals.AnimalPackage.Animal;
 import com.yourgame.model.Animals.AnimalPackage.AnimalProduct;
 import com.yourgame.model.Animals.AnimalPackage.AnimalProductType;
 import com.yourgame.model.App;
+import com.yourgame.model.Crafting.CraftedItemType;
 import com.yourgame.model.Crafting.CraftingRecipeManager;
 import com.yourgame.model.Farming.*;
 import com.yourgame.model.Food.BuffManager;
@@ -16,6 +17,7 @@ import com.yourgame.model.Food.Cooking.CookingRecipeManager;
 import com.yourgame.model.Food.Food;
 import com.yourgame.model.Food.FoodType;
 import com.yourgame.model.Item.Inventory.BackpackType;
+import com.yourgame.model.Item.Item;
 import com.yourgame.model.Item.Tools.*;
 import com.yourgame.model.Item.Inventory.Backpack;
 import com.yourgame.model.ManuFactor.Artisan.InEdibleArtisanProduct.InEdibleArtisanProductType;
@@ -101,8 +103,8 @@ public class Player implements TimeObserver {
         this.backpack.addItem(new Food(FoodType.RedPlate), 1);
         this.backpack.addItem(new Wood(),500);
         this.backpack.addItem(new Fiber(),500);
-        this.backpack.addItem(new Coal(InEdibleArtisanProductType.Coal),500);
         this.backpack.addTool(new FishingPole(PoleStage.Fiberglass));
+        this.backpack.addItem(new SonarBobber(),1);
 
 
         // Skill
@@ -213,6 +215,7 @@ public class Player implements TimeObserver {
     public int getFishingLevel() {
         return fishingSkill.level() + buffManager.getBuffValue(Skill.SkillType.FISHING);
     }
+    public void setFishingLevel(int level) {fishingSkill.changeLevel(level);}
 
     public BuffManager getBuffManager() {
         return buffManager;
@@ -384,4 +387,6 @@ public class Player implements TimeObserver {
         energy = isFaintedToday ? getMaxEnergy() / 2 : getMaxEnergy();
         isFaintedToday = false;
     }
+
+
 }

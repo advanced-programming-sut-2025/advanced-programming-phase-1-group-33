@@ -23,7 +23,8 @@ public enum CraftedItemType {
     Dehydrator("Dehydrator", 0),
     GrassStarter("GrassStarter", 0),
     FishSmoker("FishSmoker", 0),
-    MysticTreeSeed("MysticTreeSeed", 100);
+    MysticTreeSeed("MysticTreeSeed", 100),
+    SonarBobber("SonarBobber", 250);
 
     private final String name;
     private final int price;

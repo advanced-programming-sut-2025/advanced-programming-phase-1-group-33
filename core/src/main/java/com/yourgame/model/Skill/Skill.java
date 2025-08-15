@@ -35,6 +35,10 @@ public abstract class Skill {
         return level;
     }
 
+    public void changeLevel(int level) {
+        this.level = level;
+    }
+
     public boolean isMaxLevel() {
         return level == MAX_LEVEL;
     }

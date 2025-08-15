@@ -670,7 +670,7 @@ public class GameScreen extends GameBaseScreen {
         Gdx.input.setInputProcessor(new InputMultiplexer(HUDStage, menuStage));
 
         menuStage.addActor(new FishingGameMenuView(MenuAssetManager.getInstance().getSkin(3),menuStage,this,
-        fish,fishingPole));
+        Fish.GlacierFish,fishingPole));
     }
 
     public void closeMenu() {
@@ -712,4 +712,6 @@ public class GameScreen extends GameBaseScreen {
     public GameController getGameController() {
         return controller;
     }
+
+
 }

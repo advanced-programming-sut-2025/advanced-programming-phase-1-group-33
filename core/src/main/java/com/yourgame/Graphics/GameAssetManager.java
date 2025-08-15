@@ -116,6 +116,7 @@ public class GameAssetManager extends AssetManager {
             new Texture(Gdx.files.internal("Game/Fish/Fishing/Pos16.png")),
         };
 
+
         scrollBar = new Texture(Gdx.files.internal("Game/Fish/Fishing/Scroll.png"));
         fish = new Texture(Gdx.files.internal("Game/Fish/Fishing/Fish.png"));
     }

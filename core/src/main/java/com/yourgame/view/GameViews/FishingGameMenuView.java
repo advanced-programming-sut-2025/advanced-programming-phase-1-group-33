@@ -11,8 +11,14 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.yourgame.Graphics.GameAssetManager;
 import com.yourgame.model.Animals.FishPackage.Fish;
+import com.yourgame.model.Animals.FishPackage.FishItem;
+import com.yourgame.model.Item.Inventory.InventorySlot;
+import com.yourgame.model.Item.Item;
 import com.yourgame.model.Item.Tools.PoleStage;
+import com.yourgame.model.WeatherAndTime.Season;
 import com.yourgame.view.AppViews.GameScreen;
+
+import java.util.ArrayList;
 
 public class FishingGameMenuView extends Window {
     private final Skin skin;
@@ -21,25 +27,25 @@ public class FishingGameMenuView extends Window {
     private final Fish fish;
     private final PoleStage poleStage;
 
-    private final float TRACK_HEIGHT = 520f;       // play area vertical size
-    private final float TRACK_TOP_PADDING = 120f;  // top space inside the window
-    private final float TRACK_LEFT = 200f;         // x position of the track elements
-    private final float BAR_HEIGHT = 120f;         // green bar height
-    private final float BAR_WIDTH  = 64f;
-    private final float FISH_SIZE  = 64f;
+    private static final float TRACK_HEIGHT = 520f;       // play area vertical size
+    private static final float TRACK_TOP_PADDING = -150f;  // top space inside the window
+    private static final float TRACK_LEFT = 200f;         // x position of the track elements
+    private static final float BAR_HEIGHT = 120f;         // green bar height
+    private static final float BAR_WIDTH  = 64f;
+    private static final float FISH_SIZE  = 64f;
 
-    private final float barRiseAccel = 200f;   // acceleration upward when holding mouse
-    private final float barFallGravity = 150f; // gravity pulling bar down
-    private final float barMaxSpeed = 300f;    // cap for bar movement speed
+    private static final float barRiseAccel = 200f;   // acceleration upward when holding mouse
+    private static final float barFallGravity = 150f; // gravity pulling bar down
+    private static final float barMaxSpeed = 300f;    // cap for bar movement speed
 
-    private final float progressFillRate = 0.3f;  // per second when fish is inside bar
-    private final float progressDrainRate = 0.2f; // per second when fish is outside bar
+    private static final float progressFillRate = 0.1f;
+    private static final float progressDrainRate = 0.05f;
 
-    private Image progressImg;        // 17-state meter (0..16)
-    private Image greenBarImg;        // player bar
-    private Image fishImg;            // fish icon
-    private Label perfectLabel;       // shows "Perfect!" when still perfect
-    private Label exitHint;
+    private final Image progressImg;
+    private final Image greenBarImg;
+    private final Image fishImg;
+    private final Label perfectLabel;
+    private final Label exitHint;
 
     private float greenBarY;          // bottom of green bar (local to window coords)
     private float greenBarVelY;       // velocity for smooth gravity feel
@@ -55,6 +61,8 @@ public class FishingGameMenuView extends Window {
     private final FishStyle style;
     private float fishStep = 40f;
 
+    private boolean caught = false;
+
     public FishingGameMenuView(Skin skin, Stage stage, GameScreen gameScreen, Fish fish, PoleStage fishingPole) {
         super("Fishing Game", skin);
         this.stage = stage;
@@ -63,7 +71,7 @@ public class FishingGameMenuView extends Window {
         this.fish = fish;
         this.poleStage = fishingPole;
 
-        setSize(1400, 900);
+        setSize(1200, 800);
         setModal(true);
         setMovable(false);
         pad(20f);
@@ -71,29 +79,22 @@ public class FishingGameMenuView extends Window {
 
         this.style = chooseStyleForFish(fish);
 
-        Table root = new Table();
-        root.setFillParent(true);
-        add(root).expand().fill();
-
         progressImg = new Image(GameAssetManager.getInstance().getFishingState(0));
+        progressImg.setScale(1.5f);
         greenBarImg = new Image(GameAssetManager.getInstance().getScrollBar());
         fishImg = new Image(GameAssetManager.getInstance().getFish());
 
-        perfectLabel = new Label("Perfect!", skin, "Bold");
+        perfectLabel = new Label("Perfect!", skin, "BoldImpact");
         exitHint = new Label("Hold mouse: move up • Release: fall • Q: quit", skin);
 
-        Table topBar = new Table();
-        topBar.add(perfectLabel).left().padLeft(10f).expandX();
-        topBar.add(exitHint).right().padRight(10f);
-        root.add(topBar).expandX().fillX().top().row();
+        add(perfectLabel).top().padTop(20).padLeft(10f).expandX();
+        add(exitHint).top().right().padTop(20).padRight(10f);
+        row().padTop(200);
 
         WidgetGroup playArea = new WidgetGroup();
         playArea.setSize(getWidth(), TRACK_HEIGHT + TRACK_TOP_PADDING * 2f);
-        root.add(playArea).expand().fill().row();
-
-        Table right = new Table();
-        right.add(progressImg).width(64f).height(256f).padTop(20f);
-        root.add(right).right().padRight(20f).top();
+        add(playArea);
+        add(progressImg).padRight(100);
 
         playArea.addActor(greenBarImg);
         playArea.addActor(fishImg);
@@ -110,8 +111,8 @@ public class FishingGameMenuView extends Window {
                 closeWithoutCatch();
             }
         });
-        root.row();
-        root.add(backButton).left().padTop(10f);
+        row();
+        add(backButton).padTop(10f);
 
         stage.addActor(this);
     }
@@ -159,7 +160,7 @@ public class FishingGameMenuView extends Window {
     public void act(float delta) {
         super.act(delta);
 
-        float accel = held ? barRiseAccel : barFallGravity;
+        float accel = held ? barRiseAccel : -barFallGravity;
         greenBarVelY += accel * delta;
         greenBarVelY = MathUtils.clamp(greenBarVelY, -barMaxSpeed, barMaxSpeed);
         greenBarY += greenBarVelY * delta;
@@ -197,30 +198,32 @@ public class FishingGameMenuView extends Window {
         // Apply positions to actors
         applyPositions();
 
-        if (progress01 >= 1f - 1e-6f) {
+        if (!caught && progress01 >= 1f - 1e-6f) {
+            caught = true;
             onCatch();
-        } else if (progress01 <= 1e-6f) {
+        } else if (!caught && progress01 <= 1e-6f) {
+            caught = true;
             closeWithoutCatch();
         }
     }
 
     private void applyPositions() {
         greenBarImg.setBounds(TRACK_LEFT, greenBarY, BAR_WIDTH, BAR_HEIGHT);
-        fishImg.setBounds(TRACK_LEFT + 200f, fishY - FISH_SIZE * 0.5f, FISH_SIZE, FISH_SIZE);
+        fishImg.setBounds(TRACK_LEFT + 100f, fishY - FISH_SIZE * 0.5f, FISH_SIZE, FISH_SIZE);
     }
 
     private boolean isFishInsideBar() {
-        float barBottom = greenBarY;
-        float barTop = greenBarY + BAR_HEIGHT;
+        float barBottom = greenBarY - 50;
+        float barTop = greenBarY + BAR_HEIGHT + 50;
         float fy = fishY; // fish center
+        Gdx.app.log(fy + " " + barBottom + " " + barTop, "");
         return fy >= barBottom && fy <= barTop;
     }
 
     private void updateProgressImage() {
         int state = MathUtils.clamp(Math.round(progress01 * 16f), 0, 16);
         progressImg.setDrawable(new TextureRegionDrawable(
-            GameAssetManager.getInstance().getFishingState(state)
-        ));
+            GameAssetManager.getInstance().getFishingState(state)));
     }
 
     private void stepFishAI() {
@@ -244,17 +247,13 @@ public class FishingGameMenuView extends Window {
             case MIXED:
                 return randomOf(FishMove.UP, FishMove.DOWN, FishMove.STAY);
             case SMOOTH:
-                // 60% repeat last, 40% random other
                 if (MathUtils.random() < 0.6f) return last;
                 return randomOf(FishMove.UP, FishMove.DOWN, FishMove.STAY);
             case SINKER:
-                // Slight bias to DOWN
                 return weightedRandom(0.25f, 0.5f, 0.25f); // up, down, stay
             case FLOATER:
-                // Slight bias to UP
                 return weightedRandom(0.5f, 0.25f, 0.25f);
             case DART:
-                // Like MIXED but we already use a bigger step
                 return randomOf(FishMove.UP, FishMove.DOWN, FishMove.STAY);
             default:
                 return FishMove.STAY;
@@ -274,24 +273,72 @@ public class FishingGameMenuView extends Window {
     }
 
     private void onCatch() {
-        // Perfect catch bonus: if perfectSoFar and fish has at least Silver, upgrade etc.
-        // TODO: plug in your reward pipeline here:
-        //  - Add fish to inventory
-        //  - If perfectSoFar: bump quality (Silver->Gold, Gold->Iridium), XP *= 2.4
-        //  - Play SFX, show banner, etc.
-        gameScreen.showMessage("popUp", perfectSoFar ? "Perfect Catch!" : "Caught!", skin, 0, 200, stage);
+        if(perfectSoFar){
+            gameScreen.getPlayer().setFishingLevel((int)(gameScreen.getPlayer().getFishingLevel()*2.4));
+            gameScreen.showMessage("Victory","Perfect Catch!", skin,0,200,stage);
+        }
+        else{
+            gameScreen.showMessage("popUp","Caught!", skin,0,200,stage);
+        }
 
+        boolean hasSonar = false;
+        for (InventorySlot slot : gameScreen.getPlayer().getBackpack().getInventory().getSlots()) {
+            if (slot != null && slot.item().getName().equals("SonarBobber")) {
+                hasSonar = true;
+                break;
+            }
+        }
+
+        if (hasSonar) {
+            Dialog sonarDialog = new Dialog("Use Sonar Bobber?", skin) {
+                @Override
+                protected void result(Object object) {
+                    boolean useSonar = object != null && object.equals(Boolean.TRUE);
+                    if (useSonar) {
+                        gameScreen.showMessage("popUp", showFishDetails(), skin, 0, 200, stage);
+                    }
+                    addToInventory();
+                }
+            };
+            sonarDialog.text("Do you want to use the Sonar Bobber to reveal fish details?");
+            sonarDialog.button("Yes", true);
+            sonarDialog.button("No", false);
+            sonarDialog.show(stage);
+            stage.setKeyboardFocus(sonarDialog);
+        }
+    }
+
+    private void addToInventory(){
+        boolean added = gameScreen.getPlayer().getBackpack().getInventory().addItem(new FishItem(fish),1);
+        if (!added) {
+            gameScreen.showMessage("error", "Not enough space in inventory!", skin, 0, 200, stage);
+        }
         // Close minigame
-        stage.clear();
         gameScreen.closeMenu();
         remove();
+    }
+
+    private String showFishDetails() {
+        StringBuilder fishInfo = new StringBuilder();
+        fishInfo.append("Name : " + fish.getName() + "\n");
+        fishInfo.append("Price : " + fish.getPrice() + "\n");
+        fishInfo.append("Season : " + fish.getSeason() + "\n");
+        fishInfo.append("Rarity : " + getRarity(fish));
+        return fishInfo.toString();
     }
 
     private void closeWithoutCatch() {
         // Escaped
         gameScreen.showMessage("error", "The fish got away...", skin, 0, 200, stage);
-        stage.clear();
         gameScreen.closeMenu();
         remove();
+    }
+
+    private String getRarity(Fish fish){
+        if(fish.equals(Fish.CrimsonFish) || (fish.equals(Fish.GlacierFish))
+            || fish.equals(Fish.Angler) || (fish.equals(Fish.Legend))){
+            return "Legendary";
+        }
+        return "Common";
     }
 }

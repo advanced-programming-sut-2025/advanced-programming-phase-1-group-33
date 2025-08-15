@@ -22,6 +22,7 @@ public abstract class GameBaseScreen implements Screen {
     protected Sound clickSound;
     protected Sound popUpSound;
     protected Sound errorSound;
+    protected Sound victorySound;
     protected Music backgroundMusic;
     protected Image cursor;
     protected SpriteBatch batch;
@@ -36,7 +37,7 @@ public abstract class GameBaseScreen implements Screen {
         clickSound = MenuAssetManager.getInstance().getSounds("click");
         popUpSound = MenuAssetManager.getInstance().getSounds("popUp");
         errorSound = MenuAssetManager.getInstance().getSounds("error");
-
+        victorySound = MenuAssetManager.getInstance().getSounds("victory");
 
         //Setting the musix playing in the background
         backgroundMusic = GameAssetManager.getInstance().getBackgroundMusic();
@@ -103,6 +104,7 @@ public abstract class GameBaseScreen implements Screen {
             case "click" -> clickSound.play();
             case "popUp" -> popUpSound.play();
             case "error" -> errorSound.play(5f);
+            case "victory" -> victorySound.play();
         }
     }
 

@@ -175,7 +175,8 @@ public class MenuAssetManager {
             Gdx.audio.newSound(Gdx.files.internal("Sounds/UI Click 36.wav")),
             Gdx.audio.newSound(Gdx.files.internal("Sounds/Pop (3).wav")),
             Gdx.audio.newSound(Gdx.files.internal("Sounds/AvatarChoose.mp3")),
-            Gdx.audio.newSound(Gdx.files.internal("Sounds/error.mp3"))
+            Gdx.audio.newSound(Gdx.files.internal("Sounds/error.mp3")),
+            Gdx.audio.newSound(Gdx.files.internal("Sounds/GoodResult.mp3")),
         };
 
         music = Gdx.audio.newMusic(Gdx.files.internal("Musics/01. Stardew Valley Overture.mp3"));
@@ -312,6 +313,7 @@ public class MenuAssetManager {
             case "popUp" -> {return sounds[1];}
             case "avatarChoose" -> {return sounds[2];}
             case "error" -> {return sounds[3];}
+            case "victory" -> {return sounds[4];}
             default -> {return null;}
         }
     }
