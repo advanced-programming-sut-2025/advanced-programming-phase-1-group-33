@@ -7,6 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.yourgame.Graphics.GameAssetManager;
 import com.yourgame.model.Item.Inventory.InventorySlot;
 import com.yourgame.model.ManuFactor.Artisan.EdibleArtisanProduct.Products.Honey;
+import com.yourgame.model.ManuFactor.Artisan.InEdibleArtisanProduct.Products.Coal;
 import com.yourgame.model.UserInfo.Player;
 import com.yourgame.view.AppViews.GameScreen;
 
@@ -164,26 +165,13 @@ public class IngredientMenuView extends Window {
         }
     }
 
-    private void sellSelectedItems() {
-        Player player = gameScreen.getPlayer();
-
-        for (InventorySlot slot : selectedItems) {
-            player.setGold(player.getGold() + slot.item().getValue());
-            slot.reduceQuantity(1);
-            if (slot.quantity() == 0) {
-                inventory.remove(slot);
-            }
-        }
-
-        selectedItems.clear();
-        gameScreen.getHUDManager().updateCoin();
-        populateInventoryGrid();
-        refreshChosenItemsTable();
-    }
-
     private void returnSelectedItemsToPreviousMenu(Window parentWindow) {
         if(parentWindow instanceof BeeHouseMenuView){
             ((BeeHouseMenuView) parentWindow).setSelectedItems(selectedItems);
+        }
+
+        else if(parentWindow instanceof CharcoalKilnMenuView){
+            ((CharcoalKilnMenuView) parentWindow).setSelectedItems(selectedItems);
         }
         // Here you can call a method on gameScreen or parent menu
         // Example: gameScreen.receiveSelectedItems(selectedItems);
@@ -191,12 +179,35 @@ public class IngredientMenuView extends Window {
     }
 
     private void create(Window parentWindow) {
-        if(!Honey.isIngredientsAppropriate(selectedItems)){
-            gameScreen.showMessage("error","Not correct Ingredient!",skin,0,200,stage);
-            return;
+        if(parentWindow instanceof CharcoalKilnMenuView){
+            if(!Coal.isIngredientsAppropriate(selectedItems)){
+                gameScreen.showMessage("error","Not correct Ingredient!",skin,0,200,stage);
+                return;
+            }
+
+            int woodsToRemove = 10;
+            for (InventorySlot slot : inventory) {
+                if (slot.item().getName().equals("Wood")) {
+                    int remove = Math.min(slot.quantity(), woodsToRemove);
+                    slot.reduceQuantity(remove);
+                    if(slot.quantity() == 0){
+                        gameScreen.getPlayer().getBackpack().getInventory().removeItem(slot.item());
+                    }
+                    woodsToRemove -= remove;
+                    if (woodsToRemove <= 0) break;
+                }
+            }
+
+            ((CharcoalKilnMenuView) parentWindow).getCharcoalKiln().startProcessing(Coal.calculateProcessingTime());
+            ((CharcoalKilnMenuView) parentWindow).resetUI();
         }
 
         if(parentWindow instanceof BeeHouseMenuView){
+            if(!Honey.isIngredientsAppropriate(selectedItems)){
+                gameScreen.showMessage("error","Not correct Ingredient!",skin,0,200,stage);
+                return;
+            }
+
             ((BeeHouseMenuView) parentWindow).getBeeHouse().startProcessing(Honey.calculateProcessingTime());
             ((BeeHouseMenuView) parentWindow).resetUI();
         }

@@ -250,6 +250,7 @@ public class GameAssetManager extends AssetManager {
     public Texture getArtisanProductTexture(String name) {
         switch (name.toLowerCase()) {
             case "beer": return new Texture(Gdx.files.internal("Game/Artisan/Beer.png"));
+            case "coal": return new Texture(Gdx.files.internal("Game/Artisan/Coal.png"));
             case "cheese": return new Texture(Gdx.files.internal("Game/Artisan/Cheese.png"));
             case "cloth": return new Texture(Gdx.files.internal("Game/Artisan/Cloth.png"));
             case "coffee": return new Texture(Gdx.files.internal("Game/Artisan/Coffee.png"));

@@ -36,6 +36,7 @@ import com.yourgame.model.UserInfo.PlayerState;
 import com.yourgame.model.WeatherAndTime.ThunderManager;
 import com.yourgame.view.GameViews.*;
 import com.yourgame.view.GameViews.ArtisanMenuView.BeeHouseMenuView;
+import com.yourgame.view.GameViews.ArtisanMenuView.CharcoalKilnMenuView;
 import com.yourgame.view.GameViews.MainMenuView;
 import com.yourgame.view.GameViews.ShopMenu.PierreShopMenuView;
 import com.yourgame.view.GameViews.ShopMenu.PierreShopSellMenuView;
@@ -185,6 +186,10 @@ public class GameScreen extends GameBaseScreen {
 
             if(Gdx.input.isKeyJustPressed(Input.Keys.L)) {
                 openMenu("beeHouse");
+            }
+
+            if(Gdx.input.isKeyJustPressed(Input.Keys.K)) {
+                openMenu("charcoalKiln");
             }
 
             // Update animation timer
@@ -608,6 +613,8 @@ public class GameScreen extends GameBaseScreen {
             case "stardrop" -> menuStage.addActor(new StardropSaloonMenuView(MenuAssetManager.getInstance().getSkin(3),
                 menuStage,this));
             case "beeHouse" -> menuStage.addActor(new BeeHouseMenuView(MenuAssetManager.getInstance().getSkin(3),
+                menuStage, this));
+            case "charcoalKiln" -> menuStage.addActor(new CharcoalKilnMenuView(MenuAssetManager.getInstance().getSkin(3),
                 menuStage, this));
         }
     }
