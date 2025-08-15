@@ -100,7 +100,8 @@ public class Player implements TimeObserver {
         this.backpack.addItem(new MixedSeed(), 3);
         this.backpack.addItem(new Food(FoodType.RedPlate), 1);
         this.backpack.addItem(new Food(FoodType.Bread), 2);
-        this.backpack.addItem(new Fiber(),10);
+        this.backpack.addItem(new Wood(),500);
+
 
         // Skill
         this.farmingSkill = new Skill.FarmingSkill();

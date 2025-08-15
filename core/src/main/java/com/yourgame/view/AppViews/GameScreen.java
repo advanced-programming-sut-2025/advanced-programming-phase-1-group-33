@@ -200,8 +200,6 @@ public class GameScreen extends GameBaseScreen {
                 }
             }
 
-            Gdx.app.log(player.playerPosition.x + " ", player.playerPosition.y + "");
-
             // Update animation timer
             //stateTime += delta;
 
@@ -347,7 +345,7 @@ public class GameScreen extends GameBaseScreen {
         paused = true;
 
         dialogueView = new DialogueView(npc, dialogue.text(), this);
-        dialogueView.setPosition(Gdx.graphics.getWidth() / 2f, 100, Align.center);
+        dialogueView.setPosition(Gdx.graphics.getWidth() / 2f, 200, Align.center);
 
         menuStage.addActor(dialogueView);
         Gdx.input.setInputProcessor(menuStage);
@@ -440,6 +438,16 @@ public class GameScreen extends GameBaseScreen {
             }
 
             player.setPlayerState(PlayerState.WALKING);
+        }
+
+        if(Gdx.input.isKeyPressed(Input.Keys.G)) {
+            NPC clickedNpc = npcManager.getNpcAt(camera);
+            if (clickedNpc != null && clickedNpc.isPlayerInRange()) {
+                Gdx.app.log("GameScreen", "Clicked NPC");
+                paused = true;
+                Gdx.input.setInputProcessor(new InputMultiplexer(HUDStage, menuStage));
+                menuStage.addActor(new GiftMenuView(MenuAssetManager.getInstance().getSkin(3),menuStage,this,clickedNpc));
+            }
         }
 
         if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
