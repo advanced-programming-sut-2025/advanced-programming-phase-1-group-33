@@ -124,6 +124,9 @@ public class PierreShopSellMenuView extends Window {
                         if (quantitySelected < selectedItem.quantity()) {
                             quantitySelected++;
                         }
+                        else if (quantitySelected == selectedItem.quantity()) {
+                            gameScreen.showMessage("error","You can't choose more!",skin,0,200,stage);
+                        }
                     }
                     updateItemDisplay(selectedItem);
                 }

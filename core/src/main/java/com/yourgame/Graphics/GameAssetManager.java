@@ -239,12 +239,11 @@ public class GameAssetManager extends AssetManager {
 
     public Texture getHeartImage(int number) {
         switch (number) {
-            case 1,2 -> {return hearts[0];}
+            case 0,1,2 -> {return hearts[0];}
             case 3,4 -> {return hearts[1];}
             case 5,6 -> {return hearts[2];}
             case 7,8 -> {return hearts[3];}
-            case 9,10 -> {return hearts[4];}
-            default -> {return null;}
+            default -> {return hearts[4];}
         }
     }
 
