@@ -1,7 +1,6 @@
 package com.yourgame.model.Animals.FishPackage;
 
 import com.yourgame.model.Animals.FishType;
-import com.yourgame.model.Item.ArtisanIngredient;
 import com.yourgame.model.ManuFactor.Ingredient;
 import com.yourgame.model.WeatherAndTime.Season;
 
@@ -55,7 +54,6 @@ public enum Fish implements Ingredient, ArtisanIngredient {
         return season;
     }
 
-
     @Override
     public int getBaseEnergy() {
         return energy;
@@ -64,6 +62,16 @@ public enum Fish implements Ingredient, ArtisanIngredient {
     @Override
     public int getBasePrice() {
         return price;
+
+    public static ArrayList<FishType> getFishesBySeason(Season season) {
+        ArrayList<FishType> fishes = new ArrayList<>();
+        for (FishType fish : FishType.values()) {
+            if (fish.equals(Legend) || fish.equals(GlacierFish) || fish.equals(Angler) || fish.equals(CrimsonFish))
+                continue;
+            if (fish.getSeason() == season)
+                fishes.add(fish);
+        }
+        return fishes;
     }
 }
 

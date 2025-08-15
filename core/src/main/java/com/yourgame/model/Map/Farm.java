@@ -2,9 +2,11 @@ package com.yourgame.model.Map;
 
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
+import com.badlogic.gdx.maps.objects.PolygonMapObject;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMapTile;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
+import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Rectangle;
 import com.yourgame.model.App;
 import com.yourgame.model.WeatherAndTime.TimeObserver;
@@ -32,6 +34,7 @@ public class Farm extends Map implements TimeObserver {
         this.wateredGrowthTile = tiledMap.getTileSets().getTileSet("outdoors-spring").getTile(888);
         this.wateredWaterTile = tiledMap.getTileSets().getTileSet("outdoors-spring").getTile(887);
         initSpawnable();
+        initFishable();
     }
 
     private void initSpawnable() {
@@ -56,6 +59,50 @@ public class Farm extends Map implements TimeObserver {
                     }
                 }
             }
+        }
+    }
+
+    private void setFishable(Polygon polygon) {
+        float[] verts = polygon.getTransformedVertices();
+
+        float minX = Float.MAX_VALUE, maxX = Float.MIN_VALUE;
+        float minY = Float.MAX_VALUE, maxY = Float.MIN_VALUE;
+
+        for (int i = 0; i < verts.length; i += 2) {
+            minX = Math.min(minX, verts[i]);
+            maxX = Math.max(maxX, verts[i]);
+            minY = Math.min(minY, verts[i + 1]);
+            maxY = Math.max(maxY, verts[i + 1]);
+        }
+
+        int startX = (int)(minX / Tile.TILE_SIZE);
+        int endX   = (int)(maxX / Tile.TILE_SIZE);
+        int startY = (int)(minY / Tile.TILE_SIZE);
+        int endY   = (int)(maxY / Tile.TILE_SIZE);
+
+        polygon.setPosition(polygon.getX(), polygon.getY());
+
+        for (int x = startX; x <= endX; x++) {
+            for (int y = startY; y <= endY; y++) {
+                float tileCenterX = x * Tile.TILE_SIZE + Tile.TILE_SIZE / 2f;
+                float tileCenterY = y * Tile.TILE_SIZE + Tile.TILE_SIZE / 2f;
+
+                if (polygon.contains(tileCenterX, tileCenterY) && isInBounds(x, y, mapWidth, mapHeight)) {
+                    tileStates[x][y].setFishable(true);
+                }
+            }
+        }
+    }
+
+    private void initFishable() {
+        MapObject smallLake = collisions.get("small-lake");
+        if (smallLake instanceof PolygonMapObject polyObj) {
+            setFishable(polyObj.getPolygon());
+        }
+
+        MapObject bigLake = collisions.get("big-lake");
+        if (bigLake instanceof PolygonMapObject polyObj) {
+            setFishable(polyObj.getPolygon());
         }
     }
 

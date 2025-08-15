@@ -13,6 +13,7 @@ public class Tile {
 
     private DirtState dirtState;
     private Fertilizer fertilizer;
+    private boolean fishable;
     private boolean isWatered;
     private boolean walkable;
     private boolean spawnable;
@@ -52,6 +53,14 @@ public class Tile {
             if (dirtState == DirtState.PLOWED) dirtState = DirtState.PLOWED_WATER;
             else if (dirtState == DirtState.WATERED) dirtState = DirtState.WATERED_WATER;
         }
+    }
+
+    public boolean isFishable() {
+        return fishable;
+    }
+
+    public void setFishable(boolean fishable) {
+        this.fishable = fishable;
     }
 
     public boolean isWatered() {
