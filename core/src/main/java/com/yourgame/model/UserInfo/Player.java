@@ -17,6 +17,7 @@ import com.yourgame.model.Food.FoodType;
 import com.yourgame.model.Item.Inventory.BackpackType;
 import com.yourgame.model.Item.Tools.*;
 import com.yourgame.model.Item.Inventory.Backpack;
+import com.yourgame.model.Map.Farm;
 import com.yourgame.model.NPC.NPCType;
 import com.yourgame.model.NPC.QuestManager;
 import com.yourgame.model.NPC.RelationWithNPC;
@@ -52,6 +53,8 @@ public class Player implements TimeObserver {
     private boolean addedToObserver = false;
 
     private Map farmHouse;
+    private Farm farm;
+    private Farm greenhouse;
 
     private final QuestManager questManager;
     private int remainingDaysAfterMarriageDenied = 0;
@@ -86,7 +89,7 @@ public class Player implements TimeObserver {
         this.backpack.addTool(new Pickaxe());
         this.backpack.addTool(new Axe());
         this.backpack.addTool(new WateringCan());
-        this.backpack.addItem(new Food(FoodType.RedPlate), 2);
+        this.backpack.addItem(new Wood.WoodItem(), 500);
         this.backpack.addItem(new Seeds.SeedItem(Seeds.Garlic_Seeds), 5);
         this.backpack.getIngredientQuantity().put(new Coin(), 20);
         this.backpack.getIngredientQuantity().put(new Wood(), 100);
@@ -161,6 +164,14 @@ public class Player implements TimeObserver {
 
     public Map getFarmHouse() {
         return farmHouse;
+    }
+
+    public void setFarm(Farm farm) {
+        this.farm = farm;
+    }
+
+    public Farm getFarm() {
+        return farm;
     }
 
     public Skill.FarmingSkill getFarmingSkill() {
@@ -331,6 +342,23 @@ public class Player implements TimeObserver {
 
     public CookingRecipeManager getCookingRecipeManager() {
         return cookingRecipeManager;
+    }
+
+    public boolean areGreenhouseRequirementsMet() {
+        return  (gold >= 1000) && (backpack.getInventory().getItemQuantity(new Wood.WoodItem()) >= 500);
+    }
+
+    public void buildGreenhouse() {
+        if (greenhouse != null) return;
+        if (!areGreenhouseRequirementsMet()) return;
+        gold -= 1000;
+        backpack.getInventory().reduceItemQuantity(new Wood.WoodItem(), 500);
+        greenhouse = new Farm(user.getUsername() + "-greenhouse", "Game/Map/greenhouse.tmx");
+        farm.setGreenHouseLayerVisible(true);
+    }
+
+    public Farm getGreenhouse() {
+        return greenhouse;
     }
 
     @Override

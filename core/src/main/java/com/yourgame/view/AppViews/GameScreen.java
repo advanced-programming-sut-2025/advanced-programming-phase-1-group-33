@@ -36,6 +36,7 @@ import com.yourgame.model.UserInfo.PlayerState;
 import com.yourgame.model.WeatherAndTime.ThunderManager;
 import com.yourgame.view.GameViews.*;
 import com.yourgame.view.GameViews.MainMenuView;
+import com.yourgame.view.GameViews.ShopMenu.CarpenterMenuView;
 import com.yourgame.view.GameViews.ShopMenu.PierreShopMenuView;
 import com.yourgame.view.GameViews.ShopMenu.PierreShopSellMenuView;
 import com.yourgame.view.GameViews.ShopMenu.StardropSaloonMenuView;
@@ -337,16 +338,6 @@ public class GameScreen extends GameBaseScreen {
         hudManager.showInventory(true);
     }
 
-    // Methods for music control, similar to MenuBaseScreen
-    public void playBackgroundMusic() {
-        if (App.isMusicMuted()) {
-            return;
-        }
-
-        backgroundMusic.setLooping(true);
-        backgroundMusic.play();
-    }
-
     public void stopBackgroundMusic() {
         backgroundMusic.stop();
     }
@@ -435,12 +426,12 @@ public class GameScreen extends GameBaseScreen {
             controller.handleInteraction();
             if (controller.getCurrentMap() instanceof Store store) {
                 if (store.isPlayerInBuyZone(player)) {
-                    openMenu("pierreShop");
+                    openMenu(store.getName());
                 }
                 else if (store.isPlayerInSellZone(player)) {
                     openMenu("sell");
                 }
-            } else if (controller.getCurrentMap().getName().contains("house")) {
+            } else if (controller.getCurrentMap().getName().contains("-house")) {
                 MapObject obj = controller.getCurrentMap().getTiledMap().getLayers().get("Interactables")
                     .getObjects().get("fridge");
                 if (obj != null) {
@@ -534,6 +525,9 @@ public class GameScreen extends GameBaseScreen {
             newMap = controller.getMapManager().getTown();
         } else if (teleport.dest().contains("farm")) {
             newMap = controller.getMapManager().getFarm(player);
+        } else if (teleport.dest().contains("greenhouse")) {
+            if (player.getGreenhouse() == null) return;
+            newMap = player.getGreenhouse();
         } else if (teleport.dest().contains("house")) {
             newMap = controller.getMapManager().getHouse(player);
         } else {
@@ -548,19 +542,44 @@ public class GameScreen extends GameBaseScreen {
 
     private void clampCameraToMap() {
         Map currentMap = controller.getCurrentMap();
+        if (currentMap == null || camera == null) {
+            return;
+        }
+
+        // 1. Get map dimensions in pixels
         float mapWidth = currentMap.getTiledMap().getProperties().get("width", Integer.class) * Tile.TILE_SIZE;
         float mapHeight = currentMap.getTiledMap().getProperties().get("height", Integer.class) * Tile.TILE_SIZE;
 
+        // 2. Get the camera's viewport size in world units (taking zoom into account)
         float cameraHalfWidth = camera.viewportWidth * camera.zoom * 0.5f;
         float cameraHalfHeight = camera.viewportHeight * camera.zoom * 0.5f;
 
-        // Clamp X
-        camera.position.x = Math.max(cameraHalfWidth, camera.position.x);
-        camera.position.x = Math.min(mapWidth - cameraHalfWidth, camera.position.x);
+        // 3. Start with the camera centered on the player
+        camera.position.set(player.playerPosition.x, player.playerPosition.y, 0);
 
-        // Clamp Y
-        camera.position.y = Math.max(cameraHalfHeight, camera.position.y);
-        camera.position.y = Math.min(mapHeight - cameraHalfHeight, camera.position.y);
+        // 4. Calculate the boundaries for the camera's center position
+        float cameraLeftBoundary = cameraHalfWidth;
+        float cameraRightBoundary = mapWidth - cameraHalfWidth;
+        float cameraBottomBoundary = cameraHalfHeight;
+        float cameraTopBoundary = mapHeight - cameraHalfHeight;
+
+        // 5. On small maps, the right boundary can be less than the left.
+        // If the map is smaller than the camera's view, we must lock the camera's center.
+        if (mapWidth < camera.viewportWidth * camera.zoom) {
+            camera.position.x = mapWidth / 2f;
+        } else {
+            // Otherwise, clamp the camera's position within the valid range.
+            camera.position.x = Math.max(cameraLeftBoundary, Math.min(camera.position.x, cameraRightBoundary));
+        }
+
+        if (mapHeight < camera.viewportHeight * camera.zoom) {
+            camera.position.y = mapHeight / 2f;
+        } else {
+            camera.position.y = Math.max(cameraBottomBoundary, Math.min(camera.position.y, cameraTopBoundary));
+        }
+
+        // 6. Apply the changes
+        camera.update();
     }
 
     /**
@@ -593,13 +612,14 @@ public class GameScreen extends GameBaseScreen {
         switch (name) {
             case "main" -> menuStage.addActor(new MainMenuView(MenuAssetManager.getInstance().getSkin(3),
                 menuStage, this));
-            case "pierreShop" -> menuStage.addActor(new PierreShopMenuView(MenuAssetManager.getInstance().getSkin(3),
+            case "pierre-store" -> menuStage.addActor(new PierreShopMenuView(MenuAssetManager.getInstance().getSkin(3),
                 menuStage, this));
             case "refrigerator" -> menuStage.addActor(refrigeratorView);
             case "sell" -> menuStage.addActor(new PierreShopSellMenuView(MenuAssetManager.getInstance().getSkin(3),
                 menuStage, this));
             case "stardrop" -> menuStage.addActor(new StardropSaloonMenuView(MenuAssetManager.getInstance().getSkin(3),
                 menuStage,this));
+            case "CarpenterShop" -> menuStage.addActor(new CarpenterMenuView(this, menuStage, player));
         }
     }
 
