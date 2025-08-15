@@ -89,6 +89,7 @@ public class Player implements TimeObserver {
         this.backpack.addTool(new Pickaxe());
         this.backpack.addTool(new Axe());
         this.backpack.addTool(new WateringCan());
+        this.backpack.addTool(new FishingPole(PoleStage.Bamboo));
         this.backpack.addItem(new Wood.WoodItem(), 500);
         this.backpack.addItem(new Seeds.SeedItem(Seeds.Garlic_Seeds), 5);
         this.backpack.getIngredientQuantity().put(new Coin(), 20);

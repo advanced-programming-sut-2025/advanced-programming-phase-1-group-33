@@ -3,8 +3,6 @@ package com.yourgame.model.Stores;
 
 import com.yourgame.model.Animals.AnimalGood;
 import com.yourgame.model.Animals.AnimalGoodType;
-import com.yourgame.model.Animals.Fish;
-import com.yourgame.model.Animals.FishType;
 import com.yourgame.model.App;
 import com.yourgame.model.Farming.Crop;
 import com.yourgame.model.Farming.CropType;
@@ -31,16 +29,6 @@ public interface Sellable {
             for (Ingredient ingredient : player.getBackpack().getIngredientQuantity().keySet()) {
                 if (ingredient instanceof AnimalGood animalGood && animalGood.getType().equals(animalGoodType)) {
                     return animalGood;
-                }
-            }
-            return null;
-        }
-
-        FishType fishType = FishType.getFishTypeByName(name);
-        if (fishType != null) {
-            for (Ingredient ingredient : player.getBackpack().getIngredientQuantity().keySet()) {
-                if (ingredient instanceof Fish fish && fish.getType().equals(fishType)) {
-                    return fish;
                 }
             }
             return null;
@@ -77,7 +65,6 @@ public interface Sellable {
     static boolean isSellable(String name) {
         return  AnimalGoodType.getAnimalGoodTypeByName(name) != null ||
                 CropType.getCropTypeByName(name) != null ||
-                FishType.getFishTypeByName(name) != null ||
                 FoodType.getFoodByName(name) != null ||
                 Fruit.getByName(name) != null ||
                 ForagingMineral.getByName(name) != null ||
@@ -91,9 +78,6 @@ public interface Sellable {
         }
         if (sellable instanceof Crop){
             return ((Crop) sellable).getType().toString();
-        }
-        if (sellable instanceof Fish){
-            return ((Fish) sellable).getType().toString();
         }
         if (sellable instanceof FoodType){
             return sellable.toString();

@@ -2,7 +2,6 @@ package com.yourgame.model.Item.Inventory;
 
 import com.yourgame.model.Animals.Animal;
 import com.yourgame.model.Animals.AnimalGood;
-import com.yourgame.model.Animals.Fish;
 import com.yourgame.model.Animals.Hay;
 import com.yourgame.model.Farming.Crop;
 import com.yourgame.model.Farming.Fruit;
@@ -91,8 +90,6 @@ public class Backpack {
             int refund = 0;
             if (ingredient instanceof AnimalGood ag)
                 refund = ag.getSellPrice() * returnPercentage / 100;
-            else if (ingredient instanceof Fish f)
-                refund = f.getSellPrice() * returnPercentage / 100;
             else if (ingredient instanceof Crop c)
                 refund = c.getSellPrice() * returnPercentage / 100;
             else if (ingredient instanceof Fruit fr)
