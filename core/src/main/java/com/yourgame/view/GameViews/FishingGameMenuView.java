@@ -13,19 +13,15 @@ import com.yourgame.Graphics.GameAssetManager;
 import com.yourgame.model.Animals.FishPackage.Fish;
 import com.yourgame.model.Animals.FishPackage.FishItem;
 import com.yourgame.model.Item.Inventory.InventorySlot;
-import com.yourgame.model.Item.Item;
 import com.yourgame.model.Item.Tools.PoleStage;
-import com.yourgame.model.WeatherAndTime.Season;
 import com.yourgame.view.AppViews.GameScreen;
 
-import java.util.ArrayList;
 
 public class FishingGameMenuView extends Window {
     private final Skin skin;
     private final GameScreen gameScreen;
     private final Stage stage;
     private final Fish fish;
-    private final PoleStage poleStage;
 
     private static final float TRACK_HEIGHT = 520f;       // play area vertical size
     private static final float TRACK_TOP_PADDING = -150f;  // top space inside the window
@@ -63,13 +59,12 @@ public class FishingGameMenuView extends Window {
 
     private boolean caught = false;
 
-    public FishingGameMenuView(Skin skin, Stage stage, GameScreen gameScreen, Fish fish, PoleStage fishingPole) {
+    public FishingGameMenuView(Skin skin, Stage stage, GameScreen gameScreen, Fish fish) {
         super("Fishing Game", skin);
         this.stage = stage;
         this.gameScreen = gameScreen;
         this.skin = skin;
         this.fish = fish;
-        this.poleStage = fishingPole;
 
         setSize(1200, 800);
         setModal(true);
@@ -275,7 +270,7 @@ public class FishingGameMenuView extends Window {
     private void onCatch() {
         if(perfectSoFar){
             gameScreen.getPlayer().setFishingLevel((int)(gameScreen.getPlayer().getFishingLevel()*2.4));
-            gameScreen.showMessage("Victory","Perfect Catch!", skin,0,200,stage);
+            gameScreen.showMessage("victory","Perfect Catch!", skin,0,200,stage);
         }
         else{
             gameScreen.showMessage("popUp","Caught!", skin,0,200,stage);

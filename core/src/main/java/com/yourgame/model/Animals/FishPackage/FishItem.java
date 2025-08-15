@@ -14,7 +14,7 @@ public class FishItem extends Item {
 
     @Override
     public TextureRegion getTextureRegion(GameAssetManager assetManager) {
-        String path = "Game/Animal/Fish/" + fish.getName() + ".png";
+        String path = "Game/Fish/" + fish.getName() + ".png";
         return new TextureRegion(assetManager.getTexture(path));
     }
 

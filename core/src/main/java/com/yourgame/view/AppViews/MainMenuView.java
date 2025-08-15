@@ -36,6 +36,14 @@ public class MainMenuView extends MenuBaseScreen {
         Table table = createTable();
         stage.addActor(table);
 
+        Table detailsTable = new Table();
+        detailsTable.setFillParent(true);
+        detailsTable.bottom().right().pad(100);
+        detailsTable.add(new Label(App.getCurrentUser().getNickname(),MenuAssetManager.getInstance().getSkin(3),"Bold"));
+        detailsTable.row().padTop(50);
+        detailsTable.add(MenuAssetManager.getInstance().getAvatarCharacter(App.getCurrentUser().getAvatar()));
+
+        stage.addActor(detailsTable);
         Gdx.input.setInputProcessor(stage);
     }
 

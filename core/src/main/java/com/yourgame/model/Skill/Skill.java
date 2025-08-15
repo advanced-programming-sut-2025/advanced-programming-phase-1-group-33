@@ -6,7 +6,7 @@ public abstract class Skill {
     public static final int MAX_LEVEL = 4;
 
     protected final SkillType type;
-    protected int level = 0;
+    protected int level = 1;
     protected int experience = 0;
 
     public Skill(SkillType type) {
