@@ -36,9 +36,8 @@ public abstract class MenuBaseScreen implements Screen {
         if (backgroundImage != null) {
             backgroundImage.setFillParent(true);
             stage.addActor(backgroundImage);
-        }
-        else{
-            
+        } else {
+
         }
         // setting up the background music
         backgroundMusic = MenuAssetManager.getInstance().getMusic();
@@ -125,7 +124,7 @@ public abstract class MenuBaseScreen implements Screen {
         }
     }
 
-    protected void showMessage(String message, Skin skin, float x, float y) {
+    public void showMessage(String message, Skin skin, float x, float y) {
         playMenuSFX("popUp");
         Dialog dialog = new Dialog("", skin);
         dialog.text(message);
@@ -137,5 +136,11 @@ public abstract class MenuBaseScreen implements Screen {
                 dialog.hide();
             }
         }, 2);
+    }
+
+    public void showMessage(String message, float x, float y) {
+        // You need to get a default skin here.
+        Skin defaultSkin = MenuAssetManager.getInstance().getSkin(3); // Using a default skin
+        showMessage(message, defaultSkin, x, y);
     }
 }

@@ -2,6 +2,7 @@ package com.yourgame.model;
 
 import com.yourgame.model.UserInfo.User;
 import com.yourgame.model.enums.Commands.MenuTypes;
+import com.yourgame.network.lobby.Lobby;
 import com.yourgame.network.protocol.Auth.UserInfoDTO;
 import com.yourgame.model.enums.Avatar;
 import com.yourgame.model.enums.Gender;
@@ -20,6 +21,7 @@ public class App {
     private static UserDAO userDAO;
     private static GameState gameState;
     private static boolean isMusicMuted = false;
+    private static Lobby currentLobby;
 
     static {
         try {
@@ -35,7 +37,6 @@ public class App {
             currentUser = null;
             return;
         }
-
 
         currentUser = new User(
                 dto.getUsername(),
@@ -95,4 +96,13 @@ public class App {
     public static void setIsMusicMuted(boolean isMusicMuted) {
         App.isMusicMuted = isMusicMuted;
     }
+
+    public static Lobby getCurrentLobby() {
+        return currentLobby;
+    }
+
+    public static void setCurrentLobby(Lobby currentLobby) {
+        App.currentLobby = currentLobby;
+    }
+
 }

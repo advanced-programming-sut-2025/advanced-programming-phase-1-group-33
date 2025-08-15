@@ -4,7 +4,12 @@ package com.yourgame.network;
 import com.google.gson.Gson;
 import com.yourgame.network.protocol.RequestType;
 import com.yourgame.network.protocol.RequestWrapper;
+import com.yourgame.network.protocol.Auth.CreateLobbyRequest;
+import com.yourgame.network.protocol.Auth.LoginRequest;
 import com.yourgame.network.protocol.Auth.SignupRequest;
+import com.yourgame.network.protocol.Auth.Lobby.JoinLobbyRequest;
+import com.yourgame.network.protocol.Auth.Lobby.LeaveLobbyRequest;
+import com.yourgame.network.protocol.Auth.Lobby.SearchLobbyRequest;
 
 public class ClientConnectionManager {
     private Client client;
@@ -44,7 +49,6 @@ public class ClientConnectionManager {
             client.sendData(wrapper);
         }
     }
-
     public void sendRequest(Object data) {
         if (client == null) {
             System.err.println("Client is not connected. Cannot send request.");
@@ -52,11 +56,27 @@ public class ClientConnectionManager {
         }
 
         RequestType type = null;
+        // اضافه کردن بررسی برای انواع درخواست‌های لابی و سایر موارد
         if (data instanceof SignupRequest) {
             type = RequestType.SIGNUP;
+        } else if (data instanceof LoginRequest) {
+            type = RequestType.LOGIN;
+        } else if (data instanceof CreateLobbyRequest) {
+            type = RequestType.CREATE_LOBBY;
+        } else if (data instanceof JoinLobbyRequest) {
+            type = RequestType.JOIN_LOBBY;
+        } else if (data instanceof SearchLobbyRequest) {
+            type = RequestType.SEARCH_LOBBY;
         }
-        // Add more 'if' or 'else if' statements for other request types like
-        // LoginRequest, etc.
+        //  else if (data instanceof StartGameRequest) {
+        //     type = RequestType.START_GAME;
+        // } 
+        else if (data instanceof LeaveLobbyRequest) {
+            type = RequestType.LEAVE_LOBBY;
+        } else if (data.getClass().getSimpleName().equals("REFRESH_LOBBIES")) {
+            // برای RequestType های بدون payload
+            type = RequestType.REFRESH_LOBBIES;
+        }
 
         if (type != null) {
             String payload = gson.toJson(data);
