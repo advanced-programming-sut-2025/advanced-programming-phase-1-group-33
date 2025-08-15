@@ -8,7 +8,7 @@ public class MillProduct extends Item {
     private final MillProductType type;
 
     public MillProduct(MillProductType type) {
-        super(type.getName(), ItemType.MILL, type.getSellPrice(), true);
+        super(type.getName(), ItemType.MILL, type.getBasePrice(), true);
         this.type = type;
     }
 

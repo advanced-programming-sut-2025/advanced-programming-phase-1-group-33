@@ -1,6 +1,7 @@
 package com.yourgame.model.Food;
 
 
+import com.yourgame.model.Item.ArtisanIngredient;
 import com.yourgame.model.Item.Item;
 import com.yourgame.model.ManuFactor.Ingredient;
 import com.yourgame.model.Skill.Skill;
@@ -8,7 +9,7 @@ import com.yourgame.model.Stores.Sellable;
 
 import java.util.HashMap;
 
-public enum FoodType implements Ingredient, Sellable {
+public enum FoodType implements Ingredient, Sellable, ArtisanIngredient {
     FriedEgg(50, 35),
     BakedFish(75, 100),
     Salad(113, 110),
@@ -79,5 +80,15 @@ public enum FoodType implements Ingredient, Sellable {
     @Override
     public Item getItem() {
         return new Food(this);
+    }
+
+    @Override
+    public int getBaseEnergy() {
+        return energy;
+    }
+
+    @Override
+    public int getBasePrice() {
+        return sellPrice;
     }
 }

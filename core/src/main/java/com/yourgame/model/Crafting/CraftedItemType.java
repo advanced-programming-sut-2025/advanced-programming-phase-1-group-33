@@ -1,5 +1,7 @@
 package com.yourgame.model.Crafting;
 
+import com.yourgame.model.Item.ArtisanIngredient;
+
 public enum CraftedItemType {
     CherryBomb("CherryBomb", 50),
     Bomb("Bomb", 50),

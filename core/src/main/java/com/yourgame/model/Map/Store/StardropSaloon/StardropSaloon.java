@@ -5,7 +5,7 @@ import com.yourgame.model.Food.FoodType;
 import com.yourgame.model.Item.Inventory.InventorySlot;
 import com.yourgame.model.Item.Item;
 import com.yourgame.model.ManuFactor.Artisan.ArtisanProduct;
-import com.yourgame.model.ManuFactor.Artisan.ArtisanProductType;
+import com.yourgame.model.ManuFactor.Artisan.EdibleArtisanProduct.EdibleArtisanProductType;
 import com.yourgame.model.Map.Store.Store;
 import com.yourgame.model.WeatherAndTime.TimeObserver;
 import com.yourgame.model.WeatherAndTime.TimeSystem;
@@ -23,12 +23,12 @@ public class StardropSaloon extends Store implements TimeObserver {
     @Override
     public void loadInventory() {
         inventory = new ArrayList<>();
-        inventory.add(new InventorySlot(new ArtisanProduct(ArtisanProductType.Beer),-1));
+        inventory.add(new InventorySlot(new ArtisanProduct(EdibleArtisanProductType.Beer),-1));
         inventory.add(new InventorySlot(new Food(FoodType.Salad),-1));
         inventory.add(new InventorySlot(new Food(FoodType.Bread),-1));
         inventory.add(new InventorySlot(new Food(FoodType.Spaghetti),-1));
         inventory.add(new InventorySlot(new Food(FoodType.Pizza),-1));
-        inventory.add(new InventorySlot(new ArtisanProduct(ArtisanProductType.Coffee),-1));
+        inventory.add(new InventorySlot(new ArtisanProduct(EdibleArtisanProductType.Coffee),-1));
         inventory.add(new InventorySlot(new StardropSaloonItem("HashBrowns Recipe", Item.ItemType.RECIPE
         ,50,false),1));
         inventory.add(new InventorySlot(new StardropSaloonItem("Omelet Recipe", Item.ItemType.RECIPE

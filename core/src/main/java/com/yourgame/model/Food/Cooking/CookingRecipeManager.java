@@ -10,7 +10,7 @@ import com.yourgame.model.Farming.CropType;
 import com.yourgame.model.Food.Food;
 import com.yourgame.model.Food.FoodType;
 import com.yourgame.model.ManuFactor.Artisan.ArtisanProduct;
-import com.yourgame.model.ManuFactor.Artisan.ArtisanProductType;
+import com.yourgame.model.ManuFactor.Artisan.EdibleArtisanProduct.EdibleArtisanProductType;
 import com.yourgame.model.ManuFactor.Mill.MillProduct;
 import com.yourgame.model.ManuFactor.Mill.MillProductType;
 
@@ -107,7 +107,7 @@ public class CookingRecipeManager {
         // Triple Shot Espresso: 3 Coffee
         cookingRecipes.add(new CookingRecipe(
             new ArrayList<>() {{
-                add(new Ingredient(new ArtisanProduct(ArtisanProductType.Coffee),3));
+                add(new Ingredient(new ArtisanProduct(EdibleArtisanProductType.Coffee),3));
             }},
             new Food(FoodType.TripleShotEspresso),
             new CookingRecipeSource(0,0,0,0,false,false, false)

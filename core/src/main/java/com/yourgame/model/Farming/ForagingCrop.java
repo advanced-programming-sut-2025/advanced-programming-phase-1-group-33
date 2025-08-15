@@ -2,6 +2,7 @@ package com.yourgame.model.Farming;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.yourgame.Graphics.GameAssetManager;
+import com.yourgame.model.Item.ArtisanIngredient;
 import com.yourgame.model.Item.Item;
 import com.yourgame.model.ManuFactor.Ingredient;
 import com.yourgame.model.WeatherAndTime.Season;
@@ -10,7 +11,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public enum ForagingCrop implements Ingredient {
+public enum ForagingCrop implements Ingredient, ArtisanIngredient {
     // CommonMushroom(Season.Special, 40, 38),
     Common_Mushroom(List.of(Season.Spring, Season.Fall), 40, 38),
     Daffodil(List.of(Season.Spring), 30, 0),
@@ -98,6 +99,16 @@ public enum ForagingCrop implements Ingredient {
     @Override
     public Item getItem() {
         return new ForagingCropItem(this);
+    }
+
+    @Override
+    public int getBaseEnergy() {
+        return energy;
+    }
+
+    @Override
+    public int getBasePrice() {
+        return baseSellPrice;
     }
 
     public static final class ForagingCropItem extends Item {

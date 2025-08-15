@@ -8,7 +8,7 @@ public class ResourceItem extends Item {
     private final ResourceType type;
 
     public ResourceItem(ResourceType type) {
-        super(type.getName(), ItemType.RESOURCE, type.getValue(), true);
+        super(type.getName(), ItemType.RESOURCE, type.getBasePrice(), true);
         this.type = type;
     }
 

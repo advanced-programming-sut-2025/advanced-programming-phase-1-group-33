@@ -1,5 +1,7 @@
 package com.yourgame.model.Farming;
 
+import com.yourgame.model.Item.ArtisanIngredient;
+import com.yourgame.model.ManuFactor.Artisan.ArtisanProduct;
 import com.yourgame.model.ManuFactor.Ingredient;
 import com.yourgame.model.WeatherAndTime.Season;
 import java.util.ArrayList;
@@ -7,7 +9,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
-public enum CropType implements Ingredient {
+public enum CropType implements Ingredient, ArtisanIngredient {
     Blue_Jazz(Seeds.Jazz_Seeds,
             new ArrayList<>(Arrays.asList(1, 2, 2, 2)),
             7, true, 0, 50, true, 45,
@@ -297,5 +299,15 @@ public enum CropType implements Ingredient {
             return null;
         }
         return seedsToCropType.get(seed);
+    }
+
+    @Override
+    public int getBaseEnergy() {
+        return energy;
+    }
+
+    @Override
+    public int getBasePrice() {
+        return baseSellPrice;
     }
 }

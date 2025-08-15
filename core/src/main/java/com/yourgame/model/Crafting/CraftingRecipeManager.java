@@ -4,7 +4,8 @@ import com.yourgame.Mining.MiningItem;
 import com.yourgame.Mining.MiningItemType;
 import com.yourgame.model.Food.Cooking.Ingredient;
 import com.yourgame.model.ManuFactor.Artisan.ArtisanProduct;
-import com.yourgame.model.ManuFactor.Artisan.ArtisanProductType;
+import com.yourgame.model.ManuFactor.Artisan.EdibleArtisanProduct.EdibleArtisanProductType;
+import com.yourgame.model.ManuFactor.Artisan.InEdibleArtisanProduct.InEdibleArtisanProductType;
 import com.yourgame.model.Resource.Fiber;
 import com.yourgame.model.Resource.Stone;
 import com.yourgame.model.Resource.Wood;
@@ -27,7 +28,7 @@ public class CraftingRecipeManager {
         craftingRecipes.add(new CraftingRecipe(
             new ArrayList<>() {{
                 add(new Ingredient(new MiningItem(MiningItemType.CopperOre), 4));
-                add(new Ingredient(new ArtisanProduct(ArtisanProductType.Coal), 1));
+                add(new Ingredient(new ArtisanProduct(InEdibleArtisanProductType.Coal), 1));
             }},
             new CraftedItem(CraftedItemType.CherryBomb),
             new CraftingRecipeSource(1, 0, 0, false, false)
@@ -37,7 +38,7 @@ public class CraftingRecipeManager {
         craftingRecipes.add(new CraftingRecipe(
             new ArrayList<>() {{
                 add(new Ingredient(new MiningItem(MiningItemType.IronOre), 4));
-                add(new Ingredient(new ArtisanProduct(ArtisanProductType.Coal), 1));
+                add(new Ingredient(new ArtisanProduct(InEdibleArtisanProductType.Coal), 1));
             }},
             new CraftedItem(CraftedItemType.Bomb),
             new CraftingRecipeSource(2, 0, 0, false, false)
@@ -47,7 +48,7 @@ public class CraftingRecipeManager {
         craftingRecipes.add(new CraftingRecipe(
             new ArrayList<>() {{
                 add(new Ingredient(new MiningItem(MiningItemType.GoldOre), 4));
-                add(new Ingredient(new ArtisanProduct(ArtisanProductType.Coal), 1));
+                add(new Ingredient(new ArtisanProduct(InEdibleArtisanProductType.Coal), 1));
             }},
             new CraftedItem(CraftedItemType.MegaBomb),
             new CraftingRecipeSource(3, 0, 0, false, false)
@@ -107,7 +108,7 @@ public class CraftingRecipeManager {
         craftingRecipes.add(new CraftingRecipe(
             new ArrayList<>() {{
                 add(new Ingredient(new Wood(), 50));
-                add(new Ingredient(new ArtisanProduct(ArtisanProductType.Coal), 1));
+                add(new Ingredient(new ArtisanProduct(InEdibleArtisanProductType.Coal), 1));
                 add(new Ingredient(new Fiber(), 20));
             }},
             new CraftedItem(CraftedItemType.Scarecrow),
@@ -118,7 +119,7 @@ public class CraftingRecipeManager {
         craftingRecipes.add(new CraftingRecipe(
             new ArrayList<>() {{
                 add(new Ingredient(new Wood(), 50));
-                add(new Ingredient(new ArtisanProduct(ArtisanProductType.Coal), 1));
+                add(new Ingredient(new ArtisanProduct(InEdibleArtisanProductType.Coal), 1));
                 add(new Ingredient(new Fiber(), 20));
                 add(new Ingredient(new MiningItem(MiningItemType.IridiumOre), 1));
             }},
@@ -130,7 +131,7 @@ public class CraftingRecipeManager {
         craftingRecipes.add(new CraftingRecipe(
             new ArrayList<>() {{
                 add(new Ingredient(new Wood(), 40));
-                add(new Ingredient(new ArtisanProduct(ArtisanProductType.Coal), 8));
+                add(new Ingredient(new ArtisanProduct(InEdibleArtisanProductType.Coal), 8));
                 add(new Ingredient(new MiningItem(MiningItemType.IronBar), 1));
             }},
             new CraftedItem(CraftedItemType.BeeHouse),
@@ -196,7 +197,7 @@ public class CraftingRecipeManager {
             new ArrayList<>() {{
                 add(new Ingredient(new Wood(), 50));
                 add(new Ingredient(new Stone(), 40));
-                add(new Ingredient(new ArtisanProduct(ArtisanProductType.Coal), 8));
+                add(new Ingredient(new ArtisanProduct(InEdibleArtisanProductType.Coal), 8));
             }},
             new CraftedItem(CraftedItemType.PreservesJar),
             new CraftingRecipeSource(0, 0, 2, false, false)
@@ -228,7 +229,7 @@ public class CraftingRecipeManager {
             new ArrayList<>() {{
                 add(new Ingredient(new Wood(), 50));
                 add(new Ingredient(new MiningItem(MiningItemType.IronBar), 3));
-                add(new Ingredient(new ArtisanProduct(ArtisanProductType.Coal), 10));
+                add(new Ingredient(new ArtisanProduct(InEdibleArtisanProductType.Coal), 10));
             }},
             new CraftedItem(CraftedItemType.FishSmoker),
             new CraftingRecipeSource(0,0,0,false,false)

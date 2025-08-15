@@ -1,23 +1,33 @@
 package com.yourgame.model.ManuFactor.Mill;
 
-public enum MillProductType {
-    WheatFlour("WheatFlour",50),
-    Sugar("Sugar", 50),
-    Rice("Rice", 100);
+import com.yourgame.model.Item.ArtisanIngredient;
+
+public enum MillProductType implements ArtisanIngredient {
+    WheatFlour("WheatFlour", 50, 25),
+    Sugar("Sugar", 50, 13),
+    Rice("Rice", 100, 25);
 
     private final String name;
     private final int sellPrice;
+    private final int energy;
 
-    MillProductType(String name, int sellPrice) {
+    MillProductType(String name, int sellPrice, int energy) {
         this.name = name;
         this.sellPrice = sellPrice;
+        this.energy = energy;
     }
 
     public String getName() {
         return name;
     }
 
-    public int getSellPrice() {
+    @Override
+    public int getBaseEnergy() {
+        return energy;
+    }
+
+    @Override
+    public int getBasePrice() {
         return sellPrice;
     }
 }
