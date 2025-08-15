@@ -13,13 +13,13 @@ import com.yourgame.model.Food.Cooking.CookingRecipeManager;
 import com.yourgame.model.Food.Food;
 import com.yourgame.model.Food.FoodType;
 import com.yourgame.model.Item.Inventory.BackpackType;
-import com.yourgame.model.Item.Resource;
 import com.yourgame.model.Item.Tools.Axe;
 import com.yourgame.model.Item.Tools.Hoe;
 import com.yourgame.model.Item.Tools.Pickaxe;
 import com.yourgame.model.Item.Tools.Scythe;
 import com.yourgame.model.Item.Tools.WateringCan;
 import com.yourgame.model.Item.Inventory.Backpack;
+import com.yourgame.model.ManuFactor.Artisan.ArtisanMachineManager;
 import com.yourgame.model.NPC.QuestManager;
 import com.yourgame.model.Resource.Fiber;
 import com.yourgame.model.Skill.Skill;
@@ -66,6 +66,7 @@ public class Player implements TimeObserver {
 
     private final CookingRecipeManager cookingRecipeManager;
     private final CraftingRecipeManager craftingRecipeManager;
+    private final ArtisanMachineManager artisanMachineManager;
 
     private int gold = 5000;
 
@@ -108,6 +109,9 @@ public class Player implements TimeObserver {
 
         // Crafting
         this.craftingRecipeManager = CraftingRecipeManager.getInstance();
+
+        // Artisan
+        this.artisanMachineManager = ArtisanMachineManager.getInstance();
 
         // Relation
         this.questManager = new QuestManager();
@@ -340,6 +344,8 @@ public class Player implements TimeObserver {
     public CraftingRecipeManager getCraftingRecipeManager() {
         return craftingRecipeManager;
     }
+
+    public ArtisanMachineManager getArtisanMachineManager() {return artisanMachineManager;}
 
     @Override
     public void onTimeChanged(TimeSystem timeSystem) {

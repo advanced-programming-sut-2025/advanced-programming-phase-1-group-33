@@ -25,6 +25,7 @@ import com.yourgame.Graphics.GameAssets.clockUIAssetManager;
 import com.yourgame.controller.GameController.GameController;
 import com.yourgame.model.Food.FoodAnimation;
 import com.yourgame.model.Item.Inventory.Inventory;
+import com.yourgame.model.ManuFactor.Artisan.ArtisanMachine;
 import com.yourgame.model.Map.*;
 import com.yourgame.model.App;
 import com.yourgame.Graphics.GameAssetManager;
@@ -99,6 +100,10 @@ public class GameScreen extends GameBaseScreen {
         menuStage = new Stage(new ScreenViewport());
 
         refrigeratorView = new RefrigeratorView(player, this);
+
+        for(ArtisanMachine artisanMachine : player.getArtisanMachineManager().getArtisanMachines()) {
+            App.getGameState().getGameTime().addHourObserver(artisanMachine);
+        }
     }
 
     @Override
@@ -215,6 +220,9 @@ public class GameScreen extends GameBaseScreen {
                 npcManager.update(delta, controller.getMapManager().getTown(), player);
             }
         }
+
+        handleHudUpdates(delta);
+        updateDayNightCycle();
 
         // Clear screen
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
