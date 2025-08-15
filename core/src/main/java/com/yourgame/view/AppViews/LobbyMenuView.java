@@ -28,20 +28,21 @@ public class LobbyMenuView extends MenuBaseScreen {
     private final TextButton searchLobbyButton;
     private final TextButton backButton;
 
-
     private final ScrollPane scrollPane;
     private final Table lobbyTable;
+
     public LobbyMenuView() {
         this.controller = new LobbyMenuController();
         this.controller.setView(this);
         this.skin = MenuAssetManager.getInstance().getSkin(3); // استفاده از یکی از skin ها
 
         // ایجاد دکمه ها
-        this.refreshButton = MenuAssetManager.getInstance().getButtons("refresh"); 
-        this.createLobbyButton = MenuAssetManager.getInstance().getButtons("lobby_but"); // استفاده مجدد از دکمه lobby به عنوان create
-        this.searchLobbyButton = MenuAssetManager.getInstance().getButtons("lobbypre"); // استفاده مجدد از دکمه pregame به عنوان search
+        this.refreshButton = MenuAssetManager.getInstance().getButtons("refresh");
+        this.createLobbyButton = MenuAssetManager.getInstance().getButtons("lobby_but"); // استفاده مجدد از دکمه lobby
+                                                                                         // به عنوان create
+        this.searchLobbyButton = MenuAssetManager.getInstance().getButtons("lobbypre"); // استفاده مجدد از دکمه pregame
+                                                                                        // به عنوان search
         this.backButton = MenuAssetManager.getInstance().getButtons("back");
-
 
         this.lobbyTable = new Table(skin);
         this.lobbyTable.bottom().left().pad(10).defaults().pad(5);
@@ -56,11 +57,10 @@ public class LobbyMenuView extends MenuBaseScreen {
         setupUI();
         setupListeners();
 
-
         controller.handleRefreshLobbies();
     }
 
-        private void setupUI() {
+    private void setupUI() {
         Label titleLabel = new Label("Lobbies", skin, "Bold");
         mainTable.add(titleLabel).padBottom(20).colspan(2).row();
 
@@ -75,13 +75,13 @@ public class LobbyMenuView extends MenuBaseScreen {
 
         // اضافه کردن ScrollPane
         mainTable.add(scrollPane).width(700).height(400).expandX().row();
-        
+
         // دکمه بازگشت
         mainTable.add(backButton).width(200).height(50).padTop(20).row();
 
         stage.addActor(mainTable);
     }
-    
+
     private void setupListeners() {
         // دکمه بازگشت
         backButton.addListener(new ChangeListener() {
@@ -159,11 +159,10 @@ public class LobbyMenuView extends MenuBaseScreen {
             public void changed(ChangeEvent event, Actor actor) {
                 if (!lobbyNameField.getText().isEmpty()) {
                     controller.handleCreateLobby(
-                        lobbyNameField.getText(), 
-                        isPrivateCheckBox.isChecked(), 
-                        passwordField.getText(), 
-                        isVisibleCheckBox.isChecked()
-                    );
+                            lobbyNameField.getText(),
+                            isPrivateCheckBox.isChecked(),
+                            passwordField.getText(),
+                            isVisibleCheckBox.isChecked());
                     dialog.hide();
                 } else {
                     showMessage("Lobby name cannot be empty.", skin, 0, 0);
@@ -180,7 +179,7 @@ public class LobbyMenuView extends MenuBaseScreen {
 
         dialog.show(stage);
     }
-    
+
     /**
      * دیالوگ برای جستجوی لابی را نمایش می دهد.
      */
@@ -226,11 +225,14 @@ public class LobbyMenuView extends MenuBaseScreen {
      */
     public void updateLobbyList(List<Lobby> lobbies) {
         this.lobbyList.clear();
-        this.lobbyList.addAll(lobbies);
-        
+        // this.lobbyList.addAll(lobbies);
+
+        if (lobbies != null) {
+            this.lobbyList.addAll(lobbies);
+        }
         lobbyTable.clear(); // پاک کردن لابی های قبلی
-        
-        if (lobbies.isEmpty()) {
+
+        if (lobbies == null ||lobbies.isEmpty() ) {
             lobbyTable.add(new Label("No public lobbies available.", skin)).center().pad(20);
         } else {
             for (Lobby lobby : lobbies) {
@@ -242,7 +244,8 @@ public class LobbyMenuView extends MenuBaseScreen {
 
     private void addLobbyItem(Lobby lobby) {
         Table lobbyItem = new Table(skin);
-        // lobbyItem.setBackground(skin.getDrawable("default-round")); // یک پس زمینه برای آیتم لابی
+        // lobbyItem.setBackground(skin.getDrawable("default-round")); // یک پس زمینه
+        // برای آیتم لابی
         lobbyItem.defaults().pad(5);
 
         Label nameLabel = new Label(lobby.getName(), skin, "default");
@@ -255,7 +258,7 @@ public class LobbyMenuView extends MenuBaseScreen {
         lobbyItem.add(playersLabel).width(50).align(Align.center);
         lobbyItem.add(statusLabel).width(100).align(Align.center);
         lobbyItem.add(joinButton).width(80).padLeft(20);
-        
+
         joinButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -269,7 +272,7 @@ public class LobbyMenuView extends MenuBaseScreen {
 
         lobbyTable.add(lobbyItem).expandX().fillX().row();
     }
-    
+
     /**
      * دیالوگ ورود رمز عبور برای پیوستن به لابی خصوصی را نمایش می دهد.
      */
@@ -299,7 +302,7 @@ public class LobbyMenuView extends MenuBaseScreen {
                 dialog.hide();
             }
         });
-        
+
         cancelButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -309,7 +312,7 @@ public class LobbyMenuView extends MenuBaseScreen {
 
         dialog.show(stage);
     }
-    
+
     @Override
     public void show() {
         Gdx.input.setInputProcessor(stage);

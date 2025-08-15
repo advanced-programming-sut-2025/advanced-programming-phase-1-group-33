@@ -14,6 +14,7 @@ public class RefreshLobbiesResponse {
 
 
     public List<Lobby> getVisibleLobbies() {
+        System.out.println("working");
         return visibleLobbies;
     }
 }
