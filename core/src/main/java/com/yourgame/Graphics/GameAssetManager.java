@@ -41,6 +41,7 @@ public class GameAssetManager extends AssetManager {
     private final Texture miningSkillIcon;
 
     private final Texture[] hearts;
+    private final Texture[] artisanProducts;
 
     private final TextButton closeButton;
     private final TextButton inventoryMenuButton;
@@ -93,6 +94,36 @@ public class GameAssetManager extends AssetManager {
             new Texture(Gdx.files.internal("Game/NPC/Heart/Eight_Hearts.png")),
             new Texture(Gdx.files.internal("Game/NPC/Heart/Ten_Hearts.png")),
         };
+
+        artisanProducts = new Texture[] {
+            new Texture(Gdx.files.internal("Game/Artisan/Beer.png")),
+            new Texture(Gdx.files.internal("Game/Artisan/Cheese.png")),
+            new Texture(Gdx.files.internal("Game/Artisan/Cloth.png")),
+            new Texture(Gdx.files.internal("Game/Artisan/Coffee.png")),
+            new Texture(Gdx.files.internal("Game/Artisan/CopperBar.png")),
+            new Texture(Gdx.files.internal("Game/Artisan/DinosaurMayonnaise.png")),
+            new Texture(Gdx.files.internal("Game/Artisan/DriedFruit.png")),
+            new Texture(Gdx.files.internal("Game/Artisan/DriedMushrooms.png")),
+            new Texture(Gdx.files.internal("Game/Artisan/DuckMayonnaise.png")),
+            new Texture(Gdx.files.internal("Game/Artisan/GoatCheese.png")),
+            new Texture(Gdx.files.internal("Game/Artisan/Honey.png")),
+            new Texture(Gdx.files.internal("Game/Artisan/IronBar.png")),
+            new Texture(Gdx.files.internal("Game/Artisan/Jelly.png")),
+            new Texture(Gdx.files.internal("Game/Artisan/Juice.png")),
+            new Texture(Gdx.files.internal("Game/Artisan/LargeCheese.png")),
+            new Texture(Gdx.files.internal("Game/Artisan/LargeGoatCheese.png")),
+            new Texture(Gdx.files.internal("Game/Artisan/Mayonnaise.png")),
+            new Texture(Gdx.files.internal("Game/Artisan/Mead.png")),
+            new Texture(Gdx.files.internal("Game/Artisan/Oil.png")),
+            new Texture(Gdx.files.internal("Game/Artisan/PaleAle.png")),
+            new Texture(Gdx.files.internal("Game/Artisan/Pickles.png")),
+            new Texture(Gdx.files.internal("Game/Artisan/Raisins.png")),
+            new Texture(Gdx.files.internal("Game/Artisan/SmokedFish.png")),
+            new Texture(Gdx.files.internal("Game/Artisan/TruffleOil.png")),
+            new Texture(Gdx.files.internal("Game/Artisan/Vinegar.png")),
+            new Texture(Gdx.files.internal("Game/Artisan/Wine.png"))
+        };
+
     }
 
     public clockUIAssetManager getClockManager() {
@@ -216,4 +247,37 @@ public class GameAssetManager extends AssetManager {
             default -> {return null;}
         }
     }
+
+    public Texture getArtisanProductTexture(String name) {
+        switch (name.toLowerCase()) {
+            case "beer": return new Texture(Gdx.files.internal("Game/Artisan/Beer.png"));
+            case "cheese": return new Texture(Gdx.files.internal("Game/Artisan/Cheese.png"));
+            case "cloth": return new Texture(Gdx.files.internal("Game/Artisan/Cloth.png"));
+            case "coffee": return new Texture(Gdx.files.internal("Game/Artisan/Coffee.png"));
+            case "copperbar": return new Texture(Gdx.files.internal("Game/Artisan/CopperBar.png"));
+            case "dinosaurmayonnaise": return new Texture(Gdx.files.internal("Game/Artisan/DinosaurMayonnaise.png"));
+            case "driedfruit": return new Texture(Gdx.files.internal("Game/Artisan/DriedFruit.png"));
+            case "driedmushrooms": return new Texture(Gdx.files.internal("Game/Artisan/DriedMushrooms.png"));
+            case "duckmayonnaise": return new Texture(Gdx.files.internal("Game/Artisan/DuckMayonnaise.png"));
+            case "goatcheese": return new Texture(Gdx.files.internal("Game/Artisan/GoatCheese.png"));
+            case "honey": return new Texture(Gdx.files.internal("Game/Artisan/Honey.png"));
+            case "ironbar": return new Texture(Gdx.files.internal("Game/Artisan/IronBar.png"));
+            case "jelly": return new Texture(Gdx.files.internal("Game/Artisan/Jelly.png"));
+            case "juice": return new Texture(Gdx.files.internal("Game/Artisan/Juice.png"));
+            case "largecheese": return new Texture(Gdx.files.internal("Game/Artisan/LargeCheese.png"));
+            case "largegoatcheese": return new Texture(Gdx.files.internal("Game/Artisan/LargeGoatCheese.png"));
+            case "mayonnaise": return new Texture(Gdx.files.internal("Game/Artisan/Mayonnaise.png"));
+            case "mead": return new Texture(Gdx.files.internal("Game/Artisan/Mead.png"));
+            case "oil": return new Texture(Gdx.files.internal("Game/Artisan/Oil.png"));
+            case "paleale": return new Texture(Gdx.files.internal("Game/Artisan/PaleAle.png"));
+            case "pickles": return new Texture(Gdx.files.internal("Game/Artisan/Pickles.png"));
+            case "raisins": return new Texture(Gdx.files.internal("Game/Artisan/Raisins.png"));
+            case "smokedfish": return new Texture(Gdx.files.internal("Game/Artisan/SmokedFish.png"));
+            case "truffleoil": return new Texture(Gdx.files.internal("Game/Artisan/TruffleOil.png"));
+            case "vinegar": return new Texture(Gdx.files.internal("Game/Artisan/Vinegar.png"));
+            case "wine": return new Texture(Gdx.files.internal("Game/Artisan/Wine.png"));
+            default: return null;
+        }
+    }
+
 }

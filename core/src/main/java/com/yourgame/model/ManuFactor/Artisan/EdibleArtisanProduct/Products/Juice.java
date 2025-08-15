@@ -1,19 +1,21 @@
-package com.yourgame.model.ManuFactor.Artisan.EdibleArtisanProduct;
+package com.yourgame.model.ManuFactor.Artisan.EdibleArtisanProduct.Products;
 
 import com.yourgame.model.Item.ArtisanIngredient;
 import com.yourgame.model.Farming.Vegetables;
+import com.yourgame.model.ManuFactor.Artisan.EdibleArtisanProduct.EdibleArtisanProduct;
+import com.yourgame.model.ManuFactor.Artisan.EdibleArtisanProduct.EdibleArtisanProductType;
 
 import java.util.ArrayList;
 
 public class Juice extends EdibleArtisanProduct {
 
-    private static final int PROCESSING_TIME_DAYS = 4;
+    private static final int PROCESSING_TIME_DAYS = 96;
 
     public Juice(EdibleArtisanProductType type, ArrayList<ArtisanIngredient> artisanIngredients) {
-        super(type, artisanIngredients);
+        super(type, artisanIngredients, calculateEnergy(artisanIngredients));
     }
 
-    public int calculateEnergy(ArrayList<ArtisanIngredient> artisanIngredients) {
+    public static int calculateEnergy(ArrayList<ArtisanIngredient> artisanIngredients) {
         int totalEnergy = 0;
         for (ArtisanIngredient ingredient : artisanIngredients) {
             totalEnergy += ingredient.getBaseEnergy() * 2;

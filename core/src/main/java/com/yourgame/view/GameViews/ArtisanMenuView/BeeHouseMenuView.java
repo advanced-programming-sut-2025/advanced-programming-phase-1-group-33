@@ -5,15 +5,9 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.yourgame.Graphics.GameAssetManager;
-import com.yourgame.model.Food.Cooking.CookingRecipe;
-import com.yourgame.model.Food.Cooking.CookingRecipeSource;
-import com.yourgame.model.Food.Cooking.Ingredient;
-import com.yourgame.model.Item.Inventory.InventorySlot;
-import com.yourgame.model.UserInfo.Player;
+import com.yourgame.model.ManuFactor.Artisan.EdibleArtisanProduct.Products.Honey;
 import com.yourgame.view.AppViews.GameScreen;
-import com.yourgame.view.GameViews.MainMenuView;
 
-import java.util.ArrayList;
 
 public class BeeHouseMenuView extends Window {
     private final Skin skin;
@@ -21,7 +15,7 @@ public class BeeHouseMenuView extends Window {
     private final Stage stage;
 
     public BeeHouseMenuView(Skin skin, Stage stage, GameScreen gameScreen) {
-        super("BeeHouse Menu", skin);
+        super("Bee House", skin);
         this.stage = stage;
         this.gameScreen = gameScreen;
         this.skin = skin;
@@ -48,6 +42,11 @@ public class BeeHouseMenuView extends Window {
         scrollPane.setScrollingDisabled(true, false);
 
         table.add(scrollPane).expandX().fillX().row();
+
+        // Process table
+        Table processTable = new Table();
+        table.add(processTable).expandX().fillX().row();
+
         table.add(backButton).colspan(5).center();
 
         add(table);
@@ -73,54 +72,23 @@ public class BeeHouseMenuView extends Window {
         recipeTable.add(new Label("", skin,"Bold")).pad(10);
         recipeTable.row();
 
-        //recipeTable.add()
+        Label createHoney = new Label("Create", skin, "BoldImpact");
+        recipeTable.add(new Image(GameAssetManager.getInstance().getArtisanProductTexture("honey")));
+        recipeTable.add(new Label("Honey", skin, "Bold")).pad(10);
+        recipeTable.add(new Label(" - ", skin,"Bold")).pad(10);
+        recipeTable.add(new Label(Honey.calculateProcessingTime() + " Hours", skin,"Bold")).pad(10);
+        recipeTable.add(createHoney).pad(10);
+
+        createHoney.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                createHoney();
+            }
+        });
     }
 
-    private boolean isAvailable(CookingRecipeSource source, Player player){
-        if(source.isStarter())
-            return true;
-        if(source.isBought())
-            return true;
-        if((source.getFarmingSkillLevelNeeded() > 0) || (source.getFishingSkillLevelNeeded() > 0)
-            || (source.getMiningSkillLevelNeeded() > 0) || (source.getForagingSkillLevelNeeded() > 0)) {
-            if ((player.getFarmingLevel() >= source.getFarmingSkillLevelNeeded())
-                && (player.getFishingLevel() >= source.getFishingSkillLevelNeeded())
-                && (player.getMiningLevel() >= source.getMiningSkillLevelNeeded())
-                && (player.getForagingLevel() >= source.getForagingSkillLevelNeeded()))
-                return true;
-        }
-        return false;
-    }
+    private void createHoney() {
 
-    private boolean haveEnoughIngredients(CookingRecipe recipe, Player player){
-        for(Ingredient ingredient : recipe.getIngredients()){
-            boolean found = false;
-            for(InventorySlot slot : player.getBackpack().getInventory().getSlots()){
-                if(ingredient.getItem().getName().equals(slot.item().getName())){
-                    found = true;
-                    if(ingredient.getQuantity() > slot.quantity()){
-                        return false;
-                    }
-                }
-            }
-            if(!found){
-                return false;
-            }
-        }
-        return true;
-    }
-
-    private void updateInventory(CookingRecipe recipe,Player player){
-        for(Ingredient ingredient : recipe.getIngredients()){
-            for(InventorySlot slot : player.getBackpack().getInventory().getSlots()){
-                if(ingredient.getItem().getName().equals(slot.item().getName())){
-                    slot.reduceQuantity(ingredient.getQuantity());
-                    if(slot.quantity() == 0){
-                        player.getBackpack().getInventory().getSlots().remove(slot);
-                    }
-                }
-            }
-        }
     }
 }
 
