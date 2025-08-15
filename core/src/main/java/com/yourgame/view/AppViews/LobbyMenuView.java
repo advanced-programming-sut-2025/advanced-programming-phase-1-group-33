@@ -37,9 +37,9 @@ public class LobbyMenuView extends MenuBaseScreen {
         this.skin = MenuAssetManager.getInstance().getSkin(3); // استفاده از یکی از skin ها
 
         // ایجاد دکمه ها
-        this.refreshButton = MenuAssetManager.getInstance().getButtons("search"); // استفاده مجدد از دکمه find به عنوان refresh
+        this.refreshButton = MenuAssetManager.getInstance().getButtons("refresh"); 
         this.createLobbyButton = MenuAssetManager.getInstance().getButtons("lobby_but"); // استفاده مجدد از دکمه lobby به عنوان create
-        this.searchLobbyButton = MenuAssetManager.getInstance().getButtons("pregame"); // استفاده مجدد از دکمه pregame به عنوان search
+        this.searchLobbyButton = MenuAssetManager.getInstance().getButtons("lobbypre"); // استفاده مجدد از دکمه pregame به عنوان search
         this.backButton = MenuAssetManager.getInstance().getButtons("back");
 
 
@@ -234,6 +234,7 @@ public class LobbyMenuView extends MenuBaseScreen {
             lobbyTable.add(new Label("No public lobbies available.", skin)).center().pad(20);
         } else {
             for (Lobby lobby : lobbies) {
+                System.out.println("added one other lobby");
                 addLobbyItem(lobby);
             }
         }
@@ -241,7 +242,7 @@ public class LobbyMenuView extends MenuBaseScreen {
 
     private void addLobbyItem(Lobby lobby) {
         Table lobbyItem = new Table(skin);
-        lobbyItem.setBackground(skin.getDrawable("default-round")); // یک پس زمینه برای آیتم لابی
+        // lobbyItem.setBackground(skin.getDrawable("default-round")); // یک پس زمینه برای آیتم لابی
         lobbyItem.defaults().pad(5);
 
         Label nameLabel = new Label(lobby.getName(), skin, "default");

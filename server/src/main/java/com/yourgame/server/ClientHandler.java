@@ -138,8 +138,13 @@ public class ClientHandler implements Runnable {
 
     private void handleRefreshLobbies() {
         List<Lobby> visibleLobbies = lobbyManager.getVisibleLobbies();
-        RefreshLobbiesResponse response = new RefreshLobbiesResponse(visibleLobbies);
-        sendResponse(ResponseType.SUCCESSFUL, response);
+        if (!visibleLobbies.isEmpty()) {
+            RefreshLobbiesResponse response = new RefreshLobbiesResponse(visibleLobbies);
+            sendResponse(ResponseType.REFRESH_LOBBIES, response);
+        } else {
+            RefreshLobbiesResponse response = new RefreshLobbiesResponse(null);
+            sendResponse(ResponseType.REFRESH_LOBBIES_FAILD, response);
+        }
     }
 
     private void handleLoginRequest(LoginRequest request) {

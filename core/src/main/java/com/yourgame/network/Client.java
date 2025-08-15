@@ -14,6 +14,7 @@ import com.yourgame.network.protocol.ResponseType;
 import com.yourgame.network.protocol.ResponseWrapper;
 import com.yourgame.network.protocol.Auth.LoginResponse;
 import com.yourgame.network.protocol.Auth.SignupResponse;
+import com.yourgame.network.protocol.Auth.Lobby.RefreshLobbiesResponse;
 
 public class Client implements Runnable {
     private final String serverIp;
@@ -76,14 +77,19 @@ public class Client implements Runnable {
             switch (wrapper.getType()) {
                 case LOGIN_SUCCESS:
                 case LOGIN_FAILURE:
-                    response = gson.fromJson(wrapper.getPayload(), getResponseType(wrapper.getType())); 
-                case USER_EXIST_SIGNUP: 
+                    response = gson.fromJson(wrapper.getPayload(), getResponseType(wrapper.getType()));
+                case USER_EXIST_SIGNUP:
                 case USER_NOTEXIST_SIGNUP:
                 case SIGNUP_SUCCESS:
                     response = gson.fromJson(wrapper.getPayload(), getResponseType(wrapper.getType()));
                     responseHolder.setResponse(response);
                     break;
                 case SIGNUP_FAILURE:
+                    response = gson.fromJson(wrapper.getPayload(), getResponseType(wrapper.getType()));
+                    responseHolder.setResponse(response);
+                    break;
+                case REFRESH_LOBBIES_FAILD:
+                case REFRESH_LOBBIES: // Assuming this is the ResponseType for refresh
                     response = gson.fromJson(wrapper.getPayload(), getResponseType(wrapper.getType()));
                     responseHolder.setResponse(response);
                     break;
@@ -131,7 +137,9 @@ public class Client implements Runnable {
             case SIGNUP_SUCCESS:
             case SIGNUP_FAILURE:
                 return SignupResponse.class;
-
+            case REFRESH_LOBBIES:
+            case REFRESH_LOBBIES_FAILD: 
+                return RefreshLobbiesResponse.class; 
             default:
                 return null;
         }

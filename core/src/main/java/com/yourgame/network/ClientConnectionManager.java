@@ -68,9 +68,9 @@ public class ClientConnectionManager {
         } else if (data instanceof SearchLobbyRequest) {
             type = RequestType.SEARCH_LOBBY;
         }
-        //  else if (data instanceof StartGameRequest) {
-        //     type = RequestType.START_GAME;
-        // } 
+        else if (data instanceof RequestType){
+            type = (RequestType)  data; 
+        }
         else if (data instanceof LeaveLobbyRequest) {
             type = RequestType.LEAVE_LOBBY;
         } else if (data.getClass().getSimpleName().equals("REFRESH_LOBBIES")) {

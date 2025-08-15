@@ -77,6 +77,7 @@ public class MenuAssetManager {
 
     private final TextButton createLobbyButton;
     private final TextButton refreshButton;
+    private final TextButton lobbyPreGameButton;
 
     private MenuAssetManager() {
         Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
@@ -210,11 +211,13 @@ public class MenuAssetManager {
         defaultButtonStyle.font = skin_1_Sepehr.getFont("loading");
         backButton = new TextButton("Back", defaultButtonStyle);
         submitButton = new TextButton("Submit", defaultButtonStyle);
+        
         login2Button = new TextButton("Login", defaultButtonStyle);
         changeAvatarButton = new TextButton("Avatar", defaultButtonStyle);
-        createLobbyButton = new TextButton("Create Lobby", strawberryButtonStyle);
-        refreshButton = new TextButton("Search Lobby", strawberryButtonStyle);
         TextButton.TextButtonStyle smallButtonStyle = skin_1_Sepehr.get("default", TextButton.TextButtonStyle.class);
+        createLobbyButton = new TextButton("Create Lobby", smallButtonStyle);
+        refreshButton = new TextButton("refresh", smallButtonStyle);
+        lobbyPreGameButton = new TextButton("pregrame", smallButtonStyle);
         randomPasswordButton = new TextButton("  Generate  \n  Password  ", smallButtonStyle);
         forgetPasswordButton = new TextButton("  Forget  \n  Password  ", smallButtonStyle);
         findButton = new TextButton(" Find ", smallButtonStyle);
@@ -372,6 +375,9 @@ public class MenuAssetManager {
             }
             case "refresh" -> {
                 return refreshButton;
+            }
+            case "lobbypre" -> {
+                return lobbyPreGameButton;
             }
             case "lobby_but" -> {
                 return createLobbyButton;
