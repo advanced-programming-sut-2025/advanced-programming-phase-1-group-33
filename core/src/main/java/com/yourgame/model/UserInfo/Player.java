@@ -122,11 +122,6 @@ public class Player implements TimeObserver {
 
         // Relation
         this.questManager = new QuestManager();
-        this.relationWithAbigail = new RelationWithNPC(NPCType.Pierre);
-        this.relationWithSebastian = new RelationWithNPC(NPCType.Sebastian);
-        this.relationWithHarvey = new RelationWithNPC(NPCType.Harvey);
-        this.relationWithLeah = new RelationWithNPC(NPCType.Leah);
-        this.relationWithRobin = new RelationWithNPC(NPCType.Robin);
 
         // Load player sprite sheet
         playerSheet = new Texture("Game/Player/player.png");

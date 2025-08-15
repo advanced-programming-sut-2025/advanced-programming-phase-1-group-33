@@ -25,10 +25,10 @@ public enum Fish implements Ingredient, ArtisanIngredient {
     RainbowTrout("RainbowTrout", 65, Season.Summer, 0),
 
     // LEGENDARY_FISH
-    LEGEND("Legend", 5000, Season.Spring, 0),
-    GLACIER_FISH("GlacierFish", 1000, Season.Winter, 0),
-    ANGLER("Angler", 900, Season.Fall, 0),
-    CRIMSON_FISH("CrimsonFish", 1500, Season.Summer, 0);
+    Legend("Legend", 5000, Season.Spring, 0),
+    GlacierFish("GlacierFish", 1000, Season.Winter, 0),
+    Angler("Angler", 900, Season.Fall, 0),
+    CrimsonFish("CrimsonFish", 1500, Season.Summer, 0);
 
     private final String name;
     private final int price;
@@ -62,6 +62,7 @@ public enum Fish implements Ingredient, ArtisanIngredient {
     @Override
     public int getBasePrice() {
         return price;
+    }
 
     public static ArrayList<Fish> getFishesBySeason(Season season) {
         ArrayList<Fish> fishes = new ArrayList<>();
