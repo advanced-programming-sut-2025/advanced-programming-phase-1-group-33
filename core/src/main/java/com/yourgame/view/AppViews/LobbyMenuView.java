@@ -37,14 +37,14 @@ public class LobbyMenuView extends MenuBaseScreen {
         this.skin = MenuAssetManager.getInstance().getSkin(3); // استفاده از یکی از skin ها
 
         // ایجاد دکمه ها
-        this.refreshButton = MenuAssetManager.getInstance().getButtons("find"); // استفاده مجدد از دکمه find به عنوان refresh
-        this.createLobbyButton = MenuAssetManager.getInstance().getButtons("lobby"); // استفاده مجدد از دکمه lobby به عنوان create
+        this.refreshButton = MenuAssetManager.getInstance().getButtons("search"); // استفاده مجدد از دکمه find به عنوان refresh
+        this.createLobbyButton = MenuAssetManager.getInstance().getButtons("lobby_but"); // استفاده مجدد از دکمه lobby به عنوان create
         this.searchLobbyButton = MenuAssetManager.getInstance().getButtons("pregame"); // استفاده مجدد از دکمه pregame به عنوان search
         this.backButton = MenuAssetManager.getInstance().getButtons("back");
 
-        // ایجاد جدول برای نمایش لابی ها
+
         this.lobbyTable = new Table(skin);
-        this.lobbyTable.top().pad(10).defaults().pad(5).width(500);
+        this.lobbyTable.bottom().left().pad(10).defaults().pad(5);
         this.scrollPane = new ScrollPane(lobbyTable, skin);
         this.scrollPane.setScrollingDisabled(true, false);
 
@@ -56,13 +56,12 @@ public class LobbyMenuView extends MenuBaseScreen {
         setupUI();
         setupListeners();
 
-        // درخواست اولیه برای لیست لابی ها
+
         controller.handleRefreshLobbies();
     }
 
         private void setupUI() {
-        // عنوان صفحه
-        Label titleLabel = new Label("Lobbies", skin, "title");
+        Label titleLabel = new Label("Lobbies", skin, "Bold");
         mainTable.add(titleLabel).padBottom(20).colspan(2).row();
 
         // جدول دکمه ها
@@ -245,9 +244,9 @@ public class LobbyMenuView extends MenuBaseScreen {
         lobbyItem.setBackground(skin.getDrawable("default-round")); // یک پس زمینه برای آیتم لابی
         lobbyItem.defaults().pad(5);
 
-        Label nameLabel = new Label(lobby.getName(), skin, "default-font");
-        Label playersLabel = new Label(lobby.getPlayers().size() + "/4", skin, "default-font");
-        Label statusLabel = new Label(lobby.isPrivate() ? "Private" : "Public", skin, "default-font");
+        Label nameLabel = new Label(lobby.getName(), skin, "default");
+        Label playersLabel = new Label(lobby.getPlayers().size() + "/4", skin, "default");
+        Label statusLabel = new Label(lobby.isPrivate() ? "Private" : "Public", skin, "default");
 
         TextButton joinButton = new TextButton("Join", skin);
 

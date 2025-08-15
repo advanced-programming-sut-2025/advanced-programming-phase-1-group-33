@@ -41,12 +41,12 @@ public class LobbyRoomView extends MenuBaseScreen {
     }
 
     private void setupUI() {
-        Label titleLabel = new Label("Lobby Room", skin, "title");
+        Label titleLabel = new Label("Lobby Room", skin, "Bold");
         mainTable.add(titleLabel).padBottom(20).row();
 
         Label lobbyInfoLabel = new Label(
                 "Lobby: " + App.getCurrentLobby().getName() + " (ID: " + App.getCurrentLobby().getId() + ")", skin,
-                "default-font");
+                "default");
         mainTable.add(lobbyInfoLabel).padBottom(20).row();
 
         mainTable.add(playerListTable).expand().fillX().row();
@@ -84,14 +84,14 @@ public class LobbyRoomView extends MenuBaseScreen {
      */
     public void updatePlayerList(List<String> players) {
         playerListTable.clear();
-        Label playersTitle = new Label("Players:", skin, "default-font");
+        Label playersTitle = new Label("Players:", skin, "default");
         playerListTable.add(playersTitle).align(Align.left).padBottom(10).row();
 
         if (players.isEmpty()) {
             playerListTable.add(new Label("No players in lobby.", skin)).row();
         } else {
             for (String player : players) {
-                Label playerLabel = new Label(player, skin, "default-font");
+                Label playerLabel = new Label(player, skin, "default");
                 playerListTable.add(playerLabel).align(Align.left).row();
             }
         }

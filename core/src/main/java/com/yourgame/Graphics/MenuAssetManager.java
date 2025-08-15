@@ -21,18 +21,22 @@ import org.slf4j.LoggerFactory;
 
 public class MenuAssetManager {
     private static final Logger log = LoggerFactory.getLogger(MenuAssetManager.class);
-    //SingleTone
+    // SingleTone
     private static MenuAssetManager instance;
-    public static MenuAssetManager getInstance() {  //SingleTone
+
+    public static MenuAssetManager getInstance() { // SingleTone
         if (instance == null) {
             instance = new MenuAssetManager();
         }
         return instance;
     }
 
-    Skin skin_1_Sepehr = new Skin(Gdx.files.internal("Skin/Skin_1(Sepeher)/stardew-skin.json"), new TextureAtlas(Gdx.files.internal("Skin/Skin_1(Sepeher)/stardew-skin.atlas")));
-    Skin skin_2_Amirhossein = new Skin(Gdx.files.internal("Skin/Skin_2(Amirhossein)/uiskin.json"), new TextureAtlas(Gdx.files.internal("Skin/Skin_2(Amirhossein)/Buttons.atlas")));
-    Skin skin_3_Nz = new Skin(Gdx.files.internal("Skin/Skin_3(Nz)/NzSkin.json"), new TextureAtlas(Gdx.files.internal("Skin/Skin_3(Nz)/NzSkin.atlas")));
+    Skin skin_1_Sepehr = new Skin(Gdx.files.internal("Skin/Skin_1(Sepeher)/stardew-skin.json"),
+            new TextureAtlas(Gdx.files.internal("Skin/Skin_1(Sepeher)/stardew-skin.atlas")));
+    Skin skin_2_Amirhossein = new Skin(Gdx.files.internal("Skin/Skin_2(Amirhossein)/uiskin.json"),
+            new TextureAtlas(Gdx.files.internal("Skin/Skin_2(Amirhossein)/Buttons.atlas")));
+    Skin skin_3_Nz = new Skin(Gdx.files.internal("Skin/Skin_3(Nz)/NzSkin.json"),
+            new TextureAtlas(Gdx.files.internal("Skin/Skin_3(Nz)/NzSkin.atlas")));
 
     private final Image[] backgrounds;
     private final Image[] avatarMenuAvatars;
@@ -71,6 +75,9 @@ public class MenuAssetManager {
     private final TextButton changeAvatarButton;
     private final TextButton stayLoggedInButton;
 
+    private final TextButton createLobbyButton;
+    private final TextButton refreshButton;
+
     private MenuAssetManager() {
         Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
         pixmap.setColor(Color.WHITE);
@@ -79,97 +86,97 @@ public class MenuAssetManager {
         skin_3_Nz.add("white", new TextureRegionDrawable(new TextureRegion(whiteTexture)));
         pixmap.dispose();
 
-        backgrounds = new Image[]{
-            new Image(new Texture(Gdx.files.internal("Backgrounds/Background1.jpg"))),
-            new Image(new Texture(Gdx.files.internal("Backgrounds/Background2.png"))),
-            new Image(new Texture(Gdx.files.internal("Backgrounds/Background5.jpg"))),
-            new Image(new Texture(Gdx.files.internal("Backgrounds/Background4.jpg"))),
+        backgrounds = new Image[] {
+                new Image(new Texture(Gdx.files.internal("Backgrounds/Background1.jpg"))),
+                new Image(new Texture(Gdx.files.internal("Backgrounds/Background2.png"))),
+                new Image(new Texture(Gdx.files.internal("Backgrounds/Background5.jpg"))),
+                new Image(new Texture(Gdx.files.internal("Backgrounds/Background4.jpg"))),
         };
 
-        avatarMenuAvatars = new Image[]{
-            new Image(new Texture(Gdx.files.internal("Textures/Avatars/AbigailCharacter.png"))),
-            new Image(new Texture(Gdx.files.internal("Textures/Avatars/AbigailPortrait.png"))),
-            new Image(new Texture(Gdx.files.internal("Textures/Avatars/HarveyCharacter.png"))),
-            new Image(new Texture(Gdx.files.internal("Textures/Avatars/HarveyPortrait.png"))),
-            new Image(new Texture(Gdx.files.internal("Textures/Avatars/PierreCharacter.png"))),
-            new Image(new Texture(Gdx.files.internal("Textures/Avatars/PierrePortrait.png"))),
-            new Image(new Texture(Gdx.files.internal("Textures/Avatars/RobinCharacter.png"))),
-            new Image(new Texture(Gdx.files.internal("Textures/Avatars/RobinPortrait.png"))),
-            new Image(new Texture(Gdx.files.internal("Textures/Avatars/SamCharacter.png"))),
-            new Image(new Texture(Gdx.files.internal("Textures/Avatars/SamPortrait.png")))
+        avatarMenuAvatars = new Image[] {
+                new Image(new Texture(Gdx.files.internal("Textures/Avatars/AbigailCharacter.png"))),
+                new Image(new Texture(Gdx.files.internal("Textures/Avatars/AbigailPortrait.png"))),
+                new Image(new Texture(Gdx.files.internal("Textures/Avatars/HarveyCharacter.png"))),
+                new Image(new Texture(Gdx.files.internal("Textures/Avatars/HarveyPortrait.png"))),
+                new Image(new Texture(Gdx.files.internal("Textures/Avatars/PierreCharacter.png"))),
+                new Image(new Texture(Gdx.files.internal("Textures/Avatars/PierrePortrait.png"))),
+                new Image(new Texture(Gdx.files.internal("Textures/Avatars/RobinCharacter.png"))),
+                new Image(new Texture(Gdx.files.internal("Textures/Avatars/RobinPortrait.png"))),
+                new Image(new Texture(Gdx.files.internal("Textures/Avatars/SamCharacter.png"))),
+                new Image(new Texture(Gdx.files.internal("Textures/Avatars/SamPortrait.png")))
         };
 
         avatarMenuAvatars[0].setScale(3f);
         avatarMenuAvatars[1].setScale(3.2f);
-        for(int i=2; i<=9; i++){
+        for (int i = 2; i <= 9; i++) {
             avatarMenuAvatars[i].setScale(3f);
         }
 
-        avatarSpriteSheets = new Texture[]{
-            new Texture(Gdx.files.internal("Textures/Avatars/AbigailSpriteSheet.png")),
-            new Texture(Gdx.files.internal("Textures/Avatars/HarveySpriteSheet.png")),
-            new Texture(Gdx.files.internal("Textures/Avatars/PierreSpriteSheet.png")),
-            new Texture(Gdx.files.internal("Textures/Avatars/RobinSpriteSheet.png")),
-            new Texture(Gdx.files.internal("Textures/Avatars/SamSpriteSheet.png"))
+        avatarSpriteSheets = new Texture[] {
+                new Texture(Gdx.files.internal("Textures/Avatars/AbigailSpriteSheet.png")),
+                new Texture(Gdx.files.internal("Textures/Avatars/HarveySpriteSheet.png")),
+                new Texture(Gdx.files.internal("Textures/Avatars/PierreSpriteSheet.png")),
+                new Texture(Gdx.files.internal("Textures/Avatars/RobinSpriteSheet.png")),
+                new Texture(Gdx.files.internal("Textures/Avatars/SamSpriteSheet.png"))
         };
 
-        frames = new TextureRegion[][][]{
-            TextureRegion.split(avatarSpriteSheets[0], PLAYER_WIDTH, PLAYER_HEIGHT),
-            TextureRegion.split(avatarSpriteSheets[1], PLAYER_WIDTH, PLAYER_HEIGHT),
-            TextureRegion.split(avatarSpriteSheets[2], PLAYER_WIDTH, PLAYER_HEIGHT),
-            TextureRegion.split(avatarSpriteSheets[3], PLAYER_WIDTH, PLAYER_HEIGHT),
-            TextureRegion.split(avatarSpriteSheets[4], PLAYER_WIDTH, PLAYER_HEIGHT),
+        frames = new TextureRegion[][][] {
+                TextureRegion.split(avatarSpriteSheets[0], PLAYER_WIDTH, PLAYER_HEIGHT),
+                TextureRegion.split(avatarSpriteSheets[1], PLAYER_WIDTH, PLAYER_HEIGHT),
+                TextureRegion.split(avatarSpriteSheets[2], PLAYER_WIDTH, PLAYER_HEIGHT),
+                TextureRegion.split(avatarSpriteSheets[3], PLAYER_WIDTH, PLAYER_HEIGHT),
+                TextureRegion.split(avatarSpriteSheets[4], PLAYER_WIDTH, PLAYER_HEIGHT),
         };
 
-        walkAnimations = new Animation[][]{
-            new Animation[] { //Abigail
-                new Animation<>(0.2f, frames[0][0]), // Down
-                new Animation<>(0.2f, frames[0][1]), // Right
-                new Animation<>(0.2f, frames[0][2]), // Up
-                new Animation<>(0.2f, frames[0][3]) // Left
-            },
+        walkAnimations = new Animation[][] {
+                new Animation[] { // Abigail
+                        new Animation<>(0.2f, frames[0][0]), // Down
+                        new Animation<>(0.2f, frames[0][1]), // Right
+                        new Animation<>(0.2f, frames[0][2]), // Up
+                        new Animation<>(0.2f, frames[0][3]) // Left
+                },
 
-            new Animation[] { //Harvey
-                new Animation<>(0.2f, frames[1][0]), // Down
-                new Animation<>(0.2f, frames[1][1]), // Right
-                new Animation<>(0.2f, frames[1][2]), // Up
-                new Animation<>(0.2f, frames[1][3]) // Left
-            },
+                new Animation[] { // Harvey
+                        new Animation<>(0.2f, frames[1][0]), // Down
+                        new Animation<>(0.2f, frames[1][1]), // Right
+                        new Animation<>(0.2f, frames[1][2]), // Up
+                        new Animation<>(0.2f, frames[1][3]) // Left
+                },
 
-            new Animation[] { //Pierre
-                new Animation<>(0.2f, frames[2][0]), // Down
-                new Animation<>(0.2f, frames[2][1]), // Right
-                new Animation<>(0.2f, frames[2][2]), // Up
-                new Animation<>(0.2f, frames[2][3]) // Left
-            },
+                new Animation[] { // Pierre
+                        new Animation<>(0.2f, frames[2][0]), // Down
+                        new Animation<>(0.2f, frames[2][1]), // Right
+                        new Animation<>(0.2f, frames[2][2]), // Up
+                        new Animation<>(0.2f, frames[2][3]) // Left
+                },
 
-            new Animation[] { // Robin
-                new Animation<>(0.2f, frames[3][0]), // Down
-                new Animation<>(0.2f, frames[3][1]), // Right
-                new Animation<>(0.2f, frames[3][2]), // Up
-                new Animation<>(0.2f, frames[3][3])  // Left
-            },
+                new Animation[] { // Robin
+                        new Animation<>(0.2f, frames[3][0]), // Down
+                        new Animation<>(0.2f, frames[3][1]), // Right
+                        new Animation<>(0.2f, frames[3][2]), // Up
+                        new Animation<>(0.2f, frames[3][3]) // Left
+                },
 
-            new Animation[] { // Sam
-                new Animation<>(0.2f, frames[4][0]), // Down
-                new Animation<>(0.2f, frames[4][1]), // Right
-                new Animation<>(0.2f, frames[4][2]), // Up
-                new Animation<>(0.2f, frames[4][3])  // Left
-            }
+                new Animation[] { // Sam
+                        new Animation<>(0.2f, frames[4][0]), // Down
+                        new Animation<>(0.2f, frames[4][1]), // Right
+                        new Animation<>(0.2f, frames[4][2]), // Up
+                        new Animation<>(0.2f, frames[4][3]) // Left
+                }
         };
 
         faintAnimations = new Animation[] {
-            new Animation<>(0.4f, new Array<>(new TextureRegion[] {
-                frames[0][0][0],
-                frames[0][6][0],
-                frames[0][6][1],
-                frames[0][13][1]})) //Abigail
+                new Animation<>(0.4f, new Array<>(new TextureRegion[] {
+                        frames[0][0][0],
+                        frames[0][6][0],
+                        frames[0][6][1],
+                        frames[0][13][1] })) // Abigail
         };
 
-        sounds = new Sound[]{
-            Gdx.audio.newSound(Gdx.files.internal("Sounds/UI Click 36.wav")),
-            Gdx.audio.newSound(Gdx.files.internal("Sounds/Pop (3).wav")),
-            Gdx.audio.newSound(Gdx.files.internal("Sounds/AvatarChoose.mp3"))
+        sounds = new Sound[] {
+                Gdx.audio.newSound(Gdx.files.internal("Sounds/UI Click 36.wav")),
+                Gdx.audio.newSound(Gdx.files.internal("Sounds/Pop (3).wav")),
+                Gdx.audio.newSound(Gdx.files.internal("Sounds/AvatarChoose.mp3"))
         };
 
         music = Gdx.audio.newMusic(Gdx.files.internal("Musics/01. Stardew Valley Overture.mp3"));
@@ -177,7 +184,8 @@ public class MenuAssetManager {
         cursor = new Image(new Texture(Gdx.files.internal("Textures/Cursor.png")));
         redLine = new Image(new Texture(Gdx.files.internal("Textures/RedLine.png")));
 
-        TextButton.TextButtonStyle strawberryButtonStyle = skin_3_Nz.get("Strawberry", TextButton.TextButtonStyle.class);
+        TextButton.TextButtonStyle strawberryButtonStyle = skin_3_Nz.get("Strawberry",
+                TextButton.TextButtonStyle.class);
         strawberryButtonStyle.font = skin_1_Sepehr.getFont("loading");
         signupButton = new TextButton("Signup", strawberryButtonStyle);
         playButton = new TextButton("Play", strawberryButtonStyle);
@@ -204,7 +212,8 @@ public class MenuAssetManager {
         submitButton = new TextButton("Submit", defaultButtonStyle);
         login2Button = new TextButton("Login", defaultButtonStyle);
         changeAvatarButton = new TextButton("Avatar", defaultButtonStyle);
-
+        createLobbyButton = new TextButton("Create Lobby", strawberryButtonStyle);
+        refreshButton = new TextButton("Search Lobby", strawberryButtonStyle);
         TextButton.TextButtonStyle smallButtonStyle = skin_1_Sepehr.get("default", TextButton.TextButtonStyle.class);
         randomPasswordButton = new TextButton("  Generate  \n  Password  ", smallButtonStyle);
         forgetPasswordButton = new TextButton("  Forget  \n  Password  ", smallButtonStyle);
@@ -218,31 +227,67 @@ public class MenuAssetManager {
 
     public Image getBackgroundImage(MenuTypes type) {
         switch (type) {
-            case MainMenu -> {return backgrounds[0];}
-            case SignupMenu,LoginMenu, PreGameMenu -> {return backgrounds[1];}
-            case ProfileMenu -> {return backgrounds[2];}
-            case AvatarMenu, LobbyMenu -> {return backgrounds[3];}
-            default -> {return null;}
+            case MainMenu -> {
+                return backgrounds[0];
+            }
+            case SignupMenu, LoginMenu, PreGameMenu -> {
+                return backgrounds[1];
+            }
+            case ProfileMenu -> {
+                return backgrounds[2];
+            }
+            case AvatarMenu, LobbyMenu -> {
+                return backgrounds[3];
+            }
+            default -> {
+                return null;
+            }
         }
     }
+
     public Image getAvatarPortrait(Avatar avatar) {
-        switch (avatar){
-            case Abigail -> {return avatarMenuAvatars[1];}
-            case Harvey -> {return avatarMenuAvatars[3];}
-            case Pierre -> {return avatarMenuAvatars[5];}
-            case Robin -> {return avatarMenuAvatars[7];}
-            case Sam -> {return avatarMenuAvatars[9];}
-            default -> {return null;}
+        switch (avatar) {
+            case Abigail -> {
+                return avatarMenuAvatars[1];
+            }
+            case Harvey -> {
+                return avatarMenuAvatars[3];
+            }
+            case Pierre -> {
+                return avatarMenuAvatars[5];
+            }
+            case Robin -> {
+                return avatarMenuAvatars[7];
+            }
+            case Sam -> {
+                return avatarMenuAvatars[9];
+            }
+            default -> {
+                return null;
+            }
         }
     }
+
     public Image getAvatarCharacter(Avatar avatar) {
-        switch (avatar){
-            case Abigail -> {return avatarMenuAvatars[0];}
-            case Harvey -> {return avatarMenuAvatars[2];}
-            case Pierre -> {return avatarMenuAvatars[4];}
-            case Robin -> {return avatarMenuAvatars[6];}
-            case Sam -> {return avatarMenuAvatars[8];}
-            default -> {return null;}
+        switch (avatar) {
+            case Abigail -> {
+                return avatarMenuAvatars[0];
+            }
+            case Harvey -> {
+                return avatarMenuAvatars[2];
+            }
+            case Pierre -> {
+                return avatarMenuAvatars[4];
+            }
+            case Robin -> {
+                return avatarMenuAvatars[6];
+            }
+            case Sam -> {
+                return avatarMenuAvatars[8];
+            }
+            default -> {
+                return null;
+            }
         }
     }
 
@@ -262,52 +307,127 @@ public class MenuAssetManager {
 
     public TextButton getButtons(String name) {
         switch (name) {
-            case "signup" -> {return signupButton;}
-            case "login" -> {return loginButton;}
-            case "login2" -> {return login2Button;}
-            case "logout" -> {return logoutButton;}
-            case "exit" -> {return exitButton;}
-            case "play" -> {return playButton;}
-            case "profile" -> {return profileButton;}
-            case "back" -> {return backButton;}
-            case "submit" -> {return submitButton;}
-            case "find" -> {return findButton;}
-            case "pregame" -> {return pregameButton;}
-            case "random" -> {return randomPasswordButton;}
-            case "forget" -> {return forgetPasswordButton;}
-            case "lobby" -> {return lobbyButton;}
-            case "exitPreGame" -> {return exitPreGameButton;}
-            case "changeUsername" -> {return changeUsernameButton;}
-            case "changeNickname" -> {return changeNicknameButton;}
-            case "changePassword" -> {return changePasswordButton;}
-            case "changeEmail" -> {return changeEmailButton;}
-            case "avatar" -> {return changeAvatarButton;}
-            case "stayLoggedIn" -> {return stayLoggedInButton;}
-            default -> {return null;}
+            case "signup" -> {
+                return signupButton;
+            }
+            case "login" -> {
+                return loginButton;
+            }
+            case "login2" -> {
+                return login2Button;
+            }
+            case "logout" -> {
+                return logoutButton;
+            }
+            case "exit" -> {
+                return exitButton;
+            }
+            case "play" -> {
+                return playButton;
+            }
+            case "profile" -> {
+                return profileButton;
+            }
+            case "back" -> {
+                return backButton;
+            }
+            case "submit" -> {
+                return submitButton;
+            }
+            case "find" -> {
+                return findButton;
+            }
+            case "pregame" -> {
+                return pregameButton;
+            }
+            case "random" -> {
+                return randomPasswordButton;
+            }
+            case "forget" -> {
+                return forgetPasswordButton;
+            }
+            case "lobby" -> {
+                return lobbyButton;
+            }
+            case "exitPreGame" -> {
+                return exitPreGameButton;
+            }
+            case "changeUsername" -> {
+                return changeUsernameButton;
+            }
+            case "changeNickname" -> {
+                return changeNicknameButton;
+            }
+            case "changePassword" -> {
+                return changePasswordButton;
+            }
+            case "changeEmail" -> {
+                return changeEmailButton;
+            }
+            case "avatar" -> {
+                return changeAvatarButton;
+            }
+            case "stayLoggedIn" -> {
+                return stayLoggedInButton;
+            }
+            case "refresh" -> {
+                return refreshButton;
+            }
+            case "lobby_but" -> {
+                return createLobbyButton;
+            }
+            default -> {
+                return null;
+            }
         }
     }
 
-    public Music getMusic() {return music;}
+    public Music getMusic() {
+        return music;
+    }
 
-    public Sound getSounds(String name){
-        switch(name) {
-            case "click" -> {return sounds[0];}
-            case "popUp" -> {return sounds[1];}
-            case "avatarChoose" -> {return sounds[2];}
-            case "error" -> {return sounds[3];}
-            default -> {return null;}
+    public Sound getSounds(String name) {
+        switch (name) {
+            case "click" -> {
+                return sounds[0];
+            }
+            case "popUp" -> {
+                return sounds[1];
+            }
+            case "avatarChoose" -> {
+                return sounds[2];
+            }
+            case "error" -> {
+                return sounds[3];
+            }
+            default -> {
+                return null;
+            }
         }
     }
 
     public Skin getSkin(int index) {
         switch (index) {
-            case 1 -> {return skin_1_Sepehr;}
-            case 2 -> {return skin_2_Amirhossein;}
-            case 3 -> {return skin_3_Nz;}
-            default -> {return null;}
+            case 1 -> {
+                return skin_1_Sepehr;
+            }
+            case 2 -> {
+                return skin_2_Amirhossein;
+            }
+            case 3 -> {
+                return skin_3_Nz;
+            }
+            default -> {
+                return null;
+            }
         }
     }
 
-    public Image getCursor() {return cursor;}
-    public Image getRedLine() {return redLine;}
+    public Image getCursor() {
+        return cursor;
+    }
+
+    public Image getRedLine() {
+        return redLine;
+    }
 }
