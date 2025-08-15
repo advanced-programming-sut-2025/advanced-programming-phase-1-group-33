@@ -1,6 +1,6 @@
 package com.yourgame.model.Animals.FishPackage;
 
-import com.yourgame.model.Animals.FishType;
+import com.yourgame.model.Item.ArtisanIngredient;
 import com.yourgame.model.ManuFactor.Ingredient;
 import com.yourgame.model.WeatherAndTime.Season;
 
@@ -25,10 +25,10 @@ public enum Fish implements Ingredient, ArtisanIngredient {
     RainbowTrout("RainbowTrout", 65, Season.Summer, 0),
 
     // LEGENDARY_FISH
-    LEGEND("Legend", 5000, Season.Spring, 0),
-    GLACIER_FISH("GlacierFish", 1000, Season.Winter, 0),
-    ANGLER("Angler", 900, Season.Fall, 0),
-    CRIMSON_FISH("CrimsonFish", 1500, Season.Summer, 0);
+    Legend("Legend", 5000, Season.Spring, 0),
+    GlacierFish("GlacierFish", 1000, Season.Winter, 0),
+    Angler("Angler", 900, Season.Fall, 0),
+    CrimsonFish("CrimsonFish", 1500, Season.Summer, 0);
 
     private final String name;
     private final int price;
@@ -62,10 +62,11 @@ public enum Fish implements Ingredient, ArtisanIngredient {
     @Override
     public int getBasePrice() {
         return price;
+    }
 
-    public static ArrayList<FishType> getFishesBySeason(Season season) {
-        ArrayList<FishType> fishes = new ArrayList<>();
-        for (FishType fish : FishType.values()) {
+    public static ArrayList<Fish> getFishesBySeason(Season season) {
+        ArrayList<Fish> fishes = new ArrayList<>();
+        for (Fish fish : Fish.values()) {
             if (fish.equals(Legend) || fish.equals(GlacierFish) || fish.equals(Angler) || fish.equals(CrimsonFish))
                 continue;
             if (fish.getSeason() == season)
