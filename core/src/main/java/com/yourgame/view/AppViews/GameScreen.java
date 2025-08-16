@@ -24,6 +24,7 @@ import com.yourgame.Graphics.MenuAssetManager;
 import com.yourgame.Graphics.GameAssets.HUDManager;
 import com.yourgame.Graphics.GameAssets.clockUIAssetManager;
 import com.yourgame.controller.GameController.GameController;
+import com.yourgame.model.Animals.AnimalManager;
 import com.yourgame.model.Food.FoodAnimation;
 import com.yourgame.model.Item.Inventory.Inventory;
 import com.yourgame.model.ManuFactor.Artisan.ArtisanMachine;
@@ -87,6 +88,8 @@ public class GameScreen extends GameBaseScreen {
     private Texture buildingPreviewTexture;
     private boolean isPlacementValid = false;
 
+    private final AnimalManager animalManager;
+
     public GameScreen() {
         super();
 
@@ -114,6 +117,9 @@ public class GameScreen extends GameBaseScreen {
         for(ArtisanMachine artisanMachine : player.getArtisanMachineManager().getArtisanMachines()) {
             App.getGameState().getGameTime().addHourObserver(artisanMachine);
         }
+
+        this.animalManager = new AnimalManager(player);
+        App.getGameState().getGameTime().addDayObserver(animalManager);
     }
 
     @Override
@@ -227,6 +233,7 @@ public class GameScreen extends GameBaseScreen {
                 controller.updateDroppedItems(delta);
                 updateDayNightCycle();
                 thunderManager.update(delta);
+                animalManager.update(delta, controller.getCurrentMap());
 
                 if (foodAnimation != null) {
                     boolean isFinished = foodAnimation.update(delta);
@@ -261,12 +268,10 @@ public class GameScreen extends GameBaseScreen {
         // == Render On-Map ==
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
-        // Map Elements
         controller.renderMapObjects(assetManager, batch);
-        // Render player
         renderPlayer();
-        // Thunder
         thunderManager.render(batch);
+        animalManager.render(batch);
         // Food Animation
         if (foodAnimation != null) foodAnimation.render(batch);
         if (controller.getCurrentMap().getName().equals("town")) npcManager.render(batch);

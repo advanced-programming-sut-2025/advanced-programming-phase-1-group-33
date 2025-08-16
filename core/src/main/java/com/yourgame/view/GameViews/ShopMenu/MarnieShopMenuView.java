@@ -29,6 +29,17 @@ public class MarnieShopMenuView extends Window {
         Table mainTable = new Table();
         mainTable.pad(20f);
 
+        // --- Close Button ---
+        TextButton closeButton = new TextButton("X", MenuAssetManager.getInstance().getSkin(1));
+        this.getTitleTable().add(closeButton).size(30, 30).padRight(5);
+        closeButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                remove();
+                gameScreen.closeMenu();
+            }
+        });
+
         // --- Create an entry for each animal type ---
         for (AnimalType type : AnimalType.values()) {
             createAnimalEntry(mainTable, type);
@@ -65,7 +76,7 @@ public class MarnieShopMenuView extends Window {
                 } else if (player.getGold() < animalType.getCost()) {
                     gameScreen.showMessage("error", "Not enough gold.", getSkin(), 0, 200, getStage());
                 } else {
-                    Animal newAnimal = new Animal(animalType);
+                    Animal newAnimal = new Animal(animalType, 10, 10);
                     if (targetBuilding.addAnimal(newAnimal)) {
                         player.setGold(player.getGold() - animalType.getCost());
                         gameScreen.showMessage("success", "Your new " + animalType.getName() + " has been sent to the " + targetBuilding.getBuildingType().getName() + "!", getSkin(), 0, 200, getStage());
