@@ -1,5 +1,6 @@
 package com.yourgame.model.Animals.AnimalPackage;
 
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
@@ -10,7 +11,6 @@ import com.yourgame.model.Item.Item;
 import com.yourgame.model.Map.Elements.BuildingType;
 import com.yourgame.model.Map.Map;
 import com.yourgame.model.Map.Tile;
-import com.yourgame.model.NPC.NPC;
 import com.yourgame.model.WeatherAndTime.TimeObserver;
 import com.yourgame.model.WeatherAndTime.TimeSystem;
 
@@ -27,6 +27,7 @@ public class Animal implements TimeObserver {
     private boolean wasFed;
     private boolean wasPet;
     private int daysUntilProductReady;
+    private boolean hasProductReady;
 
     public final Vector2 position;
     private boolean isMoving;
@@ -36,7 +37,6 @@ public class Animal implements TimeObserver {
     private final Animation<TextureRegion>[] walkAnimations;
     private List<Vector2> currentPath;
     private int pathIndex;
-    private Vector2 currentDestination;
 
     public Animal(AnimalType type, float startX, float startY) {
         this.type = type;
@@ -44,7 +44,8 @@ public class Animal implements TimeObserver {
         this.friendship = 0;
         this.wasFed = false;
         this.wasPet = false;
-        this.daysUntilProductReady = type.getDaysToProduce();
+        this.daysUntilProductReady = type.getRegularProduct() != null ? 3 : 999;
+        this.hasProductReady = false;
 
         this.position = new Vector2(startX, startY);
         this.isMoving = false;
@@ -138,20 +139,38 @@ public class Animal implements TimeObserver {
             friendship -= 20;
         }
 
+        if (daysUntilProductReady <= 0 && !hasProductReady) {
+            hasProductReady = true;
+        }
+
         wasPet = false;
         wasFed = false;
 
-        friendship = Math.max(0, Math.min(1000, friendship));
+        friendship = Math.max(0, Math.min(500, friendship));
     }
 
-    public boolean canProduceProduct() {
-        return daysUntilProductReady <= 0;
+    public boolean hasProductReady () {
+        return hasProductReady;
     }
 
-    public void collectProduct() {
-        if (canProduceProduct()) {
-            daysUntilProductReady = type.getDaysToProduce();
+    public AnimalProduct collectProduct() {
+        if (!hasProductReady) {
+            return null;
         }
+
+        AnimalProductType productToGive = type.getRegularProduct();
+
+        if (type.getDeluxeProduct() != null) {
+            float deluxeChance = friendship / 1000f;
+            if (random.nextFloat() < deluxeChance) {
+                productToGive = type.getDeluxeProduct();
+            }
+        }
+
+        hasProductReady = false;
+        daysUntilProductReady = 3;
+
+        return new AnimalProduct(productToGive, this.type);
     }
 
     public boolean pet() {
@@ -170,6 +189,7 @@ public class Animal implements TimeObserver {
         return false;
     }
 
+    public int getFriendship() { return friendship; }
     public AnimalType getType() { return type; }
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }

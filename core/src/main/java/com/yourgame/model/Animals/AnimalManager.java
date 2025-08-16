@@ -37,9 +37,9 @@ public class AnimalManager implements TimeObserver {
     public void onTimeChanged(TimeSystem timeSystem) {
         activeAnimals.clear();
 
-        if (timeSystem.getWeather() != Weather.Sunny) {
-            return;
-        }
+//        if (timeSystem.getWeather() != Weather.Sunny) {
+//            return;
+//        }
 
         // Let animals out from the coop
         FarmBuilding coop = player.getCoop();
@@ -54,7 +54,6 @@ public class AnimalManager implements TimeObserver {
         // Let animals out from the barn
         FarmBuilding barn = player.getBarn();
         if (barn != null) {
-            // TODO: Check if the barn door is open
             for (Animal animal : barn.getAnimals()) {
                 animal.position.set(barn.getPixelBounds().x + 32, barn.getPixelBounds().y - 16);
                 activeAnimals.add(animal);

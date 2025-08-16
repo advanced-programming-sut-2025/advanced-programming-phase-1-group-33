@@ -5,35 +5,35 @@ import com.yourgame.model.Map.Elements.BuildingType;
 
 public enum AnimalType {
     // Coop Animals
-    CHICKEN("Chicken", BuildingType.COOP, 800, AnimalProductType.Egg, 1),
-    DUCK("Duck", BuildingType.COOP, 1200, AnimalProductType.DuckEgg, 2),
-    RABBIT("Rabbit", BuildingType.COOP, 8000, AnimalProductType.Wool, 4),
-    DINOSAUR("Dinosaur", BuildingType.COOP, 10000, AnimalProductType.DinosaurEgg, 7),
+    CHICKEN("Chicken", BuildingType.COOP, 800, AnimalProductType.Egg, AnimalProductType.LargeEgg),
+    DUCK("Duck", BuildingType.COOP, 1200, AnimalProductType.DuckEgg, AnimalProductType.DuckFeather),
+    RABBIT("Rabbit", BuildingType.COOP, 8000, AnimalProductType.Wool, AnimalProductType.RabbitFoot),
+    DINOSAUR("Dinosaur", BuildingType.COOP, 10000, AnimalProductType.DinosaurEgg, null), // Only one product type
 
     // Barn Animals
-    COW("Cow", BuildingType.BARN, 1500, AnimalProductType.Milk, 1),
-    GOAT("Goat", BuildingType.BARN, 4000, AnimalProductType.GoatMilk, 2),
-    SHEEP("Sheep", BuildingType.BARN, 8000, AnimalProductType.Wool, 3),
-    PIG("Pig", BuildingType.BARN, 16000, AnimalProductType.Truffle, 1);
+    COW("Cow", BuildingType.BARN, 1500, AnimalProductType.Milk, AnimalProductType.LargeMilk),
+    GOAT("Goat", BuildingType.BARN, 4000, AnimalProductType.GoatMilk, AnimalProductType.LargeGoatMilk),
+    SHEEP("Sheep", BuildingType.BARN, 8000, AnimalProductType.Wool, null),
+    PIG("Pig", BuildingType.BARN, 16000, AnimalProductType.Truffle, null);
 
     private final String name;
     private final BuildingType home;
     private final int cost;
-    private final AnimalProductType product;
-    private final int daysToProduce;
+    private final AnimalProductType regularProduct;
+    private final AnimalProductType deluxeProduct; // Can be null if there's only one product type
 
-    AnimalType(String name, BuildingType home, int cost, AnimalProductType product, int daysToProduce) {
+    AnimalType(String name, BuildingType home, int cost, AnimalProductType regularProduct, AnimalProductType deluxeProduct) {
         this.name = name;
         this.home = home;
         this.cost = cost;
-        this.product = product;
-        this.daysToProduce = daysToProduce;
+        this.regularProduct = regularProduct;
+        this.deluxeProduct = deluxeProduct;
     }
 
     public String getName() { return name; }
     public BuildingType getHome() { return home; }
     public int getCost() { return cost; }
-    public AnimalProductType getProduct() { return product; }
-    public int getDaysToProduce() { return daysToProduce; }
+    public AnimalProductType getRegularProduct() { return regularProduct; }
+    public AnimalProductType getDeluxeProduct() { return deluxeProduct; }
     public Texture getTexture() { return new Texture("Game/Animal/" + name + ".png"); }
 }

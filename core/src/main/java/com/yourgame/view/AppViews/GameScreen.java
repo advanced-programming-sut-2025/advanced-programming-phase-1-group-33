@@ -26,6 +26,7 @@ import com.yourgame.Graphics.GameAssets.clockUIAssetManager;
 import com.yourgame.controller.GameController.GameController;
 import com.yourgame.model.Animals.AnimalManager;
 import com.yourgame.model.Animals.AnimalPackage.Animal;
+import com.yourgame.model.Animals.AnimalPackage.AnimalProduct;
 import com.yourgame.model.Animals.Hay;
 import com.yourgame.model.Food.FoodAnimation;
 import com.yourgame.model.Item.Inventory.Inventory;
@@ -489,6 +490,14 @@ public class GameScreen extends GameBaseScreen {
 
             Animal clickedAnimal = animalManager.getAnimalAt(camera);
             if (clickedAnimal != null) {
+                if (clickedAnimal.hasProductReady()) {
+                    AnimalProduct product = clickedAnimal.collectProduct();
+                    if (product != null) {
+                        controller.getCurrentMap().spawnDroppedItem(product, clickedAnimal.position.x, clickedAnimal.position.y);
+                    }
+                    return;
+                }
+
                 Item heldItem = player.getBackpack().getInventory().getSelectedItem();
 
                 if (heldItem instanceof Hay) {

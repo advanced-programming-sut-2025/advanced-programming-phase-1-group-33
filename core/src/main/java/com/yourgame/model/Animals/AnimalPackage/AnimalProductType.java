@@ -1,5 +1,7 @@
 package com.yourgame.model.Animals.AnimalPackage;
 
+import com.badlogic.gdx.graphics.Texture;
+import com.yourgame.Graphics.GameAssetManager;
 import com.yourgame.model.Item.ArtisanIngredient;
 
 public enum AnimalProductType implements ArtisanIngredient {
@@ -43,5 +45,9 @@ public enum AnimalProductType implements ArtisanIngredient {
     @Override
     public int getBasePrice() {
         return price;
+    }
+
+    public Texture getTexture() {
+        return GameAssetManager.getInstance().getTexture("Game/Animal/" + name + ".png");
     }
 }
