@@ -269,7 +269,7 @@ public class FishingGameMenuView extends Window {
 
     private void onCatch() {
         if(perfectSoFar){
-            gameScreen.getPlayer().setFishingLevel((int)(gameScreen.getPlayer().getFishingLevel()*2.4));
+            gameScreen.getPlayer().getFishingSkill().addExperience((int)(gameScreen.getPlayer().getFishingLevel()*2.4));
             gameScreen.showMessage("victory","Perfect Catch!", skin,0,200,stage);
         }
         else{
