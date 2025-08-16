@@ -1,25 +1,16 @@
 package com.yourgame.model.Animals;
 
-public class Hay {
-    private int number;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.yourgame.Graphics.GameAssetManager;
+import com.yourgame.model.Item.Item;
 
+public class Hay extends Item {
     public Hay() {
-        this.number = 0;
+        super("Hay", ItemType.INGREDIENT, 10, true);
     }
 
-    public int getNumber() {
-        return number;
-    }
-
-    public void setNumber(int number) {
-        this.number = number;
-    }
-
-    public void increaseNumber(int number) {
-        this.number += number;
-    }
-
-    public void decreaseNumber(int number) {
-        this.number -= number;
+    @Override
+    public TextureRegion getTextureRegion(GameAssetManager assetManager) {
+        return new TextureRegion(assetManager.getTexture("Game/Animal/Hay.png"));
     }
 }

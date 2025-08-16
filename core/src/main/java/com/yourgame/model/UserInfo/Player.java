@@ -5,9 +5,9 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
+import com.yourgame.model.Animals.AnimalManager;
 import com.yourgame.model.Animals.AnimalPackage.Animal;
-import com.yourgame.model.Animals.AnimalPackage.AnimalProduct;
-import com.yourgame.model.Animals.AnimalPackage.AnimalProductType;
+import com.yourgame.model.Animals.Hay;
 import com.yourgame.model.App;
 import com.yourgame.model.Crafting.CraftedItemType;
 import com.yourgame.model.Crafting.CraftingRecipeManager;
@@ -22,6 +22,7 @@ import com.yourgame.model.Item.Tools.*;
 import com.yourgame.model.Item.Inventory.Backpack;
 import com.yourgame.model.ManuFactor.Artisan.InEdibleArtisanProduct.InEdibleArtisanProductType;
 import com.yourgame.model.ManuFactor.Artisan.InEdibleArtisanProduct.Products.Coal;
+import com.yourgame.model.Map.Elements.FarmBuilding;
 import com.yourgame.model.Map.Farm;
 import com.yourgame.model.NPC.NPCType;
 import com.yourgame.model.ManuFactor.Artisan.ArtisanMachineManager;
@@ -85,6 +86,9 @@ public class Player implements TimeObserver {
     public Vector2 playerVelocity;
     public int direction; // 0=Down, 1=Right, 2=Up, 3=Left
 
+    private FarmBuilding coop;
+    private FarmBuilding barn;
+
     public static Player guest() {
         return new Player(
                 new User("Aeen", "Aeen", "Aeen", "aeen", Gender.Male, SecurityQuestion.BirthDate, "Iran", Avatar.Sam));
@@ -102,7 +106,7 @@ public class Player implements TimeObserver {
         this.backpack.addItem(new MixedSeed(), 3);
         this.backpack.addItem(new Food(FoodType.RedPlate), 1);
         this.backpack.addItem(new Wood(),500);
-        this.backpack.addItem(new Fiber(),500);
+        this.backpack.addItem(new Hay(), 50);
         this.backpack.addTool(new FishingPole(PoleStage.Fiberglass));
         this.backpack.addItem(new SonarBobber(),1);
 
@@ -215,7 +219,6 @@ public class Player implements TimeObserver {
     public int getFishingLevel() {
         return fishingSkill.level() + buffManager.getBuffValue(Skill.SkillType.FISHING);
     }
-    public void setFishingLevel(int level) {fishingSkill.changeLevel(level);}
 
     public BuffManager getBuffManager() {
         return buffManager;
@@ -365,6 +368,11 @@ public class Player implements TimeObserver {
 
     public ArtisanMachineManager getArtisanMachineManager() {return artisanMachineManager;}
 
+    public FarmBuilding getCoop() {return coop;}
+    public void setCoop(FarmBuilding coop) {this.coop = coop;}
+    public FarmBuilding getBarn() {return barn;}
+    public void setBarn(FarmBuilding barn) {this.barn = barn;}
+
     public boolean areGreenhouseRequirementsMet() {
         return  (gold >= 1000) && (backpack.getInventory().getItemQuantity(new Wood()) >= 500);
     }
@@ -382,11 +390,16 @@ public class Player implements TimeObserver {
         return greenhouse;
     }
 
+    public List<Animal> getAllAnimals() {
+        List<Animal> animals = new ArrayList<>();
+        if (coop != null) animals.addAll(coop.getAnimals());
+        if (barn != null) animals.addAll(barn.getAnimals());
+        return animals;
+    }
+
     @Override
     public void onTimeChanged(TimeSystem timeSystem) {
         energy = isFaintedToday ? getMaxEnergy() / 2 : getMaxEnergy();
         isFaintedToday = false;
     }
-
-
 }

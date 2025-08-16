@@ -8,19 +8,30 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.yourgame.Graphics.GameAssetManager;
 import com.yourgame.Graphics.MenuAssetManager;
+import com.yourgame.model.Item.Item;
+import com.yourgame.model.Map.Elements.BuildingType;
+import com.yourgame.model.Map.Elements.FarmBuilding;
 import com.yourgame.model.Resource.Wood;
 import com.yourgame.model.UserInfo.Player;
 import com.yourgame.view.AppViews.GameScreen;
 
 public class CarpenterMenuView extends Window {
+    private final Skin skin;
+    private final Player player;
+    private final GameScreen gameScreen;
+    private final Image background;
+
     public CarpenterMenuView(GameScreen gameScreen, Stage stage, Player player) {
         super("Carpenter", MenuAssetManager.getInstance().getSkin(3));
-        Skin skin = MenuAssetManager.getInstance().getSkin(3);
+        this.skin = MenuAssetManager.getInstance().getSkin(3);
+        this.player = player;
+        this.gameScreen = gameScreen;
+        this.background = new Image(GameAssetManager.getInstance().getTexture("Backgrounds/Background7.png"));
 
         // --- Window Setup ---
         setModal(true);
         setMovable(true);
-        padTop(40f); // Make space for the title
+        padTop(40f);
 
         // --- Main Layout Table ---
         Table mainTable = new Table();
@@ -41,56 +52,57 @@ public class CarpenterMenuView extends Window {
             }
         });
 
-        if (player.getGreenhouse() != null) {
-            Label completeLabel = new Label("Greenhouse Completed", skin);
-            mainTable.add(completeLabel).colspan(2).align(Align.left).padBottom(10);
-            this.pack();
-            this.setPosition(stage.getWidth() / 2f, stage.getHeight() / 2f, Align.center);
-            return;
+        // --- Build Sections ---
+        // We check each building. If it's not built, we show the build UI. Otherwise, we show "Completed".
+        if (player.getGreenhouse() == null) {
+            createBuildingEntry(mainTable, "Build Greenhouse", new Wood(), 500, 1000, null);
+        } else {
+            mainTable.add(new Label("Greenhouse: Completed", skin)).colspan(2).align(Align.left).pad(10, 0, 10, 0).row();
         }
 
-        // --- Greenhouse Section ---
-        Label greenhouseLabel = new Label("Build Greenhouse", skin);
-        mainTable.add(greenhouseLabel).colspan(2).align(Align.left).padBottom(10);
-        mainTable.row();
+        mainTable.add(background).colspan(2).growX().height(2).pad(20, 0, 20, 0).row();
 
-        // Use a nested table for requirements to keep them grouped
-        Table requirementsTable = new Table();
+        if (player.getCoop() == null) {
+            createBuildingEntry(mainTable, "Build Coop", new Wood(), 300, 4000, BuildingType.COOP);
+        } else {
+            mainTable.add(new Label("Coop: Completed", skin)).colspan(2).align(Align.left).pad(10, 0, 10, 0).row();
+        }
 
-        // Wood Requirement
-        requirementsTable.add(new Image(new Wood().getTextureRegion(GameAssetManager.getInstance()))).size(32, 32).padRight(10);
-        Label woodLabel = new Label("500 Wood", skin);
-        requirementsTable.add(woodLabel).align(Align.left);
+        mainTable.add(background).colspan(2).growX().height(2).pad(20, 0, 20, 0).row();
 
-        // Gold Requirement
-        requirementsTable.add(new Image(new TextureRegion(GameAssetManager.getInstance().getTexture("Game/Clock/Gold.png")))).size(32, 32).padLeft(20).padRight(10);
-        Label goldLabel = new Label("1000 Gold", skin);
-        requirementsTable.add(goldLabel).align(Align.left);
-
-        mainTable.add(requirementsTable).align(Align.left);
-
-        // --- Build Button ---
-        TextButton buildButton = new TextButton("Build", MenuAssetManager.getInstance().getSkin(1));
-        mainTable.add(buildButton).width(100).height(40).padLeft(20).align(Align.right);
-        mainTable.row();
-
-        // --- Add a separator ---
-        mainTable.add(new Image(GameAssetManager.getInstance().getTexture("Backgrounds/Background7.png"))).colspan(2).growX().height(2).padTop(20);
-        mainTable.row();
+        if (player.getBarn() == null) {
+            createBuildingEntry(mainTable, "Build Barn", new Wood(), 400, 6000, BuildingType.BARN);
+        } else {
+            mainTable.add(new Label("Barn: Completed", skin)).colspan(2).align(Align.left).pad(10, 0, 10, 0).row();
+        }
 
         this.add(mainTable);
         this.pack();
         this.setPosition(stage.getWidth() / 2f, stage.getHeight() / 2f, Align.center);
+    }
+
+    private void createBuildingEntry(Table parentTable, String title, Item resource, int resourceAmount, int goldAmount, BuildingType buildingType) {
+        parentTable.add(new Label(title, skin)).colspan(2).align(Align.left).padBottom(10).row();
+
+        Table requirementsTable = new Table();
+        requirementsTable.add(new Image(resource.getTextureRegion(GameAssetManager.getInstance()))).size(32, 32).padRight(10);
+        requirementsTable.add(new Label(resourceAmount + " " + resource.getName(), skin)).align(Align.left);
+        requirementsTable.add(new Image(new TextureRegion(GameAssetManager.getInstance().getTexture("Game/Clock/Gold.png")))).size(32, 32).padLeft(20).padRight(10);
+        requirementsTable.add(new Label(goldAmount + " Gold", skin)).align(Align.left);
+        parentTable.add(requirementsTable).align(Align.left);
+
+        TextButton buildButton = new TextButton("Build", MenuAssetManager.getInstance().getSkin(1));
+        parentTable.add(buildButton).width(100).height(40).padLeft(20).align(Align.right).row();
 
         buildButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                if (player.areGreenhouseRequirementsMet()) {
-                    player.buildGreenhouse();
+                if (player.getGold() >= goldAmount && player.getBackpack().getInventory().getItemQuantity(resource) >= resourceAmount) {
+                    if (buildingType == null) player.buildGreenhouse();
+                    else gameScreen.enterPlacementMode(buildingType);
                     remove();
-                    gameScreen.closeMenu();
                 } else {
-                    gameScreen.showMessage("error", "The requirements aren't met.", skin, 0, 200, stage);
+                    gameScreen.showMessage("error", "Not enough resources.", skin, 0, 200, getStage());
                 }
             }
         });
