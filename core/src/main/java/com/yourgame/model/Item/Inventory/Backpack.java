@@ -17,7 +17,6 @@ public class Backpack {
     private BackpackType type;
     private final Inventory inventory;
     private final Inventory refrigerator;
-    private final Hay hay = new Hay();
     private final ArrayList<ArtisanMachine> artisanMachines = new ArrayList<>();
     private final TrashCan trashCan = new TrashCan();
 
@@ -112,23 +111,6 @@ public class Backpack {
 
     public ArrayList<ArtisanMachine> getArtisanMachines() {
         return artisanMachines;
-    }
-
-    public void increaseHay(int number) {
-        hay.increaseNumber(number);
-    }
-
-    public void decreaseHay(int number) {
-        hay.decreaseNumber(number);
-        hay.setNumber(Math.max(hay.getNumber(), 0));
-    }
-
-    public boolean hasEnoughHay(int number) {
-        return hay.getNumber() >= number;
-    }
-
-    public int getNumberOfHay() {
-        return hay.getNumber();
     }
 
     public TrashCan getTrashCan() {

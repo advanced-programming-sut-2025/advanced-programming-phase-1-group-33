@@ -5,6 +5,8 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.yourgame.Graphics.GameAssetManager;
 import com.yourgame.controller.GameController.PathFinder;
+import com.yourgame.model.Animals.Hay;
+import com.yourgame.model.Item.Item;
 import com.yourgame.model.Map.Elements.BuildingType;
 import com.yourgame.model.Map.Map;
 import com.yourgame.model.Map.Tile;
@@ -152,8 +154,23 @@ public class Animal implements TimeObserver {
         }
     }
 
+    public boolean pet() {
+        if (!wasPet) {
+            this.wasPet = true;
+            return true;
+        }
+        return false;
+    }
+
+    public boolean feed(Item heldItem) {
+        if (!wasFed && heldItem instanceof Hay) {
+            this.wasFed = true;
+            return true;
+        }
+        return false;
+    }
+
     public AnimalType getType() { return type; }
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
-    public void pet() { this.wasPet = true; }
 }

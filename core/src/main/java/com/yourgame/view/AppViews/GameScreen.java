@@ -25,8 +25,11 @@ import com.yourgame.Graphics.GameAssets.HUDManager;
 import com.yourgame.Graphics.GameAssets.clockUIAssetManager;
 import com.yourgame.controller.GameController.GameController;
 import com.yourgame.model.Animals.AnimalManager;
+import com.yourgame.model.Animals.AnimalPackage.Animal;
+import com.yourgame.model.Animals.Hay;
 import com.yourgame.model.Food.FoodAnimation;
 import com.yourgame.model.Item.Inventory.Inventory;
+import com.yourgame.model.Item.Item;
 import com.yourgame.model.ManuFactor.Artisan.ArtisanMachine;
 import com.yourgame.model.Item.Tools.Tool;
 import com.yourgame.model.Map.*;
@@ -272,7 +275,6 @@ public class GameScreen extends GameBaseScreen {
         renderPlayer();
         thunderManager.render(batch);
         animalManager.render(batch);
-        // Food Animation
         if (foodAnimation != null) foodAnimation.render(batch);
         if (controller.getCurrentMap().getName().equals("town")) npcManager.render(batch);
         if (currentMode == GameMode.BUILDING_PLACEMENT) renderBuildingPreview();
@@ -484,6 +486,23 @@ public class GameScreen extends GameBaseScreen {
                 Dialogue dialogue = clickedNpc.getDialogue(player);
                 showDialogue(clickedNpc, dialogue);
             }
+
+            Animal clickedAnimal = animalManager.getAnimalAt(camera);
+            if (clickedAnimal != null) {
+                Item heldItem = player.getBackpack().getInventory().getSelectedItem();
+
+                if (heldItem instanceof Hay) {
+                    if (clickedAnimal.feed(heldItem)) {
+                        animalManager.showEmote(clickedAnimal, "Happy");
+                        player.getBackpack().getInventory().reduceItemQuantity(heldItem, 1);
+                    }
+                } else {
+                    if (clickedAnimal.pet()) {
+                        animalManager.showEmote(clickedAnimal, "Heart");
+                    }
+                }
+            }
+
 
             controller.handleInteraction();
             if (controller.getCurrentMap() instanceof Store store) {

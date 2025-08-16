@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.yourgame.model.Animals.AnimalManager;
+import com.yourgame.model.Animals.Hay;
 import com.yourgame.model.App;
 import com.yourgame.model.Crafting.CraftingRecipeManager;
 import com.yourgame.model.Farming.*;
@@ -101,8 +102,7 @@ public class Player implements TimeObserver {
         this.backpack.addItem(new MixedSeed(), 3);
         this.backpack.addItem(new Food(FoodType.RedPlate), 1);
         this.backpack.addItem(new Wood(),500);
-        this.backpack.addItem(new Fiber(),500);
-        this.backpack.addItem(new Coal(InEdibleArtisanProductType.Coal),500);
+        this.backpack.addItem(new Hay(), 50);
         this.backpack.addTool(new FishingPole(PoleStage.Fiberglass));
 
 
